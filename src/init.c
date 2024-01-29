@@ -21,6 +21,8 @@ int init_game() {
     return -1;
   }
 
+  init_ui_components();  
+
   return 0;
 }
 
