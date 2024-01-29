@@ -87,6 +87,7 @@ typedef struct ui_component {
   size_t num_children;
   size_t child_buf_size;
 
+  F_GLYPH *font;
   char *text;
   size_t text_len;
 
