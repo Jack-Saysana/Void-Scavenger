@@ -23,8 +23,10 @@ extern GAME_MODE mode;
 // Game camera
 extern CAM camera;
 
-extern SIMULATION *space_sim;
-extern SIMULATION *station_sim;
+extern SIMULATION *physics_sim;
+extern SIMULATION *combat_sim;
+extern SIMULATION *render_sim;
+extern SIMULATION *event_sim;
 
 extern PLAYER st_player;
 extern SHIP player_ship;

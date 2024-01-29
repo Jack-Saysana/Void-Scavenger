@@ -21,11 +21,29 @@ int init_game() {
     return -1;
   }
 
+  status = init_wrapper_buffer();
+  if (status) {
+    return -1;
+  }
+
+  status = init_player();
+  if (status) {
+    return -1;
+  }
+
+  status = init_player_ship();
+  if (status) {
+    return -1;
+  }
+
   return 0;
 }
 
 void cleanup_game() {
   cleanup_scene();
+  free_player();
+  free_player_ship();
+  free_wrapper_buffer();
   // Add cleanup functions above...
   cleanup_gl();
 }

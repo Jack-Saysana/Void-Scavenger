@@ -6,10 +6,14 @@
 
 */
 
+GAME_MODE mode = SPACE;
+
 CAM camera;
 
-SIMULATION *space_sim = NULL;
-SIMULATION *station_sim = NULL;
+SIMULATION *physics_sim = NULL;
+SIMULATION *combat_sim = NULL;
+SIMULATION *render_sim = NULL;
+SIMULATION *event_sim = NULL;
 
 PLAYER st_player;
 SHIP player_ship;

@@ -26,7 +26,6 @@ typedef struct shield_t {
   float max_shield;
   float recharge_rate;
   float recharge_delay;
-  float recharge_timer;
   float power_draw;
 } S_SHIELD;
 

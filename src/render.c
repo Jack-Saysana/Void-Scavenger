@@ -30,8 +30,9 @@ int init_scene() {
   alien_models[1] = load_model("./assets/actors/alien_2/alien_2.obj");
   player_ship_model = load_model("./assets/actors/player_ship/player_ship.obj");
   alien_ship_models[0] = load_model("./assets/actors/alien_ship_1/alien_ship_1.obj");
+  sphere_model = load_model("./assets/misc/sphere/sphere.obj");
   if (!player_model || !alien_models[0] || !alien_models[1] ||
-      !player_ship_model || !alien_ship_models[0]) {
+      !player_ship_model || !alien_ship_models[0] || !sphere_model) {
     fprintf(stderr, "Error: failed to initialize game models\n");
     return -1;
   }
@@ -46,7 +47,7 @@ int init_scene() {
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
   // Initialize engine UI features
-  int status = init_ui("assets/quad/quad.obj", "src/shaders/ui/shader.vs",
+  int status = init_ui("assets/misc/quad/quad.obj", "src/shaders/ui/shader.vs",
                        "src/shaders/ui/shader.fs",
                        "src/shaders/font/shader.vs",
                        "src/shaders/font/shader.fs");
@@ -56,7 +57,7 @@ int init_scene() {
 
   glm_vec3_copy((vec3) {0.0, 0.0, -1.0}, camera.forward);
   glm_vec3_copy((vec3) {0.0, 1.0, 0.0}, camera.up);
-  glm_vec3_copy((vec3) {0.5, 0.0, 0.0}, camera.pos);
+  glm_vec3_copy((vec3) {0.0, 0.0, 5.0}, camera.pos);
 
   return 0;
 }
@@ -74,10 +75,26 @@ void cleanup_scene() {
 // ================================ RENDERING ================================
 
 void render_scene(GLFWwindow *window) {
-  glClearColor(1.0, 0.0, 0.0, 1.0);
+  glClearColor(0.0, 0.0, 0.0, 1.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // Insert rendering logic below...
+  mat4 view = GLM_MAT4_IDENTITY_INIT;
+  get_cam_matrix(&camera, view);
+
+  glUseProgram(entity_shader);
+  set_mat4("projection", persp_proj, entity_shader);
+  set_mat4("view", view, entity_shader);
+  draw_entity(entity_shader, player_ship.ent);
+
+  glUseProgram(basic_shader);
+  set_mat4("projection", persp_proj, basic_shader);
+  set_mat4("view", view, basic_shader);
+  set_vec3("test_col", (vec3) { 1.0, 0.0, 1.0 }, basic_shader);
+  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  draw_colliders(basic_shader, player_ship.ent, sphere_model);
+  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
   render_ui();
 
   glfwSwapBuffers(window);
@@ -85,6 +102,22 @@ void render_scene(GLFWwindow *window) {
 }
 
 // ================================= HELPERS =================================
+
+ENTITY *init_player_ent() {
+  return init_entity(player_model);
+}
+
+ENTITY *init_player_ship_ent() {
+  return init_entity(player_ship_model);
+}
+
+ENTITY *init_alien_ent(size_t index) {
+  return init_entity(alien_models[index]);
+}
+
+ENTITY *init_alien_ship_ent(size_t index) {
+  return init_entity(alien_ship_models[index]);
+}
 
 void update_perspective() {
   glm_perspective(glm_rad(45.0), RES_X / RES_Y, 0.1f, 100.0f, persp_proj);
