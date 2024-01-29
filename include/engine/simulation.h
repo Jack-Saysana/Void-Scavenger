@@ -13,7 +13,7 @@ void sim_add_force(SIMULATION *sim, vec3 force);
 void sim_clear_force(SIMULATION* sim);
 void integrate_sim(SIMULATION *sim);
 size_t get_sim_collisions(SIMULATION *sim, COLLISION **dest);
-void impulse_resolution(SIMULATION **sim, COLLISION col);
+void impulse_resolution(SIMULATION *sim, COLLISION col);
 
 void draw_oct_tree(MODEL *cube, OCT_TREE *tree, vec3 pos, float scale,
                    unsigned int shader, size_t offset, int depth);
