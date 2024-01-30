@@ -33,6 +33,7 @@ int main() {
     // - win-condition tracking
     // - etc...
     keyboard_input(window);
+    handle_collisions();
     render_scene(window);
   }
 

@@ -20,6 +20,17 @@
 #define S_BASE_VEL (10.0)
 #define S_BASE_ACCEL (5.0)
 
+// Enemy Constants
+#define NUM_ALIEN_TYPES (2)
+#define NUM_ALIEN_SHIP_TYPES (2)
+
+#define BRUTE (0)
+#define NORMAL (1)
+
+#define E_BASE_HEALTH (100.0)
+#define E_BASE_SPEED (1.0)
+#define E_BASE_FIRERATE (0.1)
+
 // Simulation constants
 #define SPACE_SIZE (1024.0)
 #define SPACE_DEPTH (9)

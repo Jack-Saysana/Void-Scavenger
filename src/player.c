@@ -21,6 +21,8 @@ int init_player() {
     fprintf(stderr, "Error: Unable to allocate player entity\n");
     return -1;
   }
+  st_player.ent->type |= T_DRIVING;
+  st_player.ent->inv_mass = 1.0;
 
   st_player.wrapper_offset = init_wrapper(PLAYER_OBJ, st_player.ent,
                                           (void *) &st_player);
@@ -40,6 +42,26 @@ int init_player() {
 void free_player() {
   free_entity(st_player.ent);
   delete_wrapper(st_player.wrapper_offset);
+}
+
+// Insert station mode player into global simulations
+int player_insert_sim() {
+  int status = sim_add_entity(physics_sim, st_player.ent, ALLOW_DEFAULT);
+  if (status) {
+    return -1;
+  }
+
+  status = sim_add_entity(combat_sim, st_player.ent, ALLOW_HURT_BOXES);
+  if (status) {
+    return -1;
+  }
+
+  status = sim_add_entity(event_sim, st_player.ent, ALLOW_DEFAULT);
+  if (status) {
+    return -1;
+  }
+
+  return 0;
 }
 
 // =============================== SPACE MODE ================================
@@ -69,8 +91,11 @@ int init_player_ship() {
     fprintf(stderr, "Error: Unable to allocate player ship entity\n");
     return -1;
   }
+  player_ship.ent->type |= T_DRIVING;
+  player_ship.ent->inv_mass = 1.0;
+
   player_ship.wrapper_offset = init_wrapper(PLAYER_SHIP_OBJ, player_ship.ent,
-                                          (void *) &player_ship);
+                                            (void *) &player_ship);
   if (player_ship.wrapper_offset == INVALID_INDEX) {
     return -1;
   }
@@ -85,5 +110,25 @@ int init_player_ship() {
 void free_player_ship() {
   free_entity(player_ship.ent);
   delete_wrapper(player_ship.wrapper_offset);
+}
+
+// Insert space mode player into global simulations
+int player_ship_insert_sim() {
+  int status = sim_add_entity(physics_sim, player_ship.ent, ALLOW_DEFAULT);
+  if (status) {
+    return -1;
+  }
+
+  status = sim_add_entity(combat_sim, player_ship.ent, ALLOW_HURT_BOXES);
+  if (status) {
+    return -1;
+  }
+
+  status = sim_add_entity(event_sim, player_ship.ent, ALLOW_DEFAULT);
+  if (status) {
+    return -1;
+  }
+
+  return 0;
 }
 

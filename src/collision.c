@@ -6,3 +6,9 @@
   simulations. Handles physical, combat-based and trigger-based collisions.
 
 */
+
+void handle_collisions() {
+  // Update simulations
+
+  // Check collisions
+}

@@ -20,9 +20,14 @@ int init_space_mode() {
   // Initialize ship entity values
   reset_physics(player_ship.ent);
 
-  // Place player ship entity in simulation
+  // Place player ship entity into simulations
+  int status = player_ship_insert_sim();
 
   // Initialize and place station entity in simulation
+  status = init_enemy_ship_buffer();
+  if (status) {
+    return -1;
+  }
 
   // Initialize and place asteroid entities in simulation
 
@@ -51,6 +56,8 @@ void clear_space_mode() {
   num_projectiles = 0;
   num_obstacles = 0;
 
+  free_enemy_ship_buffer();
+
   // Reset wrapper buffer length
   num_wrappers = 0;
 }
@@ -68,8 +75,14 @@ int init_station_mode() {
   reset_physics(st_player.ent);
 
   // Place player entity in simulation
+  int status = player_insert_sim();
 
   // Place station entities in simulations
+  status = init_enemy_buffer();
+  if (status) {
+    return -1;
+  }
+
   // Place render distance sphere in simulations
 
   mode = STATION;
@@ -100,6 +113,8 @@ void clear_station_mode() {
   num_projectiles = 0;
   num_items = 0;
   num_obstacles = 0;
+
+  free_enemy_buffer();
 
   // Reset wrapper buffer length
   num_wrappers = 0;
