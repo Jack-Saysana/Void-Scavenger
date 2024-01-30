@@ -62,13 +62,27 @@ void input_keys(GLFWwindow *window) {
   /* Letters */
   int console_enabled = is_console_enabled();
   for (int i = GLFW_KEY_A; i <= GLFW_KEY_Z; i++) {
-    if (glfwGetKey(window, i) == GLFW_PRESS && !holding_alpha[i - GLFW_KEY_A]) {
-      holding_alpha[i - GLFW_KEY_A] = 1;
-      if (console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
+    if (glfwGetKey(window, i) == GLFW_PRESS) {
+      if (console_enabled && cons_cmd_len < MAX_CMD_LEN - 1 && !holding_alpha[i - GLFW_KEY_A]) {
         cons_cmd[cons_cmd_len++] = i + 32;
         update_console_text(cons_cmd);
         /* TODO: handle console cursor */
+      } else if (!console_enabled) {
+        if (i == GLFW_KEY_W) {
+          /* Handle w press */ 
+          camera.pos[2] -= (DELTA_TIME * st_player.speed);
+        } else if (i == GLFW_KEY_S){
+          /* Handle S press */ 
+          camera.pos[2] += (DELTA_TIME * st_player.speed);
+        } else if (i == GLFW_KEY_A){
+          /* Handle S press */ 
+          camera.pos[0] -= (DELTA_TIME * st_player.speed);
+        } else if (i == GLFW_KEY_D){
+          /* Handle S press */ 
+          camera.pos[0] += (DELTA_TIME * st_player.speed);
+        }
       }
+      holding_alpha[i - GLFW_KEY_A] = 1;
     } else if (glfwGetKey(window, i) != GLFW_PRESS) {
       holding_alpha[i - GLFW_KEY_A] = 0;
     }

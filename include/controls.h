@@ -1,6 +1,6 @@
 #include <GLFW/glfw3.h>
 #include <engine/engine.h>
-//#include <global_vars.h>
+#include <global_vars.h>
 #include <stdio.h>
 
 #define MAX_CMD_LEN (100)
