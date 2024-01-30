@@ -30,6 +30,8 @@ int init_space_mode() {
   }
 
   // Initialize and place asteroid and enemies entities in simulation
+  
+
 
   mode = SPACE;
   return 0;
@@ -52,6 +54,7 @@ void clear_space_mode() {
   for (size_t i = 0; i < num_obstacles; i++) {
     free_entity(sp_obs[i].ent);
   }
+
   num_enemies = 0;
   num_projectiles = 0;
   num_obstacles = 0;

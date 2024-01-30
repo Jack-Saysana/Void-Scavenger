@@ -187,6 +187,11 @@ ENTITY *init_proj_ent() {
   return NULL;
 }
 
+ENTITY *init_obstacle_ent(size_t index) {
+  // TODO: create asteroid model to instance
+  return NULL;
+}
+
 void toggle_hit_boxes() {
   hit_boxes = !hit_boxes;
 }

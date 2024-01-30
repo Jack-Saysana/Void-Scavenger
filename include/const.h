@@ -37,6 +37,9 @@
 #define STATION_SIZE (1024.0)
 #define STATION_DEPTH (9)
 
+// Asteroid constants
+#define NUM_ASTEROIDS (1000)
+
 // Misc
 #define X (0)
 #define Y (1)

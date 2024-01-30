@@ -74,5 +74,7 @@ void delete_wrapper(size_t index) {
     // TODO Add environment stuff here
   } else if (old_wrapper->type == ITEM_OBJ) {
     items[(size_t) old_wrapper->data].wrapper_offset = index;
+  } else if (old_wrapper->type == OBSTACLE_OBJ) {
+    sp_obs[(size_t) old_wrapper->data].wrapper_offset = index;
   }
 }

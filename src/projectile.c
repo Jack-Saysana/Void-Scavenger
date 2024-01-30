@@ -1,6 +1,6 @@
 #include <projectile.h>
 
-/*                                PROJECTILE.H
+/*                                PROJECTILE.C
 
   Handles the initialization of projectile game objects. Also implements
   the integration and insertion of projectiles in simulations.
@@ -38,7 +38,7 @@ size_t init_projectile(vec3 pos, vec3 dir, float speed, PROJ_SOURCE source,
   projectile->ent = init_proj_ent();
   if (projectile->ent == NULL) {
     fprintf(stderr, "Error: Unable to allocate projectile entity\n");
-    return INVALID_INDEX;;
+    return INVALID_INDEX;
   }
 
   projectile->wrapper_offset = init_wrapper(PROJ_OBJ, projectile->ent,
