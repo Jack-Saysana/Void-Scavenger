@@ -29,7 +29,7 @@ int init_space_mode() {
     return -1;
   }
 
-  // Initialize and place asteroid entities in simulation
+  // Initialize and place asteroid and enemies entities in simulation
 
   mode = SPACE;
   return 0;

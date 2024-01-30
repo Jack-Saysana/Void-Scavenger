@@ -47,6 +47,8 @@ size_t init_projectile(vec3 pos, vec3 dir, float speed, PROJ_SOURCE source,
     return -1;
   }
 
+  // TODO initialize projectile data
+
   num_projectiles++;
   if (num_projectiles == proj_buff_len) {
     int status = double_buffer((void **) &projectiles, &proj_buff_len,
@@ -91,4 +93,10 @@ int projectile_insert_sim(size_t index) {
   }
 
   return 0;
+}
+
+// ========================== COLLECTIVE OPERATIONS ==========================
+
+void integrate_projectiles() {
+  // TODO Integrate projectile velocity
 }
