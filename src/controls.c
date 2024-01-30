@@ -47,6 +47,14 @@ void fb_size_callback(GLFWwindow *window, int res_x, int res_y) {
 
 void mouse_pos_callback(GLFWwindow *window, double x_pos, double y_pos) {
   // Insert mouse handling here...
+  // printf("x %f", x_pos);
+  if (first_mouse_move) {
+    prev_mouse_pos[0] = x_pos;
+    prev_mouse_pos[1] = y_pos;
+  }
+  vec2 mouse_dif;
+  mouse_dif[0] = x_pos - prev_mouse_pos[0];
+  mouse_dif[1] = y_pos - prev_mouse_pos[1];
 }
 
 void mouse_scroll_callback(GLFWwindow *window, double x_off, double y_off) {
@@ -75,10 +83,10 @@ void input_keys(GLFWwindow *window) {
           /* Handle S press */ 
           camera.pos[2] += (DELTA_TIME * st_player.speed);
         } else if (i == GLFW_KEY_A){
-          /* Handle S press */ 
+          /* Handle A press */ 
           camera.pos[0] -= (DELTA_TIME * st_player.speed);
         } else if (i == GLFW_KEY_D){
-          /* Handle S press */ 
+          /* Handle D press */ 
           camera.pos[0] += (DELTA_TIME * st_player.speed);
         }
       }

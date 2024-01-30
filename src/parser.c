@@ -46,7 +46,23 @@ void console_dispatcher() {
   if (command[0].kind == IDENTIFIER) {
     if (strncmp(command[0].tok, SET, sizeof(SET)) == 0) {
       /* BEGIN: set  */
-      command_not_found();
+      if (command[1].kind == IDENTIFIER) {
+        if (strncmp(command[1].tok, CURSOR, sizeof(CURSOR)) == 0) {
+          /*BEGIN: cursor*/
+            if (command[2].kind == IDENTIFIER && strncmp(command[2].tok, ON, sizeof(ON)) == 0) {
+              cursor_on(1);
+            } else if (command[2].kind == IDENTIFIER && strncmp(command[2].tok, OFF, sizeof(OFF)) == 0) {
+              cursor_on(0);
+            } else {
+              command_not_found();
+            }
+          /*END: cursor*/
+        } else {
+          command_not_found();
+        }
+      } else {
+        command_not_found();
+      }
       /* END: set */
     } else if (strncmp(command[0].tok, GIVE, sizeof(GIVE)) == 0) {
       /* BEGIN: give */

@@ -75,6 +75,11 @@ void cleanup_scene() {
 // ================================ RENDERING ================================
 
 void render_scene(GLFWwindow *window) {
+  if (CURSOR_ENABLED) {
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+  } else {
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+  }
   glClearColor(0.0, 0.0, 0.0, 1.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

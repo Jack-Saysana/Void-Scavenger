@@ -25,6 +25,8 @@ int holding_enter = 0;
 int holding_minus = 0;
 int holding_tilde = 0;
 int holding_slash = 0;
+int first_mouse_move = 0;
+vec2 prev_mouse_pos;
 
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
