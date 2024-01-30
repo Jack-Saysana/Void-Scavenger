@@ -1,6 +1,9 @@
 #pragma once
 
+#include <stdio.h>
 #include <engine/engine.h>
+
+extern F_GLYPH *fixed_sys;
 
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 

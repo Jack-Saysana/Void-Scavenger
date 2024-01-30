@@ -35,3 +35,5 @@ ST_OBSTACLE *st_obs = NULL;
 SP_OBSTACLE *sp_obs = NULL;
 size_t num_obstacles = 0;
 size_t obs_buff_len = 0;
+
+F_GLYPH *fixed_sys = NULL;

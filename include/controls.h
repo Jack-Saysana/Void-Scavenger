@@ -1,6 +1,6 @@
 #include <GLFW/glfw3.h>
 #include <engine/engine.h>
-#include <global_vars.h>
+//#include <global_vars.h>
 #include <stdio.h>
 
 #define MAX_CMD_LEN (100)
@@ -40,3 +40,4 @@ void update_perspective();
 int is_console_enabled();
 void enable_console();
 void disable_console();
+void update_console_text(char *);

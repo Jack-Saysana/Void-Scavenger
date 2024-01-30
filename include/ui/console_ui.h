@@ -1,9 +1,9 @@
 #pragma once
 
-#include <stdio.h>
 #include <engine/engine.h>
 
 static UI_COMP *console;
+extern F_GLYPH *fixed_sys;
 
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 int is_console_enabled();
