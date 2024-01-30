@@ -12,6 +12,8 @@
 #include <structs/obj_wrapper_str.h>
 
 // Insert common global variables below
+// Text Font Vars
+extern F_GLYPH *fixed_sys;
 
 // Current game mode
 typedef enum game_mode {

@@ -13,6 +13,7 @@ int init_player();
 int init_player_ship();
 int init_projectile_buffer();
 int init_space_mode();
+void init_ui_components();
 
 void cleanup_gl();
 void cleanup_scene();

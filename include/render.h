@@ -1,5 +1,6 @@
 #include <glad/glad.h>
 #include <cglm/cglm.h>
+#include <global_vars.h>
 #include <engine/engine.h>
 #include <structs/camera_str.h>
 #include <const.h>
