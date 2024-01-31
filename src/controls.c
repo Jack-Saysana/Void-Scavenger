@@ -46,15 +46,26 @@ void fb_size_callback(GLFWwindow *window, int res_x, int res_y) {
 }
 
 void mouse_pos_callback(GLFWwindow *window, double x_pos, double y_pos) {
-  // Insert mouse handling here...
-  // printf("x %f", x_pos);
   if (first_mouse_move) {
+    /* accounts for when mouse has not been moved yet*/
     prev_mouse_pos[0] = x_pos;
     prev_mouse_pos[1] = y_pos;
   }
   vec2 mouse_dif;
   mouse_dif[0] = x_pos - prev_mouse_pos[0];
   mouse_dif[1] = y_pos - prev_mouse_pos[1];
+  glm_vec2_scale(mouse_dif, mouse_sens, mouse_dif);
+  if (camera.pitch > 89) {
+    camera.pitch = 89;
+  } else if (camera.pitch < -89) {
+    camera.pitch = -89;
+  }
+  camera.yaw += mouse_dif[0];
+  if (camera.yaw > 360 || camera.yaw < -360) {
+    camera.yaw = (int)(camera.yaw) % 360;
+  }
+  prev_mouse_pos[0] = x_pos;
+  prev_mouse_pos[1] = y_pos;
 }
 
 void mouse_scroll_callback(GLFWwindow *window, double x_off, double y_off) {

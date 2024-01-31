@@ -5,6 +5,8 @@ typedef struct camera {
   vec3 forward;
   vec3 up;
   vec3 pos;
+  float pitch;
+  float yaw;
 } CAM;
 
 #endif
