@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <engine/engine.h>
 #include <global_vars.h>
 
@@ -6,5 +7,3 @@
 
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
-
-

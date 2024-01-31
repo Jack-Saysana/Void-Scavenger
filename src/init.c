@@ -24,6 +24,27 @@ int init_game() {
   init_ui_components();  
   
   status = init_timer_queue();
+  status = init_wrapper_buffer();
+  if (status) {
+    return -1;
+  }
+
+  status = init_projectile_buffer();
+  if (status) {
+    return -1;
+  }
+
+  status = init_player();
+  if (status) {
+    return -1;
+  }
+
+  status = init_player_ship();
+  if (status) {
+    return -1;
+  }
+
+  status = init_space_mode();
   if (status) {
     return -1;
   }
@@ -33,6 +54,10 @@ int init_game() {
 
 void cleanup_game() {
   cleanup_scene();
+  free_player();
+  free_player_ship();
+  free_projectile_buffer();
+  free_wrapper_buffer();
   // Add cleanup functions above...
   free_timer_queue();
   cleanup_gl();

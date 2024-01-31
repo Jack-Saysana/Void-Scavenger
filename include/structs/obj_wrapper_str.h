@@ -10,11 +10,14 @@
 */
 
 typedef enum simulation_obj_type {
-  PROJ_OBJ,
-  ENEMY_OBJ,
   PLAYER_OBJ,
+  PLAYER_SHIP_OBJ,
+  ENEMY_OBJ,
+  ENEMY_SHIP_OBJ,
+  PROJ_OBJ,
   ENV_OBJ,
   ITEM_OBJ,
+  OBSTACLE_OBJ,
 } SOBJ_T;
 
 typedef struct {
