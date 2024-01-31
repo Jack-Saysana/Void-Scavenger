@@ -21,11 +21,17 @@ int init_game() {
     return -1;
   }
 
+  status = init_timer_queue();
+  if (status) {
+    return -1;
+  }
+
   return 0;
 }
 
 void cleanup_game() {
   cleanup_scene();
   // Add cleanup functions above...
+  free_timer_queue();
   cleanup_gl();
 }
