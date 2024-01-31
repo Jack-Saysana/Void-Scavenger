@@ -7,7 +7,7 @@
   mem - location in memory to set
   set_to - value to change the location in memory to
 */
-void add_timer(float time, int *mem, int set_to) {
+void add_timer(float time, void *mem, int set_to) {
   if (time <= 0.0) {
     return;
   }
@@ -95,7 +95,11 @@ void decrement_current_timer(float delta) {
 void timer_dispatcher(TIMERS *timer) {
   /* When timer has expired, set location stored in pointer */
   /* to the value passed in originally                      */
-  *(timer->data->mem) = timer->data->set_to;
+  if (timer->data->set_to == FUNC_PTR) {
+    ((func_ptr) (timer->data->mem))();   
+  } else {
+    *((int *) timer->data->mem) = timer->data->set_to;
+  }
   free(timer->data);
   free(timer);
 }
