@@ -21,6 +21,7 @@ static MODEL *alien_models[NUM_ALIEN_TYPES] = { NULL, NULL };
 static MODEL *player_ship_model = NULL;
 static MODEL *alien_ship_models[NUM_ALIEN_SHIP_TYPES] = { NULL, NULL };
 static MODEL *sphere_model = NULL;
+static MODEL *asteroid_models[NUM_ASTEROID_TYPES] = { NULL, NULL, NULL, NULL, NULL };
 
 // Common matrices
 static mat4 ortho_proj = GLM_MAT4_IDENTITY_INIT;

@@ -50,14 +50,17 @@ void free_station_obstacle_buffer() {
 
 // ================== INDIVIDUAL INITIALIZATION AND CLEANUP ==================
 
-size_t init_space_obstacle(vec3 pos, vec3 velocity, vec3 angular_vel) {
+size_t init_space_obstacle(int type, vec3 pos, vec3 velocity, vec3 angular_vel,
+                           vec3 scale) {
   if (sp_obs == NULL) {
     fprintf(stderr, "Error: Inserting into a deallocated obstacle buffer\n");
     return INVALID_INDEX;
   }
 
   SP_OBSTACLE *obstacle = sp_obs + num_obstacles;
-  obstacle->ent = init_obstacle_ent();
+  if (type == TYPE_ASTEROID) {
+    obstacle->ent = init_obstacle_ent(gen_rand_int(NUM_ASTEROID_TYPES));
+  }
   if (obstacle->ent == NULL) {
     fprintf(stderr, "Error: Unable to allocate obstacle entity\n");
     return INVALID_INDEX;
@@ -72,6 +75,7 @@ size_t init_space_obstacle(vec3 pos, vec3 velocity, vec3 angular_vel) {
   glm_vec3_copy(velocity, obstacle->ent->velocity);
   glm_vec3_copy(angular_vel, obstacle->ent->ang_velocity);
   glm_vec3_copy(pos, obstacle->ent->translation);
+  glm_vec3_copy(scale, obstacle->ent->scale);
 
   num_obstacles++;
   if (num_obstacles == obs_buff_len) {
@@ -86,7 +90,7 @@ size_t init_space_obstacle(vec3 pos, vec3 velocity, vec3 angular_vel) {
   return num_obstacles - 1;
 }
 
-size_t init_station_obstacle(vec3 pos) {
+size_t init_station_obstacle(vec3 pos, vec3 scale) {
   if (st_obs == NULL) {
     fprintf(stderr, "Error: Inserting into a deallocated obstacle buffer\n");
     return INVALID_INDEX;
@@ -108,6 +112,7 @@ size_t init_station_obstacle(vec3 pos) {
   glm_vec3_copy((vec3) { 0.0, 0.0, 0.0 }, obstacle->ent->ang_velocity);
   glm_vec3_copy((vec3) { 0.0, 0.0, 0.0 }, obstacle->ent->velocity);
   glm_vec3_copy(pos, obstacle->ent->translation);
+  glm_vec3_copy(scale, obstacle->ent->scale);
 
   num_obstacles++;
   if (num_obstacles == obs_buff_len) {

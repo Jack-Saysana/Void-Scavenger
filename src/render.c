@@ -31,8 +31,15 @@ int init_scene() {
   player_ship_model = load_model("./assets/actors/player_ship/player_ship.obj");
   alien_ship_models[0] = load_model("./assets/actors/alien_ship_1/alien_ship_1.obj");
   sphere_model = load_model("./assets/misc/sphere/sphere.obj");
+  asteroid_models[0] = load_model("./assets/set_pieces/asteroid_1/asteroid_1.obj");
+  asteroid_models[1] = load_model("./assets/set_pieces/asteroid_2/asteroid_2.obj");
+  asteroid_models[2] = load_model("./assets/set_pieces/asteroid_3/asteroid_3.obj");
+  asteroid_models[3] = load_model("./assets/set_pieces/asteroid_4/asteroid_4.obj");
+  asteroid_models[4] = load_model("./assets/set_pieces/asteroid_5/asteroid_5.obj");
   if (!player_model || !alien_models[0] || !alien_models[1] ||
-      !player_ship_model || !alien_ship_models[0] || !sphere_model) {
+      !player_ship_model || !alien_ship_models[0] || !sphere_model ||
+      !asteroid_models[0] || !asteroid_models[1] || !asteroid_models[2] ||
+      !asteroid_models[3] || !asteroid_models[4]) {
     fprintf(stderr, "Error: failed to initialize game models\n");
     return -1;
   }
@@ -57,7 +64,7 @@ int init_scene() {
 
   glm_vec3_copy((vec3) {0.0, 0.0, -1.0}, camera.forward);
   glm_vec3_copy((vec3) {0.0, 1.0, 0.0}, camera.up);
-  glm_vec3_copy((vec3) {0.0, 0.0, 5.0}, camera.pos);
+  glm_vec3_copy((vec3) {0.0, 0.0, 15.0}, camera.pos);
 
   return 0;
 }
@@ -103,7 +110,7 @@ void render_scene(GLFWwindow *window) {
     render_items();
     render_st_obstacles();
   } else if (mode == SPACE) {
-    render_game_entity(player_ship.ent);
+    //render_game_entity(player_ship.ent);
     render_enemy_ships();
     render_projectiles();
     render_sp_obstacles();
@@ -188,8 +195,7 @@ ENTITY *init_proj_ent() {
 }
 
 ENTITY *init_obstacle_ent(size_t index) {
-  // TODO: create asteroid model to instance
-  return NULL;
+  return init_entity(asteroid_models[index]);
 }
 
 void toggle_hit_boxes() {

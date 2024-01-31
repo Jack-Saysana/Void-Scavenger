@@ -39,6 +39,8 @@
 
 // Asteroid constants
 #define NUM_ASTEROIDS (1000)
+#define NUM_ASTEROID_TYPES (5)
+#define TYPE_ASTEROID (0)
 
 // Misc
 #define X (0)

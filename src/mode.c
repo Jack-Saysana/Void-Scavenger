@@ -23,18 +23,44 @@ int init_space_mode() {
   // Place player ship entity into simulations
   int status = player_ship_insert_sim();
 
-  // Initialize and place station entity in simulation
+  // Initialize and place space entity in simulation
   status = init_enemy_ship_buffer();
+  if (status) {
+    return -1;
+  }
+  
+  status = init_space_obstacle_buffer();
   if (status) {
     return -1;
   }
 
   // Initialize and place asteroid and enemies entities in simulation
-  
-
+  spawn_asteroids(); 
+  spawn_space_debris();
 
   mode = SPACE;
   return 0;
+}
+
+void spawn_asteroids() {
+  seed_random();
+  vec3 pos = GLM_VEC3_ZERO_INIT;
+  vec3 vel = GLM_VEC3_ZERO_INIT;
+  vec3 ang_vel = GLM_VEC3_ZERO_INIT;
+  vec3 scale = GLM_VEC3_ZERO_INIT;
+  for (int i = 0; i < NUM_ASTEROIDS; i++) {
+    gen_rand_vec3(&pos, 10.0);  
+    gen_rand_vec3(&vel, 5.0);
+    gen_rand_vec3(&ang_vel, 0.5);
+    gen_rand_vec3(&scale, 3.0);
+    size_t location = init_space_obstacle(TYPE_ASTEROID, pos, vel,
+                                          ang_vel, scale);    
+    space_obstacle_insert_sim(location);
+  }
+}
+
+void spawn_space_debris() {
+  /* TODO: implement space debris */
 }
 
 void clear_space_mode() {
@@ -87,6 +113,10 @@ int init_station_mode() {
   }
 
   // Place render distance sphere in simulations
+  status = init_station_obstacle_buffer();
+  if (status) {
+    return -1;
+  }
 
   mode = STATION;
   return 0;

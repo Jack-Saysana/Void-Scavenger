@@ -13,3 +13,5 @@ ENTITY *init_obstacle_ent();
 
 size_t init_wrapper(SOBJ_T, ENTITY *, void *);
 void delete_wrapper(size_t);
+
+int gen_rand_int(int);
