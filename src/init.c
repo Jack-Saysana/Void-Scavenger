@@ -22,6 +22,11 @@ int init_game() {
   }
 
   init_ui_components();  
+  
+  status = init_timer_queue();
+  if (status) {
+    return -1;
+  }
 
   return 0;
 }
@@ -29,5 +34,6 @@ int init_game() {
 void cleanup_game() {
   cleanup_scene();
   // Add cleanup functions above...
+  free_timer_queue();
   cleanup_gl();
 }
