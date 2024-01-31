@@ -10,7 +10,7 @@ int free_ui();
 
 int import_font(char *, char *, F_GLYPH **);
 
-UI_COMP *add_ui_comp(UI_COMP *, vec3, float, float, int);
+UI_COMP *add_ui_comp(UI_COMP *, vec2, float, float, int);
 int render_ui();
 
 void set_ui_pos(UI_COMP *, vec2);
