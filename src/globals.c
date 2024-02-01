@@ -10,6 +10,8 @@ GAME_MODE mode = SPACE;
 
 CAM camera;
 
+ENTITY *render_sphere = NULL;
+
 SIMULATION *physics_sim = NULL;
 SIMULATION *combat_sim = NULL;
 SIMULATION *render_sim = NULL;

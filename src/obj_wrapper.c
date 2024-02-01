@@ -38,6 +38,8 @@ size_t init_wrapper(SOBJ_T type, ENTITY *entity, void *data) {
   object_wrappers[num_wrappers].type = type;
   object_wrappers[num_wrappers].entity = entity;
   object_wrappers[num_wrappers].data = data;
+  object_wrappers[num_wrappers].to_delete = 0;
+  entity->data = (void *) num_wrappers;
   num_wrappers++;
   if (num_wrappers == wrapper_buff_size) {
     int status = double_buffer((void **) &object_wrappers, &wrapper_buff_size,
@@ -47,7 +49,6 @@ size_t init_wrapper(SOBJ_T type, ENTITY *entity, void *data) {
       return INVALID_INDEX;
     }
   }
-
   return num_wrappers - 1;
 }
 

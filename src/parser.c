@@ -56,7 +56,7 @@ void console_dispatcher() {
       /* BEGIN: spawn */
       command_not_found();
       /* END: spawn  */
-    } else if (strncmp(command[0].tok, COORDS, sizeof(COORDS)) == 0) {     
+    } else if (strncmp(command[0].tok, COORDS, sizeof(COORDS)) == 0) {
       /* BEGIN: coords */
       command_not_found();
       /* END: coords*/
@@ -64,6 +64,14 @@ void console_dispatcher() {
       /* BEGIN: respawn */
       command_not_found();
       /* END: respawn*/
+    } else if (strncmp(command[0].tok, WIRE, sizeof(WIRE)) == 0) {
+      /* BEGIN: wire */
+      toggle_wire_frame();
+      /* END: wire */
+    } else if (strncmp(command[0].tok, HIT_BOXES, sizeof(HIT_BOXES)) == 0) {
+      /* BEGIN: hb */
+      toggle_hit_boxes();
+      /* END: hb */
     } else {
       /* NON-RECOGNIZED IDENTIFIER */
       command_not_found();

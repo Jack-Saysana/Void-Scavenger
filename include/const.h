@@ -31,11 +31,18 @@
 #define E_BASE_SPEED (1.0)
 #define E_BASE_FIRERATE (0.1)
 
+// Projectile Constants
+#define NUM_PROJ_TYPES (2)
+
+#define SHIP_PROJ (0)
+#define STAT_PROJ (1)
+
 // Simulation constants
 #define SPACE_SIZE (1024.0)
 #define SPACE_DEPTH (9)
 #define STATION_SIZE (1024.0)
 #define STATION_DEPTH (9)
+#define RENDER_DIST (10.0)
 
 // Misc
 #define X (0)

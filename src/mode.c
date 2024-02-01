@@ -4,7 +4,9 @@
 
   Implements the functionaility behind switching between station and space
   mode. This implies clearing and repopulating the simulation as well as
-  reseting game state between levels.
+  reseting game state between levels. Also implements helper functions for
+  tracking the overarching game state of each mode and managing each mode's
+  resources accordingly.
 
 */
 
@@ -67,6 +69,7 @@ void clear_space_mode() {
 int init_station_mode() {
   // Initialize simulations
   physics_sim = init_sim(STATION_SIZE, STATION_DEPTH);
+  sim_add_force(physics_sim, (vec3) { 0.0, -GRAVITY, 0.0 });
   combat_sim = init_sim(STATION_SIZE, STATION_DEPTH);
   render_sim = init_sim(STATION_SIZE, STATION_DEPTH);
   event_sim = init_sim(STATION_SIZE, STATION_DEPTH);
@@ -83,7 +86,16 @@ int init_station_mode() {
     return -1;
   }
 
+  for (int i = 0; i < 3; i++) {
+    ENTITY *ent = init_test_ent();
+    ent->type |= T_IMMUTABLE;
+    ent->translation[X] = i * 5.0;
+    sim_add_entity(physics_sim, ent, ALLOW_HURT_BOXES);
+    sim_add_entity(render_sim, ent, ALLOW_DEFAULT);
+  }
+
   // Place render distance sphere in simulations
+  sim_add_entity(render_sim, render_sphere, ALLOW_DEFAULT);
 
   mode = STATION;
   return 0;
@@ -118,4 +130,56 @@ void clear_station_mode() {
 
   // Reset wrapper buffer length
   num_wrappers = 0;
+}
+
+// ========================= GENERAL GAME MANAGEMENT =========================
+
+int delete_stale_objects() {
+  SOBJ *cur_wrapper = NULL;
+  for (size_t i = 0; i < num_enemies; i++) {
+    if (mode == SPACE) {
+      cur_wrapper = object_wrappers + sp_enemies[i].wrapper_offset;
+      if (cur_wrapper->to_delete) {
+        sp_enemy_remove_sim(i);
+        delete_enemy_ship(i);
+        i--;
+      }
+    } else {
+      cur_wrapper = object_wrappers + st_enemies[i].wrapper_offset;
+      if (cur_wrapper->to_delete) {
+        st_enemy_remove_sim(i);
+        delete_enemy_ship(i);
+        i--;
+      }
+    }
+  }
+  for (size_t i = 0; i < num_projectiles; i++) {
+    cur_wrapper = object_wrappers + projectiles[i].wrapper_offset;
+    if (cur_wrapper->to_delete) {
+      projectile_remove_sim(i);
+      delete_projectile(i);
+      i--;
+    }
+  }
+  for (size_t i = 0; i < num_items; i++) {
+    cur_wrapper = object_wrappers + items[i].wrapper_offset;
+    if (cur_wrapper->to_delete) {
+      // Delete item
+    }
+  }
+  for (size_t i = 0; i < num_obstacles; i++) {
+    if (mode == SPACE) {
+      cur_wrapper = object_wrappers + sp_obs[i].wrapper_offset;
+      if (cur_wrapper->to_delete) {
+        // Delete obstacle
+      }
+    } else {
+      cur_wrapper = object_wrappers + st_obs[i].wrapper_offset;
+      if (cur_wrapper->to_delete) {
+        // Delete obstacle
+      }
+    }
+  }
+
+  return 0;
 }

@@ -30,12 +30,30 @@ int init_scene() {
   alien_models[1] = load_model("./assets/actors/alien_2/alien_2.obj");
   player_ship_model = load_model("./assets/actors/player_ship/player_ship.obj");
   alien_ship_models[0] = load_model("./assets/actors/alien_ship_1/alien_ship_1.obj");
+  projectile_models[0] = load_model("./assets/misc/sp_projectile/sp_projectile.obj");
+  projectile_models[1] = load_model("./assets/misc/st_projectile/st_projectile.obj");
   sphere_model = load_model("./assets/misc/sphere/sphere.obj");
+  render_sphere_model = load_model("./assets/misc/render_sphere/render_sphere.obj");
+  cube_model = load_model("./assets/misc/cube/cube.obj");
+  four_way_model = load_model("./assets/set_pieces/4_way/4_way_0.obj");
   if (!player_model || !alien_models[0] || !alien_models[1] ||
-      !player_ship_model || !alien_ship_models[0] || !sphere_model) {
+      !player_ship_model || !alien_ship_models[0] || !projectile_models[0] ||
+      !projectile_models[1] || !sphere_model || !render_sphere_model ||
+      !cube_model || !four_way_model) {
     fprintf(stderr, "Error: failed to initialize game models\n");
     return -1;
   }
+
+  // Init entities below...
+  render_sphere = init_entity(render_sphere_model);
+  if (!render_sphere) {
+    fprintf(stderr, "Error: failed to initialize game entity\n");
+    return -1;
+  }
+  render_sphere->type |= T_DRIVING;
+  glm_vec3_copy((vec3) { RENDER_DIST, RENDER_DIST, RENDER_DIST },
+                render_sphere->scale);
+  render_sphere->velocity[X] = 0.01;
 
   // Initialize common matrices
   glm_ortho(-1.0, 1.0, -1.0, 1.0, 0.0, 100.0, ortho_proj);
@@ -98,10 +116,14 @@ void render_scene(GLFWwindow *window) {
 
   if (mode == STATION) {
     render_game_entity(st_player.ent);
+    render_game_entity(render_sphere);
+    /*
     render_enemies();
     render_projectiles();
     render_items();
     render_st_obstacles();
+    */
+    query_render_sim();
   } else if (mode == SPACE) {
     render_game_entity(player_ship.ent);
     render_enemy_ships();
@@ -116,6 +138,21 @@ void render_scene(GLFWwindow *window) {
 }
 
 // ============================== RENDER HELPERS =============================
+
+void query_render_sim() {
+  COLLISION *render_query = NULL;
+  size_t query_len = get_sim_collisions(render_sim, &render_query);
+  for (size_t i = 0; i < query_len; i++) {
+    if (render_query[i].a_ent == render_sphere ||
+        render_query[i].b_ent == render_sphere) {
+      if (render_query[i].a_ent != render_sphere) {
+        render_game_entity(render_query[i].a_ent);
+      } else if (render_query[i].b_ent != render_sphere) {
+        render_game_entity(render_query[i].b_ent);
+      }
+    }
+  }
+}
 
 void render_enemies() {
   for (size_t i = 0; i < num_enemies; i++) {
@@ -182,9 +219,12 @@ ENTITY *init_alien_ship_ent(size_t index) {
   return init_entity(alien_ship_models[index]);
 }
 
-ENTITY *init_proj_ent() {
-  // TODO create projectile model to instance
-  return NULL;
+ENTITY *init_proj_ent(size_t index) {
+  return init_entity(projectile_models[index]);
+}
+
+ENTITY *init_test_ent() {
+  return init_entity(four_way_model);
 }
 
 void toggle_hit_boxes() {

@@ -20,7 +20,11 @@ static MODEL *player_model = NULL;
 static MODEL *alien_models[NUM_ALIEN_TYPES] = { NULL, NULL };
 static MODEL *player_ship_model = NULL;
 static MODEL *alien_ship_models[NUM_ALIEN_SHIP_TYPES] = { NULL, NULL };
+static MODEL *projectile_models[NUM_PROJ_TYPES] = { NULL, NULL };
 static MODEL *sphere_model = NULL;
+static MODEL *render_sphere_model = NULL;
+static MODEL *cube_model = NULL;
+static MODEL *four_way_model = NULL;
 
 // Common matrices
 static mat4 ortho_proj = GLM_MAT4_IDENTITY_INIT;
@@ -32,6 +36,7 @@ static int wire_frame = 0;
 
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
+void query_render_sim();
 void render_enemies();
 void render_enemy_ships();
 void render_projectiles();

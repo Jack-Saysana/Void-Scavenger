@@ -57,7 +57,7 @@ size_t init_enemy(size_t index) {
   new_enemy->ent = init_alien_ent(index);
   if (new_enemy->ent == NULL) {
     fprintf(stderr, "Error: Unable to allocate enemy entity\n");
-    return INVALID_INDEX;;
+    return INVALID_INDEX;
   }
   new_enemy->ent->type |= T_DRIVING;
   new_enemy->ent->inv_mass = 1.0;
@@ -129,6 +129,13 @@ int st_enemy_insert_sim(size_t index) {
   }
 
   return 0;
+}
+
+void st_enemy_remove_sim(size_t index) {
+  sim_remove_entity(physics_sim, st_enemies[index].ent);
+  sim_remove_entity(combat_sim, st_enemies[index].ent);
+  sim_remove_entity(render_sim, st_enemies[index].ent);
+  sim_remove_entity(event_sim, st_enemies[index].ent);
 }
 
 // =============================== SPACE MODE ================================
@@ -207,7 +214,7 @@ void delete_enemy_ship(size_t index) {
 
 int sp_enemy_insert_sim(size_t index) {
   int status = sim_add_entity(physics_sim, sp_enemies[index].ent,
-                              ALLOW_DEFAULT);
+                              ALLOW_HURT_BOXES);
   if (status) {
     return -1;
   }
@@ -230,4 +237,12 @@ int sp_enemy_insert_sim(size_t index) {
 
   return 0;
 }
+
+void sp_enemy_remove_sim(size_t index) {
+  sim_remove_entity(physics_sim, sp_enemies[index].ent);
+  sim_remove_entity(combat_sim, sp_enemies[index].ent);
+  sim_remove_entity(render_sim, sp_enemies[index].ent);
+  sim_remove_entity(event_sim, sp_enemies[index].ent);
+}
+
 
