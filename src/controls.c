@@ -55,6 +55,7 @@ void mouse_pos_callback(GLFWwindow *window, double x_pos, double y_pos) {
   mouse_dif[0] = x_pos - prev_mouse_pos[0];
   mouse_dif[1] = y_pos - prev_mouse_pos[1];
   glm_vec2_scale(mouse_dif, mouse_sens, mouse_dif);
+  camera.pitch += mouse_dif[1];
   if (camera.pitch > 89) {
     camera.pitch = 89;
   } else if (camera.pitch < -89) {
@@ -88,17 +89,17 @@ void input_keys(GLFWwindow *window) {
         /* TODO: handle console cursor */
       } else if (!console_enabled) {
         if (i == GLFW_KEY_W) {
-          /* Handle w press */ 
-          camera.pos[2] -= (DELTA_TIME * st_player.speed);
+          /* Handle W press */ 
+          move_camera(&camera, 'w');
         } else if (i == GLFW_KEY_S){
           /* Handle S press */ 
-          camera.pos[2] += (DELTA_TIME * st_player.speed);
+          move_camera(&camera, 's');
         } else if (i == GLFW_KEY_A){
           /* Handle A press */ 
-          camera.pos[0] -= (DELTA_TIME * st_player.speed);
+          move_camera(&camera, 'a');
         } else if (i == GLFW_KEY_D){
           /* Handle D press */ 
-          camera.pos[0] += (DELTA_TIME * st_player.speed);
+          move_camera(&camera, 'd');
         }
       }
       holding_alpha[i - GLFW_KEY_A] = 1;

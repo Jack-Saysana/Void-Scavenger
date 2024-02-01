@@ -44,3 +44,4 @@ int is_console_enabled();
 void enable_console();
 void disable_console();
 void update_console_text(char *);
+void move_camera(CAM *, char);
