@@ -36,10 +36,18 @@ int init_scene() {
   asteroid_models[2] = load_model("./assets/set_pieces/asteroid_3/asteroid_3.obj");
   asteroid_models[3] = load_model("./assets/set_pieces/asteroid_4/asteroid_4.obj");
   asteroid_models[4] = load_model("./assets/set_pieces/asteroid_5/asteroid_5.obj");
+  corridor_models[0] = load_model("./assets/set_pieces/1_way/1_way.obj");
+  corridor_models[1] = load_model("./assets/set_pieces/4_way/4_way_0.obj");
+  corridor_models[2] = load_model("./assets/set_pieces/corner/corner_0.obj");
+  corridor_models[3] = load_model("./assets/set_pieces/t_junct/t_junct.obj");
+  corridor_models[4] = load_model("./assets/set_pieces/corridor/corridor_0.obj");
+  /*
   if (!player_model || !alien_models[0] || !alien_models[1] ||
       !player_ship_model || !alien_ship_models[0] || !sphere_model ||
       !asteroid_models[0] || !asteroid_models[1] || !asteroid_models[2] ||
       !asteroid_models[3] || !asteroid_models[4]) {
+  */
+  if (CHECK_ASSETS_LOADED) {
     fprintf(stderr, "Error: failed to initialize game models\n");
     return -1;
   }
@@ -196,6 +204,10 @@ ENTITY *init_proj_ent() {
 
 ENTITY *init_obstacle_ent(size_t index) {
   return init_entity(asteroid_models[index]);
+}
+
+ENTITY *init_corridor_ent(size_t index) {
+  return init_entity(corridor_models[index]);
 }
 
 void toggle_hit_boxes() {

@@ -9,6 +9,7 @@
 #include <structs/projectile_str.h>
 #include <structs/item_str.h>
 #include <structs/obstacle_str.h>
+#include <structs/corridor_str.h>
 #include <structs/obj_wrapper_str.h>
 
 // Insert common global variables below
@@ -59,5 +60,10 @@ extern ST_OBSTACLE* st_obs;
 extern SP_OBSTACLE* sp_obs;
 extern size_t num_obstacles;
 extern size_t obs_buff_len;
+
+// Currently active station corridors
+extern CORRIDOR *cd_obs;
+extern size_t num_corridors;
+extern size_t corridor_buff_len;
 
 #endif

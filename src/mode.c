@@ -113,7 +113,14 @@ int init_station_mode() {
   }
 
   // Place render distance sphere in simulations
+
+
   status = init_station_obstacle_buffer();
+  if (status) {
+    return -1;
+  }
+
+  status = init_corridor_buffer();
   if (status) {
     return -1;
   }
@@ -142,13 +149,21 @@ void clear_station_mode() {
   for (size_t i = 0; i < num_obstacles; i++) {
     free_entity(st_obs[i].ent);
   }
+  for (size_t i = 0; i < num_corridors; i++) {
+    free_entity(cd_obs[i].ent);
+  }
   num_enemies = 0;
   num_projectiles = 0;
   num_items = 0;
   num_obstacles = 0;
+  num_corridors = 0;
 
   free_enemy_buffer();
 
   // Reset wrapper buffer length
   num_wrappers = 0;
+}
+
+void create_station_corridors() {
+  /* TODO: generate maze corridors from maze generation */
 }

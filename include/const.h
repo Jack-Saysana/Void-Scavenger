@@ -42,6 +42,14 @@
 #define NUM_ASTEROID_TYPES (5)
 #define TYPE_ASTEROID (0)
 
+// Corridor constants
+#define NUM_CORRIDOR_TYPES (5)
+#define TYPE_ONE_WAY (0)
+#define TYPE_FOUR_WAY (1)
+#define TYPE_CORNER (2)
+#define TYPE_T_JUNCT (3)
+#define TYPE_CORRIDOR (4)
+
 // Misc
 #define X (0)
 #define Y (1)

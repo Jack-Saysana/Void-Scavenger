@@ -7,6 +7,89 @@
 
 */
 
+/* ==================== CORRIDOR BUFFER INITIALIZATION ===================== */
+
+int init_corridor_buffer() {
+  cd_obs = malloc(sizeof(CORRIDOR) * BUFF_STARTING_LEN);
+  if (cd_obs == NULL) {
+    fprintf(stderr, "Error: Unable to allocate projectile buffer\n");
+    return -1;
+  }
+  num_corridors = 0;
+  corridor_buff_len = BUFF_STARTING_LEN;
+
+  return 0;
+}
+
+/* ==================== CORRIDOR OBJECT INIT AND DELETE ==================== */
+
+size_t init_corridor(vec3 pos, size_t type) {
+  if (cd_obs == NULL) {
+    fprintf(stderr, "Error: Inserting into a deallocated corridor buffer\n");
+    return INVALID_INDEX;
+  }
+
+  CORRIDOR *corr = cd_obs + num_corridors;
+  corr->ent = init_corridor_ent(type);
+  if (corr->ent == NULL) {
+    fprintf(stderr, "Error: Unable to allocate corridor entity\n");
+    return INVALID_INDEX;
+  }
+
+  corr->wrapper_offset = init_wrapper(CORRIDOR_OBJ, corr->ent,
+                                      (void *) num_corridors);
+  if (corr->wrapper_offset == INVALID_INDEX) {
+    return -1;
+  }
+
+  /* Initialize corridor entity data */
+  glm_vec3_copy(pos, corr->ent->translation);
+  glm_vec3_copy((vec3) GLM_VEC3_ZERO_INIT, corr->ent->ang_velocity);
+  glm_vec3_copy((vec3) GLM_VEC3_ZERO_INIT, corr->ent->velocity);
+  glm_vec3_copy((vec3) { 1.0, 1.0, 1.0 }, corr->ent->scale);
+
+  if (++num_corridors == corridor_buff_len) {
+    int status = double_buffer((void **) &cd_obs, &corridor_buff_len,
+                               sizeof(CORRIDOR));
+    if (status) {
+      fprintf(stderr, "Error: Unable to reallocate corridor buffer\n");
+      return INVALID_INDEX;
+    }
+  }
+  return num_corridors - 1;
+}
+
+void delete_corridor(size_t index) {
+  if (index >= num_corridors) {
+    return;
+  }
+
+  free_entity(cd_obs[index].ent);
+  delete_wrapper(cd_obs[index].wrapper_offset);
+
+  num_corridors--;
+}
+
+int corridor_insert_sim(size_t index) {
+  if (sim_add_entity(physics_sim, cd_obs[index].ent,
+                              ALLOW_DEFAULT)) {
+    return -1;
+  }
+
+  if (sim_add_entity(combat_sim, cd_obs[index].ent,
+                              ALLOW_DEFAULT)) {
+    return -1;
+  }
+
+  if (sim_add_entity(render_sim, cd_obs[index].ent,
+                              ALLOW_DEFAULT)) {
+    return -1;
+  }
+  return 0;
+}
+
+/* =================== CORRIDOR LAYOUT GENERATION ========================== */
+
 void set_invalid(int *list, int size) {
   for (int i = 0; i < size; i++) {
     list[i] = INVALID;
@@ -16,7 +99,7 @@ void set_invalid(int *list, int size) {
 /*
   Gets random item from the list, then removes and returns it
 */
-int get_random(int *list, unsigned int size, int *num_elements) {
+int get_random(int *list, size_t size, int *num_elements) {
   /* Keep picking random items until a non-error block is found */
   if (*num_elements == 0) {
     return NO_ELEMENTS;
@@ -35,7 +118,7 @@ int get_random(int *list, unsigned int size, int *num_elements) {
 /*
   Searches through the list to find an element and remove it
 */
-void remove_element(int *list, unsigned int size, int *num_elements, int remove) {
+void remove_element(int *list, size_t size, int *num_elements, int remove) {
   if (*num_elements == 0) {
     return;
   }
@@ -52,7 +135,7 @@ void remove_element(int *list, unsigned int size, int *num_elements, int remove)
   Adds an element to the list and doubles the buffer if it is
   needed to fit the next coming element.
 */
-void add_element(int **list, unsigned int *size, int *num_elements, int to_add) {
+void add_element(int **list, size_t *size, int *num_elements, int to_add) {
   if (*size == *num_elements) {
     int prev_size = *size;
     if (double_buffer((void **) list, size, sizeof(int)) == -1) {
@@ -81,7 +164,7 @@ void add_element(int **list, unsigned int *size, int *num_elements, int to_add) 
 */
 void connect_cell(int maze[MAX_MAZE_SIZE][MAX_MAZE_SIZE], 
                   int x, int y, int **list,
-                  unsigned int *size, int *num_elements) {
+                  size_t *size, int *num_elements) {
   /* Find a wall around the frontier square that is adjacent */
   /* to an IN cell, then remove the wall by setting to IN    */
   if ((x + 2) < MAX_MAZE_SIZE && maze[x + 2][y] == IN) {      
@@ -122,7 +205,7 @@ void connect_cell(int maze[MAX_MAZE_SIZE][MAX_MAZE_SIZE],
 
 int gen_maze() {
   int maze[MAX_MAZE_SIZE][MAX_MAZE_SIZE];
-  unsigned int size = MIN_FRONTIER;
+  size_t size = MIN_FRONTIER;
   int *frontier_list = (int *)(malloc(sizeof(int) * size));
   int num_elements = 0;
 

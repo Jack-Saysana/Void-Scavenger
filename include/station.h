@@ -1,3 +1,5 @@
+#include <global_vars.h>
+#include <const.h>
 #include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
@@ -24,4 +26,8 @@
 #define UNSET_WALL(maze, x, y) (maze[x][y] = IN)
 
 /* ======================== EXTERNALLY DEFINED FUNCTIONS ================== */
-int double_buffer(void **, unsigned int *, unsigned int);
+int double_buffer(void **, size_t *, size_t);
+ENTITY *init_corridor_ent(size_t index);
+
+size_t init_wrapper(SOBJ_T, ENTITY *, void *);
+void delete_wrapper(size_t);

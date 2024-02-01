@@ -21,6 +21,7 @@ void free_enemy_ship_buffer();
 int player_insert_sim();
 int player_ship_insert_sim();
 
+/* Obstacles for station and space mode */
 int init_space_obstacle_buffer();
 int init_station_obstacle_buffer();
 void free_space_obstacle_buffer();
@@ -29,6 +30,10 @@ size_t init_space_obstacle(int, vec3, vec3, vec3, vec3);
 size_t init_station_obstacle(vec3, vec3);
 int space_obstacle_insert_sim(size_t);
 
+/* Corridors for the station itself */
+int init_corridor_buffer();
+
+/* Generation of asteroid positioning, speed, dir, etc... */
 void gen_rand_vec3(vec3 *, float);
 void seed_random();
 
