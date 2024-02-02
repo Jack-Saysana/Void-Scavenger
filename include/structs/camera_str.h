@@ -8,4 +8,11 @@ typedef struct camera {
   float yaw;
 } CAM;
 
+typedef enum move_dir {
+  MOVE_FORWARD,
+  MOVE_BACKWARD,
+  MOVE_LEFT,
+  MOVE_RIGHT
+} MOVE_DIR;
+
 #endif

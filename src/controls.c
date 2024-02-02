@@ -90,16 +90,16 @@ void input_keys(GLFWwindow *window) {
       } else if (!console_enabled) {
         if (i == GLFW_KEY_W) {
           /* Handle W press */ 
-          move_camera(&camera, 'w');
+          move_camera(&camera, MOVE_FORWARD);
         } else if (i == GLFW_KEY_S){
           /* Handle S press */ 
-          move_camera(&camera, 's');
+          move_camera(&camera, MOVE_BACKWARD);
         } else if (i == GLFW_KEY_A){
           /* Handle A press */ 
-          move_camera(&camera, 'a');
+          move_camera(&camera, MOVE_LEFT);
         } else if (i == GLFW_KEY_D){
           /* Handle D press */ 
-          move_camera(&camera, 'd');
+          move_camera(&camera, MOVE_RIGHT);
         }
       }
       holding_alpha[i - GLFW_KEY_A] = 1;

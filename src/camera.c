@@ -17,7 +17,7 @@ void get_cam_matrix(CAM *cam, mat4 dest) {
   glm_mat4_copy(cam->view, dest);
 }
 
-void move_camera(CAM *cam, char dir) {
+void move_camera(CAM *cam, MOVE_DIR dir) {
   vec3 forward;
   forward[0] = cam->view[2][0];
   forward[1] = 0.0;
@@ -30,16 +30,16 @@ void move_camera(CAM *cam, char dir) {
   glm_vec3_normalize(left);
   glm_vec3_scale(forward, (DELTA_TIME * st_player.speed), forward);
   glm_vec3_scale(left, (DELTA_TIME * st_player.speed), left);
-  if (dir == 'w') {
+  if (dir == MOVE_FORWARD) {
     cam->pos[0] += forward[0];
     cam->pos[2] += forward[2];
-  } else if (dir == 's') {
+  } else if (dir == MOVE_BACKWARD) {
     cam->pos[0] -= forward[0];
     cam->pos[2] -= forward[2];
-  } else if (dir == 'a') {
+  } else if (dir == MOVE_LEFT) {
     cam->pos[0] += left[0];
     cam->pos[2] += left[2];
-  } else if (dir == 'd') {
+  } else if (dir == MOVE_RIGHT) {
     cam->pos[0] -= left[0];
     cam->pos[2] -= left[2];
   }
