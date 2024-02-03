@@ -15,6 +15,8 @@
 #define SPAWN                ("spawn")
 #define COORDS               ("coords")
 #define RESPAWN              ("respawn")
+#define WIRE                 ("wire")
+#define HIT_BOXES            ("hb")
 
 #define MAX_TOKS (10)
 
@@ -34,4 +36,6 @@ float create_float(int);
 
 /* ================ EXTERNALLY DEFINED FUNCTIONS =================== */
 void command_not_found();
+void toggle_hit_boxes();
+void toggle_wire_frame();
 void cursor_on(int);

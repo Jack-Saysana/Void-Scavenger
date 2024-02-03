@@ -13,3 +13,4 @@ void cleanup_game();
 void keyboard_input(GLFWwindow *);
 
 void handle_collisions();
+int delete_stale_objects();

@@ -34,6 +34,7 @@ int main() {
     // - etc...
     keyboard_input(window);
     handle_collisions();
+    delete_stale_objects();
     render_scene(window);
   }
 

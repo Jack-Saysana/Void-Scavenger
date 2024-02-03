@@ -22,6 +22,8 @@ typedef struct projectile {
   PROJ_SOURCE source;
   S_WEAPON_T type;
   float damage;
+  // Max distance the projectile can continue to travel before despawning
+  float range;
 } PROJ;
 
 #endif
