@@ -90,31 +90,31 @@ void input_keys(GLFWwindow *window) {
       } else if (!console_enabled && mode == STATION) {
         /* FPS movment */
         if (i == GLFW_KEY_W) {
-          /* Handle W press */ 
+          /* Handle W press */
           move_camera(&camera, MOVE_FORWARD);
         } else if (i == GLFW_KEY_S){
-          /* Handle S press */ 
+          /* Handle S press */
           move_camera(&camera, MOVE_BACKWARD);
         } else if (i == GLFW_KEY_A){
-          /* Handle A press */ 
+          /* Handle A press */
           move_camera(&camera, MOVE_LEFT);
         } else if (i == GLFW_KEY_D){
-          /* Handle D press */ 
+          /* Handle D press */
           move_camera(&camera, MOVE_RIGHT);
         }
-      } else if (!console_enabled && mode == SHIP) {
+      } else if (!console_enabled && mode == SPACE) {
         /* TODO Ship movment */
         if (i == GLFW_KEY_W) {
-          /* Handle W press */ 
+          /* Handle W press */
           move_camera(&camera, MOVE_FORWARD);
         } else if (i == GLFW_KEY_S){
-          /* Handle S press */ 
+          /* Handle S press */
           move_camera(&camera, MOVE_BACKWARD);
         } else if (i == GLFW_KEY_A){
-          /* Handle A press */ 
+          /* Handle A press */
           move_camera(&camera, MOVE_LEFT);
         } else if (i == GLFW_KEY_D){
-          /* Handle D press */ 
+          /* Handle D press */
           move_camera(&camera, MOVE_RIGHT);
         }
       }
