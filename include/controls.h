@@ -1,6 +1,6 @@
 #include <GLFW/glfw3.h>
 #include <engine/engine.h>
-//#include <global_vars.h>
+#include <global_vars.h>
 #include <stdio.h>
 
 #define MAX_CMD_LEN (100)
@@ -25,6 +25,9 @@ int holding_enter = 0;
 int holding_minus = 0;
 int holding_tilde = 0;
 int holding_slash = 0;
+int first_mouse_move = 0;
+float mouse_sens = 0.05;
+vec2 prev_mouse_pos;
 
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
@@ -41,3 +44,4 @@ int is_console_enabled();
 void enable_console();
 void disable_console();
 void update_console_text(char *);
+void move_camera(CAM *, MOVE_DIR);
