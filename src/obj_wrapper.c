@@ -71,9 +71,11 @@ void delete_wrapper(size_t index) {
     sp_enemies[(size_t) old_wrapper->data].wrapper_offset = index;
   } else if (old_wrapper->type == PROJ_OBJ) {
     projectiles[(size_t) old_wrapper->data].wrapper_offset = index;
-  } else if (old_wrapper->type == ENV_OBJ) {
-    // TODO Add environment stuff here
   } else if (old_wrapper->type == ITEM_OBJ) {
     items[(size_t) old_wrapper->data].wrapper_offset = index;
+  } else if (old_wrapper->type == OBSTACLE_OBJ) {
+    sp_obs[(size_t) old_wrapper->data].wrapper_offset = index;
+  } else if (old_wrapper->type == CORRIDOR_OBJ) {
+    cd_obs[(size_t) old_wrapper->data].wrapper_offset = index;
   }
 }

@@ -21,6 +21,7 @@ int init_game() {
     return -1;
   }
 
+  status = init_timer_queue();
   status = init_wrapper_buffer();
   if (status) {
     return -1;
@@ -59,5 +60,6 @@ void cleanup_game() {
   free_projectile_buffer();
   free_wrapper_buffer();
   // Add cleanup functions above...
+  free_timer_queue();
   cleanup_gl();
 }

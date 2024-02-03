@@ -81,12 +81,15 @@ void mouse_button_callback(GLFWwindow *window, int button, int action,
 void input_keys(GLFWwindow *window) {
   /* Letters */
   int console_enabled = is_console_enabled();
+  if (console_enabled) {
+    update_cursor_enabledness(); 
+  }
   for (int i = GLFW_KEY_A; i <= GLFW_KEY_Z; i++) {
     if (glfwGetKey(window, i) == GLFW_PRESS) {
       if (console_enabled && cons_cmd_len < MAX_CMD_LEN - 1 && !holding_alpha[i - GLFW_KEY_A]) {
         cons_cmd[cons_cmd_len++] = i + 32;
         update_console_text(cons_cmd);
-        /* TODO: handle console cursor */
+        advance_cursor();
       } else if (!console_enabled && mode == STATION) {
         /* FPS movment */
         if (i == GLFW_KEY_W) {
@@ -131,7 +134,7 @@ void input_keys(GLFWwindow *window) {
       if (console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
         cons_cmd[cons_cmd_len++] = i;
         update_console_text(cons_cmd);
-        /* TODO: handle console cursor */
+        advance_cursor();
       }
     } else if (glfwGetKey(window, i) != GLFW_PRESS) {
       holding_num[i - GLFW_KEY_0] = 0;
@@ -146,7 +149,7 @@ void input_keys(GLFWwindow *window) {
     if (console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
       cons_cmd[cons_cmd_len++] = '-';
       update_console_text(cons_cmd);
-      /* TODO: handle console cursor */
+      advance_cursor();
     }
   } else if (glfwGetKey(window, GLFW_KEY_MINUS) != GLFW_PRESS &&
       (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) != GLFW_PRESS &&
@@ -161,7 +164,7 @@ void input_keys(GLFWwindow *window) {
     if (console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
       cons_cmd[cons_cmd_len++] = ' ';
       update_console_text(cons_cmd);
-      /* TODO: handle console cursor */
+      advance_cursor();
     }
   } else if (glfwGetKey(window, GLFW_KEY_SPACE) != GLFW_PRESS) {
     holding_space = 0;
@@ -174,7 +177,7 @@ void input_keys(GLFWwindow *window) {
     if (console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
       cons_cmd[cons_cmd_len++] = '_';
       update_console_text(cons_cmd);
-      /* TODO: handle console cursor */
+      advance_cursor();
     }
   } else if (glfwGetKey(window, GLFW_KEY_MINUS) != GLFW_PRESS &&
       (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) != GLFW_PRESS ||
@@ -190,12 +193,19 @@ void input_keys(GLFWwindow *window) {
       cons_cmd[cons_cmd_len++] = '\0';
       /* Call lexer to tokenize and parse the command */
       tokenize(cons_cmd, cons_cmd_len);
+
       /* Reset for the next command */
       cons_cmd_len = 0;
+      cons_cursor_pos = 0;
       for (int i = 0; i < 100; i++) {
         cons_cmd[i] = '\0';
       }
+      cons_cursor[0] = '_';
+      for (int i = 1; i < 101; i++) {
+        cons_cursor[i] = '\0';
+      }
       update_console_text(cons_cmd);
+      update_console_cursor(cons_cursor);
     }
   } else if (glfwGetKey(window, GLFW_KEY_ENTER) != GLFW_PRESS) {
     holding_enter = 0;
@@ -207,7 +217,7 @@ void input_keys(GLFWwindow *window) {
     if (console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
       cons_cmd[cons_cmd_len++] = '.';
       update_console_text(cons_cmd);
-      /* TODO: handle console cursor */
+      advance_cursor();
     }
   } else if (glfwGetKey(window, GLFW_KEY_PERIOD) != GLFW_PRESS) {
     holding_dot = 0;
@@ -219,7 +229,7 @@ void input_keys(GLFWwindow *window) {
     if (console_enabled && cons_cmd_len > 0) {
       cons_cmd[--cons_cmd_len] = '\0';
       update_console_text(cons_cmd);
-      /* TODO: handle console cursor */
+      retreat_cursor();
     }
   } else if (glfwGetKey(window, GLFW_KEY_BACKSPACE) != GLFW_PRESS) {
     holding_backspace = 0;
@@ -233,12 +243,44 @@ void input_keys(GLFWwindow *window) {
     } else {
       enable_console();
       cons_cmd_len = 0;
+      cons_cursor_pos = 0;
       for (int i = 0; i < 100; i++) {
         cons_cmd[i] = '\0';
       }
+      cons_cursor[0] = '_';
+      for (int i = 1; i < 101; i++) {
+        cons_cursor[i] = '\0';
+      }
       update_console_text(cons_cmd);
+      update_console_cursor(cons_cursor);
     }
   } else if (glfwGetKey(window, GLFW_KEY_SLASH) != GLFW_PRESS) { 
     holding_slash = 0;
+  }
+}
+
+void advance_cursor() {
+  if (cons_cursor_pos <= 100) {
+    cons_cursor[cons_cursor_pos++] = ' ';
+    cons_cursor[cons_cursor_pos] = '_';
+    update_console_cursor(cons_cursor);
+  }
+}
+
+void retreat_cursor() {
+  if (cons_cursor_pos >= 1) {
+    cons_cursor[cons_cursor_pos] = '\0';
+    cons_cursor[--cons_cursor_pos] = '_';
+    update_console_cursor(cons_cursor);
+  }
+}
+
+void update_cursor_enabledness() {
+  if (cons_cursor_enabled) {
+    /* Set timer to disable cursor */
+    add_timer(0.25, (void *) (disable_console_cursor), -1000); 
+  } else {
+    /* Set timer to enable cursor */
+    add_timer(0.25,(void *) (enable_console_cursor), -1000); 
   }
 }

@@ -25,7 +25,10 @@ static MODEL *projectile_models[NUM_PROJ_TYPES] = { NULL, NULL };
 static MODEL *sphere_model = NULL;
 static MODEL *render_sphere_model = NULL;
 static MODEL *cube_model = NULL;
-static MODEL *four_way_model = NULL;
+static MODEL *asteroid_models[NUM_ASTEROID_TYPES] = { NULL, NULL, NULL, NULL,
+                                                      NULL };
+static MODEL *corridor_models[NUM_CORRIDOR_TYPES] = { NULL, NULL, NULL, NULL,
+                                                      NULL };
 
 // Common matrices
 static mat4 ortho_proj = GLM_MAT4_IDENTITY_INIT;
@@ -34,6 +37,15 @@ static mat4 persp_proj = GLM_MAT4_IDENTITY_INIT;
 // Render settings
 static int hit_boxes = 0;
 static int wire_frame = 0;
+
+#define CHECK_ASSETS_LOADED (\
+!player_model || !alien_models[0] || !alien_models[1] || !player_ship_model || \
+!alien_ship_models[0] || !projectile_models[0] || !projectile_models[1] || \
+!sphere_model || !render_sphere_model || !cube_model || \
+!asteroid_models[0] || !asteroid_models[1] || !asteroid_models[2] || \
+!asteroid_models[3] || !asteroid_models[4] || !corridor_models[0] || \
+!corridor_models[1] || !corridor_models[2] || !corridor_models[3] || \
+!corridor_models[4])
 
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 

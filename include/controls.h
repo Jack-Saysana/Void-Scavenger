@@ -9,8 +9,11 @@
 
 /* Console */
 extern char cons_cmd[MAX_CMD_LEN];
+extern char cons_cursor[MAX_CMD_LEN + 1];
 extern unsigned int cons_cmd_len;
-extern UI_COMP *console;
+extern unsigned int cons_cursor_pos;
+extern unsigned int cons_cursor_enabled;
+
 
 /* Key Handlers */
 int holding_alpha[26];
@@ -36,6 +39,9 @@ void mouse_pos_callback(GLFWwindow *, double, double);
 void mouse_scroll_callback(GLFWwindow *, double, double);
 void mouse_button_callback(GLFWwindow *, int, int, int);
 void input_keys(GLFWwindow *);
+void advance_cursor();
+void retreat_cursor();
+void update_cursor_enabledness();
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 void tokenize(char *, unsigned int);
@@ -45,3 +51,7 @@ void enable_console();
 void disable_console();
 void update_console_text(char *);
 void move_camera(CAM *, MOVE_DIR);
+void update_console_cursor(char *);
+void disable_console_cursor();
+void enable_console_cursor();
+void add_timer(float, void *, int);

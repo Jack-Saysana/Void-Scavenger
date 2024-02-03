@@ -1,10 +1,13 @@
+#include <stdio.h>
 #include <engine/engine.h>
 #include <const.h>
 #include <global_vars.h>
 
+
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
-
+void spawn_asteroids();
+void spawn_space_debris();
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 
@@ -31,4 +34,20 @@ void sp_enemy_remove_sim(size_t);
 void delete_projectile(size_t);
 void projectile_remove_sim(size_t);
 
-ENTITY *init_test_ent();
+/* Obstacles for station and space mode */
+int init_space_obstacle_buffer();
+int init_station_obstacle_buffer();
+void free_space_obstacle_buffer();
+void free_station_obstacle_buffer();
+size_t init_space_obstacle(int, vec3, vec3, vec3, vec3, float);
+size_t init_station_obstacle(vec3, vec3, float);
+int space_obstacle_insert_sim(size_t);
+
+/* Corridors for the station itself */
+int init_corridor_buffer();
+
+/* Generation of asteroid positioning, speed, dir, etc... */
+void gen_rand_vec3(vec3 *, float);
+float gen_rand_float(float);
+void seed_random();
+

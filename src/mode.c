@@ -21,20 +21,54 @@ int init_space_mode() {
 
   // Initialize ship entity values
   reset_physics(player_ship.ent);
-  //player_ship.ent->translation[Z] = -5.0;
+
   // Place player ship entity into simulations
   int status = player_ship_insert_sim();
 
-  // Initialize and place station entity in simulation
+  // Initialize and place space entity in simulation
   status = init_enemy_ship_buffer();
   if (status) {
     return -1;
   }
 
+  status = init_space_obstacle_buffer();
+  if (status) {
+    return -1;
+  }
+
   // Initialize and place asteroid and enemies entities in simulation
+  spawn_asteroids();
+  spawn_space_debris();
 
   mode = SPACE;
   return 0;
+}
+
+void spawn_asteroids() {
+  seed_random();
+  vec3 pos = GLM_VEC3_ZERO_INIT;
+  vec3 vel = GLM_VEC3_ZERO_INIT;
+  vec3 ang_vel = GLM_VEC3_ZERO_INIT;
+  vec3 scale = GLM_VEC3_ZERO_INIT;
+  float mass = 0.0;
+  for (int i = 0; i < NUM_ASTEROIDS; i++) {
+    gen_rand_vec3(&pos, 10.0);
+    gen_rand_vec3(&vel, 3.0);
+    gen_rand_vec3(&ang_vel, 0.5);
+    gen_rand_vec3(&scale, 3.0);
+    float scale_fac = gen_rand_float(3.0) + 0.1;
+    mass = 2.0 * scale_fac;
+    scale[X] = scale_fac;
+    scale[Y] = scale_fac;
+    scale[Z] = scale_fac;
+    size_t location = init_space_obstacle(TYPE_ASTEROID, pos, vel,
+                                          ang_vel, scale, mass);
+    space_obstacle_insert_sim(location);
+  }
+}
+
+void spawn_space_debris() {
+  /* TODO: implement space debris */
 }
 
 void clear_space_mode() {
@@ -54,6 +88,7 @@ void clear_space_mode() {
   for (size_t i = 0; i < num_obstacles; i++) {
     free_entity(sp_obs[i].ent);
   }
+
   num_enemies = 0;
   num_projectiles = 0;
   num_obstacles = 0;
@@ -86,16 +121,18 @@ int init_station_mode() {
     return -1;
   }
 
-  for (int i = 0; i < 3; i++) {
-    ENTITY *ent = init_test_ent();
-    ent->type |= T_IMMUTABLE;
-    ent->translation[X] = i * 5.0;
-    sim_add_entity(physics_sim, ent, ALLOW_HURT_BOXES);
-    sim_add_entity(render_sim, ent, ALLOW_DEFAULT);
-  }
-
   // Place render distance sphere in simulations
   sim_add_entity(render_sim, render_sphere, ALLOW_DEFAULT);
+
+  status = init_station_obstacle_buffer();
+  if (status) {
+    return -1;
+  }
+
+  status = init_corridor_buffer();
+  if (status) {
+    return -1;
+  }
 
   mode = STATION;
   return 0;
@@ -121,15 +158,23 @@ void clear_station_mode() {
   for (size_t i = 0; i < num_obstacles; i++) {
     free_entity(st_obs[i].ent);
   }
+  for (size_t i = 0; i < num_corridors; i++) {
+    free_entity(cd_obs[i].ent);
+  }
   num_enemies = 0;
   num_projectiles = 0;
   num_items = 0;
   num_obstacles = 0;
+  num_corridors = 0;
 
   free_enemy_buffer();
 
   // Reset wrapper buffer length
   num_wrappers = 0;
+}
+
+void create_station_corridors() {
+  /* TODO: generate maze corridors from maze generation */
 }
 
 // ========================= GENERAL GAME MANAGEMENT =========================
