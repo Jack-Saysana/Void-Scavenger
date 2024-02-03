@@ -38,6 +38,8 @@ size_t init_wrapper(SOBJ_T type, ENTITY *entity, void *data) {
   object_wrappers[num_wrappers].type = type;
   object_wrappers[num_wrappers].entity = entity;
   object_wrappers[num_wrappers].data = data;
+  object_wrappers[num_wrappers].to_delete = 0;
+  entity->data = (void *) num_wrappers;
   num_wrappers++;
   if (num_wrappers == wrapper_buff_size) {
     int status = double_buffer((void **) &object_wrappers, &wrapper_buff_size,
@@ -47,7 +49,6 @@ size_t init_wrapper(SOBJ_T type, ENTITY *entity, void *data) {
       return INVALID_INDEX;
     }
   }
-
   return num_wrappers - 1;
 }
 
@@ -70,11 +71,11 @@ void delete_wrapper(size_t index) {
     sp_enemies[(size_t) old_wrapper->data].wrapper_offset = index;
   } else if (old_wrapper->type == PROJ_OBJ) {
     projectiles[(size_t) old_wrapper->data].wrapper_offset = index;
-  } else if (old_wrapper->type == ENV_OBJ) {
-    // TODO Add environment stuff here
   } else if (old_wrapper->type == ITEM_OBJ) {
     items[(size_t) old_wrapper->data].wrapper_offset = index;
   } else if (old_wrapper->type == OBSTACLE_OBJ) {
     sp_obs[(size_t) old_wrapper->data].wrapper_offset = index;
+  } else if (old_wrapper->type == CORRIDOR_OBJ) {
+    cd_obs[(size_t) old_wrapper->data].wrapper_offset = index;
   }
 }

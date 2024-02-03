@@ -46,7 +46,27 @@ void fb_size_callback(GLFWwindow *window, int res_x, int res_y) {
 }
 
 void mouse_pos_callback(GLFWwindow *window, double x_pos, double y_pos) {
-  // Insert mouse handling here...
+  if (first_mouse_move) {
+    /* accounts for when mouse has not been moved yet*/
+    prev_mouse_pos[0] = x_pos;
+    prev_mouse_pos[1] = y_pos;
+  }
+  vec2 mouse_dif;
+  mouse_dif[0] = x_pos - prev_mouse_pos[0];
+  mouse_dif[1] = y_pos - prev_mouse_pos[1];
+  glm_vec2_scale(mouse_dif, mouse_sens, mouse_dif);
+  camera.pitch += mouse_dif[1];
+  if (camera.pitch > 89) {
+    camera.pitch = 89;
+  } else if (camera.pitch < -89) {
+    camera.pitch = -89;
+  }
+  camera.yaw += mouse_dif[0];
+  if (camera.yaw > 360 || camera.yaw < -360) {
+    camera.yaw = (int)(camera.yaw) % 360;
+  }
+  prev_mouse_pos[0] = x_pos;
+  prev_mouse_pos[1] = y_pos;
 }
 
 void mouse_scroll_callback(GLFWwindow *window, double x_off, double y_off) {
@@ -65,13 +85,43 @@ void input_keys(GLFWwindow *window) {
     update_cursor_enabledness(); 
   }
   for (int i = GLFW_KEY_A; i <= GLFW_KEY_Z; i++) {
-    if (glfwGetKey(window, i) == GLFW_PRESS && !holding_alpha[i - GLFW_KEY_A]) {
-      holding_alpha[i - GLFW_KEY_A] = 1;
-      if (console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
+    if (glfwGetKey(window, i) == GLFW_PRESS) {
+      if (console_enabled && cons_cmd_len < MAX_CMD_LEN - 1 && !holding_alpha[i - GLFW_KEY_A]) {
         cons_cmd[cons_cmd_len++] = i + 32;
         update_console_text(cons_cmd);
         advance_cursor();
+      } else if (!console_enabled && mode == STATION) {
+        /* FPS movment */
+        if (i == GLFW_KEY_W) {
+          /* Handle W press */
+          move_camera(&camera, MOVE_FORWARD);
+        } else if (i == GLFW_KEY_S){
+          /* Handle S press */
+          move_camera(&camera, MOVE_BACKWARD);
+        } else if (i == GLFW_KEY_A){
+          /* Handle A press */
+          move_camera(&camera, MOVE_LEFT);
+        } else if (i == GLFW_KEY_D){
+          /* Handle D press */
+          move_camera(&camera, MOVE_RIGHT);
+        }
+      } else if (!console_enabled && mode == SPACE) {
+        /* TODO Ship movment */
+        if (i == GLFW_KEY_W) {
+          /* Handle W press */
+          move_camera(&camera, MOVE_FORWARD);
+        } else if (i == GLFW_KEY_S){
+          /* Handle S press */
+          move_camera(&camera, MOVE_BACKWARD);
+        } else if (i == GLFW_KEY_A){
+          /* Handle A press */
+          move_camera(&camera, MOVE_LEFT);
+        } else if (i == GLFW_KEY_D){
+          /* Handle D press */
+          move_camera(&camera, MOVE_RIGHT);
+        }
       }
+      holding_alpha[i - GLFW_KEY_A] = 1;
     } else if (glfwGetKey(window, i) != GLFW_PRESS) {
       holding_alpha[i - GLFW_KEY_A] = 0;
     }

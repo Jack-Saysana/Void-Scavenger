@@ -51,7 +51,7 @@ void free_station_obstacle_buffer() {
 // ================== INDIVIDUAL INITIALIZATION AND CLEANUP ==================
 
 size_t init_space_obstacle(int type, vec3 pos, vec3 velocity, vec3 angular_vel,
-                           vec3 scale) {
+                           vec3 scale, float mass) {
   if (sp_obs == NULL) {
     fprintf(stderr, "Error: Inserting into a deallocated obstacle buffer\n");
     return INVALID_INDEX;
@@ -76,6 +76,7 @@ size_t init_space_obstacle(int type, vec3 pos, vec3 velocity, vec3 angular_vel,
   glm_vec3_copy(angular_vel, obstacle->ent->ang_velocity);
   glm_vec3_copy(pos, obstacle->ent->translation);
   glm_vec3_copy(scale, obstacle->ent->scale);
+  obstacle->ent->inv_mass = 1.0 / mass;
 
   num_obstacles++;
   if (num_obstacles == obs_buff_len) {
@@ -90,7 +91,7 @@ size_t init_space_obstacle(int type, vec3 pos, vec3 velocity, vec3 angular_vel,
   return num_obstacles - 1;
 }
 
-size_t init_station_obstacle(vec3 pos, vec3 scale) {
+size_t init_station_obstacle(vec3 pos, vec3 scale, float mass) {
   if (st_obs == NULL) {
     fprintf(stderr, "Error: Inserting into a deallocated obstacle buffer\n");
     return INVALID_INDEX;
@@ -113,6 +114,7 @@ size_t init_station_obstacle(vec3 pos, vec3 scale) {
   glm_vec3_copy((vec3) { 0.0, 0.0, 0.0 }, obstacle->ent->velocity);
   glm_vec3_copy(pos, obstacle->ent->translation);
   glm_vec3_copy(scale, obstacle->ent->scale);
+  obstacle->ent->inv_mass = 1.0 / mass;
 
   num_obstacles++;
   if (num_obstacles == obs_buff_len) {
@@ -156,7 +158,6 @@ int space_obstacle_insert_sim(size_t index) {
 int station_obstacle_insert_sim(size_t index) {
   int status = sim_add_entity(physics_sim, st_obs[index].ent,
                               ALLOW_DEFAULT);
- 
   if (status) {
     return -1;
   }

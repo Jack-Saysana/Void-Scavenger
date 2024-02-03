@@ -72,12 +72,12 @@ void delete_corridor(size_t index) {
 
 int corridor_insert_sim(size_t index) {
   if (sim_add_entity(physics_sim, cd_obs[index].ent,
-                              ALLOW_DEFAULT)) {
+                              ALLOW_HURT_BOXES)) {
     return -1;
   }
 
   if (sim_add_entity(combat_sim, cd_obs[index].ent,
-                              ALLOW_DEFAULT)) {
+                              ALLOW_HURT_BOXES)) {
     return -1;
   }
 
@@ -142,7 +142,7 @@ void add_element(int **list, size_t *size, int *num_elements, int to_add) {
       printf("maze.c: failed to double buffer\n");
       exit(1);
     }
-    set_invalid((*list) + prev_size, prev_size); 
+    set_invalid((*list) + prev_size, prev_size);
   }
   for (int i = 0; i < *size; i++) {
     if ((*list)[i] == INVALID) {
@@ -162,18 +162,18 @@ void add_element(int **list, size_t *size, int *num_elements, int to_add) {
   OUT cells around the newly created IN cell are changed to frontier
   cells.
 */
-void connect_cell(int maze[MAX_MAZE_SIZE][MAX_MAZE_SIZE], 
+void connect_cell(int maze[MAX_MAZE_SIZE][MAX_MAZE_SIZE],
                   int x, int y, int **list,
                   size_t *size, int *num_elements) {
   /* Find a wall around the frontier square that is adjacent */
   /* to an IN cell, then remove the wall by setting to IN    */
-  if ((x + 2) < MAX_MAZE_SIZE && maze[x + 2][y] == IN) {      
+  if ((x + 2) < MAX_MAZE_SIZE && maze[x + 2][y] == IN) {
     UNSET_WALL(maze, x + 1, y);
-  } else if ((x - 2) > 0 && maze[x - 2][y] == IN) {             
+  } else if ((x - 2) > 0 && maze[x - 2][y] == IN) {
     UNSET_WALL(maze, x - 1, y);
-  } else if ((y + 2) < MAX_MAZE_SIZE && maze[x][y + 2] == IN) { 
+  } else if ((y + 2) < MAX_MAZE_SIZE && maze[x][y + 2] == IN) {
     UNSET_WALL(maze, x, y + 1);
-  } else if ((y - 2) > 0 && maze[x][y - 2] == IN) {             
+  } else if ((y - 2) > 0 && maze[x][y - 2] == IN) {
     UNSET_WALL(maze, x, y - 1);
   }
 
@@ -184,21 +184,21 @@ void connect_cell(int maze[MAX_MAZE_SIZE][MAX_MAZE_SIZE],
   maze[x][y] = IN;
 
   /* Set frontier squares and add to frontier list */
-  if ((x + 2) < MAX_MAZE_SIZE && maze[x + 2][y] == OUT) { 
-    maze[x + 2][y] = FRONTIER;                            
+  if ((x + 2) < MAX_MAZE_SIZE && maze[x + 2][y] == OUT) {
+    maze[x + 2][y] = FRONTIER;
     add_element(list, size, num_elements, CONVERT_COMBINED(x + 2, y));
   }
-  if ((x - 2) > 0 && maze[x - 2][y] == OUT) {             
-    maze[x - 2][y] = FRONTIER;                            
-    add_element(list, size, num_elements, CONVERT_COMBINED(x - 2, y));     
+  if ((x - 2) > 0 && maze[x - 2][y] == OUT) {
+    maze[x - 2][y] = FRONTIER;
+    add_element(list, size, num_elements, CONVERT_COMBINED(x - 2, y));
   }
-  if ((y + 2) < MAX_MAZE_SIZE && maze[x][y + 2] == OUT) { 
-    maze[x][y + 2] = FRONTIER;                            
-    add_element(list, size, num_elements, CONVERT_COMBINED(x, y + 2));   
+  if ((y + 2) < MAX_MAZE_SIZE && maze[x][y + 2] == OUT) {
+    maze[x][y + 2] = FRONTIER;
+    add_element(list, size, num_elements, CONVERT_COMBINED(x, y + 2));
   }
-  if ((y - 2) > 0 && maze[x][y - 2] == OUT) {             
-    maze[x][y - 2] = FRONTIER;                            
-    add_element(list, size, num_elements, CONVERT_COMBINED(x, y - 2)); 
+  if ((y - 2) > 0 && maze[x][y - 2] == OUT) {
+    maze[x][y - 2] = FRONTIER;
+    add_element(list, size, num_elements, CONVERT_COMBINED(x, y - 2));
   }
 }
 

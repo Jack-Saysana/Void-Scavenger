@@ -15,18 +15,20 @@ typedef enum simulation_obj_type {
   ENEMY_OBJ,
   ENEMY_SHIP_OBJ,
   PROJ_OBJ,
-  ENV_OBJ,
   ITEM_OBJ,
   OBSTACLE_OBJ,
   CORRIDOR_OBJ,
 } SOBJ_T;
 
 typedef struct {
-  SOBJ_T type;
   // Entity who points to this object wrapper
   ENTITY *entity;
   // Pointer (or offset) leading to linked game object (player, enemy, etc...)
   void *data;
+  SOBJ_T type;
+  // Flag indicating whether the wrapper, its entity and its game object should
+  // be deleted at the end of the frame
+  int to_delete;
 } SOBJ;
 
 #endif

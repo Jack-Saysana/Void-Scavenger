@@ -26,6 +26,9 @@ extern GAME_MODE mode;
 // Game camera
 extern CAM camera;
 
+// Used for determining which entities should be rendered in a given scene
+extern ENTITY *render_sphere;
+
 extern SIMULATION *physics_sim;
 extern SIMULATION *combat_sim;
 extern SIMULATION *render_sim;

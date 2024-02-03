@@ -7,7 +7,7 @@ void seed_random() {
 }
 
 void gen_rand_vec3(vec3 *to_copy, float bounds) {
-  glm_vec3_copy((vec3) { 
+  glm_vec3_copy((vec3) {
     fmod(rand(), bounds),
     fmod(rand(), bounds),
     fmod(rand(), bounds)

@@ -64,6 +64,12 @@ int player_insert_sim() {
   return 0;
 }
 
+void player_remove_sim() {
+  sim_remove_entity(physics_sim, st_player.ent);
+  sim_remove_entity(combat_sim, st_player.ent);
+  sim_remove_entity(event_sim, st_player.ent);
+}
+
 // =============================== SPACE MODE ================================
 
 // Initalize player ship struct at beginning of game
@@ -114,7 +120,7 @@ void free_player_ship() {
 
 // Insert space mode player into global simulations
 int player_ship_insert_sim() {
-  int status = sim_add_entity(physics_sim, player_ship.ent, ALLOW_DEFAULT);
+  int status = sim_add_entity(physics_sim, player_ship.ent, ALLOW_HURT_BOXES);
   if (status) {
     return -1;
   }
@@ -132,3 +138,8 @@ int player_ship_insert_sim() {
   return 0;
 }
 
+void player_ship_remove_sim() {
+  sim_remove_entity(physics_sim, player_ship.ent);
+  sim_remove_entity(combat_sim, player_ship.ent);
+  sim_remove_entity(event_sim, player_ship.ent);
+}

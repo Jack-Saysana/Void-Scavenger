@@ -46,7 +46,23 @@ void console_dispatcher() {
   if (command[0].kind == IDENTIFIER) {
     if (strncmp(command[0].tok, SET, sizeof(SET)) == 0) {
       /* BEGIN: set  */
-      command_not_found();
+      if (command[1].kind == IDENTIFIER) {
+        if (strncmp(command[1].tok, CURSOR, sizeof(CURSOR)) == 0) {
+          /*BEGIN: cursor*/
+            if (command[2].kind == IDENTIFIER && strncmp(command[2].tok, ON, sizeof(ON)) == 0) {
+              cursor_on(1);
+            } else if (command[2].kind == IDENTIFIER && strncmp(command[2].tok, OFF, sizeof(OFF)) == 0) {
+              cursor_on(0);
+            } else {
+              command_not_found();
+            }
+          /*END: cursor*/
+        } else {
+          command_not_found();
+        }
+      } else {
+        command_not_found();
+      }
       /* END: set */
     } else if (strncmp(command[0].tok, GIVE, sizeof(GIVE)) == 0) {
       /* BEGIN: give */
@@ -56,7 +72,7 @@ void console_dispatcher() {
       /* BEGIN: spawn */
       command_not_found();
       /* END: spawn  */
-    } else if (strncmp(command[0].tok, COORDS, sizeof(COORDS)) == 0) {     
+    } else if (strncmp(command[0].tok, COORDS, sizeof(COORDS)) == 0) {
       /* BEGIN: coords */
       command_not_found();
       /* END: coords*/
@@ -64,6 +80,14 @@ void console_dispatcher() {
       /* BEGIN: respawn */
       command_not_found();
       /* END: respawn*/
+    } else if (strncmp(command[0].tok, WIRE, sizeof(WIRE)) == 0) {
+      /* BEGIN: wire */
+      toggle_wire_frame();
+      /* END: wire */
+    } else if (strncmp(command[0].tok, HIT_BOXES, sizeof(HIT_BOXES)) == 0) {
+      /* BEGIN: hb */
+      toggle_hit_boxes();
+      /* END: hb */
     } else {
       /* NON-RECOGNIZED IDENTIFIER */
       command_not_found();

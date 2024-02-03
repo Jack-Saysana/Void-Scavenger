@@ -21,8 +21,6 @@ int init_game() {
     return -1;
   }
 
-  init_ui_components();  
-  
   status = init_timer_queue();
   status = init_wrapper_buffer();
   if (status) {
@@ -45,9 +43,12 @@ int init_game() {
   }
 
   status = init_space_mode();
+  //status = init_station_mode();
   if (status) {
     return -1;
   }
+
+  init_ui_components();
 
   return 0;
 }

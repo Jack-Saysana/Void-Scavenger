@@ -14,3 +14,4 @@ void keyboard_input(GLFWwindow *);
 void decrement_current_timer(float);
 
 void handle_collisions();
+int delete_stale_objects();
