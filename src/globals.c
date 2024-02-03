@@ -6,10 +6,16 @@
 
 */
 
+GAME_MODE mode = SPACE;
+
 CAM camera;
 
-SIMULATION *space_sim = NULL;
-SIMULATION *station_sim = NULL;
+ENTITY *render_sphere = NULL;
+
+SIMULATION *physics_sim = NULL;
+SIMULATION *combat_sim = NULL;
+SIMULATION *render_sim = NULL;
+SIMULATION *event_sim = NULL;
 
 PLAYER st_player;
 SHIP player_ship;
@@ -35,3 +41,9 @@ ST_OBSTACLE *st_obs = NULL;
 SP_OBSTACLE *sp_obs = NULL;
 size_t num_obstacles = 0;
 size_t obs_buff_len = 0;
+
+CORRIDOR *cd_obs = NULL;
+size_t num_corridors = 0;
+size_t corridor_buff_len = 0;
+
+F_GLYPH *fixed_sys = NULL;

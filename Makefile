@@ -1,4 +1,4 @@
-PROJ_NAME = playground
+PROJ_NAME = VS
 CC = gcc
 BUILD_DIR = ./bin
 SRC_DIR = ./src
@@ -31,20 +31,24 @@ endif
 all: ./bin/src $(BUILD_DIR)/$(PROJ_NAME)
 
 $(BUILD_DIR)/$(PROJ_NAME): $(SRC_OBJS)
-	$(CC) $(LIBS) $(SRC_OBJS) -o $(BUILD_DIR)/$(PROJ_NAME) $(LINK)
+	@$(CC) $(LIBS) $(SRC_OBJS) -o $(BUILD_DIR)/$(PROJ_NAME) $(LINK)
+	@echo "Created $(PROJ_NAME) binary"
 
 $(BUILD_DIR)/%.c.o: %.c
-	$(CC) $(DFLAGS) $(INCLUDE) -c $< -o $@
+	@$(CC) $(DFLAGS) $(INCLUDE) -c $< -o $@
+	@echo "--> Compiled: " $<
 
 ./bin/src:
-	mkdir -p ./bin/src
+	@mkdir -p ./bin/src/ui
+	@echo "Created build directory"
 
 clean:
-	rm -rf $(BUILD_DIR)
-	rm -f ./assets/*/*/*.obj.bin*
-	rm -f ./assets/*/*.obj.bin*
+	@rm -rf $(BUILD_DIR)
+	@rm -f ./assets/*/*/*.obj.bin*
+	@rm -f ./assets/*/*.obj.bin*
+	@echo "Cleaned ./bin"
 
-run:
+run: all
 	@./bin/$(PROJ_NAME)
 
 debug:

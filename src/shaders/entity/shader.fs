@@ -32,8 +32,8 @@ void main() {
   dir_light.col = vec3(1.0, 1.0, 1.0);
   dir_light.dir = vec3(1.0, 1.0, 1.0);
 
-  //frag_col = vec4(calc_dir_light(dir_light), 1.0);
-  frag_col = vec4(1.0, 1.0, 1.0, 1.0);
+  frag_col = vec4(calc_dir_light(dir_light), 1.0);
+  //frag_col = vec4(1.0, 1.0, 1.0, 1.0);
 }
 
 vec3 calc_dir_light(DIR_LIGHT light) {
@@ -42,16 +42,22 @@ vec3 calc_dir_light(DIR_LIGHT light) {
     col = vec3(1.0, 1.0, 1.0);
   }
 
-  vec3 ambient = light.col * 0.05;
-
-  vec3 diffuse = max(dot(normalize(normal), normalize(light.dir)), 0) * light.col;
-
+  float ambient = 0.25;
+  float diffuse = max(dot(normalize(normal), normalize(light.dir)), 0);
   vec3 view_dir = normalize(view_pos - vec3(frag_pos));
   vec3 halfway = normalize(normalize(light.dir) + view_dir);
   float spec = pow(max(dot(normalize(normal), halfway), 0), 32);
-  vec3 specular = spec * light.col;
 
-  return (ambient + diffuse + specular) * col;
+  float str = ambient + diffuse + spec;
+  if (str < 0.5) {
+    str = 0.5;
+  } else {
+    str = 1.0;
+  }
+
+  vec3 model_col = str * light.col;
+
+  return model_col * col;
 }
 
 /*vec3 calc_point_light(struct PT_LIGHT light) {
@@ -73,5 +79,5 @@ vec3 calc_dir_light(DIR_LIGHT light) {
   // TODO: ADD ATTENUATION
 
   return (ambient + diffuse + specular) * col;
-}*/
-
+}
+*/

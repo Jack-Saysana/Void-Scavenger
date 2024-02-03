@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <string.h>
 #include <engine/engine.h>
 #include <const.h>
 #include <global_vars.h>
@@ -10,8 +9,9 @@
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 
+ENTITY *init_obstacle_ent();
+
 size_t init_wrapper(SOBJ_T, ENTITY *, void *);
 void delete_wrapper(size_t);
 
-ENTITY *init_player_ent();
-ENTITY *init_player_ship_ent();
+int gen_rand_int(int);

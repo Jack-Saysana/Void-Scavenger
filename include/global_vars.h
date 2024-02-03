@@ -9,9 +9,12 @@
 #include <structs/projectile_str.h>
 #include <structs/item_str.h>
 #include <structs/obstacle_str.h>
+#include <structs/corridor_str.h>
 #include <structs/obj_wrapper_str.h>
 
 // Insert common global variables below
+// Text Font Vars
+extern F_GLYPH *fixed_sys;
 
 // Current game mode
 typedef enum game_mode {
@@ -23,8 +26,13 @@ extern GAME_MODE mode;
 // Game camera
 extern CAM camera;
 
-extern SIMULATION *space_sim;
-extern SIMULATION *station_sim;
+// Used for determining which entities should be rendered in a given scene
+extern ENTITY *render_sphere;
+
+extern SIMULATION *physics_sim;
+extern SIMULATION *combat_sim;
+extern SIMULATION *render_sim;
+extern SIMULATION *event_sim;
 
 extern PLAYER st_player;
 extern SHIP player_ship;
@@ -55,5 +63,10 @@ extern ST_OBSTACLE* st_obs;
 extern SP_OBSTACLE* sp_obs;
 extern size_t num_obstacles;
 extern size_t obs_buff_len;
+
+// Currently active station corridors
+extern CORRIDOR *cd_obs;
+extern size_t num_corridors;
+extern size_t corridor_buff_len;
 
 #endif

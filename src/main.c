@@ -18,7 +18,7 @@ int main() {
   if (status) {
     return -1;
   }
-
+ 
   while (!glfwWindowShouldClose(window)) {
     float CUR_TIME = glfwGetTime();
     DELTA_TIME = CUR_TIME - LAST_FRAME;
@@ -33,6 +33,9 @@ int main() {
     // - win-condition tracking
     // - etc...
     keyboard_input(window);
+    decrement_current_timer(DELTA_TIME);
+    handle_collisions();
+    delete_stale_objects();
     render_scene(window);
   }
 
