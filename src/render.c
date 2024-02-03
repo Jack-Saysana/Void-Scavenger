@@ -23,6 +23,8 @@ int init_scene() {
                                   "./src/shaders/basic/shader.fs");
   bone_shader = init_shader_prog("./src/shaders/bone/shader.vs", NULL,
                                  "./src/shaders/bone/shader.fs");
+  proj_shader = init_shader_prog("./src/shaders/projectile/shader.vs", NULL,
+                                 "./src/shaders/projectile/shader.fs");
 
   // Init models below...
   player_model = load_model("./assets/actors/player/player.obj");
@@ -103,10 +105,15 @@ void render_scene(GLFWwindow *window) {
   glUseProgram(entity_shader);
   set_mat4("projection", persp_proj, entity_shader);
   set_mat4("view", view, entity_shader);
+  set_vec3("camera_pos", camera.pos, entity_shader);
 
   glUseProgram(basic_shader);
   set_mat4("projection", persp_proj, basic_shader);
   set_mat4("view", view, basic_shader);
+
+  glUseProgram(proj_shader);
+  set_mat4("projection", persp_proj, proj_shader);
+  set_mat4("view", view, proj_shader);
 
   if (wire_frame) {
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -191,7 +198,12 @@ void render_sp_obstacles() {
 }
 
 void render_game_entity(ENTITY *ent) {
-  draw_entity(entity_shader, ent);
+  SOBJ *wrapper = object_wrappers + (size_t) ent->data;
+  if (wrapper->type == PROJ_OBJ) {
+    draw_entity(proj_shader, ent);
+  } else {
+    draw_entity(entity_shader, ent);
+  }
   if (hit_boxes) {
     glUseProgram(basic_shader);
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

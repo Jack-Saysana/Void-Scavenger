@@ -14,6 +14,7 @@ static unsigned int model_shader = 0;
 static unsigned int ui_shader = 0;
 static unsigned int basic_shader = 0;
 static unsigned int bone_shader = 0;
+static unsigned int proj_shader = 0;
 
 // Models
 static MODEL *player_model = NULL;

@@ -42,11 +42,12 @@ int init_game() {
   }
 
   status = init_space_mode();
+  //status = init_station_mode();
   if (status) {
     return -1;
   }
 
-  init_ui_components();  
+  init_ui_components();
 
   return 0;
 }
