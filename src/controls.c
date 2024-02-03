@@ -87,7 +87,23 @@ void input_keys(GLFWwindow *window) {
         cons_cmd[cons_cmd_len++] = i + 32;
         update_console_text(cons_cmd);
         /* TODO: handle console cursor */
-      } else if (!console_enabled) {
+      } else if (!console_enabled && mode == STATION) {
+        /* FPS movment */
+        if (i == GLFW_KEY_W) {
+          /* Handle W press */ 
+          move_camera(&camera, MOVE_FORWARD);
+        } else if (i == GLFW_KEY_S){
+          /* Handle S press */ 
+          move_camera(&camera, MOVE_BACKWARD);
+        } else if (i == GLFW_KEY_A){
+          /* Handle A press */ 
+          move_camera(&camera, MOVE_LEFT);
+        } else if (i == GLFW_KEY_D){
+          /* Handle D press */ 
+          move_camera(&camera, MOVE_RIGHT);
+        }
+      } else if (!console_enabled && mode == SHIP) {
+        /* TODO Ship movment */
         if (i == GLFW_KEY_W) {
           /* Handle W press */ 
           move_camera(&camera, MOVE_FORWARD);
