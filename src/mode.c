@@ -19,7 +19,7 @@ int init_space_mode() {
 
   // Initialize ship entity values
   reset_physics(player_ship.ent);
-
+  //player_ship.ent->translation[Z] = -5.0;
   // Place player ship entity into simulations
   int status = player_ship_insert_sim();
 

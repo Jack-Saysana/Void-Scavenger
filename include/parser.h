@@ -8,6 +8,9 @@
 /* DEFINES */
 /* Command identifiers and arguments */
 #define SET                  ("set")
+#define CURSOR               ("cursor")
+#define ON                   ("on")
+#define OFF                  ("off")
 #define GIVE                 ("give")
 #define SPAWN                ("spawn")
 #define COORDS               ("coords")
@@ -31,3 +34,4 @@ float create_float(int);
 
 /* ================ EXTERNALLY DEFINED FUNCTIONS =================== */
 void command_not_found();
+void cursor_on(int);

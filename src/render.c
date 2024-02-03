@@ -54,10 +54,10 @@ int init_scene() {
   if (status) {
     return -1;
   }
-
-  glm_vec3_copy((vec3) {0.0, 0.0, -1.0}, camera.forward);
-  glm_vec3_copy((vec3) {0.0, 1.0, 0.0}, camera.up);
+  
   glm_vec3_copy((vec3) {0.0, 0.0, 5.0}, camera.pos);
+  camera.pitch = 0.0;
+  camera.yaw = 0.0;
 
   return 0;
 }
@@ -75,6 +75,11 @@ void cleanup_scene() {
 // ================================ RENDERING ================================
 
 void render_scene(GLFWwindow *window) {
+  if (CURSOR_ENABLED) {
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+  } else {
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+  }
   glClearColor(0.0, 0.0, 0.0, 1.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
