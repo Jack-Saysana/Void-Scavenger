@@ -37,8 +37,8 @@ int init_space_mode() {
   }
 
   // Initialize and place asteroid and enemies entities in simulation
-//  spawn_asteroids();
-//  spawn_space_debris();
+  spawn_asteroids();
+  spawn_space_debris();
 
   mode = SPACE;
   return 0;
@@ -198,15 +198,15 @@ Legend:
 
   1-Way:
   |-----|
-  |  X  |
-  |X * *|
+  |  *  |
+  |X * X|
   |  X  |
   |-----|
 
   T-Junction:
   |-----|
   |  *  |
-  |* * X|
+  |X * *|
   |  *  |
   |-----|
 
@@ -219,30 +219,14 @@ Legend:
 
   Corner:
   |-----|
-  |  X  |
-  |* * X|
   |  *  |
+  |X * *|
+  |  X  |
   |-----|
 
 */
 void create_station_corridors() {
   int **maze = gen_maze();
- #if 1
-   for (int x = 0; x < maze_size; x++) {
-    for (int y = 0; y < maze_size; y++) {
-      if (maze[x][y] == 1) {
-        printf("* ");
-      } else if (maze[x][y] == 3) {
-        printf("X ");
-      } else if (maze[x][y] == 0) { 
-        printf("  ");
-      } else {
-        printf("%d ", maze[x][y]);
-      }
-    }
-    printf("\n");
-  } 
-  
   /* Analyze the odd numbered indices to find corridor type */
   /* x = movement in OpenGL X-axis along maze */
   /* z = movement in OpenGL Z-axis along maze */
@@ -328,50 +312,9 @@ void create_station_corridors() {
         glm_vec3_copy((vec3) { ((float) x) * 5.0, 0.0,((float) z) * 5.0 }, position);       
         size_t index = init_corridor(position, rot, type); 
         corridor_insert_sim(index);
-        /*
-        if (type == TYPE_ONE_WAY) {
-          printf("Found type ONE_WAY at (%d, %d) with rotation %d deg.", x, z, rotation);
-        } else if (type == TYPE_FOUR_WAY) {
-          printf("Found type FOUR_WAY at (%d, %d) with rotation %d deg.", x, z, rotation);
-        } else if (type == TYPE_CORNER) {
-          printf("Found type CORNER at (%d, %d) with rotation %d deg.", x, z, rotation);
-        } else if (type == TYPE_T_JUNCT) {
-          printf("Found type T_JUNCT at (%d, %d) with rotation %d deg.", x, z, rotation);
-        } else if (type == TYPE_CORRIDOR) {
-          printf("Found type CORRIDOR at (%d, %d) with rotation %d deg.", x, z, rotation);
-        }
-        printf(" Position: (%.1f, %.1f, %.1f)\n", position[0], position[1], position[2]); 
-        */
       }
     }
   }
-#endif
-#if 0
-  int rotation = 0;
-  versor rot;
-  vec3 pos = GLM_VEC3_ZERO_INIT;
-  glm_vec3_copy((vec3) { 0.0, 0.0, 0.0 }, pos);
-  //mat3 rot_mat = GLM_MAT3_IDENTITY_INIT;
-  if (rotation == 0) {
-    glm_quat_identity(rot);
-  } else if (rotation == 90) {
-    glm_quat_init(rot, 0.0, 1 / sqrt(2), 0.0, 1 / sqrt(2)); 
-  } else if (rotation == 180) {
-    glm_quat_init(rot, 0.0, 1.0, 0.0, 0.0);
-  } else if (rotation == 270) {
-    glm_quat_init(rot, 0.0, 1 / sqrt(2), 0.0, -1 / sqrt(2)); 
-  }
-  /*
-  glm_vec3_copy((vec3) { 0.0, 0.0, 1.0 } ,rot_mat[0]);
-  glm_vec3_copy((vec3) { 1.0, 0.0, 0.0 } ,rot_mat[2]);
-  glm_mat3_quat(rot_mat, rot);
-  //glm_quat_identity(rot);
-  */
-  int type = 4;
-  size_t index = init_corridor(pos, rot, type); 
-  corridor_insert_sim(index);
-#endif
-
   free_maze(maze);
 }
 
