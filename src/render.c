@@ -144,7 +144,7 @@ void render_scene(GLFWwindow *window) {
     */
     query_render_sim();
   } else if (mode == SPACE) {
-    //render_game_entity(player_ship.ent);
+    render_game_entity(player_ship.ent);
     render_enemy_ships();
     render_projectiles();
     render_sp_obstacles();

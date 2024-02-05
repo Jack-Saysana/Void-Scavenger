@@ -2,6 +2,7 @@
 #include <engine/engine.h>
 #include <global_vars.h>
 #include <stdio.h>
+#include <cglm/cglm.h>
 
 #define MAX_CMD_LEN (100)
 

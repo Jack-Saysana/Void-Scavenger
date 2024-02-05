@@ -109,17 +109,33 @@ void input_keys(GLFWwindow *window) {
         /* TODO Ship movment */
         if (i == GLFW_KEY_W) {
           /* Handle W press */
-          
-          move_camera(&camera, MOVE_FORWARD);
+          if (player_ship.ent->velocity[0] >= player_ship.thruster.max_vel) {
+            player_ship.ent->velocity[0] = player_ship.thruster.max_vel;
+          } else {
+            player_ship.ent->velocity[0] += DELTA_TIME * player_ship.thruster.max_accel;
+          }
         } else if (i == GLFW_KEY_S){
           /* Handle S press */
-          move_camera(&camera, MOVE_BACKWARD);
+          if (player_ship.ent->velocity[0] <= 0) {
+            player_ship.ent->velocity[0] = 0;
+          } else {
+            player_ship.ent->velocity[0] -= DELTA_TIME * player_ship.thruster.max_accel;
+          }
         } else if (i == GLFW_KEY_A){
           /* Handle A press */
-          move_camera(&camera, MOVE_LEFT);
+          mat4 rotation = GLM_MAT4_IDENTITY_INIT;
+          glm_rotate(rotation, glm_rad(1), (vec3){1.0,0.0,0.0});
+          versor rot_quat = GLM_QUAT_IDENTITY_INIT;
+          glm_mat4_quat(rotation, rot_quat);
+          glm_quat_mul(rot_quat, player_ship.ent->rotation, player_ship.ent->rotation);
         } else if (i == GLFW_KEY_D){
           /* Handle D press */
-          move_camera(&camera, MOVE_RIGHT);
+          //move_camera(&camera, MOVE_RIGHT);
+          mat4 rotation = GLM_MAT4_IDENTITY_INIT;
+          glm_rotate(rotation, glm_rad(-1), (vec3){1.0,0.0,0.0});
+          versor rot_quat = GLM_QUAT_IDENTITY_INIT;
+          glm_mat4_quat(rotation, rot_quat);
+          glm_quat_mul(rot_quat, player_ship.ent->rotation, player_ship.ent->rotation);
         }
       }
       holding_alpha[i - GLFW_KEY_A] = 1;

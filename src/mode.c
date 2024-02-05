@@ -37,7 +37,7 @@ int init_space_mode() {
   }
 
   // Initialize and place asteroid and enemies entities in simulation
-  spawn_asteroids();
+  //spawn_asteroids();
   spawn_space_debris();
 
   mode = SPACE;
