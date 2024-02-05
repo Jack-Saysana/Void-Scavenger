@@ -68,5 +68,6 @@ extern size_t obs_buff_len;
 extern CORRIDOR *cd_obs;
 extern size_t num_corridors;
 extern size_t corridor_buff_len;
+extern int maze_size;
 
 #endif

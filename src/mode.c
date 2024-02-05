@@ -37,8 +37,8 @@ int init_space_mode() {
   }
 
   // Initialize and place asteroid and enemies entities in simulation
-  spawn_asteroids();
-  spawn_space_debris();
+//  spawn_asteroids();
+//  spawn_space_debris();
 
   mode = SPACE;
   return 0;
@@ -94,6 +94,7 @@ void clear_space_mode() {
   num_obstacles = 0;
 
   free_enemy_ship_buffer();
+  free_space_obstacle_buffer();
 
   // Reset wrapper buffer length
   num_wrappers = 0;
@@ -133,6 +134,8 @@ int init_station_mode() {
   if (status) {
     return -1;
   }
+  
+  create_station_corridors();
 
   mode = STATION;
   return 0;
@@ -168,13 +171,208 @@ void clear_station_mode() {
   num_corridors = 0;
 
   free_enemy_buffer();
+  free_corridor_buffer();
+  free_station_obstacle_buffer();
 
   // Reset wrapper buffer length
   num_wrappers = 0;
 }
 
+/*
+
+Legend:
+ * = Walkable
+ X = Non-walkable
+  
+ Note: Diagrams are draw in the layout
+ to which they are imported. Therefore,
+ the way they are laid out in the game is
+ based on this orientation.
+
+  4-Way:
+  |-----|
+  |  *  |
+  |* * *|
+  |  *  |
+  |-----|
+
+  1-Way:
+  |-----|
+  |  X  |
+  |X * *|
+  |  X  |
+  |-----|
+
+  T-Junction:
+  |-----|
+  |  *  |
+  |* * X|
+  |  *  |
+  |-----|
+
+  Corridor:
+  |-----|
+  |  *  |
+  |X * X|
+  |  *  |
+  |-----|
+
+  Corner:
+  |-----|
+  |  X  |
+  |* * X|
+  |  *  |
+  |-----|
+
+*/
 void create_station_corridors() {
-  /* TODO: generate maze corridors from maze generation */
+  int **maze = gen_maze();
+ #if 1
+   for (int x = 0; x < maze_size; x++) {
+    for (int y = 0; y < maze_size; y++) {
+      if (maze[x][y] == 1) {
+        printf("* ");
+      } else if (maze[x][y] == 3) {
+        printf("X ");
+      } else if (maze[x][y] == 0) { 
+        printf("  ");
+      } else {
+        printf("%d ", maze[x][y]);
+      }
+    }
+    printf("\n");
+  } 
+  
+  /* Analyze the odd numbered indices to find corridor type */
+  /* x = movement in OpenGL X-axis along maze */
+  /* z = movement in OpenGL Z-axis along maze */
+  /* x_pos = current position on X-axis */
+  /* z_pos = current position on Z-axis */
+  int up = 0;
+  int down = 0;
+  int left = 0;
+  int right = 0;
+  int type = -1; 
+  int rotation = 0;
+  for (int x = 1; x < maze_size - 1; x++) {
+    for (int z = 1; z < maze_size - 1; z++) {
+      /* Check above, below, left, and right */
+      /* Outputs of macros are stored in up, down, left, and right */
+      /* if up, down, left, or right == UP, output is 1, otherwise 0 */
+      if (!maze[x][z]) {
+        CHECK_UP(maze, x, z, up)
+        CHECK_DOWN(maze, x, z, down)
+        CHECK_LEFT(maze, x, z, left)
+        CHECK_RIGHT(maze, x, z, right)
+        if (up & down & left & right) {
+          type = TYPE_FOUR_WAY;
+          rotation = 0;
+        } else if (up & ~down & ~left & ~right) {
+          type = TYPE_ONE_WAY;
+          rotation = 0;
+        } else if (~up & down & ~left & ~right) {
+          type = TYPE_ONE_WAY;
+          rotation = 180;
+        } else if (~up & ~down & left & ~right) {
+          type = TYPE_ONE_WAY;
+          rotation = 90;
+        } else if (~up & ~down & ~left & right) {
+          type = TYPE_ONE_WAY;
+          rotation = 270;
+        } else if (up & down & left & ~right) {
+          type = TYPE_T_JUNCT;
+          rotation = 180;
+        } else if (~up & down & left & right) {
+          type = TYPE_T_JUNCT;
+          rotation = 270;
+        } else if (up & down & ~left & right) {
+          type = TYPE_T_JUNCT;
+          rotation = 0;
+        } else if (up & ~down & left & right) {
+          type = TYPE_T_JUNCT;
+          rotation = 90;
+        } else if (up & down & ~left & ~right) {
+          type = TYPE_CORRIDOR;
+          rotation = 0;
+        } else if (~up & ~down & left & right) {
+          type = TYPE_CORRIDOR;
+          rotation = 90;
+        } else if (~up & down & left & ~right) {
+          type = TYPE_CORNER;
+          rotation = 180;
+        } else if (~up & down & ~left & right) {
+          type = TYPE_CORNER;
+          rotation = 270;
+        } else if (up & ~down & ~left & right) {
+          type = TYPE_CORNER;
+          rotation = 0;
+        } else if (up & ~down & left & ~right) {
+          type = TYPE_CORNER;
+          rotation = 90;
+        } else {
+          fprintf(stderr, "Could not find a matching corridor layout for (%d, %d)!\n", x, z);
+          continue;
+        }
+        versor rot;
+        if (rotation == 90) {
+          glm_quat_identity(rot);
+        } else if (rotation == 180) {
+          glm_quat_init(rot, 0.0, 1 / sqrt(2), 0.0, 1 / sqrt(2)); 
+        } else if (rotation == 270) {
+          glm_quat_init(rot, 0.0, 1.0, 0.0, 0.0);
+        } else if (rotation == 0) {
+          glm_quat_init(rot, 0.0, 1 / sqrt(2), 0.0, -1 / sqrt(2)); 
+        }
+
+        vec3 position = GLM_VEC3_ZERO_INIT;
+        glm_vec3_copy((vec3) { ((float) x) * 5.0, 0.0,((float) z) * 5.0 }, position);       
+        size_t index = init_corridor(position, rot, type); 
+        corridor_insert_sim(index);
+        /*
+        if (type == TYPE_ONE_WAY) {
+          printf("Found type ONE_WAY at (%d, %d) with rotation %d deg.", x, z, rotation);
+        } else if (type == TYPE_FOUR_WAY) {
+          printf("Found type FOUR_WAY at (%d, %d) with rotation %d deg.", x, z, rotation);
+        } else if (type == TYPE_CORNER) {
+          printf("Found type CORNER at (%d, %d) with rotation %d deg.", x, z, rotation);
+        } else if (type == TYPE_T_JUNCT) {
+          printf("Found type T_JUNCT at (%d, %d) with rotation %d deg.", x, z, rotation);
+        } else if (type == TYPE_CORRIDOR) {
+          printf("Found type CORRIDOR at (%d, %d) with rotation %d deg.", x, z, rotation);
+        }
+        printf(" Position: (%.1f, %.1f, %.1f)\n", position[0], position[1], position[2]); 
+        */
+      }
+    }
+  }
+#endif
+#if 0
+  int rotation = 0;
+  versor rot;
+  vec3 pos = GLM_VEC3_ZERO_INIT;
+  glm_vec3_copy((vec3) { 0.0, 0.0, 0.0 }, pos);
+  //mat3 rot_mat = GLM_MAT3_IDENTITY_INIT;
+  if (rotation == 0) {
+    glm_quat_identity(rot);
+  } else if (rotation == 90) {
+    glm_quat_init(rot, 0.0, 1 / sqrt(2), 0.0, 1 / sqrt(2)); 
+  } else if (rotation == 180) {
+    glm_quat_init(rot, 0.0, 1.0, 0.0, 0.0);
+  } else if (rotation == 270) {
+    glm_quat_init(rot, 0.0, 1 / sqrt(2), 0.0, -1 / sqrt(2)); 
+  }
+  /*
+  glm_vec3_copy((vec3) { 0.0, 0.0, 1.0 } ,rot_mat[0]);
+  glm_vec3_copy((vec3) { 1.0, 0.0, 0.0 } ,rot_mat[2]);
+  glm_mat3_quat(rot_mat, rot);
+  //glm_quat_identity(rot);
+  */
+  int type = 4;
+  size_t index = init_corridor(pos, rot, type); 
+  corridor_insert_sim(index);
+#endif
+
+  free_maze(maze);
 }
 
 // ========================= GENERAL GAME MANAGEMENT =========================
@@ -217,14 +415,38 @@ int delete_stale_objects() {
       cur_wrapper = object_wrappers + sp_obs[i].wrapper_offset;
       if (cur_wrapper->to_delete) {
         // Delete obstacle
+        space_obstacle_remove_sim(i); 
+        delete_space_obstacle(i);
+        i--;
       }
     } else {
       cur_wrapper = object_wrappers + st_obs[i].wrapper_offset;
       if (cur_wrapper->to_delete) {
         // Delete obstacle
+        station_obstacle_remove_sim(i); 
+        delete_station_obstacle(i);
+        i--;
       }
+    }
+  }
+  for (size_t i = 0; i < num_corridors; i++) {
+    cur_wrapper = object_wrappers + cd_obs[i].wrapper_offset;
+    if (cur_wrapper->to_delete) {
+      corridor_remove_sim(i);
+      delete_corridor(i);
+      i--;
     }
   }
 
   return 0;
+}
+
+void switch_game_modes() {
+  if (mode == SPACE) {
+    clear_space_mode();
+    init_station_mode();
+  } else {
+    clear_station_mode();
+    init_space_mode();
+  }
 }

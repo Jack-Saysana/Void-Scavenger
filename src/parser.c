@@ -45,19 +45,35 @@ void parse() {
 void console_dispatcher() {
   if (command[0].kind == IDENTIFIER) {
     if (strncmp(command[0].tok, SET, sizeof(SET)) == 0) {
-      /* BEGIN: set  */
+      /* BEGIN: set */
       if (command[1].kind == IDENTIFIER) {
         if (strncmp(command[1].tok, CURSOR, sizeof(CURSOR)) == 0) {
-          /*BEGIN: cursor*/
-            if (command[2].kind == IDENTIFIER && strncmp(command[2].tok, ON, sizeof(ON)) == 0) {
+          /* BEGIN: cursor */
+            if (command[2].kind == IDENTIFIER &&
+                strncmp(command[2].tok, ON, sizeof(ON)) == 0) {
               cursor_on(1);
-            } else if (command[2].kind == IDENTIFIER && strncmp(command[2].tok, OFF, sizeof(OFF)) == 0) {
+            } else if (command[2].kind == IDENTIFIER && 
+                       strncmp(command[2].tok, OFF, sizeof(OFF)) == 0) {
               cursor_on(0);
             } else {
               command_not_found();
             }
-          /*END: cursor*/
-        } else {
+          /* END: cursor */
+        } else if (strncmp(command[1].tok, GAMEMODE, sizeof(GAMEMODE)) == 0) {
+          /* BEGIN: gamemode */
+          if (command[2].kind == IDENTIFIER) {
+            if (strncmp(command[2].tok, STATION, sizeof(STATION)) == 0) {
+              set_gamemode_station();
+            } else if (strncmp(command[2].tok, SPACE, sizeof(SPACE)) == 0) {
+              set_gamemode_space();
+            } else {
+              command_not_found();
+            }
+          } else {
+            command_not_found();
+          }
+          /* END: gamemode */
+        }  else {
           command_not_found();
         }
       } else {
@@ -88,6 +104,10 @@ void console_dispatcher() {
       /* BEGIN: hb */
       toggle_hit_boxes();
       /* END: hb */
+    } else if (strncmp(command[0].tok, QUIT, sizeof(QUIT)) == 0) {
+      /* BEGIN: quit */
+      quit();
+      /* END: quit */
     } else {
       /* NON-RECOGNIZED IDENTIFIER */
       command_not_found();

@@ -17,6 +17,10 @@
 #define RESPAWN              ("respawn")
 #define WIRE                 ("wire")
 #define HIT_BOXES            ("hb")
+#define GAMEMODE             ("gamemode")
+#define STATION              ("station")
+#define SPACE                ("space")
+#define QUIT                 ("quit")
 
 #define MAX_TOKS (10)
 
@@ -39,3 +43,6 @@ void command_not_found();
 void toggle_hit_boxes();
 void toggle_wire_frame();
 void cursor_on(int);
+void set_gamemode_station();
+void set_gamemode_space();
+void quit();

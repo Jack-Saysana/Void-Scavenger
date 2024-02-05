@@ -25,6 +25,9 @@
 */
 #define UNSET_WALL(maze, x, y) (maze[x][y] = IN)
 
+/* ======================== INTERNALLY DEFINED FUNCTIONS ================== */
+void free_maze(int **);
+
 /* ======================== EXTERNALLY DEFINED FUNCTIONS ================== */
 int double_buffer(void **, size_t *, size_t);
 ENTITY *init_corridor_ent(size_t index);

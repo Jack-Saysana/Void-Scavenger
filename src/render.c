@@ -95,6 +95,10 @@ void cleanup_scene() {
   free_model(alien_models[1]);
   free_model(player_ship_model);
   free_model(alien_ship_models[0]);
+  for (int i = 0; i < 5; i++) {
+    free_model(corridor_models[i]);
+    free_model(asteroid_models[i]);
+  }
 
   free_ui();
 }
@@ -171,6 +175,7 @@ void query_render_sim() {
       }
     }
   }
+  free(render_query);
 }
 
 void render_enemies() {
@@ -263,6 +268,6 @@ void toggle_wire_frame() {
   wire_frame = !wire_frame;
 }
 
-void update_perspective() {
+void update_perspective() {  
   glm_perspective(glm_rad(45.0), RES_X / RES_Y, 0.1f, 100.0f, persp_proj);
 }

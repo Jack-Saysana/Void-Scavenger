@@ -170,3 +170,24 @@ int station_obstacle_insert_sim(size_t index) {
 
   return 0;
 }
+
+void delete_station_obstacle(size_t index) {
+  if (index >= num_obstacles) {
+    return;
+  }
+
+  free_entity(st_obs[index].ent);
+  delete_wrapper(st_obs[index].wrapper_offset);
+
+  num_obstacles--;
+}
+
+void station_obstacle_remove_sim(size_t index) {
+  sim_remove_entity(render_sim, st_obs[index].ent);
+  sim_remove_entity(physics_sim, st_obs[index].ent);
+}
+
+void space_obstacle_remove_sim(size_t index) {
+  sim_remove_entity(render_sim, sp_obs[index].ent);
+  sim_remove_entity(physics_sim, sp_obs[index].ent);
+}

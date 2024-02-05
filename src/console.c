@@ -29,3 +29,24 @@ void cursor_on(int on) {
     CURSOR_ENABLED = 0;
   }
 }
+
+void set_gamemode_station() {
+  if (mode == STATION) {
+    return;
+  }
+  clear_space_mode();
+  init_station_mode();
+}
+
+void set_gamemode_space() {
+  if (mode == SPACE) {
+    return;
+  }
+  clear_station_mode();
+  init_space_mode();
+}
+
+void quit() {
+  cleanup_game();
+  exit(0);
+}

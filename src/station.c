@@ -21,9 +21,13 @@ int init_corridor_buffer() {
   return 0;
 }
 
+void free_corridor_buffer() {
+  free(cd_obs);
+}
+
 /* ==================== CORRIDOR OBJECT INIT AND DELETE ==================== */
 
-size_t init_corridor(vec3 pos, size_t type) {
+size_t init_corridor(vec3 pos, versor rotation, size_t type) {
   if (cd_obs == NULL) {
     fprintf(stderr, "Error: Inserting into a deallocated corridor buffer\n");
     return INVALID_INDEX;
@@ -46,7 +50,12 @@ size_t init_corridor(vec3 pos, size_t type) {
   glm_vec3_copy(pos, corr->ent->translation);
   glm_vec3_copy((vec3) GLM_VEC3_ZERO_INIT, corr->ent->ang_velocity);
   glm_vec3_copy((vec3) GLM_VEC3_ZERO_INIT, corr->ent->velocity);
+  corr->ent->rotation[0] = rotation[0];
+  corr->ent->rotation[1] = rotation[1];
+  corr->ent->rotation[2] = rotation[2];
+  corr->ent->rotation[3] = rotation[3];
   glm_vec3_copy((vec3) { 1.0, 1.0, 1.0 }, corr->ent->scale);
+  
 
   if (++num_corridors == corridor_buff_len) {
     int status = double_buffer((void **) &cd_obs, &corridor_buff_len,
@@ -68,6 +77,12 @@ void delete_corridor(size_t index) {
   delete_wrapper(cd_obs[index].wrapper_offset);
 
   num_corridors--;
+}
+
+void corridor_remove_sim(size_t index) {
+  sim_remove_entity(render_sim, cd_obs[index].ent);
+  sim_remove_entity(combat_sim, cd_obs[index].ent);
+  sim_remove_entity(physics_sim, cd_obs[index].ent);
 }
 
 int corridor_insert_sim(size_t index) {
@@ -162,16 +177,16 @@ void add_element(int **list, size_t *size, int *num_elements, int to_add) {
   OUT cells around the newly created IN cell are changed to frontier
   cells.
 */
-void connect_cell(int maze[MAX_MAZE_SIZE][MAX_MAZE_SIZE],
+void connect_cell(int **maze,
                   int x, int y, int **list,
                   size_t *size, int *num_elements) {
   /* Find a wall around the frontier square that is adjacent */
   /* to an IN cell, then remove the wall by setting to IN    */
-  if ((x + 2) < MAX_MAZE_SIZE && maze[x + 2][y] == IN) {
+  if ((x + 2) < maze_size && maze[x + 2][y] == IN) {
     UNSET_WALL(maze, x + 1, y);
   } else if ((x - 2) > 0 && maze[x - 2][y] == IN) {
     UNSET_WALL(maze, x - 1, y);
-  } else if ((y + 2) < MAX_MAZE_SIZE && maze[x][y + 2] == IN) {
+  } else if ((y + 2) < maze_size && maze[x][y + 2] == IN) {
     UNSET_WALL(maze, x, y + 1);
   } else if ((y - 2) > 0 && maze[x][y - 2] == IN) {
     UNSET_WALL(maze, x, y - 1);
@@ -184,7 +199,7 @@ void connect_cell(int maze[MAX_MAZE_SIZE][MAX_MAZE_SIZE],
   maze[x][y] = IN;
 
   /* Set frontier squares and add to frontier list */
-  if ((x + 2) < MAX_MAZE_SIZE && maze[x + 2][y] == OUT) {
+  if ((x + 2) < maze_size && maze[x + 2][y] == OUT) {
     maze[x + 2][y] = FRONTIER;
     add_element(list, size, num_elements, CONVERT_COMBINED(x + 2, y));
   }
@@ -192,7 +207,7 @@ void connect_cell(int maze[MAX_MAZE_SIZE][MAX_MAZE_SIZE],
     maze[x - 2][y] = FRONTIER;
     add_element(list, size, num_elements, CONVERT_COMBINED(x - 2, y));
   }
-  if ((y + 2) < MAX_MAZE_SIZE && maze[x][y + 2] == OUT) {
+  if ((y + 2) < maze_size && maze[x][y + 2] == OUT) {
     maze[x][y + 2] = FRONTIER;
     add_element(list, size, num_elements, CONVERT_COMBINED(x, y + 2));
   }
@@ -203,8 +218,11 @@ void connect_cell(int maze[MAX_MAZE_SIZE][MAX_MAZE_SIZE],
 }
 
 
-int gen_maze() {
-  int maze[MAX_MAZE_SIZE][MAX_MAZE_SIZE];
+int **gen_maze() {
+  int **maze = (int **) malloc(sizeof(int *) * maze_size);
+  for (int i = 0; i < maze_size; i++) {
+    maze[i] = (int *) malloc(sizeof(int) * maze_size);
+  }
   size_t size = MIN_FRONTIER;
   int *frontier_list = (int *)(malloc(sizeof(int) * size));
   int num_elements = 0;
@@ -216,15 +234,15 @@ int gen_maze() {
   srand(time(NULL));
 
   /* Set up maze in a grid */
-  for (int x = 0; x < MAX_MAZE_SIZE; x++) {
-    for (int y = 0; y < MAX_MAZE_SIZE; y++) {
+  for (int x = 0; x < maze_size; x++) {
+    for (int y = 0; y < maze_size; y++) {
       if (x % 2 == 0 || y % 2 == 0) {
         maze[x][y] = WALL;
       } else {
         maze[x][y] = OUT;
       }
       /* Set the outside wall for back side of maze */
-      if ((x == (MAX_MAZE_SIZE - 1) || y == (MAX_MAZE_SIZE - 1))) {
+      if ((x == (maze_size - 1) || y == (maze_size - 1))) {
         maze[x][y] = WALL;
       }
     }
@@ -242,7 +260,7 @@ int gen_maze() {
   add_element(&frontier_list, &size, &num_elements, CONVERT_COMBINED(3, 1));
 
   /* Set the exit location */
-  maze[MAX_MAZE_SIZE - 2][MAX_MAZE_SIZE - 1] = IN;
+  //maze[maze_size - 2][maze_size - 1] = IN;
 
   /* While there are frontier cells left */
   /* choose one at random                */
@@ -253,5 +271,12 @@ int gen_maze() {
     random = get_random(frontier_list, size, &num_elements);
   }
   free(frontier_list);
-  return 0;
+  return maze;
+}
+
+void free_maze(int **maze) {
+  for (int i = 0; i < maze_size; i++) {
+    free(maze[i]);
+  }
+  free(maze);
 }
