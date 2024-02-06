@@ -3,11 +3,14 @@
 #include <const.h>
 #include <global_vars.h>
 
+static ENTITY *dead_zones[6] = { NULL };
 
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
 void spawn_asteroids();
 void spawn_space_debris();
+int insert_dead_zones();
+void clear_dead_zones();
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 
@@ -51,3 +54,5 @@ void gen_rand_vec3(vec3 *, float);
 float gen_rand_float(float);
 void seed_random();
 
+// Dead zone placement
+ENTITY *init_dead_zone_ent();

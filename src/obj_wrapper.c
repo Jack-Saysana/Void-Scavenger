@@ -60,7 +60,11 @@ void delete_wrapper(size_t index) {
 
   object_wrappers[index] = object_wrappers[num_wrappers];
   SOBJ *old_wrapper = object_wrappers + num_wrappers;
-  old_wrapper->entity->data = (void *) index;
+
+  if (old_wrapper->entity) {
+    old_wrapper->entity->data = (void *) index;
+  }
+
   if (old_wrapper->type == PLAYER_OBJ) {
     st_player.wrapper_offset = index;
   } else if (old_wrapper->type == PLAYER_SHIP_OBJ) {

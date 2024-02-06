@@ -19,11 +19,16 @@ int init_space_mode() {
   render_sim = init_sim(SPACE_SIZE, SPACE_DEPTH);
   event_sim = init_sim(SPACE_SIZE, SPACE_DEPTH);
 
+  int status = insert_dead_zones();
+  if (status) {
+    return -1;
+  }
+
   // Initialize ship entity values
   reset_physics(player_ship.ent);
 
   // Place player ship entity into simulations
-  int status = player_ship_insert_sim();
+  status = player_ship_insert_sim();
 
   // Initialize and place space entity in simulation
   status = init_enemy_ship_buffer();
@@ -35,6 +40,9 @@ int init_space_mode() {
   if (status) {
     return -1;
   }
+
+  // Place render distance sphere in simulations
+  sim_add_entity(render_sim, render_sphere, ALLOW_DEFAULT);
 
   // Initialize and place asteroid and enemies entities in simulation
   spawn_asteroids();
@@ -77,6 +85,7 @@ void clear_space_mode() {
   free_sim(combat_sim);
   free_sim(render_sim);
   free_sim(event_sim);
+  clear_dead_zones();
 
   // Free non-player entities
   for (size_t i = 0; i < num_enemies; i++) {
@@ -144,6 +153,7 @@ void clear_station_mode() {
   free_sim(combat_sim);
   free_sim(render_sim);
   free_sim(event_sim);
+  clear_dead_zones();
 
   // Free non-player entities
   for (size_t i = 0; i < num_enemies; i++) {
@@ -227,4 +237,78 @@ int delete_stale_objects() {
   }
 
   return 0;
+}
+
+// ============================= GENERAL HELPERS =============================
+
+int insert_dead_zones() {
+  float max_extent = 0.0;
+  if (mode == SPACE) {
+    max_extent = SPACE_SIZE;
+  } else {
+    max_extent = STATION_SIZE;
+  }
+
+  mat3 rot_mats[6] = {
+    GLM_MAT3_IDENTITY_INIT,
+    { { -1.0, 0.0, 0.0}, { 0.0, -1.0, 0.0 }, { 0.0, 0.0, 1.0 } },
+    { { 0.0, 1.0, 0.0}, { -1.0, 0.0, 0.0 }, { 0.0, 0.0, 1.0 } },
+    { { 0.0, -1.0, 0.0}, { 1.0, 0.0, 0.0 }, { 0.0, 0.0, 1.0 } },
+    { { 1.0, 0.0, 0.0}, { 0.0, 0.0, 1.0 }, { 0.0, -1.0, 0.0 } },
+    { { 1.0, 0.0, 0.0}, { 0.0, 0.0, -1.0 }, { 0.0, 1.0, 0.0 } },
+  };
+
+  vec3 scales[6] = {
+    { max_extent * 3.0, max_extent, max_extent * 3.0 },
+    { max_extent * 3.0, max_extent, max_extent * 3.0 },
+    { max_extent, max_extent, max_extent * 3.0 },
+    { max_extent, max_extent, max_extent * 3.0 },
+    { max_extent, max_extent, max_extent },
+    { max_extent, max_extent, max_extent }
+  };
+
+  int status = 0;
+  for (int i = 0; i < 6; i++) {
+    dead_zones[i] = init_dead_zone_ent();
+
+    if (i == TOP) {
+      glm_vec3_copy((vec3) { 0.0, max_extent, 0.0 },
+                    dead_zones[TOP]->translation);
+    } else if (i == BOTTOM) {
+      glm_vec3_copy((vec3) { 0.0, -max_extent, 0.0 },
+                    dead_zones[BOTTOM]->translation);
+    } else if (i == LEFT) {
+      glm_vec3_copy((vec3) { -max_extent, 0.0, 0.0 },
+                    dead_zones[LEFT]->translation);
+    } else if (i == RIGHT) {
+      glm_vec3_copy((vec3) { max_extent, 0.0, 0.0 },
+                    dead_zones[RIGHT]->translation);
+    } else if (i == FORWARD) {
+      glm_vec3_copy((vec3) { 0.0, 0.0, max_extent },
+                    dead_zones[FORWARD]->translation);
+    } else if (i == BACK) {
+      glm_vec3_copy((vec3) { 0.0, 0.0, -max_extent },
+                    dead_zones[BACK]->translation);
+    }
+    glm_mat3_quat(rot_mats[i], dead_zones[i]->rotation);
+    glm_vec3_copy(scales[i], dead_zones[i]->scale);
+
+    status = sim_add_entity(event_sim, dead_zones[i], ALLOW_DEFAULT);
+    if (status) {
+      return -1;
+    }
+
+    status = sim_add_entity(render_sim, dead_zones[i], ALLOW_DEFAULT);
+    if (status) {
+      return -1;
+    }
+  }
+
+  return 0;
+}
+
+void clear_dead_zones() {
+  for (int i = 0; i < 6; i++) {
+    free_entity(dead_zones[i]);
+  }
 }

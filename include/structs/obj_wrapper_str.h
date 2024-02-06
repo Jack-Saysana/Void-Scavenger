@@ -18,6 +18,7 @@ typedef enum simulation_obj_type {
   ITEM_OBJ,
   OBSTACLE_OBJ,
   CORRIDOR_OBJ,
+  DEAD_ZONE_OBJ,
 } SOBJ_T;
 
 typedef struct {

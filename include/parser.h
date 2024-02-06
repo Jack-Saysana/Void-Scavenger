@@ -17,6 +17,7 @@
 #define RESPAWN              ("respawn")
 #define WIRE                 ("wire")
 #define HIT_BOXES            ("hb")
+#define RENDER_ARENA         ("ra")
 
 #define MAX_TOKS (10)
 
@@ -38,4 +39,5 @@ float create_float(int);
 void command_not_found();
 void toggle_hit_boxes();
 void toggle_wire_frame();
+void toggle_render_arena();
 void cursor_on(int);

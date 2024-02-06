@@ -29,6 +29,7 @@ static MODEL *asteroid_models[NUM_ASTEROID_TYPES] = { NULL, NULL, NULL, NULL,
                                                       NULL };
 static MODEL *corridor_models[NUM_CORRIDOR_TYPES] = { NULL, NULL, NULL, NULL,
                                                       NULL };
+static MODEL *dead_zone_model = NULL;
 
 // Common matrices
 static mat4 ortho_proj = GLM_MAT4_IDENTITY_INIT;
@@ -37,6 +38,7 @@ static mat4 persp_proj = GLM_MAT4_IDENTITY_INIT;
 // Render settings
 static int hit_boxes = 0;
 static int wire_frame = 0;
+static int render_arena = 0;
 
 #define CHECK_ASSETS_LOADED (\
 !player_model || !alien_models[0] || !alien_models[1] || !player_ship_model || \
@@ -45,18 +47,13 @@ static int wire_frame = 0;
 !asteroid_models[0] || !asteroid_models[1] || !asteroid_models[2] || \
 !asteroid_models[3] || !asteroid_models[4] || !corridor_models[0] || \
 !corridor_models[1] || !corridor_models[2] || !corridor_models[3] || \
-!corridor_models[4])
+!corridor_models[4] || !dead_zone_model)
 
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
 void query_render_sim();
-void render_enemies();
-void render_enemy_ships();
-void render_projectiles();
-void render_items();
-void render_st_obstacles();
-void render_sp_obstacles();
 void render_game_entity(ENTITY *);
+void render_oct_tree(SIMULATION *);
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 

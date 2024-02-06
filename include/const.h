@@ -38,11 +38,11 @@
 #define STAT_PROJ (1)
 
 // Simulation constants
-#define SPACE_SIZE (1024.0)
-#define SPACE_DEPTH (9)
-#define STATION_SIZE (1024.0)
-#define STATION_DEPTH (9)
-#define RENDER_DIST (10.0)
+#define SPACE_SIZE (32.0)
+#define SPACE_DEPTH (4)
+#define STATION_SIZE (32.0)
+#define STATION_DEPTH (4)
+#define RENDER_DIST (128.0)
 
 // Asteroid constants
 #define NUM_ASTEROIDS (10)
@@ -63,5 +63,11 @@
 #define Z (2)
 #define W (3)
 
+#define TOP (0)
+#define BOTTOM (1)
+#define LEFT (2)
+#define RIGHT (3)
+#define FORWARD (4)
+#define BACK (5)
 
 #endif
