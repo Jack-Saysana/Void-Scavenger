@@ -138,6 +138,25 @@ void delete_space_obstacle(size_t index) {
   delete_wrapper(sp_obs[index].wrapper_offset);
 
   num_obstacles--;
+
+  sp_obs[index] = sp_obs[num_obstacles];
+  SOBJ *wrapper = object_wrappers + sp_obs[index].wrapper_offset;
+  wrapper->data = (void *) index;
+}
+
+void delete_station_obstacle(size_t index) {
+  if (index >= num_obstacles) {
+    return;
+  }
+
+  free_entity(st_obs[index].ent);
+  delete_wrapper(st_obs[index].wrapper_offset);
+
+  num_obstacles--;
+
+  st_obs[index] = st_obs[num_obstacles];
+  SOBJ *wrapper = object_wrappers + st_obs[index].wrapper_offset;
+  wrapper->data = (void *) index;
 }
 
 int space_obstacle_insert_sim(size_t index) {
@@ -148,6 +167,11 @@ int space_obstacle_insert_sim(size_t index) {
   }
 
   status = sim_add_entity(render_sim, sp_obs[index].ent, ALLOW_DEFAULT);
+  if (status) {
+    return -1;
+  }
+
+  status = sim_add_entity(event_sim, sp_obs[index].ent, ALLOW_DEFAULT);
   if (status) {
     return -1;
   }
@@ -169,4 +193,15 @@ int station_obstacle_insert_sim(size_t index) {
   }
 
   return 0;
+}
+
+void space_obstacle_remove_sim(size_t index) {
+  sim_remove_entity(physics_sim, sp_obs[index].ent);
+  sim_remove_entity(render_sim, sp_obs[index].ent);
+  sim_remove_entity(event_sim, sp_obs[index].ent);
+}
+
+void station_obstacle_remove_sim(size_t index) {
+  sim_remove_entity(physics_sim, st_obs[index].ent);
+  sim_remove_entity(render_sim, st_obs[index].ent);
 }

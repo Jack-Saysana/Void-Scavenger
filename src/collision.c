@@ -21,7 +21,8 @@ void handle_collisions() {
   handle_combat_collisions(combat_collisions, num_c_col);
 
   COLLISION *event_collisions = NULL;
-  /*size_t num_e_col = */get_sim_collisions(event_sim, &event_collisions);
+  size_t num_e_col = get_sim_collisions(event_sim, &event_collisions);
+  handle_event_collisions(event_collisions, num_e_col);
 
   // Check collisions
 
@@ -76,5 +77,25 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
 }
 
 void handle_event_collisions(COLLISION *cols, size_t num_cols) {
+  SOBJ *target_wrapper = NULL;
 
+  SOBJ *a_wrapper = NULL;
+  SOBJ *b_wrapper = NULL;
+  for (size_t i = 0; i < num_cols; i++) {
+    a_wrapper = object_wrappers + (size_t) cols[i].a_ent->data;
+    b_wrapper = object_wrappers + (size_t) cols[i].b_ent->data;
+
+    if (a_wrapper->type == DEAD_ZONE_OBJ && b_wrapper->type != DEAD_ZONE_OBJ) {
+      target_wrapper = b_wrapper;
+    } else if (a_wrapper->type != DEAD_ZONE_OBJ &&
+               b_wrapper->type == DEAD_ZONE_OBJ) {
+      target_wrapper = a_wrapper;
+    }
+
+    if (target_wrapper->type == ENEMY_SHIP_OBJ) {
+      // Despawn enemy after 5 seconds
+    } else if (target_wrapper->type == OBSTACLE_OBJ) {
+      target_wrapper->to_delete = 1;
+    }
+  }
 }

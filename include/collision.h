@@ -3,8 +3,9 @@
 
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
-void handle_physics_collisions();
-void handle_combat_collisions();
+void handle_physics_collisions(COLLISION *, size_t);
+void handle_combat_collisions(COLLISION *, size_t);
+void handle_event_collisions(COLLISION *, size_t);
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 

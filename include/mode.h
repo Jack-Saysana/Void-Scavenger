@@ -14,6 +14,9 @@ void clear_dead_zones();
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 
+size_t init_wrapper(SOBJ_T, ENTITY *, void *);
+void delete_wrapper(size_t);
+
 void reset_physics(ENTITY *);
 
 int init_enemy_buffer();
@@ -36,6 +39,12 @@ void sp_enemy_remove_sim(size_t);
 
 void delete_projectile(size_t);
 void projectile_remove_sim(size_t);
+
+void delete_space_obstacle(size_t);
+void space_obstacle_remove_sim(size_t);
+
+void delete_station_obstacle(size_t);
+void station_obstacle_remove_sim(size_t);
 
 /* Obstacles for station and space mode */
 int init_space_obstacle_buffer();

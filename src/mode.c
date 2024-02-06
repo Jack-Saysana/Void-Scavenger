@@ -226,12 +226,16 @@ int delete_stale_objects() {
     if (mode == SPACE) {
       cur_wrapper = object_wrappers + sp_obs[i].wrapper_offset;
       if (cur_wrapper->to_delete) {
-        // Delete obstacle
+        space_obstacle_remove_sim(i);
+        delete_space_obstacle(i);
+        i--;
       }
     } else {
       cur_wrapper = object_wrappers + st_obs[i].wrapper_offset;
       if (cur_wrapper->to_delete) {
-        // Delete obstacle
+        station_obstacle_remove_sim(i);
+        delete_station_obstacle(i);
+        i--;
       }
     }
   }
@@ -270,6 +274,7 @@ int insert_dead_zones() {
   int status = 0;
   for (int i = 0; i < 6; i++) {
     dead_zones[i] = init_dead_zone_ent();
+    init_wrapper(DEAD_ZONE_OBJ, dead_zones[i], NULL);
 
     if (i == TOP) {
       glm_vec3_copy((vec3) { 0.0, max_extent, 0.0 },
@@ -309,6 +314,7 @@ int insert_dead_zones() {
 
 void clear_dead_zones() {
   for (int i = 0; i < 6; i++) {
+    delete_wrapper((size_t) dead_zones[i]->data);
     free_entity(dead_zones[i]);
   }
 }
