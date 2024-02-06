@@ -47,6 +47,20 @@ int init_scene() {
   corridor_models[2] = load_model("./assets/set_pieces/corner/corner_0.obj");
   corridor_models[3] = load_model("./assets/set_pieces/t_junct/t_junct.obj");
   corridor_models[4] = load_model("./assets/set_pieces/corridor/corridor_0.obj");
+  station_obstacles[0] = load_model("./assets/station_obstacles/ammo_crate_0/ammo_crate_0.obj");
+  station_obstacles[1] = load_model("./assets/station_obstacles/ammo_crate_1/ammo_crate_1.obj");
+  station_obstacles[2] = load_model("./assets/station_obstacles/crate_0/crate_0.obj");
+  station_obstacles[3] = load_model("./assets/station_obstacles/crate_1/crate_1.obj");
+  station_obstacles[4] = load_model("./assets/station_obstacles/cryo_bed/cryo_bed.obj");
+  station_obstacles[5] = load_model("./assets/station_obstacles/health_crate_0/health_crate_0.obj");
+  station_obstacles[6] = load_model("./assets/station_obstacles/health_crate_1/health_crate_1.obj");
+  station_obstacles[7] = load_model("./assets/station_obstacles/medical_arms/medical_arms.obj");
+  station_obstacles[8] = load_model("./assets/station_obstacles/oxygen_tank_0/oxygen_tank_0.obj");
+  station_obstacles[9] = load_model("./assets/station_obstacles/plant_vase/plant_vase.obj");
+  station_obstacles[10] = load_model("./assets/station_obstacles/shield_crate_0/shield_crate_0.obj");
+  station_obstacles[11] = load_model("./assets/station_obstacles/shield_crate_1/shield_crate_1.obj");
+  station_obstacles[12] = load_model("./assets/station_obstacles/toilet/toilet.obj");
+
 
   if (CHECK_ASSETS_LOADED) {
     fprintf(stderr, "Error: failed to initialize game models\n");
@@ -98,6 +112,9 @@ void cleanup_scene() {
   for (int i = 0; i < 5; i++) {
     free_model(corridor_models[i]);
     free_model(asteroid_models[i]);
+  }
+  for (int i = 0; i < NUM_STATION_OBSTACLE_TYPES; i++) {
+    free_model(station_obstacles[i]);
   }
 
   free_ui();
@@ -254,6 +271,10 @@ ENTITY *init_proj_ent(size_t index) {
 
 ENTITY *init_obstacle_ent(size_t index) {
   return init_entity(asteroid_models[index]);
+}
+
+ENTITY *init_station_obstacle_ent(size_t index) {
+  return init_entity(station_obstacles[index]);
 }
 
 ENTITY *init_corridor_ent(size_t index) {

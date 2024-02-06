@@ -29,6 +29,10 @@ static MODEL *asteroid_models[NUM_ASTEROID_TYPES] = { NULL, NULL, NULL, NULL,
                                                       NULL };
 static MODEL *corridor_models[NUM_CORRIDOR_TYPES] = { NULL, NULL, NULL, NULL,
                                                       NULL };
+static MODEL *station_obstacles[NUM_STATION_OBSTACLE_TYPES] = {
+  NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+  NULL, NULL, NULL, NULL, NULL, NULL
+};
 
 // Common matrices
 static mat4 ortho_proj = GLM_MAT4_IDENTITY_INIT;
@@ -45,7 +49,13 @@ static int wire_frame = 0;
 !asteroid_models[0] || !asteroid_models[1] || !asteroid_models[2] || \
 !asteroid_models[3] || !asteroid_models[4] || !corridor_models[0] || \
 !corridor_models[1] || !corridor_models[2] || !corridor_models[3] || \
-!corridor_models[4])
+!corridor_models[4] || \
+!station_obstacles[0] || !station_obstacles[1] || !station_obstacles[2] || \
+!station_obstacles[3] || !station_obstacles[4] || !station_obstacles[5] || \
+!station_obstacles[6] || !station_obstacles[7] || !station_obstacles[8] || \
+!station_obstacles[9] || !station_obstacles[10] || !station_obstacles[11] || \
+!station_obstacles[12] \
+)
 
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 

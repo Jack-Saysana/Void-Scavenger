@@ -91,14 +91,14 @@ size_t init_space_obstacle(int type, vec3 pos, vec3 velocity, vec3 angular_vel,
   return num_obstacles - 1;
 }
 
-size_t init_station_obstacle(vec3 pos, vec3 scale, float mass) {
+size_t init_station_obstacle(int type, vec3 pos, vec3 scale, float mass) {
   if (st_obs == NULL) {
     fprintf(stderr, "Error: Inserting into a deallocated obstacle buffer\n");
     return INVALID_INDEX;
   }
 
   ST_OBSTACLE *obstacle = st_obs + num_obstacles;
-  obstacle->ent = init_obstacle_ent();
+  obstacle->ent = init_station_obstacle_ent(type);
   if (obstacle->ent == NULL) {
     fprintf(stderr, "Error: Unable to allocate obstacle entity\n");
     return INVALID_INDEX;
@@ -111,7 +111,7 @@ size_t init_station_obstacle(vec3 pos, vec3 scale, float mass) {
   }
 
   glm_vec3_copy((vec3) { 0.0, 0.0, 0.0 }, obstacle->ent->ang_velocity);
-  glm_vec3_copy((vec3) { 0.0, 0.0, 0.0 }, obstacle->ent->velocity);
+  glm_vec3_copy((vec3) { 0.0, 0.01, 0.0 }, obstacle->ent->velocity);
   glm_vec3_copy(pos, obstacle->ent->translation);
   glm_vec3_copy(scale, obstacle->ent->scale);
   obstacle->ent->inv_mass = 1.0 / mass;

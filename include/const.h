@@ -57,6 +57,24 @@
 #define TYPE_T_JUNCT (3)
 #define TYPE_CORRIDOR (4)
 
+// Station obstacle constants
+#define NUM_STATION_OBSTACLE_TYPES (13)
+#define TYPE_AMMO_CRATE_0          (0)
+#define TYPE_AMMO_CRATE_1          (1)
+#define TYPE_CRATE_0               (2)
+#define TYPE_CRATE_1               (3)
+#define TYPE_CRYO_BED              (4)
+#define TYPE_HEALTH_CRATE_0        (5)
+#define TYPE_HEALTH_CRATE_1        (6)
+#define TYPE_MEDICAL_ARMS          (7)
+#define TYPE_OXYGEN_TANK_0         (8)
+#define TYPE_PLANT_VASE            (9)
+#define TYPE_SHIELD_CRATE_0        (10)
+#define TYPE_SHIELD_CRATE_1        (11)
+#define TYPE_TOILET                (12)
+#define STATION_SMALL_OBJS         (5)
+#define STATION_LARGE_OBJS         (8)
+
 // Misc
 #define X (0)
 #define Y (1)

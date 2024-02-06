@@ -259,9 +259,6 @@ int **gen_maze() {
   add_element(&frontier_list, &size, &num_elements, CONVERT_COMBINED(1, 3));
   add_element(&frontier_list, &size, &num_elements, CONVERT_COMBINED(3, 1));
 
-  /* Set the exit location */
-  //maze[maze_size - 2][maze_size - 1] = IN;
-
   /* While there are frontier cells left */
   /* choose one at random                */
   int random = get_random(frontier_list, size, &num_elements);
@@ -279,4 +276,181 @@ void free_maze(int **maze) {
     free(maze[i]);
   }
   free(maze);
+}
+
+
+/*
+Legend:
+ * = Walkable
+ X = Non-walkable
+  
+ Note: Diagrams are draw in the layout
+ to which they are imported. Therefore,
+ the way they are laid out in the game is
+ based on this orientation.
+
+  4-Way:
+  |-----|
+  |  *  |
+  |* * *|
+  |  *  |
+  |-----|
+
+  1-Way:
+  |-----|
+  |  *  |
+  |X * X|
+  |  X  |
+  |-----|
+
+  T-Junction:
+  |-----|
+  |  *  |
+  |X * *|
+  |  *  |
+  |-----|
+
+  Corridor:
+  |-----|
+  |  *  |
+  |X * X|
+  |  *  |
+  |-----|
+
+  Corner:
+  |-----|
+  |  *  |
+  |X * *|
+  |  X  |
+  |-----|
+
+*/
+void create_station_corridors() {
+  int **maze = gen_maze();
+  /* Analyze the odd numbered indices to find corridor type */
+  /* x = movement in OpenGL X-axis along maze */
+  /* z = movement in OpenGL Z-axis along maze */
+  /* x_pos = current position on X-axis */
+  /* z_pos = current position on Z-axis */
+  int up = 0;
+  int down = 0;
+  int left = 0;
+  int right = 0;
+  int type = -1; 
+  int rotation = 0;
+  int large_obstacles[STATION_LARGE_OBJS] = {
+    TYPE_TOILET,
+    TYPE_OXYGEN_TANK_0,
+    TYPE_AMMO_CRATE_1,
+    TYPE_CRYO_BED,
+    TYPE_SHIELD_CRATE_1,
+    TYPE_MEDICAL_ARMS,
+    TYPE_HEALTH_CRATE_1,
+    TYPE_CRATE_1
+  };
+  int small_obstacles[STATION_SMALL_OBJS] = {
+    TYPE_AMMO_CRATE_0,
+    TYPE_CRATE_0,
+    TYPE_HEALTH_CRATE_0,
+    TYPE_PLANT_VASE,
+    TYPE_SHIELD_CRATE_0
+  };
+  for (int x = 1; x < maze_size - 1; x++) {
+    for (int z = 1; z < maze_size - 1; z++) {
+      /* Check above, below, left, and right */
+      /* Outputs of macros are stored in up, down, left, and right */
+      /* if up, down, left, or right == UP, output is 1, otherwise 0 */
+      if (maze[x][z] == IN) {
+        CHECK_UP(maze, x, z, up)
+        CHECK_DOWN(maze, x, z, down)
+        CHECK_LEFT(maze, x, z, left)
+        CHECK_RIGHT(maze, x, z, right)
+        if (up & down & left & right) {
+          type = TYPE_FOUR_WAY;
+          rotation = 0;
+        } else if (up & ~down & ~left & ~right) {
+          type = TYPE_ONE_WAY;
+          rotation = 0;
+        } else if (~up & down & ~left & ~right) {
+          type = TYPE_ONE_WAY;
+          rotation = 180;
+        } else if (~up & ~down & left & ~right) {
+          type = TYPE_ONE_WAY;
+          rotation = 90;
+        } else if (~up & ~down & ~left & right) {
+          type = TYPE_ONE_WAY;
+          rotation = 270;
+        } else if (up & down & left & ~right) {
+          type = TYPE_T_JUNCT;
+          rotation = 180;
+        } else if (~up & down & left & right) {
+          type = TYPE_T_JUNCT;
+          rotation = 270;
+        } else if (up & down & ~left & right) {
+          type = TYPE_T_JUNCT;
+          rotation = 0;
+        } else if (up & ~down & left & right) {
+          type = TYPE_T_JUNCT;
+          rotation = 90;
+        } else if (up & down & ~left & ~right) {
+          type = TYPE_CORRIDOR;
+          rotation = 0;
+        } else if (~up & ~down & left & right) {
+          type = TYPE_CORRIDOR;
+          rotation = 90;
+        } else if (~up & down & left & ~right) {
+          type = TYPE_CORNER;
+          rotation = 180;
+        } else if (~up & down & ~left & right) {
+          type = TYPE_CORNER;
+          rotation = 270;
+        } else if (up & ~down & ~left & right) {
+          type = TYPE_CORNER;
+          rotation = 0;
+        } else if (up & ~down & left & ~right) {
+          type = TYPE_CORNER;
+          rotation = 90;
+        } else {
+          fprintf(stderr, "Could not find a matching corridor layout for (%d, %d)!\n", x, z);
+          continue;
+        }
+        versor rot;
+        if (rotation == 90) {
+          glm_quat_identity(rot);
+        } else if (rotation == 180) {
+          glm_quat_init(rot, 0.0, 1 / sqrt(2), 0.0, 1 / sqrt(2)); 
+        } else if (rotation == 270) {
+          glm_quat_init(rot, 0.0, 1.0, 0.0, 0.0);
+        } else if (rotation == 0) {
+          glm_quat_init(rot, 0.0, 1 / sqrt(2), 0.0, -1 / sqrt(2)); 
+        }
+
+        vec3 position = GLM_VEC3_ZERO_INIT;
+        glm_vec3_copy((vec3) { ((float) x) * 5.0, 0.0,((float) z) * 5.0 }, position);       
+        size_t index = init_corridor(position, rot, type); 
+        corridor_insert_sim(index);
+
+        int obstacle_type = -1;
+        /* Chance for there to spawn elements in any given corridor */
+        if (gen_rand_int(100) <= 20) {
+          /* Chances of getting a big or small obstacle */
+          if (gen_rand_int(100) <= 30) {
+            /* Large obstacle */
+            obstacle_type = large_obstacles[gen_rand_int(STATION_LARGE_OBJS)];
+          } else {
+            /* Small obstacle */
+            obstacle_type = small_obstacles[gen_rand_int(STATION_SMALL_OBJS)];
+          }
+        }
+        if (obstacle_type != -1) {
+          vec3 scale = GLM_VEC3_ZERO_INIT;
+          glm_vec3_copy((vec3) { 1.0, 1.0, 1.0 }, scale);
+          index = init_station_obstacle(obstacle_type, position,
+                                        scale, 2.0 * (gen_rand_float(3.0) + 1.0));
+          station_obstacle_insert_sim(index);
+        }
+      }
+    }
+  }
+  free_maze(maze);
 }
