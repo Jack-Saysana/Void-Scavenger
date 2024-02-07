@@ -54,16 +54,29 @@ void mouse_pos_callback(GLFWwindow *window, double x_pos, double y_pos) {
   vec2 mouse_dif;
   mouse_dif[0] = x_pos - prev_mouse_pos[0];
   mouse_dif[1] = y_pos - prev_mouse_pos[1];
-  glm_vec2_scale(mouse_dif, mouse_sens, mouse_dif);
-  camera.pitch += mouse_dif[1];
-  if (camera.pitch > 89) {
-    camera.pitch = 89;
-  } else if (camera.pitch < -89) {
-    camera.pitch = -89;
-  }
-  camera.yaw += mouse_dif[0];
-  if (camera.yaw > 360 || camera.yaw < -360) {
-    camera.yaw = (int)(camera.yaw) % 360;
+  if (mode == STATION) {
+    glm_vec2_scale(mouse_dif, mouse_sens, mouse_dif);
+    camera.pitch += mouse_dif[1];
+    if (camera.pitch > 89) {
+      camera.pitch = 89;
+    } else if (camera.pitch < -89) {
+      camera.pitch = -89;
+    }
+    camera.yaw += mouse_dif[0];
+    if (camera.yaw > 360 || camera.yaw < -360) {
+      camera.yaw = (int)(camera.yaw) % 360;
+    } 
+  } else if (mode == SPACE) {
+    mat4 rotation = GLM_MAT4_IDENTITY_INIT;
+    vec3 ship_up;
+    vec3 ship_side;
+    glm_quat_rotatev(player_ship.ent->rotation, (vec3){0.0, 1.0, 0.0}, ship_up);
+    glm_quat_rotatev(player_ship.ent->rotation, (vec3){0.0, 0.0, 1.0}, ship_side);
+    glm_rotate(rotation, glm_rad(-mouse_dif[1] * DELTA_TIME), ship_side);
+    glm_rotate(rotation, glm_rad(mouse_dif[0] * DELTA_TIME), ship_up);
+    versor rot_quat = GLM_QUAT_IDENTITY_INIT;
+    glm_mat4_quat(rotation, rot_quat);
+    glm_quat_mul(rot_quat, player_ship.ent->rotation, player_ship.ent->rotation);
   }
   prev_mouse_pos[0] = x_pos;
   prev_mouse_pos[1] = y_pos;
@@ -109,30 +122,40 @@ void input_keys(GLFWwindow *window) {
         /* TODO Ship movment */
         if (i == GLFW_KEY_W) {
           /* Handle W press */
-          if (player_ship.ent->velocity[0] >= player_ship.thruster.max_vel) {
-            player_ship.ent->velocity[0] = player_ship.thruster.max_vel;
+          vec3 ship_forward;
+          glm_quat_rotatev(player_ship.ent->rotation, (vec3){-1.0, 0.0, 0.0}, ship_forward);
+          glm_normalize(ship_forward);
+          if (glm_vec3_norm(player_ship.ent->velocity) >= player_ship.thruster.max_vel) {
+            glm_normalize(player_ship.ent->velocity);
+            glm_vec3_scale(player_ship.ent->velocity, player_ship.thruster.max_vel, player_ship.ent->velocity);
           } else {
-            player_ship.ent->velocity[0] += DELTA_TIME * player_ship.thruster.max_accel;
+            glm_vec3_scale(ship_forward, DELTA_TIME * player_ship.thruster.max_accel, ship_forward);
+            glm_vec3_add(player_ship.ent->velocity, ship_forward, player_ship.ent->velocity);
           }
         } else if (i == GLFW_KEY_S){
           /* Handle S press */
-          if (player_ship.ent->velocity[0] <= 0) {
-            player_ship.ent->velocity[0] = 0;
-          } else {
-            player_ship.ent->velocity[0] -= DELTA_TIME * player_ship.thruster.max_accel;
+          vec3 ship_forward;
+          glm_quat_rotatev(player_ship.ent->rotation, (vec3){-1.0, 0.0, 0.0}, ship_forward);
+          glm_normalize(ship_forward);
+          if (glm_vec3_dot(player_ship.ent->velocity, ship_forward) > 0) {
+            glm_vec3_scale(ship_forward, DELTA_TIME * player_ship.thruster.max_accel, ship_forward);
+            glm_vec3_add(player_ship.ent->velocity, ship_forward, player_ship.ent->velocity);
           }
         } else if (i == GLFW_KEY_A){
           /* Handle A press */
+          vec3 ship_forward;
+          glm_quat_rotatev(player_ship.ent->rotation, (vec3){1.0, 0.0, 0.0}, ship_forward);
           mat4 rotation = GLM_MAT4_IDENTITY_INIT;
-          glm_rotate(rotation, glm_rad(1), (vec3){1.0,0.0,0.0});
+          glm_rotate(rotation, glm_rad(DELTA_TIME * 50), ship_forward);
           versor rot_quat = GLM_QUAT_IDENTITY_INIT;
           glm_mat4_quat(rotation, rot_quat);
           glm_quat_mul(rot_quat, player_ship.ent->rotation, player_ship.ent->rotation);
         } else if (i == GLFW_KEY_D){
           /* Handle D press */
-          //move_camera(&camera, MOVE_RIGHT);
+          vec3 ship_forward;
+          glm_quat_rotatev(player_ship.ent->rotation, (vec3){1.0, 0.0, 0.0}, ship_forward);
           mat4 rotation = GLM_MAT4_IDENTITY_INIT;
-          glm_rotate(rotation, glm_rad(-1), (vec3){1.0,0.0,0.0});
+          glm_rotate(rotation, glm_rad(-1 * DELTA_TIME * 50), ship_forward);
           versor rot_quat = GLM_QUAT_IDENTITY_INIT;
           glm_mat4_quat(rotation, rot_quat);
           glm_quat_mul(rot_quat, player_ship.ent->rotation, player_ship.ent->rotation);

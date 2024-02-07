@@ -37,11 +37,8 @@ int init_space_mode() {
   }
 
   // Initialize and place asteroid and enemies entities in simulation
-  //spawn_asteroids();
+  spawn_asteroids();
   spawn_space_debris();
-  glm_vec3_copy((vec3) {20.0, 3.0, 0.0}, camera.pos);
-  camera.yaw = -90;
-  camera.pitch = 7;
 
   mode = SPACE;
   return 0;

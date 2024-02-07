@@ -82,7 +82,7 @@ int init_scene() {
     return -1;
   }
   
-  glm_vec3_copy((vec3) {0.0, 0.0, 5.0}, camera.pos);
+  glm_vec3_copy((vec3) {0.0, 0.0, 0.0}, camera.pos);
   camera.pitch = 0.0;
   camera.yaw = 0.0;
 
