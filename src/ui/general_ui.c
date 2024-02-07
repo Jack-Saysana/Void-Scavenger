@@ -14,4 +14,9 @@ void init_ui_components() {
     exit(1);
   }
   console_ui_initialize();
+
+  // Initialize stats
+  if (init_stats()) {
+    exit(1);
+  }
 }

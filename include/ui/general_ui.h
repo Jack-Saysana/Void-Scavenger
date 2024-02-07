@@ -9,3 +9,4 @@ extern F_GLYPH *fixed_sys;
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 void console_ui_initialize();
+int init_stats();
