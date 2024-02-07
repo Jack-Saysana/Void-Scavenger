@@ -97,15 +97,16 @@ int init_stats() {
   );
   set_ui_texture(stats.ui_health_bar, "assets/ui/hud_color.png");
 
-  stats.ui_velocity_text = add_ui_comp(
-    stats.ui_stats_root, // UI_COMP *parent
-    (vec2) { 0.55, -0.6 }, // vec2 pos
-    0.3, // float width
-    0.05, // float height
-    ABSOLUTE_POS | POS_UNIT_RATIO | SIZE_UNIT_RATIO | LINE_UNIT_RATIO_Y
-  );
-  set_ui_texture(stats.ui_velocity_text, "assets/ui/transparent.png");
-  set_ui_text(stats.ui_velocity_text, "37357 mph", 1.0, T_LEFT, fixed_sys, (vec3) { 0.0, 0.867, 1.0 });
+  // Do not have velocity var
+  // stats.ui_velocity_text = add_ui_comp(
+  //   stats.ui_stats_root, // UI_COMP *parent
+  //   (vec2) { 0.55, -0.6 }, // vec2 pos
+  //   0.3, // float width
+  //   0.05, // float height
+  //   ABSOLUTE_POS | POS_UNIT_RATIO | SIZE_UNIT_RATIO | LINE_UNIT_RATIO_Y
+  // );
+  // set_ui_texture(stats.ui_velocity_text, "assets/ui/transparent.png");
+  // set_ui_text(stats.ui_velocity_text, "37357 mph", 1.0, T_LEFT, fixed_sys, (vec3) { 0.0, 0.867, 1.0 });
 
   stats.ui_exp_root = add_ui_comp(
     stats.ui_stats_root, // UI_COMP *parent
@@ -146,11 +147,16 @@ void update_stats() {
   if (mode == SPACE) {
     // disable exp ui
     set_ui_enabled(stats.ui_exp_root, 0);
+    // update health and shield
+    stats.ui_health_bar->width = player_ship.cur_health / S_BASE_HEALTH;
+    stats.ui_shield_bar->width = player_ship.cur_shield / S_BASE_SHIELD;
   } else if (mode == STATION) {
     // disable shield ui
     set_ui_enabled(stats.ui_shield_root, 0);
     // disable velocity ui
     set_ui_enabled(stats.ui_velocity_text, 0);
+    // update health and exp
+    stats.ui_health_bar->width = st_player.health / st_player.max_health;
+    stats.ui_exp_bar->width = st_player.experience / 100.0;
   }
 }
-

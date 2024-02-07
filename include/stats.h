@@ -1,6 +1,7 @@
 #include <engine/ui_component.h>
 #include <structs/stats_str.h>
 #include <global_vars.h>
+#include <const.h>
 
 /*
                                    STATS
