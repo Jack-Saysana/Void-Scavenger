@@ -17,6 +17,7 @@ void init_ui_components() {
 
   // Initialize stats
   if (init_stats()) {
+    printf("Could not initialize stats!\n");
     exit(1);
   }
 }

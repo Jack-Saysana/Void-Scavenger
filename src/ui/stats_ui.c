@@ -1,4 +1,4 @@
-#include <stats.h>
+#include <ui/stats_ui.h>
 
 /*
                                    STATS
@@ -23,7 +23,8 @@ int init_stats() {
     1.0, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(stats.ui_stats_root, "assets/ui/transparent.png");
+  // set_ui_texture(stats.ui_stats_root, "assets/ui/transparent.png");
+  set_ui_display(stats.ui_stats_root, 0);
 
   stats.ui_shield_root = add_ui_comp(
     stats.ui_stats_root, // UI_COMP *parent
@@ -68,7 +69,8 @@ int init_stats() {
     0.05, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(stats.ui_health_root, "assets/ui/transparent.png");
+  // set_ui_texture(stats.ui_health_root, "assets/ui/transparent.png");
+  set_ui_display(stats.ui_health_root, 0);
 
   stats.ui_health_icon = add_ui_comp(
     stats.ui_health_root, // UI_COMP *parent
@@ -115,8 +117,8 @@ int init_stats() {
     0.01, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(stats.ui_exp_root, "assets/ui/transparent.png");
-
+  // set_ui_texture(stats.ui_exp_root, "assets/ui/transparent.png");
+  set_ui_display(stats.ui_exp_root, 0);
 
   stats.ui_exp_border = add_ui_comp(
     stats.ui_exp_root, // UI_COMP *parent
@@ -136,6 +138,63 @@ int init_stats() {
   );
   set_ui_texture(stats.ui_exp_bar, "assets/ui/hud_color.png");
 
+  stats.ui_energy_root = add_ui_comp(
+    stats.ui_stats_root, // UI_COMP *parent
+    (vec2) { 0.2, -0.3 }, // vec2 pos
+    0.03, // float width
+    0.33, // float height
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
+  );
+  // set_ui_texture(stats.ui_energy_root, "assets/ui/transparent.png");
+  set_ui_display(stats.ui_energy_root, 0);
+
+  stats.ui_energy_border = add_ui_comp(
+    stats.ui_energy_root, // UI_COMP *parent
+    (vec2) { 0.1, 0.0 }, // vec2 pos
+    0.8, // float width
+    0.8, // float height
+    RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
+  );
+  set_ui_texture(stats.ui_energy_border, "assets/ui/hud_color_bg.png");
+
+  stats.ui_energy_bar = add_ui_comp(
+    stats.ui_energy_border, // UI_COMP *parent
+    (vec2) { 0.0, -1.0 }, // vec2 pos
+    1.0, // float width
+    -0.8, // float height
+    RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
+  );
+  set_ui_texture(stats.ui_energy_bar, "assets/ui/hud_color.png");
+
+  stats.ui_thruster_root = add_ui_comp(
+    stats.ui_stats_root, // UI_COMP *parent
+    (vec2) { 0.24, -0.3 }, // vec2 pos
+    0.03, // float width
+    0.33, // float height
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
+  );
+  // set_ui_texture(stats.ui_thruster_root, "assets/ui/transparent.png");
+  set_ui_display(stats.ui_thruster_root, 0);
+
+
+  stats.ui_thruster_border = add_ui_comp(
+    stats.ui_thruster_root, // UI_COMP *parent
+    (vec2) { 0.1, 0.0 }, // vec2 pos
+    0.8, // float width
+    0.8, // float height
+    RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
+  );
+  set_ui_texture(stats.ui_thruster_border, "assets/ui/hud_color_bg.png");
+
+  stats.ui_thruster_bar = add_ui_comp(
+    stats.ui_thruster_border, // UI_COMP *parent
+    (vec2) { 0.0, -1.0 }, // vec2 pos
+    1.0, // float width
+    -0.8, // float height
+    RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
+  );
+  set_ui_texture(stats.ui_thruster_bar, "assets/ui/hud_color.png");
+
   return 0;
 }
 
@@ -148,15 +207,14 @@ void update_stats() {
     // disable exp ui
     set_ui_enabled(stats.ui_exp_root, 0);
     // update health and shield
-    stats.ui_health_bar->width = player_ship.cur_health / S_BASE_HEALTH;
-    stats.ui_shield_bar->width = player_ship.cur_shield / S_BASE_SHIELD;
+    stats.ui_health_bar->width = player_ship.cur_health / player_ship.hull.max_health;
+    stats.ui_shield_bar->width = player_ship.cur_shield / player_ship.shield.max_shield;
   } else if (mode == STATION) {
-    // disable shield ui
-    set_ui_enabled(stats.ui_shield_root, 0);
-    // disable velocity ui
-    set_ui_enabled(stats.ui_velocity_text, 0);
+    // disable exp ui
+    set_ui_enabled(stats.ui_exp_root, 1);
     // update health and exp
-    stats.ui_health_bar->width = st_player.health / st_player.max_health;
-    stats.ui_exp_bar->width = st_player.experience / 100.0;
+    stats.ui_health_bar->width = st_player.cur_health / st_player.max_health;
+    stats.ui_shield_bar->width = st_player.cur_shield / st_player.max_shield;
+    stats.ui_exp_bar->width = st_player.cur_experience / st_player.max_experience;
   }
 }
