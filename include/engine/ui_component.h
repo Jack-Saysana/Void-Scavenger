@@ -29,5 +29,6 @@ void set_ui_on_click(UI_COMP *, void (*)(UI_COMP *, void *), void *);
 void set_ui_on_release(UI_COMP *, void (*)(UI_COMP *, void *), void *);
 void set_ui_on_hover(UI_COMP *, void (*)(UI_COMP *, void *), void *);
 void set_ui_no_hover(UI_COMP *, void (*)(UI_COMP *, void *), void *);
+void set_ui_options(UI_COMP *comp, int options);
 
 #endif

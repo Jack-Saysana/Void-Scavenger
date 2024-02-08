@@ -24,10 +24,12 @@ typedef struct stats {
   UI_COMP *ui_exp_bar;
 
   UI_COMP *ui_energy_root;
+  UI_COMP *ui_energy_icon;
   UI_COMP *ui_energy_border;
   UI_COMP *ui_energy_bar;
 
   UI_COMP *ui_thruster_root;
+  UI_COMP *ui_thruster_icon;
   UI_COMP *ui_thruster_border;
   UI_COMP *ui_thruster_bar;
 
