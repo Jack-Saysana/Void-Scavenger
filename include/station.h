@@ -55,8 +55,16 @@
   }                                   \
 }
 
+/* Quaternion creation macro (about OpenGL y-axis) */
+#define CREATE_QUATERNION(rotation, quaternion) {            \
+  glm_quat_identity(quaternion);                             \
+  glm_quatv(quaternion, rotation, (vec3) { 0.0, 1.0, 0.0 }); \
+}
+
 /* ======================== INTERNALLY DEFINED FUNCTIONS ================== */
 void free_maze(int **);
+void spawn_small_station_obstacle(vec3);
+void spawn_large_station_obstacle(vec3);
 
 /* ======================== EXTERNALLY DEFINED FUNCTIONS ================== */
 int double_buffer(void **, size_t *, size_t);
@@ -73,4 +81,4 @@ void seed_random();
 
 void station_obstacle_insert_sim(size_t);
 int space_obstacle_insert_sim(size_t);
-size_t init_station_obstacle(int, vec3, vec3, float);
+size_t init_station_obstacle(int, vec3, vec3, versor, float);

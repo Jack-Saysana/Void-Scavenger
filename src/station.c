@@ -327,41 +327,14 @@ Legend:
 */
 void create_station_corridors() {
   int **maze = gen_maze();
-  /* Analyze the odd numbered indices to find corridor type */
   /* x = movement in OpenGL X-axis along maze */
   /* z = movement in OpenGL Z-axis along maze */
-  /* x_pos = current position on X-axis */
-  /* z_pos = current position on Z-axis */
   int up = 0;
   int down = 0;
   int left = 0;
   int right = 0;
   int type = -1; 
   int rotation = 0;
-  int large_obstacles[STATION_LARGE_OBJS] = {
-    TYPE_TOILET,
-    TYPE_OXYGEN_TANK_0,
-    TYPE_AMMO_CRATE_1,
-    TYPE_CRYO_BED,
-    TYPE_SHIELD_CRATE_1,
-    TYPE_MEDICAL_ARMS,
-    TYPE_HEALTH_CRATE_1,
-    TYPE_CRATE_1,
-    TYPE_BIG_BUG,
-    TYPE_STOOL,
-    TYPE_TABLE
-  };
-  int small_obstacles[STATION_SMALL_OBJS] = {
-    TYPE_AMMO_CRATE_0,
-    TYPE_CRATE_0,
-    TYPE_HEALTH_CRATE_0,
-    TYPE_PLANT_VASE,
-    TYPE_SHIELD_CRATE_0,
-    TYPE_HOSE_0,
-    TYPE_HOSE_1,
-    TYPE_HOSE_2,
-    TYPE_HOSE_3
-  };
   for (int x = 1; x < maze_size - 1; x++) {
     for (int z = 1; z < maze_size - 1; z++) {
       /* Check above, below, left, and right */
@@ -432,32 +405,101 @@ void create_station_corridors() {
           glm_quat_init(rot, 0.0, 1 / sqrt(2), 0.0, -1 / sqrt(2)); 
         }
 
+        /* Initialize corridor */
         vec3 position = GLM_VEC3_ZERO_INIT;
         glm_vec3_copy((vec3) { ((float) x) * 5.0, 0.0,((float) z) * 5.0 }, position);       
         size_t index = init_corridor(position, rot, type); 
         corridor_insert_sim(index);
 
-        int obstacle_type = -1;
         /* Chance for there to spawn elements in any given corridor */
-        if (gen_rand_int(100) <= 20) {
+        if (gen_rand_int(100) <= 30) {
           /* Chances of getting a big or small obstacle */
           if (gen_rand_int(100) <= 30) {
             /* Large obstacle */
-            obstacle_type = large_obstacles[gen_rand_int(STATION_LARGE_OBJS)];
+            spawn_large_station_obstacle(position);
           } else {
             /* Small obstacle */
-            obstacle_type = small_obstacles[gen_rand_int(STATION_SMALL_OBJS)];
+            spawn_small_station_obstacle(position);
+            spawn_small_station_obstacle(position);
           }
-        }
-        if (obstacle_type != -1) {
-          vec3 scale = GLM_VEC3_ZERO_INIT;
-          glm_vec3_copy((vec3) { 1.0, 1.0, 1.0 }, scale);
-          index = init_station_obstacle(obstacle_type, position,
-                                        scale, 2.0 * (gen_rand_float(3.0) + 1.0));
-          station_obstacle_insert_sim(index);
         }
       }
     }
   }
   free_maze(maze);
+}
+
+void spawn_small_station_obstacle(vec3 position) {
+  int small_obstacles[STATION_SMALL_OBJS] = {
+    TYPE_AMMO_CRATE_0,
+    TYPE_CRATE_0,
+    TYPE_HEALTH_CRATE_0,
+    TYPE_PLANT_VASE,
+    TYPE_SHIELD_CRATE_0,
+    TYPE_HOSE_0,
+    TYPE_HOSE_1,
+    TYPE_HOSE_2,
+    TYPE_HOSE_3
+  };
+
+  vec3 offset = GLM_VEC3_ZERO_INIT;
+  int offset_randomness = gen_rand_int(4);
+  int obstacle_type = small_obstacles[gen_rand_int(STATION_SMALL_OBJS)];
+  switch (offset_randomness) {
+    case 0:
+      glm_vec3_copy((vec3) { gen_rand_float(1.0), gen_rand_float(1.0),
+                             gen_rand_float(1.0) }, offset);
+      break;
+    case 1:
+      glm_vec3_copy((vec3) { -gen_rand_float(1.0), gen_rand_float(1.0),
+                             gen_rand_float(1.0) }, offset);
+      break;
+    case 2:
+      glm_vec3_copy((vec3) { gen_rand_float(1.0), gen_rand_float(1.0),
+                             -gen_rand_float(1.0) }, offset);
+      break;
+    case 3:
+      glm_vec3_copy((vec3) { -gen_rand_float(1.0), gen_rand_float(1.0),
+                             -gen_rand_float(1.0) }, offset);
+      break;
+  }
+  glm_vec3_add(position, offset, position); 
+
+  vec3 scale = GLM_VEC3_ZERO_INIT;
+  versor q;
+  /* Randomly rotate the obstacle around the y axis */
+  CREATE_QUATERNION(gen_rand_float(360.0), q)
+  glm_vec3_copy((vec3) { 1.0, 1.0, 1.0 }, scale);
+  size_t index = init_station_obstacle(obstacle_type, position,
+                                scale, q,
+                                2.0 * (gen_rand_float(3.0) + 1.0));
+  station_obstacle_insert_sim(index);
+}
+
+void spawn_large_station_obstacle(vec3 position) {
+  int large_obstacles[STATION_LARGE_OBJS] = {
+    TYPE_TOILET,
+    TYPE_OXYGEN_TANK_0,
+    TYPE_AMMO_CRATE_1,
+    TYPE_CRYO_BED,
+    TYPE_SHIELD_CRATE_1,
+    TYPE_MEDICAL_ARMS,
+    TYPE_HEALTH_CRATE_1,
+    TYPE_CRATE_1,
+    TYPE_BIG_BUG,
+    TYPE_STOOL,
+    TYPE_TABLE
+  };
+
+  int obstacle_type = large_obstacles[gen_rand_int(STATION_LARGE_OBJS)];
+  
+  vec3 scale = GLM_VEC3_ZERO_INIT;
+  versor q;
+  /* Randomly rotate the obstacle around the y axis */
+  CREATE_QUATERNION(gen_rand_float(360.0), q)
+  glm_vec3_copy((vec3) { 1.0, 1.0, 1.0 }, scale);
+  size_t index = init_station_obstacle(obstacle_type, position,
+                                scale, q,
+                                2.0 * (gen_rand_float(3.0) + 1.0));
+  station_obstacle_insert_sim(index);
 }
