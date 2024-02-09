@@ -65,7 +65,7 @@ int init_stats() {
     stats.ui_stats_root, // UI_COMP *parent
     (vec2) { 0.07, -0.6 }, // vec2 pos
     0.02, // float width
-    0.30, // float height
+    0.3, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(stats.ui_health_root, "assets/ui/transparent.png");
@@ -101,7 +101,7 @@ int init_stats() {
     stats.ui_stats_root, // UI_COMP *parent
     (vec2) { 0.1, -0.6 }, // vec2 pos
     0.02, // float width
-    0.30, // float height
+    0.3, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(stats.ui_energy_root, "assets/ui/transparent.png");
@@ -137,7 +137,7 @@ int init_stats() {
     stats.ui_stats_root, // UI_COMP *parent
     (vec2) { 0.13, -0.6 }, // vec2 pos
     0.02, // float width
-    0.30, // float height
+    0.3, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(stats.ui_thruster_root, "assets/ui/transparent.png");
@@ -205,54 +205,8 @@ int init_stats() {
 void update_stats() {
   // check current game mode
   if (mode == SPACE) {
-    // set visibility
-    set_ui_enabled(stats.ui_shield_root, 1);
-    set_ui_enabled(stats.ui_health_root, 1);
-    set_ui_enabled(stats.ui_energy_root, 1);
-    set_ui_enabled(stats.ui_thruster_root, 1);
-    set_ui_enabled(stats.ui_exp_root, 0);
-
-    // set health bar and shield to space style
-    // set_ui_pos(stats.ui_shield_root, (vec2) { 0.04, -0.6 });
-    // set_ui_width(stats.ui_shield_root, 0.02);
-    // set_ui_height(stats.ui_shield_root, 0.3);
-    // set_ui_options(stats.ui_shield_root, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
-
-    // set_ui_pos(stats.ui_shield_icon, (vec2) { 0.0, -1.02 });
-    // set_ui_width(stats.ui_shield_icon, 1.0);
-    // set_ui_height(stats.ui_shield_icon, 1.0);
-    // set_ui_options(stats.ui_shield_root, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_X);
-
-    // set_ui_pos(stats.ui_shield_border, (vec2) { 0.07, -0.6 });
-    // set_ui_width(stats.ui_shield_border, 0.02);
-    // set_ui_height(stats.ui_shield_border, 0.3);
-    // set_ui_options(stats.ui_shield_root, RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
-
-    // set_ui_pos(stats.ui_shield_bar, (vec2) { 0.07, -0.6 });
-    // set_ui_width(stats.ui_shield_bar, 0.02);
-    // set_ui_height(stats.ui_shield_bar, 0.3);
-    // set_ui_options(stats.ui_shield_root, RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
-
-    // set_ui_pos(stats.ui_health_root, (vec2) { 0.07, -0.6 });
-    // set_ui_width(stats.ui_health_root, 0.02);
-    // set_ui_height(stats.ui_health_root, 0.3);
-    // set_ui_options(stats.ui_health_root, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
-
-    // set_ui_pos(stats.ui_health_icon, (vec2) { 0.0, -1.02 });
-    // set_ui_width(stats.ui_health_icon, 1.0);
-    // set_ui_height(stats.ui_health_icon, 1.0);
-    // set_ui_options(stats.ui_health_icon, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_X);
-
-    // set_ui_pos(stats.ui_health_border, (vec2) { 0.07, -0.6 });
-    // set_ui_width(stats.ui_health_border, 0.02);
-    // set_ui_height(stats.ui_health_border, 0.3);
-    // set_ui_options(stats.ui_health_border, RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
-
-    // set_ui_pos(stats.ui_health_bar, (vec2) { 0.07, -0.6 });
-    // set_ui_width(stats.ui_health_bar, 0.02);
-    // set_ui_height(stats.ui_health_bar, 0.3);
-    // set_ui_options(stats.ui_health_bar, RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
-
+    switch_space_hud();
+    
     // update stats
     // TODO: Should be functional in sprint 2
     set_ui_height(stats.ui_shield_bar, 0.9);
@@ -261,53 +215,7 @@ void update_stats() {
     set_ui_height(stats.ui_thruster_bar, 0.3);
 
   } else if (mode == STATION) {
-    // set visibility
-    set_ui_enabled(stats.ui_shield_root, 1);
-    set_ui_enabled(stats.ui_health_root, 1);
-    set_ui_enabled(stats.ui_energy_root, 0);
-    set_ui_enabled(stats.ui_thruster_root, 0);
-    set_ui_enabled(stats.ui_exp_root, 1);
-
-    // set health bar and shield to station style
-    // set_ui_pos(stats.ui_shield_root, (vec2) { 0.06, -0.86 });
-    // set_ui_width(stats.ui_shield_root, 0.2);
-    // set_ui_height(stats.ui_shield_root, 0.03);
-    // set_ui_options(stats.ui_shield_root, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
-
-    // set_ui_pos(stats.ui_shield_icon, (vec2) { -0.02, 0.0 });
-    // set_ui_width(stats.ui_shield_icon, -1.0);
-    // set_ui_height(stats.ui_shield_icon, 1.0);
-    // set_ui_options(stats.ui_shield_root, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_Y | HEIGHT_UNIT_RATIO_Y);
-
-    // set_ui_pos(stats.ui_shield_border, (vec2) { 0.0, 0.0 });
-    // set_ui_width(stats.ui_shield_border, 1.0);
-    // set_ui_height(stats.ui_shield_border, 1.0);
-    // set_ui_options(stats.ui_shield_root, RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
-
-    // set_ui_pos(stats.ui_shield_bar, (vec2) { 0.0, 0.0 });
-    // set_ui_width(stats.ui_shield_bar, 0.8);
-    // set_ui_height(stats.ui_shield_bar, 1.0);
-    // set_ui_options(stats.ui_shield_root, RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
-
-    // set_ui_pos(stats.ui_health_root, (vec2) { 0.06, -0.9 });
-    // set_ui_width(stats.ui_health_root, 0.2);
-    // set_ui_height(stats.ui_health_root, 0.03);
-    // set_ui_options(stats.ui_health_root, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
-
-    // set_ui_pos(stats.ui_health_icon, (vec2) { -0.02, 0.0 });
-    // set_ui_width(stats.ui_health_icon, -1.0);
-    // set_ui_height(stats.ui_health_icon, 1.0);
-    // set_ui_options(stats.ui_health_icon, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_Y | HEIGHT_UNIT_RATIO_Y);
-
-    // set_ui_pos(stats.ui_health_border, (vec2) { 0.0, 0.0 });
-    // set_ui_width(stats.ui_health_border, 1.0);
-    // set_ui_height(stats.ui_health_border, 1.0);
-    // set_ui_options(stats.ui_health_border, RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
-
-    // set_ui_pos(stats.ui_health_bar, (vec2) { 0.0, 0.0 });
-    // set_ui_width(stats.ui_health_bar, 0.8);
-    // set_ui_height(stats.ui_health_bar, 1.0);
-    // set_ui_options(stats.ui_health_bar, RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
+    switch_station_hud();
 
     // update stats
     // TODO: Should be functional in sprint 2
@@ -316,4 +224,110 @@ void update_stats() {
     stats.ui_energy_bar->height = 0.5;
     stats.ui_thruster_bar->height = 0.3;
   }
+}
+
+/*
+  Switch current hud to space style hud
+*/
+void switch_space_hud() {
+  // set visibility
+  set_ui_enabled(stats.ui_shield_root, 1);
+  set_ui_enabled(stats.ui_health_root, 1);
+  set_ui_enabled(stats.ui_energy_root, 1);
+  set_ui_enabled(stats.ui_thruster_root, 1);
+  set_ui_enabled(stats.ui_exp_root, 0);
+
+  // set health bar and shield to space style
+  set_ui_pos(stats.ui_shield_root, (vec2) { 0.04, -0.6 });
+  set_ui_width(stats.ui_shield_root, 0.02);
+  set_ui_height(stats.ui_shield_root, 0.3);
+  set_ui_options(stats.ui_shield_root, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
+
+  set_ui_pos(stats.ui_shield_icon, (vec2) { 0.0, -1.02 });
+  set_ui_width(stats.ui_shield_icon, 1.0);
+  set_ui_height(stats.ui_shield_icon, 1.0);
+  set_ui_options(stats.ui_shield_root, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_X);
+
+  set_ui_pos(stats.ui_shield_border, (vec2) { 0.1, -1.0 });
+  set_ui_width(stats.ui_shield_border, 0.8);
+  set_ui_height(stats.ui_shield_border, -1.0);
+  set_ui_options(stats.ui_shield_root, RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
+
+  set_ui_pos(stats.ui_shield_bar, (vec2) { 0.0, 0.0 });
+  set_ui_width(stats.ui_shield_bar, 1.0);
+  set_ui_height(stats.ui_shield_bar, 0.8);
+  set_ui_options(stats.ui_shield_root, RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
+
+  set_ui_pos(stats.ui_health_root, (vec2) { 0.07, -0.6 });
+  set_ui_width(stats.ui_health_root, 0.02);
+  set_ui_height(stats.ui_health_root, 0.3);
+  set_ui_options(stats.ui_health_root, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
+
+  set_ui_pos(stats.ui_health_icon, (vec2) { 0.0, -1.02 });
+  set_ui_width(stats.ui_health_icon, 1.0);
+  set_ui_height(stats.ui_health_icon, 1.0);
+  set_ui_options(stats.ui_health_icon, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_X);
+
+  set_ui_pos(stats.ui_health_border, (vec2) { 0.1, -1.0 });
+  set_ui_width(stats.ui_health_border, 0.8);
+  set_ui_height(stats.ui_health_border, -1.0);
+  set_ui_options(stats.ui_health_border, RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
+
+  set_ui_pos(stats.ui_health_bar, (vec2) { 0.0, 0.0 });
+  set_ui_width(stats.ui_health_bar, 1.0);
+  set_ui_height(stats.ui_health_bar, 0.8);
+  set_ui_options(stats.ui_health_bar, RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
+}
+
+/*
+  Switch current hud to station style hud
+*/
+void switch_station_hud() {
+  // set visibility
+  set_ui_enabled(stats.ui_shield_root, 1);
+  set_ui_enabled(stats.ui_health_root, 1);
+  set_ui_enabled(stats.ui_energy_root, 0);
+  set_ui_enabled(stats.ui_thruster_root, 0);
+  set_ui_enabled(stats.ui_exp_root, 1);
+
+  // set health bar and shield to station style
+  set_ui_pos(stats.ui_shield_root, (vec2) { 0.06, -0.86 });
+  set_ui_width(stats.ui_shield_root, 0.2);
+  set_ui_height(stats.ui_shield_root, 0.03);
+  set_ui_options(stats.ui_shield_root, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
+
+  set_ui_pos(stats.ui_shield_icon, (vec2) { -0.02, 0.0 });
+  set_ui_width(stats.ui_shield_icon, -1.0);
+  set_ui_height(stats.ui_shield_icon, 1.0);
+  set_ui_options(stats.ui_shield_icon, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_Y | HEIGHT_UNIT_RATIO_Y);
+
+  set_ui_pos(stats.ui_shield_border, (vec2) { 0.0, 0.0 });
+  set_ui_width(stats.ui_shield_border, 1.0);
+  set_ui_height(stats.ui_shield_border, 1.0);
+  set_ui_options(stats.ui_shield_border, RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
+
+  set_ui_pos(stats.ui_shield_bar, (vec2) { 0.0, 0.0 });
+  set_ui_width(stats.ui_shield_bar, 1.0);
+  set_ui_height(stats.ui_shield_bar, 1.0);
+  set_ui_options(stats.ui_shield_bar, RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
+
+  set_ui_pos(stats.ui_health_root, (vec2) { 0.06, -0.9 });
+  set_ui_width(stats.ui_health_root, 0.2);
+  set_ui_height(stats.ui_health_root, 0.03);
+  set_ui_options(stats.ui_health_root, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
+
+  set_ui_pos(stats.ui_health_icon, (vec2) { -0.02, 0.0 });
+  set_ui_width(stats.ui_health_icon, -1.0);
+  set_ui_height(stats.ui_health_icon, 1.0);
+  set_ui_options(stats.ui_health_icon, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_Y | HEIGHT_UNIT_RATIO_Y);
+
+  set_ui_pos(stats.ui_health_border, (vec2) { 0.0, 0.0 });
+  set_ui_width(stats.ui_health_border, 1.0);
+  set_ui_height(stats.ui_health_border, 1.0);
+  set_ui_options(stats.ui_health_border, RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
+
+  set_ui_pos(stats.ui_health_bar, (vec2) { 0.0, 0.0 });
+  set_ui_width(stats.ui_health_bar, 1.0);
+  set_ui_height(stats.ui_health_bar, 1.0);
+  set_ui_options(stats.ui_health_bar, RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
 }

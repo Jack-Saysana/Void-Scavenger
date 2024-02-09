@@ -15,6 +15,8 @@ STATS stats;
 /* ================= INTERNALLY DEFINED FUNCTIONS ================= */
 int init_stats();
 void update_stats();
+void switch_space_hud();
+void switch_station_hud();
 
 /* ================= EXTERNALLY DEFINED FUNCTIONS ================ */
 
