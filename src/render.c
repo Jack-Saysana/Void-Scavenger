@@ -60,6 +60,13 @@ int init_scene() {
   station_obstacles[10] = load_model("./assets/station_obstacles/shield_crate_0/shield_crate_0.obj");
   station_obstacles[11] = load_model("./assets/station_obstacles/shield_crate_1/shield_crate_1.obj");
   station_obstacles[12] = load_model("./assets/station_obstacles/toilet/toilet.obj");
+  station_obstacles[13] = load_model("./assets/station_obstacles/big_bug/big_bug.obj");
+  station_obstacles[14] = load_model("./assets/station_obstacles/hose_0/hose_0.obj");
+  station_obstacles[15] = load_model("./assets/station_obstacles/hose_1/hose_1.obj");
+  station_obstacles[16] = load_model("./assets/station_obstacles/hose_2/hose_2.obj");
+  station_obstacles[17] = load_model("./assets/station_obstacles/hose_3/hose_3.obj");
+  station_obstacles[18] = load_model("./assets/station_obstacles/stool/stool.obj");
+  station_obstacles[19] = load_model("./assets/station_obstacles/table/table.obj");
 
 
   if (CHECK_ASSETS_LOADED) {

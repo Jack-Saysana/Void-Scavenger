@@ -58,7 +58,7 @@
 #define TYPE_CORRIDOR (4)
 
 // Station obstacle constants
-#define NUM_STATION_OBSTACLE_TYPES (13)
+#define NUM_STATION_OBSTACLE_TYPES (20)
 #define TYPE_AMMO_CRATE_0          (0)
 #define TYPE_AMMO_CRATE_1          (1)
 #define TYPE_CRATE_0               (2)
@@ -72,8 +72,15 @@
 #define TYPE_SHIELD_CRATE_0        (10)
 #define TYPE_SHIELD_CRATE_1        (11)
 #define TYPE_TOILET                (12)
-#define STATION_SMALL_OBJS         (5)
-#define STATION_LARGE_OBJS         (8)
+#define TYPE_BIG_BUG               (13)
+#define TYPE_HOSE_0                (14)
+#define TYPE_HOSE_1                (15)
+#define TYPE_HOSE_2                (16)
+#define TYPE_HOSE_3                (17)
+#define TYPE_STOOL                 (18)
+#define TYPE_TABLE                 (19)
+#define STATION_SMALL_OBJS         (9)
+#define STATION_LARGE_OBJS         (11)
 
 // Misc
 #define X (0)

@@ -346,14 +346,21 @@ void create_station_corridors() {
     TYPE_SHIELD_CRATE_1,
     TYPE_MEDICAL_ARMS,
     TYPE_HEALTH_CRATE_1,
-    TYPE_CRATE_1
+    TYPE_CRATE_1,
+    TYPE_BIG_BUG,
+    TYPE_STOOL,
+    TYPE_TABLE
   };
   int small_obstacles[STATION_SMALL_OBJS] = {
     TYPE_AMMO_CRATE_0,
     TYPE_CRATE_0,
     TYPE_HEALTH_CRATE_0,
     TYPE_PLANT_VASE,
-    TYPE_SHIELD_CRATE_0
+    TYPE_SHIELD_CRATE_0,
+    TYPE_HOSE_0,
+    TYPE_HOSE_1,
+    TYPE_HOSE_2,
+    TYPE_HOSE_3
   };
   for (int x = 1; x < maze_size - 1; x++) {
     for (int z = 1; z < maze_size - 1; z++) {

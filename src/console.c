@@ -50,3 +50,7 @@ void quit() {
   cleanup_game();
   exit(0);
 }
+
+void set_player_station_speed(float input) {
+  st_player.speed = input;
+}

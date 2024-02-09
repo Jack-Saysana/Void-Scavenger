@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <lexer_str.h>
-#include <parser_str.h>
+#include <structs/lexer_str.h>
+#include <structs/parser_str.h>
 #include <float.h>
 
 /* DEFINES */
@@ -21,6 +21,8 @@
 #define STATION              ("station")
 #define SPACE                ("space")
 #define QUIT                 ("quit")
+#define PLAYER               ("player")
+#define SPEED                ("speed")
 
 #define MAX_TOKS (10)
 
@@ -46,3 +48,4 @@ void cursor_on(int);
 void set_gamemode_station();
 void set_gamemode_space();
 void quit();
+void set_player_station_speed(float);
