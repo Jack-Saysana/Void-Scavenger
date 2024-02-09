@@ -219,10 +219,9 @@ void update_stats() {
 
     // update stats
     // TODO: Should be functional in sprint 2
-    stats.ui_shield_bar->height = 0.9;
-    stats.ui_health_bar->height = 0.7;
-    stats.ui_energy_bar->height = 0.5;
-    stats.ui_thruster_bar->height = 0.3;
+    set_ui_height(stats.ui_shield_bar, 0.9);
+    set_ui_height(stats.ui_health_bar, 0.7);
+    set_ui_height(stats.ui_exp_bar, 0.5);
   }
 }
 
