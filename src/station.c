@@ -407,7 +407,10 @@ void create_station_corridors() {
 
         /* Initialize corridor */
         vec3 position = GLM_VEC3_ZERO_INIT;
-        glm_vec3_copy((vec3) { ((float) x) * 5.0, 0.0,((float) z) * 5.0 }, position);       
+        glm_vec3_copy((vec3) { 
+                      ((float) x - 1) * 5.0,
+                      0.0,
+                      ((float) z - 1) * 5.0 }, position);       
         size_t index = init_corridor(position, rot, type); 
         corridor_insert_sim(index);
 
