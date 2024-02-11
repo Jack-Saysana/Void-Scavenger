@@ -22,7 +22,9 @@ void gen_rand_vec2(vec2 *to_copy, float bounds) {
 }
 
 float gen_rand_float(float bounds) {
-  return fmod(rand(), bounds);
+  float r = fmod(rand(), bounds * 1000.0);
+  float f = r / 1000.0;
+  return f;
 }
 
 int gen_rand_int(int bounds) {

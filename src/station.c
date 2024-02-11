@@ -88,6 +88,19 @@ int corridor_insert_sim(size_t index) {
   return 0;
 }
 
+void sim_refresh_corridor(size_t index) {
+  CORRIDOR *corridor = cd_obs + index;
+  COLLIDER *cur_col = NULL;
+  for (size_t i = 0; i < corridor->ent->model->num_colliders; i++) {
+    cur_col = corridor->ent->model->colliders + i;
+    if (cur_col->category == DEFAULT) {
+      refresh_collider(render_sim, corridor->ent, i);
+    } else if (cur_col->category == HURT_BOX) {
+      refresh_collider(combat_sim, corridor->ent, i);
+    }
+  }
+}
+
 /* =================== CORRIDOR LAYOUT GENERATION ========================== */
 
 void set_invalid(int *list, int size) {

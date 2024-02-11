@@ -62,7 +62,7 @@ void spawn_asteroids() {
   for (int i = 0; i < NUM_ASTEROIDS; i++) {
     gen_rand_vec3(&pos, 10.0);
     gen_rand_vec3(&vel, 3.0);
-    gen_rand_vec3(&ang_vel, 0.5);
+    gen_rand_vec3(&ang_vel, 1.5);
     gen_rand_vec3(&scale, 3.0);
     float scale_fac = gen_rand_float(3.0) + 0.1;
     mass = 2.0 * scale_fac;
@@ -203,7 +203,7 @@ int delete_stale_objects() {
       cur_wrapper = object_wrappers + st_enemies[i].wrapper_offset;
       if (cur_wrapper->to_delete) {
         st_enemy_remove_sim(i);
-        delete_enemy_ship(i);
+        delete_enemy(i);
         i--;
       }
     }
@@ -241,6 +241,15 @@ int delete_stale_objects() {
   }
 
   return 0;
+}
+
+void refresh_objects() {
+  for (size_t i = 0; i < num_wrappers; i++) {
+    if (object_wrappers[i].to_refresh) {
+      refresh_wrapper(i);
+      object_wrappers[i].to_refresh = 0;
+    }
+  }
 }
 
 // ============================= GENERAL HELPERS =============================

@@ -109,6 +109,18 @@ void projectile_remove_sim(size_t index) {
   sim_remove_entity(render_sim, projectiles[index].ent);
 }
 
+void sim_refresh_proj(size_t index) {
+  PROJ *proj = projectiles + index;
+  COLLIDER *cur_col = NULL;
+  for (size_t i = 0; i < proj->ent->model->num_colliders; i++) {
+    cur_col = proj->ent->model->colliders + i;
+    if (cur_col->category == HIT_BOX) {
+      refresh_collider(render_sim, proj->ent, i);
+      refresh_collider(combat_sim, proj->ent, i);
+    }
+  }
+}
+
 // ========================== COLLECTIVE OPERATIONS ==========================
 
 void integrate_projectiles() {

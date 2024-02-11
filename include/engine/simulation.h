@@ -11,6 +11,8 @@ int sim_add_entity(SIMULATION *sim, ENTITY *entity, int collider_filter);
 int sim_remove_entity(SIMULATION *sim, ENTITY *entity);
 void sim_add_force(SIMULATION *sim, vec3 force);
 void sim_clear_force(SIMULATION* sim);
+void prep_sim_movement(SIMULATION *);
+void update_sim_movement(SIMULATION *);
 void integrate_sim(SIMULATION *sim);
 size_t get_sim_collisions(SIMULATION *sim, COLLISION **dest);
 void impulse_resolution(SIMULATION *sim, COLLISION col);

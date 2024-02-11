@@ -7,6 +7,9 @@ void handle_physics_collisions(COLLISION *, size_t);
 void handle_combat_collisions(COLLISION *, size_t);
 void handle_event_collisions(COLLISION *, size_t);
 
+void prepare_object_movement();
+void update_object_movement();
+
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 
 void integrate_projectiles();

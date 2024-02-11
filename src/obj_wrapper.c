@@ -39,6 +39,7 @@ size_t init_wrapper(SOBJ_T type, ENTITY *entity, void *data) {
   object_wrappers[num_wrappers].entity = entity;
   object_wrappers[num_wrappers].data = data;
   object_wrappers[num_wrappers].to_delete = 0;
+  object_wrappers[num_wrappers].to_refresh = 0;
   entity->data = (void *) num_wrappers;
   num_wrappers++;
   if (num_wrappers == wrapper_buff_size) {
@@ -60,10 +61,7 @@ void delete_wrapper(size_t index) {
 
   object_wrappers[index] = object_wrappers[num_wrappers];
   SOBJ *old_wrapper = object_wrappers + num_wrappers;
-
-  if (old_wrapper->entity) {
-    old_wrapper->entity->data = (void *) index;
-  }
+  old_wrapper->entity->data = (void *) index;
 
   if (old_wrapper->type == PLAYER_OBJ) {
     st_player.wrapper_offset = index;
@@ -78,8 +76,37 @@ void delete_wrapper(size_t index) {
   } else if (old_wrapper->type == ITEM_OBJ) {
     items[(size_t) old_wrapper->data].wrapper_offset = index;
   } else if (old_wrapper->type == OBSTACLE_OBJ) {
-    sp_obs[(size_t) old_wrapper->data].wrapper_offset = index;
+    if (mode == SPACE) {
+      sp_obs[(size_t) old_wrapper->data].wrapper_offset = index;
+    } else if (mode == STATION) {
+      st_obs[(size_t) old_wrapper->data].wrapper_offset = index;
+    }
   } else if (old_wrapper->type == CORRIDOR_OBJ) {
     cd_obs[(size_t) old_wrapper->data].wrapper_offset = index;
+  }
+}
+
+void refresh_wrapper(size_t index) {
+  SOBJ *wrapper = object_wrappers + index;
+  if (wrapper->type == PLAYER_OBJ) {
+    sim_refresh_player();
+  } else if (wrapper->type == PLAYER_SHIP_OBJ) {
+    sim_refresh_player_ship();
+  } else if (wrapper->type == ENEMY_OBJ) {
+    sim_refresh_st_enemy((size_t) wrapper->data);
+  } else if (wrapper->type == ENEMY_SHIP_OBJ) {
+    sim_refresh_sp_enemy((size_t) wrapper->data);
+  } else if (wrapper->type == PROJ_OBJ) {
+    sim_refresh_proj((size_t) wrapper->data);
+  } else if (wrapper->type == ITEM_OBJ) {
+    // Refresh item
+  } else if (wrapper->type == OBSTACLE_OBJ) {
+    if (mode == SPACE) {
+      sim_refresh_sp_obstacle((size_t) wrapper->data);
+    } else if (mode == STATION) {
+      sim_refresh_st_obstacle((size_t) wrapper->data);
+    }
+  } else if (wrapper->type == CORRIDOR_OBJ) {
+    sim_refresh_corridor((size_t) wrapper->data);
   }
 }

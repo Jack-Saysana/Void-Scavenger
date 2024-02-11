@@ -205,3 +205,28 @@ void station_obstacle_remove_sim(size_t index) {
   sim_remove_entity(physics_sim, st_obs[index].ent);
   sim_remove_entity(render_sim, st_obs[index].ent);
 }
+
+void sim_refresh_sp_obstacle(size_t index) {
+  SP_OBSTACLE *obs = sp_obs + index;
+  COLLIDER *cur_col = NULL;
+  for (size_t i = 0; i < obs->ent->model->num_colliders; i++) {
+    cur_col = obs->ent->model->colliders + i;
+    if (cur_col->category == DEFAULT) {
+      refresh_collider(physics_sim, obs->ent, i);
+      refresh_collider(render_sim, obs->ent, i);
+      refresh_collider(event_sim, obs->ent, i);
+    }
+  }
+}
+
+void sim_refresh_st_obstacle(size_t index) {
+  ST_OBSTACLE *obs = st_obs + index;
+  COLLIDER *cur_col = NULL;
+  for (size_t i = 0; i < obs->ent->model->num_colliders; i++) {
+    cur_col = obs->ent->model->colliders + i;
+    if (cur_col->category == DEFAULT) {
+      refresh_collider(physics_sim, obs->ent, i);
+      refresh_collider(render_sim, obs->ent, i);
+    }
+  }
+}

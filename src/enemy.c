@@ -138,6 +138,21 @@ void st_enemy_remove_sim(size_t index) {
   sim_remove_entity(event_sim, st_enemies[index].ent);
 }
 
+void sim_refresh_st_enemy(size_t index) {
+  ST_ENEMY *enemy = st_enemies + index;
+  COLLIDER *cur_col = NULL;
+  for (size_t i = 0; i < enemy->ent->model->num_colliders; i++) {
+    cur_col = enemy->ent->model->colliders + i;
+    if (cur_col->category == DEFAULT) {
+      refresh_collider(physics_sim, enemy->ent, i);
+      refresh_collider(render_sim, enemy->ent, i);
+      refresh_collider(event_sim, enemy->ent, i);
+    } else if (cur_col->category == HURT_BOX) {
+      refresh_collider(combat_sim, enemy->ent, i);
+    }
+  }
+}
+
 // =============================== SPACE MODE ================================
 
 size_t init_enemy_ship(int index) {
@@ -151,6 +166,8 @@ size_t init_enemy_ship(int index) {
   }
 
   SHIP *new_enemy = sp_enemies + num_enemies;
+  memset(new_enemy, 0, sizeof(SHIP));
+
   new_enemy->ent = init_alien_ship_ent(index);
   if (new_enemy->ent == NULL) {
     fprintf(stderr, "Error: Unable to allocate enemy entity\n");
@@ -245,4 +262,18 @@ void sp_enemy_remove_sim(size_t index) {
   sim_remove_entity(event_sim, sp_enemies[index].ent);
 }
 
+void sim_refresh_sp_enemy(size_t index) {
+  SHIP *enemy = sp_enemies + index;
+  COLLIDER *cur_col = NULL;
+  for (size_t i = 0; i < enemy->ent->model->num_colliders; i++) {
+    cur_col = enemy->ent->model->colliders + i;
+    if (cur_col->category == DEFAULT) {
+      refresh_collider(render_sim, enemy->ent, i);
+      refresh_collider(event_sim, enemy->ent, i);
+    } else if (cur_col->category == HURT_BOX) {
+      refresh_collider(physics_sim, enemy->ent, i);
+      refresh_collider(combat_sim, enemy->ent, i);
+    }
+  }
+}
 

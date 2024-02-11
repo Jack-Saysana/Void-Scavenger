@@ -46,6 +46,8 @@ void space_obstacle_remove_sim(size_t);
 void delete_station_obstacle(size_t);
 void station_obstacle_remove_sim(size_t);
 
+void refresh_wrapper(size_t);
+
 /* Obstacles for station and space mode */
 int init_space_obstacle_buffer();
 int init_station_obstacle_buffer();

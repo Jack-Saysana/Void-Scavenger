@@ -74,6 +74,7 @@ int init_scene() {
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   CURSOR_ENABLED = 0;
+  //CURSOR_ENABLED = 1;
 
   // Initialize engine UI features
   int status = init_ui("assets/misc/quad/quad.obj", "src/shaders/ui/shader.vs",
@@ -143,7 +144,7 @@ void render_scene(GLFWwindow *window) {
     render_oct_tree(physics_sim);
   }
 
-  //render_game_entity(render_sphere);
+  render_game_entity(render_sphere);
   if (mode == STATION) {
     render_game_entity(st_player.ent);
   } else if (mode == SPACE) {

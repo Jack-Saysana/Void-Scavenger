@@ -35,8 +35,9 @@ int main() {
     keyboard_input(window);
     decrement_current_timer(DELTA_TIME);
     handle_collisions();
-    delete_stale_objects();
+    refresh_objects();
     render_scene(window);
+    delete_stale_objects();
   }
 
   cleanup_game();
