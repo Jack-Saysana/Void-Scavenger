@@ -69,10 +69,11 @@ size_t init_enemy(size_t index) {
   }
 
   new_enemy->max_health = E_BASE_HEALTH;
-  new_enemy->health = E_BASE_HEALTH;
+  new_enemy->cur_health = E_BASE_HEALTH;
   new_enemy->speed = E_BASE_SPEED;
   new_enemy->fire_rate = E_BASE_FIRERATE;
   new_enemy->weapon_type = RANGED;
+  new_enemy->invuln = 0;
 
   num_enemies++;
   if (num_enemies == enemy_buff_len) {
@@ -92,6 +93,7 @@ void delete_enemy(size_t index) {
     return;
   }
 
+  update_timer_memory(&st_enemies[index].invuln, NULL);
   free_entity(st_enemies[index].ent);
   delete_wrapper(st_enemies[index].wrapper_offset);
 
@@ -101,6 +103,8 @@ void delete_enemy(size_t index) {
   }
 
   st_enemies[index] = st_enemies[num_enemies];
+  update_timer_memory(&st_enemies[num_enemies].invuln,
+                      &st_enemies[index].invuln);
   SOBJ *wrapper = object_wrappers + st_enemies[index].wrapper_offset;
   wrapper->data = (void *) index;
 }
@@ -198,6 +202,10 @@ size_t init_enemy_ship(int index) {
   new_enemy->thruster.max_accel = S_BASE_ACCEL;
   new_enemy->thruster.max_power_draw = S_BASE_PWR_DRAW;
 
+  new_enemy->cur_health = new_enemy->hull.max_health;
+  new_enemy->cur_shield = new_enemy->shield.max_shield;
+  new_enemy->invuln = 0;
+
   num_enemies++;
   if (num_enemies == enemy_buff_len) {
     int status = double_buffer((void **) &sp_enemies, &enemy_buff_len,
@@ -216,6 +224,7 @@ void delete_enemy_ship(size_t index) {
     return;
   }
 
+  update_timer_memory(&sp_enemies[index].invuln, NULL);
   free_entity(sp_enemies[index].ent);
   delete_wrapper(sp_enemies[index].wrapper_offset);
 
@@ -225,6 +234,8 @@ void delete_enemy_ship(size_t index) {
   }
 
   sp_enemies[index] = sp_enemies[num_enemies];
+  update_timer_memory(&st_enemies[num_enemies].invuln,
+                      &st_enemies[index].invuln);
   SOBJ *wrapper = object_wrappers + sp_enemies[index].wrapper_offset;
   wrapper->data = (void *) index;
 }

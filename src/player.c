@@ -31,9 +31,10 @@ int init_player() {
   }
 
   st_player.max_health = P_BASE_HEALTH;
-  st_player.health = P_BASE_HEALTH;
+  st_player.cur_health = P_BASE_HEALTH;
   st_player.speed = P_BASE_SPEED;
   st_player.fire_rate = P_BASE_FIRERATE;
+  st_player.invuln = 0;
 
   return 0;
 }
@@ -119,8 +120,9 @@ int init_player_ship() {
     return -1;
   }
 
-  player_ship.cur_health = S_BASE_HEALTH;
-  player_ship.cur_shield = S_BASE_SHIELD;
+  player_ship.cur_health = player_ship.hull.max_health;
+  player_ship.cur_shield = player_ship.shield.max_shield;
+  player_ship.invuln = 0;
 
   return 0;
 }

@@ -15,3 +15,5 @@ void delete_wrapper(size_t);
 
 ENTITY *init_alien_ent(size_t);
 ENTITY *init_alien_ship_ent(size_t);
+
+void update_timer_memory(void *, void *);

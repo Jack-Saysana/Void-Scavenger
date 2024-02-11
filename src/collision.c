@@ -73,11 +73,11 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
     PROJ *proj = projectiles + (size_t) proj_wrapper->data;
     if (proj->source == SRC_ENEMY && (target_wrapper->type == PLAYER_OBJ ||
         target_wrapper->type == PLAYER_SHIP_OBJ)) {
-      // TODO Player hit response
+      decrement_player_health(proj->damage);
     } else if (proj->source == SRC_PLAYER &&
                (target_wrapper->type == ENEMY_OBJ ||
                 target_wrapper->type == ENEMY_SHIP_OBJ)) {
-      // TODO Enemy hit response
+      decrement_enemy_health((size_t) target_wrapper->data, proj->damage);
     }
 
     proj_wrapper->to_delete = 1;
@@ -102,7 +102,10 @@ void handle_event_collisions(COLLISION *cols, size_t num_cols) {
       continue;
     }
 
-    if (target_wrapper->type == ENEMY_SHIP_OBJ) {
+    if (target_wrapper->type == PLAYER_SHIP_OBJ) {
+      decrement_player_health(10.0);
+    } else if (target_wrapper->type == ENEMY_SHIP_OBJ) {
+      decrement_enemy_health((size_t) target_wrapper->data, 10.0);
     } else if (target_wrapper->type == OBSTACLE_OBJ) {
       target_wrapper->to_delete = 1;
     }
@@ -121,4 +124,52 @@ void update_object_movement() {
   update_sim_movement(combat_sim);
   update_sim_movement(event_sim);
   update_sim_movement(render_sim);
+}
+
+// ================================= HELPERS =================================
+
+void decrement_player_health(float damage) {
+  if (mode == SPACE && !player_ship.invuln) {
+    player_ship.cur_health -= damage;
+    if (player_ship.cur_health <= 0.0) {
+      fprintf(stderr, "END GAME\n");
+    } else {
+      player_ship.invuln = 1;
+      add_timer(1.0, &player_ship.invuln, 0);
+    }
+  } else if (mode == STATION && !st_player.invuln) {
+    st_player.cur_health -= damage;
+    if (st_player.cur_health <= 0.0) {
+      fprintf(stderr, "END GAME\n");
+    } else {
+      st_player.invuln = 1;
+      add_timer(1.0, &st_player.invuln, 0);
+    }
+  }
+}
+
+void decrement_enemy_health(size_t index, float damage) {
+  if (mode == SPACE) {
+    SHIP *enemy = sp_enemies + index;
+    if (!enemy->invuln) {
+      enemy->cur_health -= damage;
+      if (enemy->cur_health <= 0.0) {
+        object_wrappers[(size_t) enemy->wrapper_offset].to_delete = 1;
+      } else {
+        enemy->invuln = 1;
+        add_timer(1.0, &enemy->invuln, 0);
+      }
+    }
+  } else if (mode == STATION) {
+    ST_ENEMY *enemy = st_enemies + index;
+    if (!enemy->invuln) {
+      enemy->cur_health -= damage;
+      if (enemy->cur_health <= 0.0) {
+        object_wrappers[(size_t) enemy->wrapper_offset].to_delete = 1;
+      } else {
+        enemy->invuln = 1;
+        add_timer(1.0, &enemy->invuln, 0);
+      }
+    }
+  }
 }

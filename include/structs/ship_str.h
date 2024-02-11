@@ -62,6 +62,8 @@ typedef struct ship_t {
 
   float cur_health;
   float cur_shield;
+  // Flag denoting if the ship is current invulnerable to damage
+  int invuln;
 } SHIP;
 
 #endif

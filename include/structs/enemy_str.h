@@ -20,10 +20,11 @@ typedef struct station_enemy {
   size_t wrapper_offset;
 
   float max_health;
-  float health;
+  float cur_health;
   float speed;
   float fire_rate;
   E_WEAP_T weapon_type;
+  int invuln;
 } ST_ENEMY;
 
 #endif
