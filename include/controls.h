@@ -56,3 +56,4 @@ void disable_console_cursor();
 void enable_console_cursor();
 void add_timer(float, void *, int);
 void toggle_inventory();
+void toggle_ship_parts();

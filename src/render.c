@@ -154,6 +154,7 @@ void render_scene(GLFWwindow *window) {
   // update UI components
   update_stats();
   update_inventory();
+  update_ship_parts();
 
   glfwSwapBuffers(window);
   glfwPollEvents();

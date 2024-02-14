@@ -234,7 +234,7 @@ void switch_space_hud() {
   set_ui_enabled(stats.ui_health_root, 1);
   set_ui_enabled(stats.ui_energy_root, 1);
   set_ui_enabled(stats.ui_thruster_root, 1);
-  set_ui_enabled(stats.ui_exp_root, 1);
+  set_ui_enabled(stats.ui_exp_root, 0);
 
   // set health bar and shield to space style
   set_ui_pos(stats.ui_shield_root, (vec2) { 0.04, -0.6 });

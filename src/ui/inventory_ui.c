@@ -1,5 +1,4 @@
 #include <ui/inventory_ui.h>
-#include <stdio.h>
 
 /*
                                    INVENTORY
@@ -8,7 +7,7 @@ mode inventory.
 */
 
 /*
-  Init stats UI globaly, call by general_ui.c init_scene()
+  Init inventory UI globaly, call by general_ui.c init_scene()
 
   Return
     0 if successful
@@ -109,7 +108,7 @@ int init_inventory() {
 }
 
 /*
-  Update stats UI per frame, call by render.c render_scene()
+  Update inventory UI per frame, call by render.c render_scene()
 */
 void update_inventory() {
   // check current game mode
