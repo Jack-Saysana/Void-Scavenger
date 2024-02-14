@@ -22,7 +22,7 @@ int init_ship_parts() {
     1.0, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(ship_parts.ui_ship_parts_root, "assets/ui/test.png");
+  set_ui_texture(ship_parts.ui_ship_parts_root, "assets/transparent.png");
 
   ship_parts.ui_reactor_background = add_ui_comp(
     ship_parts.ui_ship_parts_root, // UI_COMP *parent
@@ -132,7 +132,7 @@ int init_ship_parts() {
   );
   set_ui_texture(ship_parts.ui_thruster_icon, "assets/ui/hud_color.png");
 
-  set_ui_enabled(ship_parts.ui_ship_parts_root, 0);
+  set_ui_enabled(ship_parts.ui_ship_parts_root, 1);
 
   return 0;
 }

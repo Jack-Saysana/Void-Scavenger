@@ -26,4 +26,10 @@ void init_ui_components() {
     printf("Could not initialize inventory!\n");
     exit(1);
   }
+
+  // Initialize ship parts
+  if (init_ship_parts()) {
+    printf("Could not initialize ship parts!\n");
+    exit(1);
+  }
 }

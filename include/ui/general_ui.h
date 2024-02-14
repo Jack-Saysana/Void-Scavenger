@@ -11,3 +11,4 @@ extern F_GLYPH *fixed_sys;
 void console_ui_initialize();
 int init_stats();
 int init_inventory();
+int init_ship_parts();
