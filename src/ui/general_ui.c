@@ -20,4 +20,10 @@ void init_ui_components() {
     printf("Could not initialize stats!\n");
     exit(1);
   }
+
+  // Initialize inventory
+  if (init_inventory()) {
+    printf("Could not initialize inventory!\n");
+    exit(1);
+  }
 }

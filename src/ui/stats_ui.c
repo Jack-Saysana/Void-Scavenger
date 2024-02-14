@@ -7,7 +7,7 @@ and station mode.
 */
 
 /*
-  Init stats UI globaly, call by render.c init_scene()
+  Init stats UI globaly, call by general_ui.c init_scene()
 
   Return
     0 if successful
