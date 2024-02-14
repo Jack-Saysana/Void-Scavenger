@@ -143,3 +143,12 @@ void player_ship_remove_sim() {
   sim_remove_entity(combat_sim, player_ship.ent);
   sim_remove_entity(event_sim, player_ship.ent);
 }
+
+
+void player_ship_thrust_move() {
+  vec3 ship_forward;
+  glm_quat_rotatev(player_ship.ent->rotation, (vec3){-1.0, 0.0, 0.0}, ship_forward);
+  glm_normalize(ship_forward);
+  glm_vec3_scale(ship_forward, player_ship.cur_speed, ship_forward);
+  glm_vec3_copy(ship_forward, player_ship.ent->velocity);
+}

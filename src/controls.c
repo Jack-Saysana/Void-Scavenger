@@ -73,7 +73,7 @@ void mouse_pos_callback(GLFWwindow *window, double x_pos, double y_pos) {
     glm_quat_rotatev(player_ship.ent->rotation, (vec3){0.0, 1.0, 0.0}, ship_up);
     glm_quat_rotatev(player_ship.ent->rotation, (vec3){0.0, 0.0, 1.0}, ship_side);
     glm_rotate(rotation, glm_rad(-mouse_dif[1] * DELTA_TIME), ship_side);
-    glm_rotate(rotation, glm_rad(mouse_dif[0] * DELTA_TIME), ship_up);
+    glm_rotate(rotation, glm_rad(-mouse_dif[0] * DELTA_TIME), ship_up);
     versor rot_quat = GLM_QUAT_IDENTITY_INIT;
     glm_mat4_quat(rotation, rot_quat);
     glm_quat_mul(rot_quat, player_ship.ent->rotation, player_ship.ent->rotation);
@@ -122,24 +122,17 @@ void input_keys(GLFWwindow *window) {
         /* TODO Ship movment */
         if (i == GLFW_KEY_W) {
           /* Handle W press */
-          vec3 ship_forward;
-          glm_quat_rotatev(player_ship.ent->rotation, (vec3){-1.0, 0.0, 0.0}, ship_forward);
-          glm_normalize(ship_forward);
-          if (glm_vec3_norm(player_ship.ent->velocity) >= player_ship.thruster.max_vel) {
-            glm_normalize(player_ship.ent->velocity);
-            glm_vec3_scale(player_ship.ent->velocity, player_ship.thruster.max_vel, player_ship.ent->velocity);
+          if (player_ship.cur_speed >= player_ship.thruster.max_vel) {
+            player_ship.cur_speed = player_ship.thruster.max_vel;
           } else {
-            glm_vec3_scale(ship_forward, DELTA_TIME * player_ship.thruster.max_accel, ship_forward);
-            glm_vec3_add(player_ship.ent->velocity, ship_forward, player_ship.ent->velocity);
+            player_ship.cur_speed += DELTA_TIME * player_ship.thruster.max_accel;
           }
         } else if (i == GLFW_KEY_S){
           /* Handle S press */
-          vec3 ship_forward;
-          glm_quat_rotatev(player_ship.ent->rotation, (vec3){-1.0, 0.0, 0.0}, ship_forward);
-          glm_normalize(ship_forward);
-          if (glm_vec3_dot(player_ship.ent->velocity, ship_forward) > 0) {
-            glm_vec3_scale(ship_forward, DELTA_TIME * player_ship.thruster.max_accel, ship_forward);
-            glm_vec3_add(player_ship.ent->velocity, ship_forward, player_ship.ent->velocity);
+          if (player_ship.cur_speed <= 0 ) {
+            player_ship.cur_speed = 0;
+          } else {
+            player_ship.cur_speed -= DELTA_TIME * player_ship.thruster.max_accel;
           }
         } else if (i == GLFW_KEY_A){
           /* Handle A press */

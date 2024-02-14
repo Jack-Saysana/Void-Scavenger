@@ -62,6 +62,7 @@ typedef struct ship_t {
 
   float cur_health;
   float cur_shield;
+  float cur_speed;
 } SHIP;
 
 #endif
