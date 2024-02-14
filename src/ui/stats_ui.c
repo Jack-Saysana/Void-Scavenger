@@ -22,7 +22,7 @@ int init_stats() {
     1.0, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(stats.ui_stats_root, "assets/ui/transparent.png");
+  set_ui_texture(stats.ui_stats_root, "assets/transparent.png");
 
   stats.ui_shield_root = add_ui_comp(
     stats.ui_stats_root, // UI_COMP *parent
@@ -31,7 +31,7 @@ int init_stats() {
     0.3, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(stats.ui_shield_root, "assets/ui/transparent.png");
+  set_ui_texture(stats.ui_shield_root, "assets/transparent.png");
 
 
   stats.ui_shield_icon = add_ui_comp(
@@ -68,7 +68,7 @@ int init_stats() {
     0.3, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(stats.ui_health_root, "assets/ui/transparent.png");
+  set_ui_texture(stats.ui_health_root, "assets/transparent.png");
 
   stats.ui_health_icon = add_ui_comp(
     stats.ui_health_root, // UI_COMP *parent
@@ -104,7 +104,7 @@ int init_stats() {
     0.3, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(stats.ui_energy_root, "assets/ui/transparent.png");
+  set_ui_texture(stats.ui_energy_root, "assets/transparent.png");
 
   stats.ui_energy_icon = add_ui_comp(
     stats.ui_energy_root, // UI_COMP *parent
@@ -140,7 +140,7 @@ int init_stats() {
     0.3, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(stats.ui_thruster_root, "assets/ui/transparent.png");
+  set_ui_texture(stats.ui_thruster_root, "assets/transparent.png");
 
   stats.ui_thruster_icon = add_ui_comp(
     stats.ui_thruster_root, // UI_COMP *parent
@@ -176,7 +176,7 @@ int init_stats() {
     0.01, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(stats.ui_exp_root, "assets/ui/transparent.png");
+  set_ui_texture(stats.ui_exp_root, "assets/transparent.png");
 
   stats.ui_exp_border = add_ui_comp(
     stats.ui_exp_root, // UI_COMP *parent

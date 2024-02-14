@@ -22,7 +22,7 @@ int init_inventory() {
     1.0, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(inventory.ui_inventory_root, "assets/ui/transparent.png");
+  set_ui_texture(inventory.ui_inventory_root, "assets/transparent.png");
 
     inventory.ui_inventory_info_background = add_ui_comp(
     inventory.ui_inventory_root, // UI_COMP *parent
@@ -49,7 +49,7 @@ int init_inventory() {
     0.8, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_Y
   );
-  set_ui_texture(inventory.ui_inventory_info_title_text, "assets/ui/transparent.png");
+  set_ui_texture(inventory.ui_inventory_info_title_text, "assets/transparent.png");
   set_ui_text(inventory.ui_inventory_info_title_text, "title", 1.0, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
 
   inventory.ui_inventory_info_content_background = add_ui_comp(
@@ -68,7 +68,7 @@ int init_inventory() {
     0.5, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_Y
   );
-  set_ui_texture(inventory.ui_inventory_info_content_text, "assets/ui/transparent.png");
+  set_ui_texture(inventory.ui_inventory_info_content_text, "assets/transparent.png");
   set_ui_text(inventory.ui_inventory_info_content_text, "content", 1.0, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
 
   inventory.ui_inventory_background = add_ui_comp(
@@ -89,8 +89,8 @@ int init_inventory() {
       ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_Y | HEIGHT_UNIT_RATIO_Y
     );
     set_ui_texture(inventory.ui_inventory_slot_background[i], "assets/ui/hud_color_bg.png");
-    set_ui_on_hover(inventory.ui_inventory_slot_background[i], slot_on_hover, NULL);
-    set_ui_no_hover(inventory.ui_inventory_slot_background[i], slot_on_no_hover, NULL);
+    // set_ui_on_hover(inventory.ui_inventory_slot_background[i], slot_on_hover, NULL);
+    // set_ui_no_hover(inventory.ui_inventory_slot_background[i], slot_on_no_hover, NULL);
 
     inventory.ui_inventory_slot_icon[i] = add_ui_comp(
       inventory.ui_inventory_slot_background[i], // UI_COMP *parent
