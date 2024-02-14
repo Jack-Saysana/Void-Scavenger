@@ -55,6 +55,7 @@ void mouse_pos_callback(GLFWwindow *window, double x_pos, double y_pos) {
   mouse_dif[0] = x_pos - prev_mouse_pos[0];
   mouse_dif[1] = y_pos - prev_mouse_pos[1];
   if (mode == STATION) {
+    /* updates pitch and yaw of camera */
     glm_vec2_scale(mouse_dif, mouse_sens, mouse_dif);
     camera.pitch += mouse_dif[1];
     if (camera.pitch > 89) {
@@ -67,6 +68,7 @@ void mouse_pos_callback(GLFWwindow *window, double x_pos, double y_pos) {
       camera.yaw = (int)(camera.yaw) % 360;
     } 
   } else if (mode == SPACE) {
+    /* rotates the ships pitch and yaw*/
     mat4 rotation = GLM_MAT4_IDENTITY_INIT;
     vec3 ship_up;
     vec3 ship_side;
@@ -92,15 +94,16 @@ void mouse_button_callback(GLFWwindow *window, int button, int action,
   if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
     if (mode == STATION) {
       if(can_shoot) {
+        /* firerate timer */
         can_shoot = 0;
         add_timer(st_player.fire_rate, (void *) &can_shoot, 1);
-        printf("HELLO\n");
+        /* forward vector from player*/
         vec3 forward;
         forward[0] = camera.view[2][0];
         forward[1] = camera.view[2][1];
         forward[2] = -camera.view[2][2];
         glm_vec3_normalize(forward);
-        printf("Forward: %f, %f, %f\n", forward[0], forward[1], forward[2]);
+        /* spwans projectile*/
         init_projectile(camera.pos,
                         forward,
                         10,
@@ -113,8 +116,10 @@ void mouse_button_callback(GLFWwindow *window, int button, int action,
       }
     } else if (mode == SPACE) {
       if (can_shoot) {
-        can_shoot = 0; //set flag to cap firerate
-        add_timer(player_ship.weapon.fire_rate, (void *) &can_shoot, 1); //sets timer for once firerate gap met
+        /* fire rate timer */
+        can_shoot = 0;
+        add_timer(player_ship.weapon.fire_rate, (void *) &can_shoot, 1);
+        /* get ship vectors */
         vec3 ship_forward;
         glm_quat_rotatev(player_ship.ent->rotation, (vec3){-1.0, 0.0, 0.0}, ship_forward);
         glm_normalize(ship_forward);
@@ -124,10 +129,13 @@ void mouse_button_callback(GLFWwindow *window, int button, int action,
         vec3 ship_up;
         glm_quat_rotatev(player_ship.ent->rotation, (vec3){0.0, 1.0, 0.0}, ship_up);
         glm_normalize(ship_up);
+        /* rotate left gun to converage */
         glm_vec3_rotate(ship_forward, glm_rad(-5.0), ship_side);
         glm_vec3_rotate(ship_forward, glm_rad(-0.625), ship_up);
+        /* get left gun offset pos */
         vec3 gun_pos;
         glm_vec3_add(player_ship.ent->translation, ship_side, gun_pos);
+        /* spawn left projectile*/
         init_projectile(gun_pos,
                         ship_forward,
                         player_ship.weapon.proj_speed,
@@ -137,9 +145,12 @@ void mouse_button_callback(GLFWwindow *window, int button, int action,
                         player_ship.weapon.range,
                         0
         );
+        /* get right gun offset pos */
         glm_vec3_negate(ship_side);
         glm_vec3_add(player_ship.ent->translation, ship_side, gun_pos);
+        /* rotate right gun to converage */
         glm_vec3_rotate(ship_forward, glm_rad(1.25), ship_up);
+        /* spawn right projectile*/
         init_projectile(gun_pos,
                         ship_forward,
                         player_ship.weapon.proj_speed,
@@ -185,6 +196,7 @@ void input_keys(GLFWwindow *window) {
         /* TODO Ship movment */
         if (i == GLFW_KEY_W) {
           /* Handle W press */
+          /* increases curent speed of player ship up to max_vel */
           if (player_ship.cur_speed >= player_ship.thruster.max_vel) {
             player_ship.cur_speed = player_ship.thruster.max_vel;
           } else {
@@ -192,6 +204,7 @@ void input_keys(GLFWwindow *window) {
           }
         } else if (i == GLFW_KEY_S){
           /* Handle S press */
+          /* decreases curent speed of player ship down to 0 */
           if (player_ship.cur_speed <= 0 ) {
             player_ship.cur_speed = 0;
           } else {
@@ -199,6 +212,7 @@ void input_keys(GLFWwindow *window) {
           }
         } else if (i == GLFW_KEY_A){
           /* Handle A press */
+          /*roll left*/
           vec3 ship_forward;
           glm_quat_rotatev(player_ship.ent->rotation, (vec3){1.0, 0.0, 0.0}, ship_forward);
           mat4 rotation = GLM_MAT4_IDENTITY_INIT;
@@ -208,6 +222,7 @@ void input_keys(GLFWwindow *window) {
           glm_quat_mul(rot_quat, player_ship.ent->rotation, player_ship.ent->rotation);
         } else if (i == GLFW_KEY_D){
           /* Handle D press */
+          /*roll right*/
           vec3 ship_forward;
           glm_quat_rotatev(player_ship.ent->rotation, (vec3){1.0, 0.0, 0.0}, ship_forward);
           mat4 rotation = GLM_MAT4_IDENTITY_INIT;
