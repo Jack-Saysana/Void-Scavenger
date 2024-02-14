@@ -138,10 +138,12 @@ void render_scene(GLFWwindow *window) {
     render_game_entity(render_sphere);
     /*
     render_enemies();
-    render_projectiles();
+    */
+   render_projectiles();/*
     render_items();
     render_st_obstacles();
     */
+    printf("%lld\n", num_projectiles);
     query_render_sim();
   } else if (mode == SPACE) {
     player_ship_thrust_move();

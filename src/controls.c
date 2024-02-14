@@ -94,6 +94,22 @@ void mouse_button_callback(GLFWwindow *window, int button, int action,
       if(can_shoot) {
         can_shoot = 0;
         add_timer(st_player.fire_rate, (void *) &can_shoot, 1);
+        printf("HELLO\n");
+        vec3 forward;
+        forward[0] = camera.view[2][0];
+        forward[1] = camera.view[2][1];
+        forward[2] = -camera.view[2][2];
+        glm_vec3_normalize(forward);
+        printf("Forward: %f, %f, %f\n", forward[0], forward[1], forward[2]);
+        init_projectile(camera.pos,
+                        forward,
+                        10,
+                        SRC_PLAYER,
+                        player_ship.weapon.type,
+                        player_ship.weapon.damage,
+                        player_ship.weapon.range,
+                        1
+        );
       }
     } else if (mode == SPACE) {
       if (can_shoot) {
