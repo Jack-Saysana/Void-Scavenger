@@ -132,7 +132,21 @@ void console_dispatcher() {
       /* END: spawn  */
     } else if (strncmp(command[0].tok, COORDS, sizeof(COORDS)) == 0) {
       /* BEGIN: coords */
-      command_not_found();
+      if (command[1].kind == IDENTIFIER) {
+        if (strncmp(command[1].tok, ON, sizeof(ON)) == 0) {
+          /* BEGIN: coords on */
+          enable_coordinates();
+          /* END: coords on */
+        } else if (strncmp(command[1].tok, OFF, sizeof(OFF)) == 0) {
+          /* BEGIN: coords off */
+          disable_coordinates();
+          /* END: coords off */
+        } else {
+          command_not_found();
+        }
+      } else {
+        command_not_found();
+      }
       /* END: coords*/
     } else if (strncmp(command[0].tok, RESPAWN, sizeof(RESPAWN)) == 0) {
       /* BEGIN: respawn */

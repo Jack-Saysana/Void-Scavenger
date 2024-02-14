@@ -49,3 +49,5 @@ void set_gamemode_station();
 void set_gamemode_space();
 void quit();
 void set_player_station_speed(float);
+void enable_coordinates();
+void disable_coordinates();
