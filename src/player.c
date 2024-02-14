@@ -143,3 +143,12 @@ void player_ship_remove_sim() {
   sim_remove_entity(combat_sim, player_ship.ent);
   sim_remove_entity(event_sim, player_ship.ent);
 }
+
+// =============================== HELPERS ================================
+void get_player_coordinates(vec3 coords) {
+  if (mode == SPACE) {
+    glm_vec3_copy(player_ship.ent->translation, coords);
+  } else {
+    glm_vec3_copy(st_player.ent->translation, coords);
+  }
+}
