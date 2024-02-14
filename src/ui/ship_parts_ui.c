@@ -132,8 +132,9 @@ int init_ship_parts() {
   );
   set_ui_texture(ship_parts.ui_thruster_icon, "assets/ui/hud_color.png");
 
-  set_ui_enabled(ship_parts.ui_ship_parts_root, 1);
-
+  // set init visibility
+  set_ui_enabled(ship_parts.ui_ship_parts_root, 0);
+  
   return 0;
 }
 
@@ -148,7 +149,7 @@ void update_ship_parts() {
     
   } else if (mode == STATION) {
     // set visibility
-    set_ui_enabled(ship_parts.ui_ship_parts_root, 1);
+    set_ui_enabled(ship_parts.ui_ship_parts_root, 0);
   }
 }
 

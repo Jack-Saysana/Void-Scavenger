@@ -122,7 +122,7 @@ void input_keys(GLFWwindow *window) {
         } else if (i == GLFW_KEY_D){
           /* Handle D press */
           move_camera(&camera, MOVE_RIGHT);
-        }  else if (i == GLFW_KEY_P) {
+        }  else if (i == GLFW_KEY_P && !holding_alpha[i - GLFW_KEY_A]) {
           /* Handle P press (Ship Parts at Space Mode) */
           toggle_ship_parts();
         }

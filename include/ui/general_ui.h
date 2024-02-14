@@ -17,3 +17,4 @@ void coordinates_ui_initialize();
 void update_coordinates();
 void update_stats();
 void update_inventory();
+void update_ship_parts();
