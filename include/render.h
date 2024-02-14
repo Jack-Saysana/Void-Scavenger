@@ -75,3 +75,4 @@ void render_game_entity(ENTITY *);
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 
 void get_cam_matrix(CAM *, mat4);
+void player_ship_thrust_move();
