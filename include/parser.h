@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <lexer_str.h>
-#include <parser_str.h>
+#include <structs/lexer_str.h>
+#include <structs/parser_str.h>
 #include <float.h>
 
 /* DEFINES */
@@ -17,6 +17,12 @@
 #define RESPAWN              ("respawn")
 #define WIRE                 ("wire")
 #define HIT_BOXES            ("hb")
+#define GAMEMODE             ("gamemode")
+#define STATION              ("station")
+#define SPACE                ("space")
+#define QUIT                 ("quit")
+#define PLAYER               ("player")
+#define SPEED                ("speed")
 
 #define MAX_TOKS (10)
 
@@ -39,5 +45,9 @@ void command_not_found();
 void toggle_hit_boxes();
 void toggle_wire_frame();
 void cursor_on(int);
+void set_gamemode_station();
+void set_gamemode_space();
+void quit();
+void set_player_station_speed(float);
 void enable_coordinates();
 void disable_coordinates();

@@ -98,6 +98,7 @@ void clear_space_mode() {
   num_obstacles = 0;
 
   free_enemy_ship_buffer();
+  free_space_obstacle_buffer();
 
   // Reset wrapper buffer length
   num_wrappers = 0;
@@ -141,6 +142,8 @@ int init_station_mode() {
   if (status) {
     return -1;
   }
+  
+  create_station_corridors();
 
   mode = STATION;
   return 0;
@@ -176,13 +179,11 @@ void clear_station_mode() {
   num_corridors = 0;
 
   free_enemy_buffer();
+  free_corridor_buffer();
+  free_station_obstacle_buffer();
 
   // Reset wrapper buffer length
   num_wrappers = 0;
-}
-
-void create_station_corridors() {
-  /* TODO: generate maze corridors from maze generation */
 }
 
 // ========================= GENERAL GAME MANAGEMENT =========================
@@ -225,14 +226,38 @@ int delete_stale_objects() {
       cur_wrapper = object_wrappers + sp_obs[i].wrapper_offset;
       if (cur_wrapper->to_delete) {
         // Delete obstacle
+        space_obstacle_remove_sim(i); 
+        delete_space_obstacle(i);
+        i--;
       }
     } else {
       cur_wrapper = object_wrappers + st_obs[i].wrapper_offset;
       if (cur_wrapper->to_delete) {
         // Delete obstacle
+        station_obstacle_remove_sim(i); 
+        delete_station_obstacle(i);
+        i--;
       }
+    }
+  }
+  for (size_t i = 0; i < num_corridors; i++) {
+    cur_wrapper = object_wrappers + cd_obs[i].wrapper_offset;
+    if (cur_wrapper->to_delete) {
+      corridor_remove_sim(i);
+      delete_corridor(i);
+      i--;
     }
   }
 
   return 0;
+}
+
+void switch_game_modes() {
+  if (mode == SPACE) {
+    clear_space_mode();
+    init_station_mode();
+  } else {
+    clear_station_mode();
+    init_space_mode();
+  }
 }

@@ -47,6 +47,27 @@ int init_scene() {
   corridor_models[2] = load_model("./assets/set_pieces/corner/corner_0.obj");
   corridor_models[3] = load_model("./assets/set_pieces/t_junct/t_junct.obj");
   corridor_models[4] = load_model("./assets/set_pieces/corridor/corridor_0.obj");
+  station_obstacles[0] = load_model("./assets/station_obstacles/ammo_crate_0/ammo_crate_0.obj");
+  station_obstacles[1] = load_model("./assets/station_obstacles/ammo_crate_1/ammo_crate_1.obj");
+  station_obstacles[2] = load_model("./assets/station_obstacles/crate_0/crate_0.obj");
+  station_obstacles[3] = load_model("./assets/station_obstacles/crate_1/crate_1.obj");
+  station_obstacles[4] = load_model("./assets/station_obstacles/cryo_bed/cryo_bed.obj");
+  station_obstacles[5] = load_model("./assets/station_obstacles/health_crate_0/health_crate_0.obj");
+  station_obstacles[6] = load_model("./assets/station_obstacles/health_crate_1/health_crate_1.obj");
+  station_obstacles[7] = load_model("./assets/station_obstacles/medical_arms/medical_arms.obj");
+  station_obstacles[8] = load_model("./assets/station_obstacles/oxygen_tank_0/oxygen_tank_0.obj");
+  station_obstacles[9] = load_model("./assets/station_obstacles/plant_vase/plant_vase.obj");
+  station_obstacles[10] = load_model("./assets/station_obstacles/shield_crate_0/shield_crate_0.obj");
+  station_obstacles[11] = load_model("./assets/station_obstacles/shield_crate_1/shield_crate_1.obj");
+  station_obstacles[12] = load_model("./assets/station_obstacles/toilet/toilet.obj");
+  station_obstacles[13] = load_model("./assets/station_obstacles/big_bug/big_bug.obj");
+  station_obstacles[14] = load_model("./assets/station_obstacles/hose_0/hose_0.obj");
+  station_obstacles[15] = load_model("./assets/station_obstacles/hose_1/hose_1.obj");
+  station_obstacles[16] = load_model("./assets/station_obstacles/hose_2/hose_2.obj");
+  station_obstacles[17] = load_model("./assets/station_obstacles/hose_3/hose_3.obj");
+  station_obstacles[18] = load_model("./assets/station_obstacles/stool/stool.obj");
+  station_obstacles[19] = load_model("./assets/station_obstacles/table/table.obj");
+
 
   if (CHECK_ASSETS_LOADED) {
     fprintf(stderr, "Error: failed to initialize game models\n");
@@ -95,6 +116,13 @@ void cleanup_scene() {
   free_model(alien_models[1]);
   free_model(player_ship_model);
   free_model(alien_ship_models[0]);
+  for (int i = 0; i < 5; i++) {
+    free_model(corridor_models[i]);
+    free_model(asteroid_models[i]);
+  }
+  for (int i = 0; i < NUM_STATION_OBSTACLE_TYPES; i++) {
+    free_model(station_obstacles[i]);
+  }
 
   free_ui();
 }
@@ -167,6 +195,7 @@ void query_render_sim() {
       }
     }
   }
+  free(render_query);
 }
 
 void render_enemies() {
@@ -247,6 +276,10 @@ ENTITY *init_obstacle_ent(size_t index) {
   return init_entity(asteroid_models[index]);
 }
 
+ENTITY *init_station_obstacle_ent(size_t index) {
+  return init_entity(station_obstacles[index]);
+}
+
 ENTITY *init_corridor_ent(size_t index) {
   return init_entity(corridor_models[index]);
 }
@@ -259,6 +292,6 @@ void toggle_wire_frame() {
   wire_frame = !wire_frame;
 }
 
-void update_perspective() {
+void update_perspective() {  
   glm_perspective(glm_rad(45.0), RES_X / RES_Y, 0.1f, 100.0f, persp_proj);
 }

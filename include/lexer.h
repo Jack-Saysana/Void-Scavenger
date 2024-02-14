@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <lexer_str.h>
+#include <structs/lexer_str.h>
 
 /* GLOBALS */
 LEXER lexer;
