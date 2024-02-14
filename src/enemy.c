@@ -309,19 +309,35 @@ void sp_enemy_pathfind(size_t index) {
   glm_vec3_cross(forward, up, side);
   glm_vec3_normalize(side);
 
+  // Turning radius approximately equal to |lin_velocity| * sin(|ang_velocity|)
+  // TODO Actually calculate turning radius
+  float turning_rad = 56.0;
+
   // Steer ship away from arena edges
   vec3 target_dir = { 0.0, 0.0, 0.0 };
-  if (e_pos[X] >= SPACE_SIZE - 48.0 ||
-      e_pos[X] <= 32.0 - SPACE_SIZE) {
-    target_dir[X] = -e_pos[X];
+  float target_speed = enemy->thruster.max_vel;
+  if (e_pos[X] >= SPACE_SIZE - turning_rad) {
+    target_dir[X] = (SPACE_SIZE - turning_rad) - e_pos[X];
+  } else if (e_pos[X] <= turning_rad - SPACE_SIZE) {
+    target_dir[X] = (turning_rad - SPACE_SIZE) - e_pos[X];
   }
-  if (e_pos[Y] >= SPACE_SIZE - 48.0 ||
-      e_pos[Y] <= 32.0 - SPACE_SIZE) {
-    target_dir[Y] = -e_pos[Y];
+  if (e_pos[Y] >= SPACE_SIZE - turning_rad) {
+    target_dir[Y] = (SPACE_SIZE - turning_rad) - e_pos[Y];
+  } else if (e_pos[Y] <= turning_rad - SPACE_SIZE) {
+    target_dir[Y] = (turning_rad - SPACE_SIZE) - e_pos[Y];
   }
-  if (e_pos[Z] >= SPACE_SIZE - 48.0 ||
-      e_pos[Z] <= 32.0 - SPACE_SIZE) {
-    target_dir[Z] = -e_pos[Z];
+  if (e_pos[Z] >= SPACE_SIZE - turning_rad) {
+    target_dir[Z] = (SPACE_SIZE - turning_rad) - e_pos[Z];
+  } else if (e_pos[Z] <= turning_rad - SPACE_SIZE) {
+    target_dir[Z] = (turning_rad - SPACE_SIZE) - e_pos[Z];
+  }
+  // Slow down ship as it approaches a collision
+  float speed_modifier = glm_vec3_norm(target_dir);
+  if (speed_modifier) {
+    speed_modifier = 5.0 / fabs(speed_modifier);
+    if (speed_modifier < 1.0) {
+      target_speed *= speed_modifier;
+    }
   }
   glm_vec3_normalize(target_dir);
 
@@ -373,7 +389,17 @@ void sp_enemy_pathfind(size_t index) {
                       enemy->ent->ang_velocity);
   }
 
-  enemy->cur_speed = enemy->thruster.max_vel;
+  if (enemy->cur_speed < target_speed) {
+    enemy->cur_speed += enemy->thruster.max_accel * DELTA_TIME;
+    if (enemy->cur_speed < 0.0) {
+      enemy->cur_speed = 0.0;
+    }
+  } else if (enemy->cur_speed > target_speed) {
+    enemy->cur_speed -= enemy->thruster.max_accel * DELTA_TIME;
+    if (enemy->cur_speed > enemy->thruster.max_vel) {
+      enemy->cur_speed = enemy->thruster.max_vel;
+    }
+  }
   glm_vec3_scale_as(forward, enemy->cur_speed, enemy->ent->velocity);
 }
 

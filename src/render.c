@@ -67,7 +67,7 @@ int init_scene() {
 
   // Initialize common matrices
   glm_ortho(-1.0, 1.0, -1.0, 1.0, 0.0, 100.0, ortho_proj);
-  glm_perspective(glm_rad(45.0), RES_X / RES_Y, 0.1f, 100.0f, persp_proj);
+  glm_perspective(glm_rad(45.0), RES_X / RES_Y, 0.1f, RENDER_DIST, persp_proj);
 
   // Initialize OpenGL options
   glEnable(GL_DEPTH_TEST);
