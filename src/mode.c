@@ -13,6 +13,10 @@
 // ================================ SPACE MODE ===============================
 
 int init_space_mode() {
+
+  /* Ensure coordinates are enabled */
+  enable_coordinates();
+
   // Initialize simulations
   physics_sim = init_sim(SPACE_SIZE, SPACE_DEPTH);
   combat_sim = init_sim(SPACE_SIZE, SPACE_DEPTH);
@@ -102,6 +106,10 @@ void clear_space_mode() {
 // ============================== STATION MODE ===============================
 
 int init_station_mode() {
+
+  /* Turn off the coordinates */
+  disable_coordinates();
+
   // Initialize simulations
   physics_sim = init_sim(STATION_SIZE, STATION_DEPTH);
   sim_add_force(physics_sim, (vec3) { 0.0, -GRAVITY, 0.0 });

@@ -12,6 +12,7 @@ int init_game();
 void cleanup_game();
 void keyboard_input(GLFWwindow *);
 void decrement_current_timer(float);
+void update_ui_components();
 
 void handle_collisions();
 int delete_stale_objects();

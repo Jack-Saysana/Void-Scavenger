@@ -51,3 +51,5 @@ void gen_rand_vec3(vec3 *, float);
 float gen_rand_float(float);
 void seed_random();
 
+void disable_coordinates();
+void enable_coordinates();

@@ -58,3 +58,4 @@ void disable_console_cursor();
 void enable_console_cursor();
 void add_timer(float, void *, int);
 size_t init_projectile(vec3, vec3, float, PROJ_SOURCE, S_WEAPON_T, float, float, size_t);
+void toggle_inventory();

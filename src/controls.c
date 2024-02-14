@@ -182,15 +182,18 @@ void input_keys(GLFWwindow *window) {
         if (i == GLFW_KEY_W) {
           /* Handle W press */
           move_camera(&camera, MOVE_FORWARD);
-        } else if (i == GLFW_KEY_S){
+        } else if (i == GLFW_KEY_S) {
           /* Handle S press */
           move_camera(&camera, MOVE_BACKWARD);
-        } else if (i == GLFW_KEY_A){
+        } else if (i == GLFW_KEY_A) {
           /* Handle A press */
           move_camera(&camera, MOVE_LEFT);
-        } else if (i == GLFW_KEY_D){
+        } else if (i == GLFW_KEY_D) {
           /* Handle D press */
           move_camera(&camera, MOVE_RIGHT);
+        } else if (i == GLFW_KEY_I && !holding_alpha[i - GLFW_KEY_A]) {
+          /* Handle I press */
+          toggle_inventory();
         }
       } else if (!console_enabled && mode == SPACE) {
         /* TODO Ship movment */

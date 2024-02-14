@@ -83,7 +83,7 @@ typedef struct ui_component {
   void *no_hover_args;
 
   // List of child components
-  struct ui_component *children;
+  struct ui_component **children;
   size_t num_children;
   size_t child_buf_size;
 

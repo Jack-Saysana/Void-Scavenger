@@ -31,7 +31,7 @@ int init_player() {
   }
 
   st_player.max_health = P_BASE_HEALTH;
-  st_player.health = P_BASE_HEALTH;
+  st_player.cur_health = P_BASE_HEALTH;
   st_player.speed = P_BASE_SPEED;
   st_player.fire_rate = P_BASE_FIRERATE;
 
@@ -152,4 +152,14 @@ void player_ship_thrust_move() {
   glm_normalize(ship_forward);
   glm_vec3_scale(ship_forward, player_ship.cur_speed, ship_forward);
   glm_vec3_copy(ship_forward, player_ship.ent->velocity);
+}
+
+// =============================== HELPERS ================================
+
+void get_player_coordinates(vec3 coords) {
+  if (mode == SPACE) {
+    glm_vec3_copy(player_ship.ent->translation, coords);
+  } else {
+    glm_vec3_copy(st_player.ent->translation, coords);
+  }
 }
