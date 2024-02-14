@@ -10,5 +10,9 @@ extern unsigned int coordinates_enabled;
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 void console_ui_initialize();
+int init_stats();
+int init_inventory();
 void coordinates_ui_initialize();
 void update_coordinates();
+void update_stats();
+void update_inventory();

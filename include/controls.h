@@ -55,3 +55,4 @@ void update_console_cursor(char *);
 void disable_console_cursor();
 void enable_console_cursor();
 void add_timer(float, void *, int);
+void toggle_inventory();
