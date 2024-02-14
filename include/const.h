@@ -15,6 +15,8 @@
 #define S_BASE_PWR_DRAW (25.0)
 #define S_BASE_DAMAGE (10.0)
 #define S_BASE_FIRERATE (0.1)
+#define S_BASE_PROJ_SPEED (50.0)
+#define S_BASE_RANGE (100.0)
 #define S_BASE_ANG_VEL (10.0)
 #define S_BASE_ANG_ACCEL (5.0)
 #define S_BASE_VEL (10.0)

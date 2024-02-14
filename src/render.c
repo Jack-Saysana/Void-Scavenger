@@ -82,7 +82,7 @@ int init_scene() {
     return -1;
   }
   
-  glm_vec3_copy((vec3) {0.0, 0.0, 5.0}, camera.pos);
+  glm_vec3_copy((vec3) {0.0, 0.0, 0.0}, camera.pos);
   camera.pitch = 0.0;
   camera.yaw = 0.0;
 
@@ -136,15 +136,11 @@ void render_scene(GLFWwindow *window) {
   if (mode == STATION) {
     render_game_entity(st_player.ent);
     render_game_entity(render_sphere);
-    /*
-    render_enemies();
     render_projectiles();
-    render_items();
-    render_st_obstacles();
-    */
     query_render_sim();
   } else if (mode == SPACE) {
-    //render_game_entity(player_ship.ent);
+    player_ship_thrust_move();
+    render_game_entity(player_ship.ent);
     render_enemy_ships();
     render_projectiles();
     render_sp_obstacles();

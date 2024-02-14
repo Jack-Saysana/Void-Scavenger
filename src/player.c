@@ -86,6 +86,8 @@ int init_player_ship() {
   player_ship.weapon.damage = S_BASE_DAMAGE;
   player_ship.weapon.fire_rate = S_BASE_FIRERATE;
   player_ship.weapon.max_power_draw = S_BASE_PWR_DRAW;
+  player_ship.weapon.proj_speed = S_BASE_PROJ_SPEED;
+  player_ship.weapon.range = S_BASE_RANGE;
   player_ship.wing.max_ang_vel = S_BASE_ANG_VEL;
   player_ship.wing.max_ang_accel = S_BASE_ANG_ACCEL;
   player_ship.thruster.max_vel = S_BASE_VEL;
@@ -144,7 +146,16 @@ void player_ship_remove_sim() {
   sim_remove_entity(event_sim, player_ship.ent);
 }
 
+void player_ship_thrust_move() {
+  vec3 ship_forward;
+  glm_quat_rotatev(player_ship.ent->rotation, (vec3){-1.0, 0.0, 0.0}, ship_forward);
+  glm_normalize(ship_forward);
+  glm_vec3_scale(ship_forward, player_ship.cur_speed, ship_forward);
+  glm_vec3_copy(ship_forward, player_ship.ent->velocity);
+}
+
 // =============================== HELPERS ================================
+
 void get_player_coordinates(vec3 coords) {
   if (mode == SPACE) {
     glm_vec3_copy(player_ship.ent->translation, coords);
