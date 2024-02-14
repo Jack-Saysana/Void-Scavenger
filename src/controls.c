@@ -89,6 +89,53 @@ void mouse_scroll_callback(GLFWwindow *window, double x_off, double y_off) {
 void mouse_button_callback(GLFWwindow *window, int button, int action,
                            int mods) {
   // Insert mouse button handling here...
+  if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+    if (mode == STATION) {
+      if(can_shoot) {
+        can_shoot = 0;
+        add_timer(st_player.fire_rate, (void *) &can_shoot, 1);
+      }
+    } else if (mode == SPACE) {
+      if (can_shoot) {
+        can_shoot = 0; //set flag to cap firerate
+        add_timer(player_ship.weapon.fire_rate, (void *) &can_shoot, 1); //sets timer for once firerate gap met
+        vec3 ship_forward;
+        glm_quat_rotatev(player_ship.ent->rotation, (vec3){-1.0, 0.0, 0.0}, ship_forward);
+        glm_normalize(ship_forward);
+        vec3 ship_side;
+        glm_quat_rotatev(player_ship.ent->rotation, (vec3){0.0, 0.0, 1.0}, ship_side);
+        glm_normalize(ship_side);
+        vec3 ship_up;
+        glm_quat_rotatev(player_ship.ent->rotation, (vec3){0.0, 1.0, 0.0}, ship_up);
+        glm_normalize(ship_up);
+        glm_vec3_rotate(ship_forward, glm_rad(-5.0), ship_side);
+        glm_vec3_rotate(ship_forward, glm_rad(-0.625), ship_up);
+        vec3 gun_pos;
+        glm_vec3_add(player_ship.ent->translation, ship_side, gun_pos);
+        init_projectile(gun_pos,
+                        ship_forward,
+                        player_ship.weapon.proj_speed,
+                        SRC_PLAYER,
+                        player_ship.weapon.type,
+                        player_ship.weapon.damage,
+                        player_ship.weapon.range,
+                        0
+        );
+        glm_vec3_negate(ship_side);
+        glm_vec3_add(player_ship.ent->translation, ship_side, gun_pos);
+        glm_vec3_rotate(ship_forward, glm_rad(1.25), ship_up);
+        init_projectile(gun_pos,
+                        ship_forward,
+                        player_ship.weapon.proj_speed,
+                        SRC_PLAYER,
+                        player_ship.weapon.type,
+                        player_ship.weapon.damage,
+                        player_ship.weapon.range,
+                        0
+      );
+      }
+    }
+  }
 }
 
 void input_keys(GLFWwindow *window) {
