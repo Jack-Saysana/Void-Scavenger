@@ -38,4 +38,7 @@ void update_ui_components() {
   if (coordinates_enabled) {
     update_coordinates();
   }
+  // update UI components
+  update_stats();
+  update_inventory();
 }

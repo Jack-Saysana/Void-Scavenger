@@ -104,7 +104,7 @@ void input_keys(GLFWwindow *window) {
         } else if (i == GLFW_KEY_D) {
           /* Handle D press */
           move_camera(&camera, MOVE_RIGHT);
-        } else if (i == GLFW_KEY_I) {
+        } else if (i == GLFW_KEY_I && !holding_alpha[i - GLFW_KEY_A]) {
           /* Handle I press */
           toggle_inventory();
         }

@@ -61,5 +61,3 @@ void render_game_entity(ENTITY *);
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 
 void get_cam_matrix(CAM *, mat4);
-void update_stats();
-void update_inventory();
