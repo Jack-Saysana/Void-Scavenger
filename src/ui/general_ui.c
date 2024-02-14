@@ -14,4 +14,15 @@ void init_ui_components() {
     exit(1);
   }
   console_ui_initialize();
+  coordinates_ui_initialize();
+}
+
+/*
+  General function where all ui components which need per-frame
+  updates are called from.
+*/
+void update_ui_components() {
+  if (coordinates_enabled) {
+    update_coordinates();
+  }
 }

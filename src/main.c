@@ -34,6 +34,7 @@ int main() {
     // - etc...
     keyboard_input(window);
     decrement_current_timer(DELTA_TIME);
+    update_ui_components();
     handle_collisions();
     delete_stale_objects();
     render_scene(window);
