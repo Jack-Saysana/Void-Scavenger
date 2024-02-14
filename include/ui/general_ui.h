@@ -4,6 +4,7 @@
 #include <engine/engine.h>
 
 extern F_GLYPH *fixed_sys;
+extern unsigned int coordinates_enabled;
 
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
@@ -11,3 +12,5 @@ extern F_GLYPH *fixed_sys;
 void console_ui_initialize();
 int init_stats();
 int init_inventory();
+void coordinates_ui_initialize();
+void update_coordinates();

@@ -26,4 +26,16 @@ void init_ui_components() {
     printf("Could not initialize inventory!\n");
     exit(1);
   }
+
+  coordinates_ui_initialize();
+}
+
+/*
+  General function where all ui components which need per-frame
+  updates are called from.
+*/
+void update_ui_components() {
+  if (coordinates_enabled) {
+    update_coordinates();
+  }
 }

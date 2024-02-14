@@ -39,3 +39,5 @@ void command_not_found();
 void toggle_hit_boxes();
 void toggle_wire_frame();
 void cursor_on(int);
+void enable_coordinates();
+void disable_coordinates();
