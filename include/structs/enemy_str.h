@@ -21,7 +21,7 @@ typedef struct station_enemy {
 
   float max_health;
   float cur_health;
-  float speed;
+  float cur_speed;
   float fire_rate;
   E_WEAP_T weapon_type;
   int invuln;

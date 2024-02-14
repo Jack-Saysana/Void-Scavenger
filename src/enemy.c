@@ -70,7 +70,7 @@ size_t init_enemy(size_t index) {
 
   new_enemy->max_health = E_BASE_HEALTH;
   new_enemy->cur_health = E_BASE_HEALTH;
-  new_enemy->speed = E_BASE_SPEED;
+  new_enemy->cur_speed = E_BASE_SPEED;
   new_enemy->fire_rate = E_BASE_FIRERATE;
   new_enemy->weapon_type = RANGED;
   new_enemy->invuln = 0;
@@ -288,3 +288,95 @@ void sim_refresh_sp_enemy(size_t index) {
   }
 }
 
+// ================================ BEHAVIOR =================================
+
+void enemy_behavior() {
+  if (mode == SPACE && num_enemies) {
+    sp_enemy_pathfind(0);
+  }
+}
+
+void sp_enemy_pathfind(size_t index) {
+  SHIP *enemy = sp_enemies + index;
+  vec3 e_pos = GLM_VEC3_ZERO_INIT;
+  glm_vec3_copy(enemy->ent->translation, e_pos);
+
+  vec3 forward = { -1.0, 0.0, 0.0 };
+  glm_quat_rotatev(enemy->ent->rotation, forward, forward);
+  vec3 up = { 0.0, 1.0, 0.0 };
+  glm_quat_rotatev(enemy->ent->rotation, up, up);
+  vec3 side = GLM_VEC3_ZERO_INIT;
+  glm_vec3_cross(forward, up, side);
+  glm_vec3_normalize(side);
+
+  // Steer ship away from arena edges
+  vec3 target_dir = { 0.0, 0.0, 0.0 };
+  if (e_pos[X] >= SPACE_SIZE - 48.0 ||
+      e_pos[X] <= 32.0 - SPACE_SIZE) {
+    target_dir[X] = -e_pos[X];
+  }
+  if (e_pos[Y] >= SPACE_SIZE - 48.0 ||
+      e_pos[Y] <= 32.0 - SPACE_SIZE) {
+    target_dir[Y] = -e_pos[Y];
+  }
+  if (e_pos[Z] >= SPACE_SIZE - 48.0 ||
+      e_pos[Z] <= 32.0 - SPACE_SIZE) {
+    target_dir[Z] = -e_pos[Z];
+  }
+  glm_vec3_normalize(target_dir);
+
+  float alignment = glm_vec3_dot(target_dir, forward);
+  if ((target_dir[X] || target_dir[Y] || target_dir[Z]) &&
+       alignment < 0.9) {
+    // Goal: Steer the ship using roll such that it's up, forward, and target
+    // vector are co-planar, then steer using pitch such that it's forward
+    // vector matches it's forward vector. This will create a "realistic"
+    // looking turning style
+
+    vec3 temp = GLM_VEC3_ZERO_INIT;
+    // Three vectors a, b and c are coplanar if (a * (b x c)) == 0
+    glm_vec3_cross(forward, up, temp);
+    float rolling = glm_vec3_dot(target_dir, temp);
+    enemy->cur_ang_speed = enemy->wing.max_ang_vel;
+    if (rolling < -0.1 || rolling > 0.1) {
+      // Steer using roll
+      enemy->cur_ang_speed += enemy->wing.max_ang_accel * DELTA_TIME;
+      if (enemy->cur_ang_speed > enemy->wing.max_ang_vel) {
+        enemy->cur_ang_speed = enemy->wing.max_ang_vel;
+      }
+
+      glm_vec3_scale_as(forward, enemy->cur_ang_speed,
+                        enemy->ent->ang_velocity);
+    } else {
+      // Steer using pitch
+      enemy->cur_ang_speed += enemy->wing.max_ang_accel * DELTA_TIME;
+      if (enemy->cur_ang_speed > enemy->wing.max_ang_vel) {
+        enemy->cur_ang_speed = enemy->wing.max_ang_vel;
+      }
+
+      glm_vec3_cross(forward, target_dir, temp);
+      glm_vec3_normalize(temp);
+      if (glm_vec3_dot(temp, side) > 0.0) {
+        glm_vec3_scale_as(side, enemy->cur_ang_speed,
+                          enemy->ent->ang_velocity);
+      } else {
+        glm_vec3_scale_as(side, -enemy->cur_ang_speed,
+                          enemy->ent->ang_velocity);
+      }
+    }
+  } else {
+    enemy->cur_ang_speed -= enemy->wing.max_ang_accel * DELTA_TIME;
+    if (enemy->cur_ang_speed < 0.0) {
+      enemy->cur_ang_speed = 0.0;
+    }
+    glm_vec3_scale_as(enemy->ent->ang_velocity, enemy->cur_ang_speed,
+                      enemy->ent->ang_velocity);
+  }
+
+  enemy->cur_speed = enemy->thruster.max_vel;
+  glm_vec3_scale_as(forward, enemy->cur_speed, enemy->ent->velocity);
+}
+
+void st_enemy_pathfind(size_t index) {
+
+}

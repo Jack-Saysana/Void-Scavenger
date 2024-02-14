@@ -18,7 +18,7 @@ int main() {
   if (status) {
     return -1;
   }
- 
+
   while (!glfwWindowShouldClose(window)) {
     float CUR_TIME = glfwGetTime();
     DELTA_TIME = CUR_TIME - LAST_FRAME;
@@ -34,6 +34,7 @@ int main() {
     // - etc...
     keyboard_input(window);
     decrement_current_timer(DELTA_TIME);
+    enemy_behavior();
     handle_collisions();
     refresh_objects();
     render_scene(window);
