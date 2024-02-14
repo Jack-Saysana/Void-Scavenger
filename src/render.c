@@ -151,8 +151,6 @@ void render_scene(GLFWwindow *window) {
   }
 
   render_ui();
-  // update UI components
-  update_stats();
 
   glfwSwapBuffers(window);
   glfwPollEvents();

@@ -7,7 +7,7 @@ and station mode.
 */
 
 /*
-  Init stats UI globaly, call by render.c init_scene()
+  Init stats UI globaly, call by general_ui.c init_scene()
 
   Return
     0 if successful
@@ -22,7 +22,7 @@ int init_stats() {
     1.0, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(stats.ui_stats_root, "assets/ui/transparent.png");
+  set_ui_texture(stats.ui_stats_root, "assets/transparent.png");
 
   stats.ui_shield_root = add_ui_comp(
     stats.ui_stats_root, // UI_COMP *parent
@@ -31,7 +31,7 @@ int init_stats() {
     0.3, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(stats.ui_shield_root, "assets/ui/transparent.png");
+  set_ui_texture(stats.ui_shield_root, "assets/transparent.png");
 
 
   stats.ui_shield_icon = add_ui_comp(
@@ -48,7 +48,7 @@ int init_stats() {
     (vec2) { 0.1, -1.0 }, // vec2 pos
     0.8, // float width
     -1.0, // float height
-    RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(stats.ui_shield_border, "assets/ui/hud_color_bg.png");
 
@@ -57,7 +57,7 @@ int init_stats() {
     (vec2) { 0.0, 0.0 }, // vec2 pos
     1.0, // float width
     0.8, // float height
-    RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(stats.ui_shield_bar, "assets/ui/hud_color.png");
 
@@ -68,7 +68,7 @@ int init_stats() {
     0.3, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(stats.ui_health_root, "assets/ui/transparent.png");
+  set_ui_texture(stats.ui_health_root, "assets/transparent.png");
 
   stats.ui_health_icon = add_ui_comp(
     stats.ui_health_root, // UI_COMP *parent
@@ -84,7 +84,7 @@ int init_stats() {
     (vec2) { 0.1, -1.0 }, // vec2 pos
     0.8, // float width
     -1.0, // float height
-    RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(stats.ui_health_border, "assets/ui/hud_color_bg.png");
 
@@ -93,7 +93,7 @@ int init_stats() {
     (vec2) { 0.0, 0.0 }, // vec2 pos
     1.0, // float width
     0.8, // float height
-    RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(stats.ui_health_bar, "assets/ui/hud_color.png");
 
@@ -104,7 +104,7 @@ int init_stats() {
     0.3, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(stats.ui_energy_root, "assets/ui/transparent.png");
+  set_ui_texture(stats.ui_energy_root, "assets/transparent.png");
 
   stats.ui_energy_icon = add_ui_comp(
     stats.ui_energy_root, // UI_COMP *parent
@@ -120,7 +120,7 @@ int init_stats() {
     (vec2) { 0.1, -1.0 }, // vec2 pos
     0.8, // float width
     -1.0, // float height
-    RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(stats.ui_energy_border, "assets/ui/hud_color_bg.png");
 
@@ -129,7 +129,7 @@ int init_stats() {
     (vec2) { 0.0, 0.0 }, // vec2 pos
     1.0, // float width
     0.8, // float height
-    RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(stats.ui_energy_bar, "assets/ui/hud_color.png");
 
@@ -140,7 +140,7 @@ int init_stats() {
     0.3, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(stats.ui_thruster_root, "assets/ui/transparent.png");
+  set_ui_texture(stats.ui_thruster_root, "assets/transparent.png");
 
   stats.ui_thruster_icon = add_ui_comp(
     stats.ui_thruster_root, // UI_COMP *parent
@@ -156,7 +156,7 @@ int init_stats() {
     (vec2) { 0.1, -1.0 }, // vec2 pos
     0.8, // float width
     -1.0, // float height
-    RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(stats.ui_thruster_border, "assets/ui/hud_color_bg.png");
 
@@ -165,7 +165,7 @@ int init_stats() {
     (vec2) { 0.0, 0.0 }, // vec2 pos
     1.0, // float width
     0.8, // float height
-    RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(stats.ui_thruster_bar, "assets/ui/hud_color.png");
 
@@ -176,14 +176,14 @@ int init_stats() {
     0.01, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(stats.ui_exp_root, "assets/ui/transparent.png");
+  set_ui_texture(stats.ui_exp_root, "assets/transparent.png");
 
   stats.ui_exp_border = add_ui_comp(
     stats.ui_exp_root, // UI_COMP *parent
     (vec2) { 0.0, 0.0 }, // vec2 pos
     1.0, // float width
     1.0, // float height
-    RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(stats.ui_exp_border, "assets/ui/hud_color_bg.png");
 
@@ -192,7 +192,7 @@ int init_stats() {
     (vec2) { 0.0, 0.0 }, // vec2 pos
     0.8, // float width
     1.0, // float height
-    RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(stats.ui_exp_bar, "assets/ui/hud_color.png");
 
@@ -219,9 +219,9 @@ void update_stats() {
 
     // update stats
     // TODO: Should be functional in sprint 2
-    set_ui_height(stats.ui_shield_bar, 0.9);
-    set_ui_height(stats.ui_health_bar, 0.7);
-    set_ui_height(stats.ui_exp_bar, 0.5);
+    set_ui_width(stats.ui_shield_bar, 0.9);
+    set_ui_width(stats.ui_health_bar, 0.7);
+    set_ui_width(stats.ui_exp_bar, 0.5);
   }
 }
 
@@ -234,7 +234,7 @@ void switch_space_hud() {
   set_ui_enabled(stats.ui_health_root, 1);
   set_ui_enabled(stats.ui_energy_root, 1);
   set_ui_enabled(stats.ui_thruster_root, 1);
-  set_ui_enabled(stats.ui_exp_root, 0);
+  set_ui_enabled(stats.ui_exp_root, 1);
 
   // set health bar and shield to space style
   set_ui_pos(stats.ui_shield_root, (vec2) { 0.04, -0.6 });
@@ -250,12 +250,12 @@ void switch_space_hud() {
   set_ui_pos(stats.ui_shield_border, (vec2) { 0.1, -1.0 });
   set_ui_width(stats.ui_shield_border, 0.8);
   set_ui_height(stats.ui_shield_border, -1.0);
-  set_ui_options(stats.ui_shield_root, RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
+  set_ui_options(stats.ui_shield_root, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
 
   set_ui_pos(stats.ui_shield_bar, (vec2) { 0.0, 0.0 });
   set_ui_width(stats.ui_shield_bar, 1.0);
   set_ui_height(stats.ui_shield_bar, 0.8);
-  set_ui_options(stats.ui_shield_root, RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
+  set_ui_options(stats.ui_shield_root, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
 
   set_ui_pos(stats.ui_health_root, (vec2) { 0.07, -0.6 });
   set_ui_width(stats.ui_health_root, 0.02);
@@ -270,12 +270,12 @@ void switch_space_hud() {
   set_ui_pos(stats.ui_health_border, (vec2) { 0.1, -1.0 });
   set_ui_width(stats.ui_health_border, 0.8);
   set_ui_height(stats.ui_health_border, -1.0);
-  set_ui_options(stats.ui_health_border, RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
+  set_ui_options(stats.ui_health_border, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
 
   set_ui_pos(stats.ui_health_bar, (vec2) { 0.0, 0.0 });
   set_ui_width(stats.ui_health_bar, 1.0);
   set_ui_height(stats.ui_health_bar, 0.8);
-  set_ui_options(stats.ui_health_bar, RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
+  set_ui_options(stats.ui_health_bar, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
 }
 
 /*
@@ -323,10 +323,10 @@ void switch_station_hud() {
   set_ui_pos(stats.ui_health_border, (vec2) { 0.0, 0.0 });
   set_ui_width(stats.ui_health_border, 1.0);
   set_ui_height(stats.ui_health_border, 1.0);
-  set_ui_options(stats.ui_health_border, RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
+  set_ui_options(stats.ui_health_border, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
 
   set_ui_pos(stats.ui_health_bar, (vec2) { 0.0, 0.0 });
   set_ui_width(stats.ui_health_bar, 1.0);
   set_ui_height(stats.ui_health_bar, 1.0);
-  set_ui_options(stats.ui_health_bar, RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
+  set_ui_options(stats.ui_health_bar, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
 }
