@@ -16,6 +16,8 @@ INVENTORY inventory;
 int init_inventory();
 void update_inventory();
 void toggle_inventory();
+void slot_on_hover(UI_COMP *ui_inventory_slot, void *unused);
+void slot_on_no_hover(UI_COMP *ui_inventory_slot, void *unused);
 
 /* ================= EXTERNALLY DEFINED FUNCTIONS ================ */
 
