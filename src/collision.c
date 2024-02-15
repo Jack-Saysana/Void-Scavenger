@@ -9,14 +9,18 @@
 
 void handle_collisions() {
   // Update simulations
+  update_query_spheres();
+
   prepare_object_movement();
-  integrate_sim(physics_sim);
+  integrate_sim(physics_sim, sim_sphere->translation, SIM_DIST);
   integrate_projectiles();
   update_object_movement();
 
   // Detect and respond to physics based collisions
   COLLISION *physics_collisions = NULL;
-  size_t num_p_col = get_sim_collisions(physics_sim, &physics_collisions);
+  size_t num_p_col = get_sim_collisions(physics_sim, &physics_collisions,
+                                        sim_sphere->translation,
+                                        SIM_DIST);
   // Physics collision resolution will move objects in the scene, so we must
   // prepare the game simulations for potential movement
   prepare_object_movement();
@@ -24,12 +28,16 @@ void handle_collisions() {
   update_object_movement();
 
   COLLISION *combat_collisions = NULL;
-  size_t num_c_col = get_sim_collisions(combat_sim, &combat_collisions);
+  size_t num_c_col = get_sim_collisions(combat_sim, &combat_collisions,
+                                        sim_sphere->translation,
+                                        SIM_DIST);
   handle_combat_collisions(combat_collisions, num_c_col);
 
   COLLISION *event_collisions = NULL;
-  size_t num_e_col = get_sim_collisions(event_sim, &event_collisions);
-  handle_event_collisions(event_collisions, num_e_col);
+  size_t num_e_col = get_sim_collisions(event_sim, &event_collisions,
+                                        sim_sphere->translation,
+                                        SIM_DIST);
+  handle_combat_collisions(event_collisions, num_e_col);
 
   free(physics_collisions);
   free(combat_collisions);
@@ -173,3 +181,16 @@ void decrement_enemy_health(size_t index, float damage) {
     }
   }
 }
+
+void update_query_spheres() {
+  prep_sim_movement(render_sim);
+  if (mode == SPACE) {
+    glm_vec3_copy(player_ship.ent->translation, render_sphere->translation);
+    glm_vec3_copy(player_ship.ent->translation, sim_sphere->translation);
+  } else if (mode == STATION) {
+    glm_vec3_copy(camera.pos, render_sphere->translation);
+    glm_vec3_copy(camera.pos, sim_sphere->translation);
+  }
+  update_sim_movement(render_sim);
+}
+

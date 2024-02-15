@@ -91,14 +91,15 @@ size_t init_space_obstacle(int type, vec3 pos, vec3 velocity, vec3 angular_vel,
   return num_obstacles - 1;
 }
 
-size_t init_station_obstacle(vec3 pos, vec3 scale, float mass) {
+size_t init_station_obstacle(int type, vec3 pos, vec3 scale, versor rotation,
+                             float mass) {
   if (st_obs == NULL) {
     fprintf(stderr, "Error: Inserting into a deallocated obstacle buffer\n");
     return INVALID_INDEX;
   }
 
   ST_OBSTACLE *obstacle = st_obs + num_obstacles;
-  obstacle->ent = init_obstacle_ent();
+  obstacle->ent = init_station_obstacle_ent(type);
   if (obstacle->ent == NULL) {
     fprintf(stderr, "Error: Unable to allocate obstacle entity\n");
     return INVALID_INDEX;
@@ -111,9 +112,14 @@ size_t init_station_obstacle(vec3 pos, vec3 scale, float mass) {
   }
 
   glm_vec3_copy((vec3) { 0.0, 0.0, 0.0 }, obstacle->ent->ang_velocity);
-  glm_vec3_copy((vec3) { 0.0, 0.0, 0.0 }, obstacle->ent->velocity);
+  glm_vec3_copy((vec3) { 0.0, 0.01, 0.0 }, obstacle->ent->velocity);
+  obstacle->ent->rotation[0] = rotation[0];
+  obstacle->ent->rotation[1] = rotation[1];
+  obstacle->ent->rotation[2] = rotation[2];
+  obstacle->ent->rotation[3] = rotation[3];
   glm_vec3_copy(pos, obstacle->ent->translation);
   glm_vec3_copy(scale, obstacle->ent->scale);
+
   obstacle->ent->inv_mass = 1.0 / mass;
 
   num_obstacles++;
@@ -166,6 +172,11 @@ int space_obstacle_insert_sim(size_t index) {
     return -1;
   }
 
+  status = sim_add_entity(combat_sim, sp_obs[index].ent, ALLOW_DEFAULT);
+  if (status) {
+    return -1;
+  }
+
   status = sim_add_entity(render_sim, sp_obs[index].ent, ALLOW_DEFAULT);
   if (status) {
     return -1;
@@ -180,14 +191,17 @@ int space_obstacle_insert_sim(size_t index) {
 }
 
 int station_obstacle_insert_sim(size_t index) {
-  int status = sim_add_entity(physics_sim, st_obs[index].ent,
-                              ALLOW_DEFAULT);
+  int status = sim_add_entity(physics_sim, st_obs[index].ent, ALLOW_DEFAULT);
   if (status) {
     return -1;
   }
 
-  status = sim_add_entity(render_sim, st_obs[index].ent,
-                           ALLOW_DEFAULT);
+  status = sim_add_entity(combat_sim, st_obs[index].ent, ALLOW_DEFAULT);
+  if (status) {
+    return -1;
+  }
+
+  status = sim_add_entity(render_sim, st_obs[index].ent, ALLOW_DEFAULT);
   if (status) {
     return -1;
   }
@@ -197,12 +211,14 @@ int station_obstacle_insert_sim(size_t index) {
 
 void space_obstacle_remove_sim(size_t index) {
   sim_remove_entity(physics_sim, sp_obs[index].ent);
+  sim_remove_entity(combat_sim, sp_obs[index].ent);
   sim_remove_entity(render_sim, sp_obs[index].ent);
   sim_remove_entity(event_sim, sp_obs[index].ent);
 }
 
 void station_obstacle_remove_sim(size_t index) {
   sim_remove_entity(physics_sim, st_obs[index].ent);
+  sim_remove_entity(combat_sim, st_obs[index].ent);
   sim_remove_entity(render_sim, st_obs[index].ent);
 }
 

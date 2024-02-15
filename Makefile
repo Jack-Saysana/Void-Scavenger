@@ -47,6 +47,8 @@ clean:
 	@rm -f ./assets/*/*/*.obj.bin*
 	@rm -f ./assets/*/*.obj.bin*
 	@echo "Cleaned ./bin"
+	@mkdir ./bin/
+	@cp ./lib/glfw3.dll ./bin/glfw3.dll
 
 run: all
 	@./bin/$(PROJ_NAME)

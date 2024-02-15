@@ -13,6 +13,9 @@
 // ================================ SPACE MODE ===============================
 
 int init_space_mode() {
+  /* Ensure coordinates are enabled */
+  enable_coordinates();
+
   // Initialize simulations
   physics_sim = init_sim(SPACE_SIZE, SPACE_DEPTH);
   combat_sim = init_sim(SPACE_SIZE, SPACE_DEPTH);
@@ -43,6 +46,7 @@ int init_space_mode() {
 
   // Place render distance sphere in simulations
   sim_add_entity(render_sim, render_sphere, ALLOW_DEFAULT);
+  sim_add_entity(render_sim, sim_sphere, ALLOW_DEFAULT);
 
   // Initialize and place asteroid and enemies entities in simulation
   spawn_asteroids();
@@ -103,6 +107,7 @@ void clear_space_mode() {
   num_obstacles = 0;
 
   free_enemy_ship_buffer();
+  free_space_obstacle_buffer();
 
   // Reset wrapper buffer length
   num_wrappers = 0;
@@ -111,6 +116,10 @@ void clear_space_mode() {
 // ============================== STATION MODE ===============================
 
 int init_station_mode() {
+
+  /* Turn off the coordinates */
+  disable_coordinates();
+
   // Initialize simulations
   physics_sim = init_sim(STATION_SIZE, STATION_DEPTH);
   sim_add_force(physics_sim, (vec3) { 0.0, -GRAVITY, 0.0 });
@@ -118,11 +127,19 @@ int init_station_mode() {
   render_sim = init_sim(STATION_SIZE, STATION_DEPTH);
   event_sim = init_sim(STATION_SIZE, STATION_DEPTH);
 
+  int status = insert_dead_zones();
+  if (status) {
+    return -1;
+  }
+
   // Initialize player entity values
   reset_physics(st_player.ent);
 
   // Place player entity in simulation
-  int status = player_insert_sim();
+  status = player_insert_sim();
+  if (status) {
+    return -1;
+  }
 
   // Place station entities in simulations
   status = init_enemy_buffer();
@@ -130,8 +147,9 @@ int init_station_mode() {
     return -1;
   }
 
-  // Place render distance sphere in simulations
+  // Place render and simulation distance sphere in simulations
   sim_add_entity(render_sim, render_sphere, ALLOW_DEFAULT);
+  sim_add_entity(render_sim, sim_sphere, ALLOW_DEFAULT);
 
   status = init_station_obstacle_buffer();
   if (status) {
@@ -142,6 +160,7 @@ int init_station_mode() {
   if (status) {
     return -1;
   }
+  create_station_corridors();
 
   mode = STATION;
   return 0;
@@ -178,13 +197,11 @@ void clear_station_mode() {
   num_corridors = 0;
 
   free_enemy_buffer();
+  free_corridor_buffer();
+  free_station_obstacle_buffer();
 
   // Reset wrapper buffer length
   num_wrappers = 0;
-}
-
-void create_station_corridors() {
-  /* TODO: generate maze corridors from maze generation */
 }
 
 // ========================= GENERAL GAME MANAGEMENT =========================
@@ -226,6 +243,7 @@ int delete_stale_objects() {
     if (mode == SPACE) {
       cur_wrapper = object_wrappers + sp_obs[i].wrapper_offset;
       if (cur_wrapper->to_delete) {
+        // Delete obstacle
         space_obstacle_remove_sim(i);
         delete_space_obstacle(i);
         i--;
@@ -233,10 +251,19 @@ int delete_stale_objects() {
     } else {
       cur_wrapper = object_wrappers + st_obs[i].wrapper_offset;
       if (cur_wrapper->to_delete) {
+        // Delete obstacle
         station_obstacle_remove_sim(i);
         delete_station_obstacle(i);
         i--;
       }
+    }
+  }
+  for (size_t i = 0; i < num_corridors; i++) {
+    cur_wrapper = object_wrappers + cd_obs[i].wrapper_offset;
+    if (cur_wrapper->to_delete) {
+      corridor_remove_sim(i);
+      delete_corridor(i);
+      i--;
     }
   }
 
@@ -249,6 +276,16 @@ void refresh_objects() {
       refresh_wrapper(i);
       object_wrappers[i].to_refresh = 0;
     }
+  }
+}
+
+void switch_game_modes() {
+  if (mode == SPACE) {
+    clear_space_mode();
+    init_station_mode();
+  } else {
+    clear_station_mode();
+    init_space_mode();
   }
 }
 

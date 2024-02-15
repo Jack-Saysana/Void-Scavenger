@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <engine/engine.h>
+#include <const.h>
 #include <global_vars.h>
 
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
@@ -13,6 +14,8 @@ void update_object_movement();
 
 void decrement_player_health(float);
 void decrement_enemy_health(size_t, float);
+
+void update_query_spheres();
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 

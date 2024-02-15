@@ -37,6 +37,7 @@ int init_scene() {
   sphere_model = load_model("./assets/misc/sphere/sphere.obj");
   render_sphere_model = load_model("./assets/misc/render_sphere/render_sphere.obj");
   cube_model = load_model("./assets/misc/cube/cube.obj");
+  dead_zone_model = load_model("./assets/misc/dead_zone/dead_zone.obj");
   asteroid_models[0] = load_model("./assets/set_pieces/asteroid_1/asteroid_1.obj");
   asteroid_models[1] = load_model("./assets/set_pieces/asteroid_2/asteroid_2.obj");
   asteroid_models[2] = load_model("./assets/set_pieces/asteroid_3/asteroid_3.obj");
@@ -47,7 +48,27 @@ int init_scene() {
   corridor_models[2] = load_model("./assets/set_pieces/corner/corner_0.obj");
   corridor_models[3] = load_model("./assets/set_pieces/t_junct/t_junct.obj");
   corridor_models[4] = load_model("./assets/set_pieces/corridor/corridor_0.obj");
-  dead_zone_model = load_model("./assets/misc/dead_zone/dead_zone.obj");
+  station_obstacles[0] = load_model("./assets/station_obstacles/ammo_crate_0/ammo_crate_0.obj");
+  station_obstacles[1] = load_model("./assets/station_obstacles/ammo_crate_1/ammo_crate_1.obj");
+  station_obstacles[2] = load_model("./assets/station_obstacles/crate_0/crate_0.obj");
+  station_obstacles[3] = load_model("./assets/station_obstacles/crate_1/crate_1.obj");
+  station_obstacles[4] = load_model("./assets/station_obstacles/cryo_bed/cryo_bed.obj");
+  station_obstacles[5] = load_model("./assets/station_obstacles/health_crate_0/health_crate_0.obj");
+  station_obstacles[6] = load_model("./assets/station_obstacles/health_crate_1/health_crate_1.obj");
+  station_obstacles[7] = load_model("./assets/station_obstacles/medical_arms/medical_arms.obj");
+  station_obstacles[8] = load_model("./assets/station_obstacles/oxygen_tank_0/oxygen_tank_0.obj");
+  station_obstacles[9] = load_model("./assets/station_obstacles/plant_vase/plant_vase.obj");
+  station_obstacles[10] = load_model("./assets/station_obstacles/shield_crate_0/shield_crate_0.obj");
+  station_obstacles[11] = load_model("./assets/station_obstacles/shield_crate_1/shield_crate_1.obj");
+  station_obstacles[12] = load_model("./assets/station_obstacles/toilet/toilet.obj");
+  station_obstacles[13] = load_model("./assets/station_obstacles/big_bug/big_bug.obj");
+  station_obstacles[14] = load_model("./assets/station_obstacles/hose_0/hose_0.obj");
+  station_obstacles[15] = load_model("./assets/station_obstacles/hose_1/hose_1.obj");
+  station_obstacles[16] = load_model("./assets/station_obstacles/hose_2/hose_2.obj");
+  station_obstacles[17] = load_model("./assets/station_obstacles/hose_3/hose_3.obj");
+  station_obstacles[18] = load_model("./assets/station_obstacles/stool/stool.obj");
+  station_obstacles[19] = load_model("./assets/station_obstacles/table/table.obj");
+
 
   if (CHECK_ASSETS_LOADED) {
     fprintf(stderr, "Error: failed to initialize game models\n");
@@ -65,8 +86,17 @@ int init_scene() {
                 render_sphere->scale);
   render_sphere->velocity[X] = 0.01;
 
+  sim_sphere = init_entity(render_sphere_model);
+  if (!sim_sphere) {
+    fprintf(stderr, "Error: Failed to initialize game entity\n");
+    return -1;
+  }
+  sim_sphere->type |= T_DRIVING;
+  glm_vec3_copy((vec3) { SIM_DIST, SIM_DIST, SIM_DIST }, sim_sphere->scale);
+  sim_sphere->velocity[X] = 0.01;
+
   // Initialize common matrices
-  glm_ortho(-1.0, 1.0, -1.0, 1.0, 0.0, 100.0, ortho_proj);
+  glm_ortho(-1.0, 1.0, -1.0, 1.0, 0.0, 256.0, ortho_proj);
   glm_perspective(glm_rad(45.0), RES_X / RES_Y, 0.1f, RENDER_DIST, persp_proj);
 
   // Initialize OpenGL options
@@ -85,7 +115,7 @@ int init_scene() {
     return -1;
   }
 
-  glm_vec3_copy((vec3) {0.0, 0.0, 5.0}, camera.pos);
+  glm_vec3_copy((vec3) {0.0, 0.0, 0.0}, camera.pos);
   camera.pitch = 0.0;
   camera.yaw = 0.0;
 
@@ -98,6 +128,13 @@ void cleanup_scene() {
   free_model(alien_models[1]);
   free_model(player_ship_model);
   free_model(alien_ship_models[0]);
+  for (int i = 0; i < 5; i++) {
+    free_model(corridor_models[i]);
+    free_model(asteroid_models[i]);
+  }
+  for (int i = 0; i < NUM_STATION_OBSTACLE_TYPES; i++) {
+    free_model(station_obstacles[i]);
+  }
 
   free_ui();
 }
@@ -145,12 +182,8 @@ void render_scene(GLFWwindow *window) {
   }
 
   render_game_entity(render_sphere);
-  if (mode == STATION) {
-    render_game_entity(st_player.ent);
-  } else if (mode == SPACE) {
-    render_game_entity(player_ship.ent);
-  }
-  query_render_sim();
+  render_game_entity(sim_sphere);
+  query_render_dist();
 
   render_ui();
 
@@ -160,15 +193,19 @@ void render_scene(GLFWwindow *window) {
 
 // ============================== RENDER HELPERS =============================
 
-void query_render_sim() {
+void query_render_dist() {
   COLLISION *render_query = NULL;
-  size_t query_len = get_sim_collisions(render_sim, &render_query);
+  size_t query_len = get_sim_collisions(render_sim, &render_query,
+                                        render_sphere->translation,
+                                        SIM_RANGE_INF);
   for (size_t i = 0; i < query_len; i++) {
     if (render_query[i].a_ent == render_sphere ||
         render_query[i].b_ent == render_sphere) {
-      if (render_query[i].a_ent != render_sphere) {
+      if (render_query[i].a_ent != render_sphere &&
+          render_query[i].a_ent != sim_sphere) {
         render_game_entity(render_query[i].a_ent);
-      } else if (render_query[i].b_ent != render_sphere) {
+      } else if (render_query[i].b_ent != render_sphere &&
+                 render_query[i].b_ent != sim_sphere) {
         render_game_entity(render_query[i].b_ent);
       }
     }
@@ -226,6 +263,10 @@ ENTITY *init_proj_ent(size_t index) {
 
 ENTITY *init_obstacle_ent(size_t index) {
   return init_entity(asteroid_models[index]);
+}
+
+ENTITY *init_station_obstacle_ent(size_t index) {
+  return init_entity(station_obstacles[index]);
 }
 
 ENTITY *init_corridor_ent(size_t index) {

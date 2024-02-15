@@ -15,6 +15,8 @@
 #define S_BASE_PWR_DRAW (25.0)
 #define S_BASE_DAMAGE (10.0)
 #define S_BASE_FIRERATE (0.1)
+#define S_BASE_PROJ_SPEED (50.0)
+#define S_BASE_RANGE (100.0)
 #define S_BASE_ANG_VEL (10.0)
 #define S_BASE_ANG_ACCEL (5.0)
 #define S_BASE_VEL (10.0)
@@ -38,11 +40,12 @@
 #define STAT_PROJ (1)
 
 // Simulation constants
-#define SPACE_SIZE (32.0)
-#define SPACE_DEPTH (4)
-#define STATION_SIZE (32.0)
-#define STATION_DEPTH (4)
-#define RENDER_DIST (128.0)
+#define SPACE_SIZE (256.0)
+#define SPACE_DEPTH (8)
+#define STATION_SIZE (80.0)
+#define STATION_DEPTH (6)
+#define RENDER_DIST (8.0)
+#define SIM_DIST (10.0)
 
 // Asteroid constants
 #define NUM_ASTEROIDS (10)
@@ -56,6 +59,31 @@
 #define TYPE_CORNER (2)
 #define TYPE_T_JUNCT (3)
 #define TYPE_CORRIDOR (4)
+
+// Station obstacle constants
+#define NUM_STATION_OBSTACLE_TYPES (20)
+#define TYPE_AMMO_CRATE_0          (0)
+#define TYPE_AMMO_CRATE_1          (1)
+#define TYPE_CRATE_0               (2)
+#define TYPE_CRATE_1               (3)
+#define TYPE_CRYO_BED              (4)
+#define TYPE_HEALTH_CRATE_0        (5)
+#define TYPE_HEALTH_CRATE_1        (6)
+#define TYPE_MEDICAL_ARMS          (7)
+#define TYPE_OXYGEN_TANK_0         (8)
+#define TYPE_PLANT_VASE            (9)
+#define TYPE_SHIELD_CRATE_0        (10)
+#define TYPE_SHIELD_CRATE_1        (11)
+#define TYPE_TOILET                (12)
+#define TYPE_BIG_BUG               (13)
+#define TYPE_HOSE_0                (14)
+#define TYPE_HOSE_1                (15)
+#define TYPE_HOSE_2                (16)
+#define TYPE_HOSE_3                (17)
+#define TYPE_STOOL                 (18)
+#define TYPE_TABLE                 (19)
+#define STATION_SMALL_OBJS         (9)
+#define STATION_LARGE_OBJS         (11)
 
 // Misc
 #define X (0)

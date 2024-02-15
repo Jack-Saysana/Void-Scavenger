@@ -23,8 +23,8 @@ int main() {
     float CUR_TIME = glfwGetTime();
     DELTA_TIME = CUR_TIME - LAST_FRAME;
     LAST_FRAME = CUR_TIME;
-    if (DELTA_TIME > 0.2) {
-      DELTA_TIME = 0.2;
+    if (DELTA_TIME > 0.016) {
+      DELTA_TIME = 0.016;
     }
 
     // Insert all simulation logic here:
@@ -35,8 +35,10 @@ int main() {
     keyboard_input(window);
     decrement_current_timer(DELTA_TIME);
     enemy_behavior();
+    player_ship_thrust_move();
     handle_collisions();
     refresh_objects();
+    update_ui_components();
     render_scene(window);
     delete_stale_objects();
   }

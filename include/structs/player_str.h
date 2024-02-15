@@ -63,9 +63,12 @@ typedef struct player {
   size_t wrapper_offset;
 
   // Game stats
-  size_t experience;
-  float max_health;
+  size_t cur_experience;
+  size_t max_experience;
   float cur_health;
+  float max_health;
+  float cur_shield;
+  float max_shield;
   float speed;
   float fire_rate;
   int invuln;
