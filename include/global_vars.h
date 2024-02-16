@@ -71,4 +71,8 @@ extern size_t num_corridors;
 extern size_t corridor_buff_len;
 extern int maze_size;
 
+// Simulation settings
+extern float RENDER_DIST;
+extern float SIM_DIST;
+
 #endif

@@ -54,6 +54,7 @@ size_t init_projectile(vec3 pos, vec3 dir, float speed, PROJ_SOURCE source,
   projectile->source = source;
   projectile->type = type;
   projectile->range = range;
+  projectile->damage = damage;
 
   num_projectiles++;
   if (num_projectiles == proj_buff_len) {

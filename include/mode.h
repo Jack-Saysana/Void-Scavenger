@@ -75,6 +75,7 @@ void create_station_corridors();
 
 /* Generation of asteroid positioning, speed, dir, etc... */
 void gen_rand_vec3(vec3 *, float);
+void gen_rand_vec4(vec4 *, float);
 float gen_rand_float(float);
 void seed_random();
 
@@ -83,3 +84,5 @@ ENTITY *init_dead_zone_ent();
 
 void disable_coordinates();
 void enable_coordinates();
+
+void update_perspective();

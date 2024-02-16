@@ -1,8 +1,9 @@
-#include <GLFW/glfw3.h>
-#include <engine/engine.h>
-#include <global_vars.h>
 #include <stdio.h>
 #include <cglm/cglm.h>
+#include <GLFW/glfw3.h>
+#include <engine/engine.h>
+#include <const.h>
+#include <global_vars.h>
 
 #define MAX_CMD_LEN (100)
 
@@ -57,6 +58,7 @@ void update_console_cursor(char *);
 void disable_console_cursor();
 void enable_console_cursor();
 void add_timer(float, void *, int);
-size_t init_projectile(vec3, vec3, float, PROJ_SOURCE, S_WEAPON_T, float, float, size_t);
+size_t init_projectile(vec3, vec3, float, PROJ_SOURCE, S_WEAPON_T, float,
+                       float, size_t);
 int projectile_insert_sim(size_t);
 void toggle_inventory();

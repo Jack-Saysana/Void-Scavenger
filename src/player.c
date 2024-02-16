@@ -21,7 +21,6 @@ int init_player() {
     fprintf(stderr, "Error: Unable to allocate player entity\n");
     return -1;
   }
-  glm_vec3_copy((vec3) { 0.0, 4.0, 0.0 }, st_player.ent->translation);
   st_player.ent->type |= T_DRIVING;
   st_player.ent->inv_mass = 1.0;
 
@@ -186,11 +185,14 @@ void sim_refresh_player_ship() {
 }
 
 void player_ship_thrust_move() {
-  vec3 ship_forward;
-  glm_quat_rotatev(player_ship.ent->rotation, (vec3){-1.0, 0.0, 0.0}, ship_forward);
-  glm_normalize(ship_forward);
-  glm_vec3_scale(ship_forward, player_ship.cur_speed, ship_forward);
-  glm_vec3_copy(ship_forward, player_ship.ent->velocity);
+  if (mode == SPACE) {
+    vec3 ship_forward;
+    glm_quat_rotatev(player_ship.ent->rotation, (vec3){-1.0, 0.0, 0.0},
+                     ship_forward);
+    glm_normalize(ship_forward);
+    glm_vec3_scale(ship_forward, player_ship.cur_speed, ship_forward);
+    glm_vec3_copy(ship_forward, player_ship.ent->velocity);
+  }
 }
 
 // =============================== HELPERS ================================

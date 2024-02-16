@@ -10,7 +10,6 @@
 void handle_collisions() {
   // Update simulations
   update_query_spheres();
-
   prepare_object_movement();
   integrate_sim(physics_sim, sim_sphere->translation, SIM_DIST);
   integrate_projectiles();
@@ -37,7 +36,7 @@ void handle_collisions() {
   size_t num_e_col = get_sim_collisions(event_sim, &event_collisions,
                                         sim_sphere->translation,
                                         SIM_DIST);
-  handle_combat_collisions(event_collisions, num_e_col);
+  handle_event_collisions(event_collisions, num_e_col);
 
   free(physics_collisions);
   free(combat_collisions);
@@ -165,7 +164,7 @@ void decrement_enemy_health(size_t index, float damage) {
         object_wrappers[(size_t) enemy->wrapper_offset].to_delete = 1;
       } else {
         enemy->invuln = 1;
-        add_timer(1.0, &enemy->invuln, 0);
+        add_timer(0.1, &enemy->invuln, 0);
       }
     }
   } else if (mode == STATION) {
@@ -176,7 +175,7 @@ void decrement_enemy_health(size_t index, float damage) {
         object_wrappers[(size_t) enemy->wrapper_offset].to_delete = 1;
       } else {
         enemy->invuln = 1;
-        add_timer(1.0, &enemy->invuln, 0);
+        add_timer(0.1, &enemy->invuln, 0);
       }
     }
   }

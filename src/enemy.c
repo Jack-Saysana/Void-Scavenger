@@ -291,8 +291,8 @@ void sim_refresh_sp_enemy(size_t index) {
 // ================================ BEHAVIOR =================================
 
 void enemy_behavior() {
-  if (mode == SPACE && num_enemies) {
-    sp_enemy_pathfind(0);
+  for (size_t i = 0; i < num_enemies; i++) {
+    sp_enemy_pathfind(i);
   }
 }
 

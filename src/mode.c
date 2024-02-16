@@ -16,6 +16,14 @@ int init_space_mode() {
   /* Ensure coordinates are enabled */
   enable_coordinates();
 
+  // Initialize proper render distances
+  RENDER_DIST = SP_BASE_RENDER_DIST;
+  glm_vec3_copy((vec3) { RENDER_DIST, RENDER_DIST, RENDER_DIST },
+                render_sphere->scale);
+  SIM_DIST = SP_BASE_SIM_DIST;
+  glm_vec3_copy((vec3) { SIM_DIST, SIM_DIST, SIM_DIST }, sim_sphere->scale);
+  update_perspective();
+
   // Initialize simulations
   physics_sim = init_sim(SPACE_SIZE, SPACE_DEPTH);
   combat_sim = init_sim(SPACE_SIZE, SPACE_DEPTH);
@@ -33,10 +41,31 @@ int init_space_mode() {
   // Place player ship entity into simulations
   status = player_ship_insert_sim();
 
-  // Initialize and place space entity in simulation
+  // Initialize and place space entities into simulation
   status = init_enemy_ship_buffer();
   if (status) {
     return -1;
+  }
+
+  SHIP *cur_enemy = NULL;
+  size_t e_index = 0;
+  srand(glfwGetTime());
+  int num_enemies = BASE_NUM_ENEMIES + (rand() % 5) - 2;
+  if (num_enemies > 0) {
+    for (int i = 0; i < num_enemies; i++) {
+      e_index = init_enemy_ship(0);
+      cur_enemy = sp_enemies + e_index;
+      gen_rand_vec3(&cur_enemy->ent->translation, 2.0 * SPACE_SIZE);
+      cur_enemy->ent->translation[X] -= SPACE_SIZE;
+      cur_enemy->ent->translation[Y] -= SPACE_SIZE;
+      cur_enemy->ent->translation[Z] -= SPACE_SIZE;
+
+      gen_rand_vec4(&cur_enemy->ent->rotation, 1.0);
+      glm_quat_normalize(cur_enemy->ent->rotation);
+
+      // TODO vary enemy ship parts
+      sp_enemy_insert_sim(e_index);
+    }
   }
 
   status = init_space_obstacle_buffer();
@@ -116,9 +145,16 @@ void clear_space_mode() {
 // ============================== STATION MODE ===============================
 
 int init_station_mode() {
-
   /* Turn off the coordinates */
   disable_coordinates();
+
+  // Initialize proper render distances
+  RENDER_DIST = ST_BASE_RENDER_DIST;
+  glm_vec3_copy((vec3) {RENDER_DIST, RENDER_DIST, RENDER_DIST },
+                render_sphere->scale);
+  SIM_DIST = ST_BASE_SIM_DIST;
+  glm_vec3_copy((vec3) {SIM_DIST, SIM_DIST, SIM_DIST }, sim_sphere->scale);
+  update_perspective();
 
   // Initialize simulations
   physics_sim = init_sim(STATION_SIZE, STATION_DEPTH);
@@ -134,6 +170,8 @@ int init_station_mode() {
 
   // Initialize player entity values
   reset_physics(st_player.ent);
+  glm_vec3_copy((vec3) { 2.5, 5.0, 2.5 }, st_player.ent->translation);
+  glm_vec3_copy(st_player.ent->translation, camera.pos);
 
   // Place player entity in simulation
   status = player_insert_sim();

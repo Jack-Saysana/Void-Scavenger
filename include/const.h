@@ -3,7 +3,7 @@
 
 // Player constants
 #define P_BASE_HEALTH (100.0)
-#define P_BASE_SPEED (1.0)
+#define P_BASE_SPEED (10.0)
 #define P_BASE_FIRERATE (0.1)
 
 // Ship constants
@@ -13,12 +13,12 @@
 #define S_BASE_SHIELD_RECHARGE (5.0)
 #define S_BASE_SHIELD_DELAY (2.0)
 #define S_BASE_PWR_DRAW (25.0)
-#define S_BASE_DAMAGE (10.0)
+#define S_BASE_DAMAGE (1000.0)
 #define S_BASE_FIRERATE (0.1)
 #define S_BASE_PROJ_SPEED (50.0)
 #define S_BASE_RANGE (100.0)
-#define S_BASE_ANG_VEL (10.0)
-#define S_BASE_ANG_ACCEL (5.0)
+#define S_BASE_ANG_VEL (0.25)
+#define S_BASE_ANG_ACCEL (0.25)
 #define S_BASE_VEL (10.0)
 #define S_BASE_ACCEL (5.0)
 
@@ -40,12 +40,15 @@
 #define STAT_PROJ (1)
 
 // Simulation constants
-#define SPACE_SIZE (256.0)
-#define SPACE_DEPTH (8)
+#define SPACE_SIZE (128.0)
+#define SPACE_DEPTH (7)
 #define STATION_SIZE (80.0)
 #define STATION_DEPTH (6)
-#define RENDER_DIST (8.0)
-#define SIM_DIST (10.0)
+#define ST_BASE_RENDER_DIST (8.0)
+#define ST_BASE_SIM_DIST (10.0)
+#define SP_BASE_RENDER_DIST (128.0)
+#define SP_BASE_SIM_DIST (130.0)
+#define BASE_NUM_ENEMIES (5)
 
 // Asteroid constants
 #define NUM_ASTEROIDS (10)

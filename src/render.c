@@ -82,8 +82,6 @@ int init_scene() {
     return -1;
   }
   render_sphere->type |= T_DRIVING;
-  glm_vec3_copy((vec3) { RENDER_DIST, RENDER_DIST, RENDER_DIST },
-                render_sphere->scale);
   render_sphere->velocity[X] = 0.01;
 
   sim_sphere = init_entity(render_sphere_model);
@@ -92,11 +90,10 @@ int init_scene() {
     return -1;
   }
   sim_sphere->type |= T_DRIVING;
-  glm_vec3_copy((vec3) { SIM_DIST, SIM_DIST, SIM_DIST }, sim_sphere->scale);
   sim_sphere->velocity[X] = 0.01;
 
   // Initialize common matrices
-  glm_ortho(-1.0, 1.0, -1.0, 1.0, 0.0, 256.0, ortho_proj);
+  glm_ortho(-1.0, 1.0, -1.0, 1.0, 0.0, 100.0, ortho_proj);
   glm_perspective(glm_rad(45.0), RES_X / RES_Y, 0.1f, RENDER_DIST, persp_proj);
 
   // Initialize OpenGL options
@@ -104,7 +101,6 @@ int init_scene() {
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   CURSOR_ENABLED = 0;
-  //CURSOR_ENABLED = 1;
 
   // Initialize engine UI features
   int status = init_ui("assets/misc/quad/quad.obj", "src/shaders/ui/shader.vs",
@@ -290,5 +286,5 @@ void toggle_render_arena() {
 }
 
 void update_perspective() {
-  glm_perspective(glm_rad(45.0), RES_X / RES_Y, 0.1f, 100.0f, persp_proj);
+  glm_perspective(glm_rad(45.0), RES_X / RES_Y, 0.1f, RENDER_DIST, persp_proj);
 }
