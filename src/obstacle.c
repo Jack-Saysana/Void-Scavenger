@@ -119,7 +119,6 @@ size_t init_station_obstacle(int type, vec3 pos, vec3 scale, versor rotation,
   obstacle->ent->rotation[3] = rotation[3];
   glm_vec3_copy(pos, obstacle->ent->translation);
   glm_vec3_copy(scale, obstacle->ent->scale);
-
   obstacle->ent->inv_mass = 1.0 / mass;
 
   num_obstacles++;

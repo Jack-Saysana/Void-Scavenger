@@ -56,6 +56,7 @@ size_t init_corridor(vec3 pos, versor rotation, size_t type) {
   corr->ent->rotation[2] = rotation[2];
   corr->ent->rotation[3] = rotation[3];
   glm_vec3_copy((vec3) { 1.0, 1.0, 1.0 }, corr->ent->scale);
+  
 
   if (++num_corridors == corridor_buff_len) {
     int status = double_buffer((void **) &cd_obs, &corridor_buff_len,
@@ -296,7 +297,6 @@ void free_maze(int **maze) {
 Legend:
  * = Walkable
  X = Non-walkable
-
  Note: Diagrams are draw in the layout
  to which they are imported. Therefore,
  the way they are laid out in the game is

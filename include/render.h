@@ -72,3 +72,4 @@ void render_oct_tree(SIMULATION *);
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 
 void get_cam_matrix(CAM *, mat4);
+void player_ship_thrust_move();

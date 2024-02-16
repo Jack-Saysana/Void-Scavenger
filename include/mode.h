@@ -6,6 +6,8 @@
 
 static ENTITY *dead_zones[6] = { NULL };
 
+
+
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
 void spawn_asteroids();
