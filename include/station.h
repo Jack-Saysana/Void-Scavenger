@@ -26,32 +26,32 @@
 #define UNSET_WALL(maze, x, y) (maze[x][y] = IN)
 
 /* Maze to corridor macro helpers */
-#define RIGHT(maze, x, z) (maze[x][z + 1] == 0)    
-#define LEFT(maze, x, z) (maze[x][z - 1] == 0)
-#define UP(maze, x, z) (maze[x + 1][z] == 0)
-#define DOWN(maze, x, z) (maze[x - 1][z] == 0)
+#define S_RIGHT(maze, x, z) (maze[x][z + 1] == 0)
+#define S_LEFT(maze, x, z) (maze[x][z - 1] == 0)
+#define S_UP(maze, x, z) (maze[x + 1][z] == 0)
+#define S_DOWN(maze, x, z) (maze[x - 1][z] == 0)
 
 #define CHECK_UP(maze, x, z, in) { \
   if (x > 0) {                     \
-    in = UP(maze, x, z);           \
+    in = S_UP(maze, x, z);           \
   }                                \
 }
 
 #define CHECK_DOWN(maze, x, z, in) { \
   if (x < maze_size - 1) {           \
-    in = DOWN(maze, x, z);           \
+    in = S_DOWN(maze, x, z);           \
   }                                  \
 }
 
 #define CHECK_LEFT(maze, x, z, in) { \
   if (z > 0) {                       \
-    in = LEFT(maze, x, z);           \
+    in = S_LEFT(maze, x, z);           \
   }                                  \
 }
 
 #define CHECK_RIGHT(maze, x, z, in) { \
   if (z < maze_size - 1) {            \
-    in = RIGHT(maze, x, z);           \
+    in = S_RIGHT(maze, x, z);           \
   }                                   \
 }
 

@@ -1,8 +1,10 @@
 #include <stdio.h>
+#include <cglm/cglm.h>
 #include <engine/engine.h>
 #include <const.h>
 #include <global_vars.h>
 
+static ENTITY *dead_zones[6] = { NULL };
 
 
 
@@ -10,8 +12,13 @@
 
 void spawn_asteroids();
 void spawn_space_debris();
+int insert_dead_zones();
+void clear_dead_zones();
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
+
+size_t init_wrapper(SOBJ_T, ENTITY *, void *);
+void delete_wrapper(size_t);
 
 void reset_physics(ENTITY *);
 
@@ -35,6 +42,14 @@ void sp_enemy_remove_sim(size_t);
 
 void delete_projectile(size_t);
 void projectile_remove_sim(size_t);
+
+void delete_space_obstacle(size_t);
+void space_obstacle_remove_sim(size_t);
+
+void delete_station_obstacle(size_t);
+void station_obstacle_remove_sim(size_t);
+
+void refresh_wrapper(size_t);
 
 /* Obstacles for station and space mode */
 int init_space_obstacle_buffer();
@@ -62,8 +77,14 @@ void create_station_corridors();
 
 /* Generation of asteroid positioning, speed, dir, etc... */
 void gen_rand_vec3(vec3 *, float);
+void gen_rand_vec4(vec4 *, float);
 float gen_rand_float(float);
 void seed_random();
 
+// Dead zone placement
+ENTITY *init_dead_zone_ent();
+
 void disable_coordinates();
 void enable_coordinates();
+
+void update_perspective();

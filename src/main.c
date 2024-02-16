@@ -18,13 +18,13 @@ int main() {
   if (status) {
     return -1;
   }
- 
+
   while (!glfwWindowShouldClose(window)) {
     float CUR_TIME = glfwGetTime();
     DELTA_TIME = CUR_TIME - LAST_FRAME;
     LAST_FRAME = CUR_TIME;
-    if (DELTA_TIME > 0.2) {
-      DELTA_TIME = 0.2;
+    if (DELTA_TIME > 0.016) {
+      DELTA_TIME = 0.016;
     }
 
     // Insert all simulation logic here:
@@ -34,10 +34,13 @@ int main() {
     // - etc...
     keyboard_input(window);
     decrement_current_timer(DELTA_TIME);
-    update_ui_components();
+    enemy_behavior();
+    player_ship_thrust_move();
     handle_collisions();
-    delete_stale_objects();
+    refresh_objects();
+    update_ui_components();
     render_scene(window);
+    delete_stale_objects();
   }
 
   cleanup_game();

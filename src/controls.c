@@ -66,7 +66,7 @@ void mouse_pos_callback(GLFWwindow *window, double x_pos, double y_pos) {
     camera.yaw += mouse_dif[0];
     if (camera.yaw > 360 || camera.yaw < -360) {
       camera.yaw = (int)(camera.yaw) % 360;
-    } 
+    }
   } else if (mode == SPACE) {
     /* rotates the ships pitch and yaw*/
     mat4 rotation = GLM_MAT4_IDENTITY_INIT;
@@ -104,15 +104,15 @@ void mouse_button_callback(GLFWwindow *window, int button, int action,
         forward[2] = -camera.view[2][2];
         glm_vec3_normalize(forward);
         /* spwans projectile*/
-        init_projectile(camera.pos,
-                        forward,
-                        10,
-                        SRC_PLAYER,
-                        player_ship.weapon.type,
-                        player_ship.weapon.damage,
-                        player_ship.weapon.range,
-                        1
-        );
+        size_t proj_index = init_projectile(camera.pos,
+                                            forward,
+                                            10.0 + st_player.speed,
+                                            SRC_PLAYER,
+                                            player_ship.weapon.type,
+                                            player_ship.weapon.damage,
+                                            player_ship.weapon.range,
+                                            1);
+        projectile_insert_sim(proj_index);
       }
     } else if (mode == SPACE) {
       if (can_shoot) {
@@ -133,33 +133,39 @@ void mouse_button_callback(GLFWwindow *window, int button, int action,
         glm_vec3_rotate(ship_forward, glm_rad(-5.0), ship_side);
         glm_vec3_rotate(ship_forward, glm_rad(-0.625), ship_up);
         /* get left gun offset pos */
-        vec3 gun_pos;
-        glm_vec3_add(player_ship.ent->translation, ship_side, gun_pos);
+        vec3 gun_pos = GLM_VEC3_ZERO_INIT;
+        glm_vec3_scale_as(ship_forward, 7.0, gun_pos);
+        glm_vec3_add(player_ship.ent->translation, gun_pos, gun_pos);
+        glm_vec3_add(gun_pos, ship_side, gun_pos);
         /* spawn left projectile*/
-        init_projectile(gun_pos,
-                        ship_forward,
-                        player_ship.weapon.proj_speed,
-                        SRC_PLAYER,
-                        player_ship.weapon.type,
-                        player_ship.weapon.damage,
-                        player_ship.weapon.range,
-                        0
-        );
+        size_t proj_index = init_projectile(gun_pos,
+                                            ship_forward,
+                                            player_ship.weapon.proj_speed +
+                                            player_ship.cur_speed,
+                                            SRC_PLAYER,
+                                            player_ship.weapon.type,
+                                            player_ship.weapon.damage,
+                                            player_ship.weapon.range,
+                                            0);
+        projectile_insert_sim(proj_index);
         /* get right gun offset pos */
         glm_vec3_negate(ship_side);
-        glm_vec3_add(player_ship.ent->translation, ship_side, gun_pos);
+        glm_vec3_scale_as(ship_forward, 7.0, gun_pos);
+        glm_vec3_add(player_ship.ent->translation, gun_pos, gun_pos);
+        glm_vec3_add(gun_pos, ship_side, gun_pos);
         /* rotate right gun to converage */
         glm_vec3_rotate(ship_forward, glm_rad(1.25), ship_up);
         /* spawn right projectile*/
-        init_projectile(gun_pos,
-                        ship_forward,
-                        player_ship.weapon.proj_speed,
-                        SRC_PLAYER,
-                        player_ship.weapon.type,
-                        player_ship.weapon.damage,
-                        player_ship.weapon.range,
-                        0
-      );
+        proj_index = init_projectile(gun_pos,
+                                     ship_forward,
+                                     player_ship.weapon.proj_speed +
+                                     player_ship.cur_speed,
+                                     SRC_PLAYER,
+                                     player_ship.weapon.type,
+                                     player_ship.weapon.damage,
+                                     player_ship.weapon.range,
+                                     0);
+        projectile_insert_sim(proj_index);
       }
     }
   }
@@ -169,7 +175,7 @@ void input_keys(GLFWwindow *window) {
   /* Letters */
   int console_enabled = is_console_enabled();
   if (console_enabled) {
-    update_cursor_enabledness(); 
+    update_cursor_enabledness();
   }
   for (int i = GLFW_KEY_A; i <= GLFW_KEY_Z; i++) {
     if (glfwGetKey(window, i) == GLFW_PRESS) {
@@ -196,7 +202,6 @@ void input_keys(GLFWwindow *window) {
           toggle_inventory();
         }
       } else if (!console_enabled && mode == SPACE) {
-        /* TODO Ship movment */
         if (i == GLFW_KEY_W) {
           /* Handle W press */
           /* increases curent speed of player ship up to max_vel */
@@ -273,13 +278,13 @@ void input_keys(GLFWwindow *window) {
   }
 
   /* Space */
-  if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && !holding_space) {
-    holding_space = 1;
-    if (console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
+  if (glfwGetKey(window, GLFW_KEY_SPACE)) {
+    if (console_enabled && cons_cmd_len < MAX_CMD_LEN - 1 && !holding_space) {
       cons_cmd[cons_cmd_len++] = ' ';
       update_console_text(cons_cmd);
       advance_cursor();
     }
+    holding_space = 1;
   } else if (glfwGetKey(window, GLFW_KEY_SPACE) != GLFW_PRESS) {
     holding_space = 0;
   }
@@ -368,7 +373,7 @@ void input_keys(GLFWwindow *window) {
       update_console_text(cons_cmd);
       update_console_cursor(cons_cursor);
     }
-  } else if (glfwGetKey(window, GLFW_KEY_SLASH) != GLFW_PRESS) { 
+  } else if (glfwGetKey(window, GLFW_KEY_SLASH) != GLFW_PRESS) {
     holding_slash = 0;
   }
 }
@@ -392,9 +397,9 @@ void retreat_cursor() {
 void update_cursor_enabledness() {
   if (cons_cursor_enabled) {
     /* Set timer to disable cursor */
-    add_timer(0.25, (void *) (disable_console_cursor), -1000); 
+    add_timer(0.25, (void *) (disable_console_cursor), -1000);
   } else {
     /* Set timer to enable cursor */
-    add_timer(0.25,(void *) (enable_console_cursor), -1000); 
+    add_timer(0.25,(void *) (enable_console_cursor), -1000);
   }
 }

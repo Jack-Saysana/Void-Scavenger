@@ -17,6 +17,7 @@
 #define RESPAWN              ("respawn")
 #define WIRE                 ("wire")
 #define HIT_BOXES            ("hb")
+#define RENDER_ARENA         ("ra")
 #define GAMEMODE             ("gamemode")
 #define STATION              ("station")
 #define SPACE                ("space")
@@ -44,6 +45,7 @@ float create_float(int);
 void command_not_found();
 void toggle_hit_boxes();
 void toggle_wire_frame();
+void toggle_render_arena();
 void cursor_on(int);
 void set_gamemode_station();
 void set_gamemode_space();

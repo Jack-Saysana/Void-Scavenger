@@ -39,6 +39,7 @@ size_t init_corridor(vec3 pos, versor rotation, size_t type) {
     fprintf(stderr, "Error: Unable to allocate corridor entity\n");
     return INVALID_INDEX;
   }
+  corr->ent->type |= T_IMMUTABLE;
 
   corr->wrapper_offset = init_wrapper(CORRIDOR_OBJ, corr->ent,
                                       (void *) num_corridors);
@@ -101,6 +102,19 @@ int corridor_insert_sim(size_t index) {
     return -1;
   }
   return 0;
+}
+
+void sim_refresh_corridor(size_t index) {
+  CORRIDOR *corridor = cd_obs + index;
+  COLLIDER *cur_col = NULL;
+  for (size_t i = 0; i < corridor->ent->model->num_colliders; i++) {
+    cur_col = corridor->ent->model->colliders + i;
+    if (cur_col->category == DEFAULT) {
+      refresh_collider(render_sim, corridor->ent, i);
+    } else if (cur_col->category == HURT_BOX) {
+      refresh_collider(combat_sim, corridor->ent, i);
+    }
+  }
 }
 
 /* =================== CORRIDOR LAYOUT GENERATION ========================== */
@@ -283,7 +297,6 @@ void free_maze(int **maze) {
 Legend:
  * = Walkable
  X = Non-walkable
-  
  Note: Diagrams are draw in the layout
  to which they are imported. Therefore,
  the way they are laid out in the game is
@@ -333,7 +346,7 @@ void create_station_corridors() {
   int down = 0;
   int left = 0;
   int right = 0;
-  int type = -1; 
+  int type = -1;
   int rotation = 0;
   for (int x = 1; x < maze_size - 1; x++) {
     for (int z = 1; z < maze_size - 1; z++) {
@@ -398,20 +411,20 @@ void create_station_corridors() {
         if (rotation == 90) {
           glm_quat_identity(rot);
         } else if (rotation == 180) {
-          glm_quat_init(rot, 0.0, 1 / sqrt(2), 0.0, 1 / sqrt(2)); 
+          glm_quat_init(rot, 0.0, 1 / sqrt(2), 0.0, 1 / sqrt(2));
         } else if (rotation == 270) {
           glm_quat_init(rot, 0.0, 1.0, 0.0, 0.0);
         } else if (rotation == 0) {
-          glm_quat_init(rot, 0.0, 1 / sqrt(2), 0.0, -1 / sqrt(2)); 
+          glm_quat_init(rot, 0.0, 1 / sqrt(2), 0.0, -1 / sqrt(2));
         }
 
         /* Initialize corridor */
         vec3 position = GLM_VEC3_ZERO_INIT;
-        glm_vec3_copy((vec3) { 
-                      ((float) x - 1) * 5.0,
-                      0.0,
-                      ((float) z - 1) * 5.0 }, position);       
-        size_t index = init_corridor(position, rot, type); 
+        glm_vec3_copy((vec3) {
+                      (((float) x - 1) * 5.0) - (2.5 * maze_size),
+                      2.0,
+                      (((float) z - 1) * 5.0) - (2.5 * maze_size) }, position);
+        size_t index = init_corridor(position, rot, type);
         corridor_insert_sim(index);
 
         /* Chance for there to spawn elements in any given corridor */
@@ -450,31 +463,30 @@ void spawn_small_station_obstacle(vec3 position) {
   int obstacle_type = small_obstacles[gen_rand_int(STATION_SMALL_OBJS)];
   switch (offset_randomness) {
     case 0:
-      glm_vec3_copy((vec3) { gen_rand_float(1.0), gen_rand_float(1.0),
-                             gen_rand_float(1.0) }, offset);
+      glm_vec3_copy((vec3) { gen_rand_float(1.0), 1.0, gen_rand_float(1.0) },
+                             offset);
       break;
     case 1:
-      glm_vec3_copy((vec3) { -gen_rand_float(1.0), gen_rand_float(1.0),
-                             gen_rand_float(1.0) }, offset);
+      glm_vec3_copy((vec3) { -gen_rand_float(1.0), 1.0, gen_rand_float(1.0) },
+                             offset);
       break;
     case 2:
-      glm_vec3_copy((vec3) { gen_rand_float(1.0), gen_rand_float(1.0),
-                             -gen_rand_float(1.0) }, offset);
+      glm_vec3_copy((vec3) { gen_rand_float(1.0), 1.0, -gen_rand_float(1.0) },
+                             offset);
       break;
     case 3:
-      glm_vec3_copy((vec3) { -gen_rand_float(1.0), gen_rand_float(1.0),
-                             -gen_rand_float(1.0) }, offset);
+      glm_vec3_copy((vec3) { -gen_rand_float(1.0), 1.0, -gen_rand_float(1.0) },
+                             offset);
       break;
   }
-  glm_vec3_add(position, offset, position); 
+  glm_vec3_add(position, offset, offset);
 
   vec3 scale = GLM_VEC3_ZERO_INIT;
   versor q;
   /* Randomly rotate the obstacle around the y axis */
   CREATE_QUATERNION(gen_rand_float(360.0), q)
   glm_vec3_copy((vec3) { 1.0, 1.0, 1.0 }, scale);
-  size_t index = init_station_obstacle(obstacle_type, position,
-                                scale, q,
+  size_t index = init_station_obstacle(obstacle_type, offset, scale, q,
                                 2.0 * (gen_rand_float(3.0) + 1.0));
   station_obstacle_insert_sim(index);
 }
@@ -495,7 +507,6 @@ void spawn_large_station_obstacle(vec3 position) {
   };
 
   int obstacle_type = large_obstacles[gen_rand_int(STATION_LARGE_OBJS)];
-  
   vec3 scale = GLM_VEC3_ZERO_INIT;
   versor q;
   /* Randomly rotate the obstacle around the y axis */

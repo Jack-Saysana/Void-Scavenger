@@ -160,6 +160,10 @@ void console_dispatcher() {
       /* BEGIN: hb */
       toggle_hit_boxes();
       /* END: hb */
+    } else if (strncmp(command[0].tok, RENDER_ARENA, sizeof(RENDER_ARENA)) == 0) {
+      /* BEGIN: ra */
+      toggle_render_arena();
+      /* END: ra */
     } else if (strncmp(command[0].tok, QUIT, sizeof(QUIT)) == 0) {
       /* BEGIN: quit */
       quit();

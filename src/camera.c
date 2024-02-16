@@ -51,11 +51,13 @@ void move_camera(CAM *cam, MOVE_DIR dir) {
   glm_vec3_normalize(forward);
   vec3 up = {0.0, 1.0, 0.0};
   vec3 left;
+  vec3 up_mov;
   glm_vec3_cross(forward, up, left);
   glm_vec3_negate(left);
   glm_vec3_normalize(left);
   glm_vec3_scale(forward, (DELTA_TIME * st_player.speed), forward);
   glm_vec3_scale(left, (DELTA_TIME * st_player.speed), left);
+  glm_vec3_scale(up, (DELTA_TIME * st_player.speed), up_mov);
   if (dir == MOVE_FORWARD) {
     cam->pos[0] += forward[0];
     cam->pos[2] += forward[2];
@@ -68,5 +70,9 @@ void move_camera(CAM *cam, MOVE_DIR dir) {
   } else if (dir == MOVE_RIGHT) {
     cam->pos[0] -= left[0];
     cam->pos[2] -= left[2];
+  } else if (dir == MOVE_UP) {
+    cam->pos[1] += up_mov[1];
+  } else if (dir == MOVE_DOWN) {
+    cam->pos[1] -= up_mov[1];
   }
 }

@@ -14,6 +14,15 @@ void gen_rand_vec3(vec3 *to_copy, float bounds) {
   }, *to_copy);
 }
 
+void gen_rand_vec4(vec4 *to_copy, float bounds) {
+  glm_vec4_copy((vec4) {
+    fmod(rand(), bounds),
+    fmod(rand(), bounds),
+    fmod(rand(), bounds),
+    fmod(rand(), bounds)
+  }, *to_copy);
+}
+
 void gen_rand_vec2(vec2 *to_copy, float bounds) {
   glm_vec2_copy((vec2) {
     fmod(rand(), bounds),

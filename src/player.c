@@ -34,6 +34,7 @@ int init_player() {
   st_player.cur_health = P_BASE_HEALTH;
   st_player.speed = P_BASE_SPEED;
   st_player.fire_rate = P_BASE_FIRERATE;
+  st_player.invuln = 0;
 
   return 0;
 }
@@ -56,6 +57,11 @@ int player_insert_sim() {
     return -1;
   }
 
+  status = sim_add_entity(render_sim, st_player.ent, ALLOW_DEFAULT);
+  if (status) {
+    return -1;
+  }
+
   status = sim_add_entity(event_sim, st_player.ent, ALLOW_DEFAULT);
   if (status) {
     return -1;
@@ -68,6 +74,19 @@ void player_remove_sim() {
   sim_remove_entity(physics_sim, st_player.ent);
   sim_remove_entity(combat_sim, st_player.ent);
   sim_remove_entity(event_sim, st_player.ent);
+}
+
+void sim_refresh_player() {
+  COLLIDER *cur_col = NULL;
+  for (size_t i = 0; i < st_player.ent->model->num_colliders; i++) {
+    cur_col = st_player.ent->model->colliders + i;
+    if (cur_col->category == DEFAULT) {
+      refresh_collider(physics_sim, st_player.ent, i);
+      refresh_collider(event_sim, st_player.ent, i);
+    } else if (cur_col->category == HURT_BOX) {
+      refresh_collider(combat_sim, st_player.ent, i);
+    }
+  }
 }
 
 // =============================== SPACE MODE ================================
@@ -108,8 +127,9 @@ int init_player_ship() {
     return -1;
   }
 
-  player_ship.cur_health = S_BASE_HEALTH;
-  player_ship.cur_shield = S_BASE_SHIELD;
+  player_ship.cur_health = player_ship.hull.max_health;
+  player_ship.cur_shield = player_ship.shield.max_shield;
+  player_ship.invuln = 0;
 
   return 0;
 }
@@ -132,6 +152,11 @@ int player_ship_insert_sim() {
     return -1;
   }
 
+  status = sim_add_entity(render_sim, player_ship.ent, ALLOW_DEFAULT);
+  if (status) {
+    return -1;
+  }
+
   status = sim_add_entity(event_sim, player_ship.ent, ALLOW_DEFAULT);
   if (status) {
     return -1;
@@ -146,12 +171,28 @@ void player_ship_remove_sim() {
   sim_remove_entity(event_sim, player_ship.ent);
 }
 
+void sim_refresh_player_ship() {
+  COLLIDER *cur_col = NULL;
+  for (size_t i = 0; i < player_ship.ent->model->num_colliders; i++) {
+    cur_col = player_ship.ent->model->colliders + i;
+    if (cur_col->category == DEFAULT) {
+      refresh_collider(event_sim, player_ship.ent, i);
+    } else if (cur_col->category == HURT_BOX) {
+      refresh_collider(physics_sim, player_ship.ent, i);
+      refresh_collider(combat_sim, player_ship.ent, i);
+    }
+  }
+}
+
 void player_ship_thrust_move() {
-  vec3 ship_forward;
-  glm_quat_rotatev(player_ship.ent->rotation, (vec3){-1.0, 0.0, 0.0}, ship_forward);
-  glm_normalize(ship_forward);
-  glm_vec3_scale(ship_forward, player_ship.cur_speed, ship_forward);
-  glm_vec3_copy(ship_forward, player_ship.ent->velocity);
+  if (mode == SPACE) {
+    vec3 ship_forward;
+    glm_quat_rotatev(player_ship.ent->rotation, (vec3){-1.0, 0.0, 0.0},
+                     ship_forward);
+    glm_normalize(ship_forward);
+    glm_vec3_scale(ship_forward, player_ship.cur_speed, ship_forward);
+    glm_vec3_copy(ship_forward, player_ship.ent->velocity);
+  }
 }
 
 // =============================== HELPERS ================================
