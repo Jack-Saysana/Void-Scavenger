@@ -54,3 +54,13 @@ void quit() {
 void set_player_station_speed(float input) {
   st_player.speed = input;
 }
+
+void set_sim_dist(float dist) {
+  SIM_DIST = dist;
+  refresh_sim_distances();
+}
+
+void set_render_dist(float dist) {
+  RENDER_DIST = dist;
+  refresh_sim_distances();
+}

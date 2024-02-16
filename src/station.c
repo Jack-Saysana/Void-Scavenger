@@ -435,8 +435,12 @@ void create_station_corridors() {
             spawn_large_station_obstacle(position);
           } else {
             /* Small obstacle */
-            spawn_small_station_obstacle(position);
-            spawn_small_station_obstacle(position);
+            if (gen_rand_int(100) <= 50) {
+              spawn_small_station_obstacle(position);
+              spawn_small_station_obstacle(position);
+            } else {
+              spawn_small_station_obstacle(position);
+            }
           }
         }
       }

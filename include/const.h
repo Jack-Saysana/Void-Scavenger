@@ -40,14 +40,14 @@
 #define STAT_PROJ (1)
 
 // Simulation constants
-#define SPACE_SIZE (128.0)
-#define SPACE_DEPTH (7)
+#define SPACE_SIZE (256.0)
+#define SPACE_DEPTH (8)
 #define STATION_SIZE (80.0)
 #define STATION_DEPTH (6)
-#define ST_BASE_RENDER_DIST (8.0)
-#define ST_BASE_SIM_DIST (10.0)
-#define SP_BASE_RENDER_DIST (128.0)
-#define SP_BASE_SIM_DIST (130.0)
+#define ST_BASE_RENDER_DIST (32.0)
+#define ST_BASE_SIM_DIST (36.0)
+#define SP_BASE_RENDER_DIST (256.0)
+#define SP_BASE_SIM_DIST (256.0)
 #define BASE_NUM_ENEMIES (5)
 
 // Asteroid constants

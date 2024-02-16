@@ -175,6 +175,9 @@ void render_scene(GLFWwindow *window) {
   if (render_arena) {
     render_oct_tree(physics_sim);
   }
+  if (render_bounds) {
+    render_dead_zones();
+  }
 
   render_game_entity(render_sphere);
   render_game_entity(sim_sphere);
@@ -192,7 +195,7 @@ void query_render_dist() {
   COLLISION *render_query = NULL;
   size_t query_len = get_sim_collisions(render_sim, &render_query,
                                         render_sphere->translation,
-                                        SIM_RANGE_INF);
+                                        SIM_RANGE_INF, 0);
   for (size_t i = 0; i < query_len; i++) {
     if (render_query[i].a_ent == render_sphere ||
         render_query[i].b_ent == render_sphere) {
@@ -221,6 +224,21 @@ void render_game_entity(ENTITY *ent) {
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     set_vec3("test_col", (vec3) { 1.0, 0.0, 1.0 }, basic_shader);
     draw_colliders(basic_shader, ent, sphere_model);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+  }
+}
+
+void render_dead_zones() {
+  ENTITY **dead_zones = get_dead_zones();
+  if (dead_zones == NULL) {
+    return;
+  }
+
+  for (int i = 0; i < 6; i++) {
+    glUseProgram(basic_shader);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    set_vec3("test_col", (vec3) { 0.0, 1.0, 0.0 }, basic_shader);
+    draw_colliders(basic_shader, dead_zones[i], sphere_model);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   }
 }
@@ -282,6 +300,10 @@ void toggle_wire_frame() {
 
 void toggle_render_arena() {
   render_arena = !render_arena;
+}
+
+void toggle_render_bounds() {
+  render_bounds = !render_bounds;
 }
 
 void update_perspective() {

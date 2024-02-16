@@ -12,8 +12,8 @@ void handle_event_collisions(COLLISION *, size_t);
 void prepare_object_movement();
 void update_object_movement();
 
-void decrement_player_health(float);
-void decrement_enemy_health(size_t, float);
+void decrement_player_health(float, float);
+void decrement_enemy_health(size_t, float, float);
 
 void update_query_spheres();
 

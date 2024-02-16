@@ -317,6 +317,18 @@ void refresh_objects() {
   }
 }
 
+void refresh_sim_distances() {
+  glm_vec3_copy((vec3) {RENDER_DIST, RENDER_DIST, RENDER_DIST },
+                render_sphere->scale);
+  glm_vec3_copy((vec3) {SIM_DIST, SIM_DIST, SIM_DIST }, sim_sphere->scale);
+  update_perspective();
+
+  sim_remove_entity(render_sim, render_sphere);
+  sim_remove_entity(render_sim, sim_sphere);
+  sim_add_entity(render_sim, render_sphere, ALLOW_DEFAULT);
+  sim_add_entity(render_sim, sim_sphere, ALLOW_DEFAULT);
+}
+
 void switch_game_modes() {
   if (mode == SPACE) {
     clear_space_mode();
@@ -401,4 +413,11 @@ void clear_dead_zones() {
     delete_wrapper((size_t) dead_zones[i]->data);
     free_entity(dead_zones[i]);
   }
+}
+
+ENTITY **get_dead_zones() {
+  if (mode == SPACE) {
+    return dead_zones;
+  }
+  return NULL;
 }

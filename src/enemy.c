@@ -309,9 +309,9 @@ void sp_enemy_pathfind(size_t index) {
   glm_vec3_cross(forward, up, side);
   glm_vec3_normalize(side);
 
-  // Turning radius approximately equal to |lin_velocity| * sin(|ang_velocity|)
-  // TODO Actually calculate turning radius
-  float turning_rad = 56.0;
+  float turning_rad = ((2.0 * enemy->thruster.max_vel *
+                       (1.0 - enemy->wing.max_ang_vel)) /
+                       enemy->wing.max_ang_vel) + 30.0;
 
   // Steer ship away from arena edges
   vec3 target_dir = { 0.0, 0.0, 0.0 };

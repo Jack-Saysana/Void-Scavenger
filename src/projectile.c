@@ -124,7 +124,7 @@ void sim_refresh_proj(size_t index) {
 
 // ============================= GENERAL HELPERS =============================
 
-void integrate_projectiles(size_t index) {
+void integrate_projectiles() {
   for (size_t i = 0; i < num_projectiles; i++) {
     integrate_projectile(i);
   }

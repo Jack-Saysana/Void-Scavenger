@@ -18,6 +18,9 @@
 #define WIRE                 ("wire")
 #define HIT_BOXES            ("hb")
 #define RENDER_ARENA         ("ra")
+#define RENDER_BOUNDS        ("rb")
+#define SET_SIM_DIST         ("ssd")
+#define SET_RENDER_DIST      ("srd")
 #define GAMEMODE             ("gamemode")
 #define STATION              ("station")
 #define SPACE                ("space")
@@ -46,6 +49,7 @@ void command_not_found();
 void toggle_hit_boxes();
 void toggle_wire_frame();
 void toggle_render_arena();
+void toggle_render_bounds();
 void cursor_on(int);
 void set_gamemode_station();
 void set_gamemode_space();
@@ -53,3 +57,5 @@ void quit();
 void set_player_station_speed(float);
 void enable_coordinates();
 void disable_coordinates();
+void set_render_dist(float);
+void set_sim_dist(float);

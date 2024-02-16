@@ -19,7 +19,7 @@ void handle_collisions() {
   COLLISION *physics_collisions = NULL;
   size_t num_p_col = get_sim_collisions(physics_sim, &physics_collisions,
                                         sim_sphere->translation,
-                                        SIM_DIST);
+                                        SIM_DIST, 1);
   // Physics collision resolution will move objects in the scene, so we must
   // prepare the game simulations for potential movement
   prepare_object_movement();
@@ -29,13 +29,13 @@ void handle_collisions() {
   COLLISION *combat_collisions = NULL;
   size_t num_c_col = get_sim_collisions(combat_sim, &combat_collisions,
                                         sim_sphere->translation,
-                                        SIM_DIST);
+                                        SIM_DIST, 0);
   handle_combat_collisions(combat_collisions, num_c_col);
 
   COLLISION *event_collisions = NULL;
   size_t num_e_col = get_sim_collisions(event_sim, &event_collisions,
                                         sim_sphere->translation,
-                                        SIM_DIST);
+                                        SIM_DIST, 0);
   handle_event_collisions(event_collisions, num_e_col);
 
   free(physics_collisions);
@@ -80,11 +80,11 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
     PROJ *proj = projectiles + (size_t) proj_wrapper->data;
     if (proj->source == SRC_ENEMY && (target_wrapper->type == PLAYER_OBJ ||
         target_wrapper->type == PLAYER_SHIP_OBJ)) {
-      decrement_player_health(proj->damage);
+      decrement_player_health(proj->damage, 0.1);
     } else if (proj->source == SRC_PLAYER &&
                (target_wrapper->type == ENEMY_OBJ ||
                 target_wrapper->type == ENEMY_SHIP_OBJ)) {
-      decrement_enemy_health((size_t) target_wrapper->data, proj->damage);
+      decrement_enemy_health((size_t) target_wrapper->data, proj->damage, 0.1);
     }
 
     proj_wrapper->to_delete = 1;
@@ -110,9 +110,9 @@ void handle_event_collisions(COLLISION *cols, size_t num_cols) {
     }
 
     if (target_wrapper->type == PLAYER_SHIP_OBJ) {
-      decrement_player_health(10.0);
+      decrement_player_health(10.0, 1.0);
     } else if (target_wrapper->type == ENEMY_SHIP_OBJ) {
-      decrement_enemy_health((size_t) target_wrapper->data, 10.0);
+      decrement_enemy_health((size_t) target_wrapper->data, 10.0, 1.0);
     } else if (target_wrapper->type == OBSTACLE_OBJ) {
       target_wrapper->to_delete = 1;
     }
@@ -135,14 +135,14 @@ void update_object_movement() {
 
 // ================================= HELPERS =================================
 
-void decrement_player_health(float damage) {
+void decrement_player_health(float damage, float timing) {
   if (mode == SPACE && !player_ship.invuln) {
     player_ship.cur_health -= damage;
     if (player_ship.cur_health <= 0.0) {
       fprintf(stderr, "END GAME\n");
     } else {
       player_ship.invuln = 1;
-      add_timer(1.0, &player_ship.invuln, 0);
+      add_timer(timing, &player_ship.invuln, 0);
     }
   } else if (mode == STATION && !st_player.invuln) {
     st_player.cur_health -= damage;
@@ -150,12 +150,12 @@ void decrement_player_health(float damage) {
       fprintf(stderr, "END GAME\n");
     } else {
       st_player.invuln = 1;
-      add_timer(1.0, &st_player.invuln, 0);
+      add_timer(timing, &st_player.invuln, 0);
     }
   }
 }
 
-void decrement_enemy_health(size_t index, float damage) {
+void decrement_enemy_health(size_t index, float damage, float timing) {
   if (mode == SPACE) {
     SHIP *enemy = sp_enemies + index;
     if (!enemy->invuln) {
@@ -164,7 +164,7 @@ void decrement_enemy_health(size_t index, float damage) {
         object_wrappers[(size_t) enemy->wrapper_offset].to_delete = 1;
       } else {
         enemy->invuln = 1;
-        add_timer(0.1, &enemy->invuln, 0);
+        add_timer(timing, &enemy->invuln, 0);
       }
     }
   } else if (mode == STATION) {
@@ -175,7 +175,7 @@ void decrement_enemy_health(size_t index, float damage) {
         object_wrappers[(size_t) enemy->wrapper_offset].to_delete = 1;
       } else {
         enemy->invuln = 1;
-        add_timer(0.1, &enemy->invuln, 0);
+        add_timer(timing, &enemy->invuln, 0);
       }
     }
   }

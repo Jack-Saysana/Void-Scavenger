@@ -54,7 +54,7 @@ void console_dispatcher() {
               /* BEGIN: set cursor on */
               cursor_on(1);
               /* END: set cursor on */
-            } else if (command[2].kind == IDENTIFIER && 
+            } else if (command[2].kind == IDENTIFIER &&
                        strncmp(command[2].tok, OFF, sizeof(OFF)) == 0) {
               /* BEGIN: set cursor off */
               cursor_on(0);
@@ -160,14 +160,36 @@ void console_dispatcher() {
       /* BEGIN: hb */
       toggle_hit_boxes();
       /* END: hb */
-    } else if (strncmp(command[0].tok, RENDER_ARENA, sizeof(RENDER_ARENA)) == 0) {
+    } else if (strncmp(command[0].tok, RENDER_ARENA,
+                       sizeof(RENDER_ARENA)) == 0) {
       /* BEGIN: ra */
       toggle_render_arena();
       /* END: ra */
+    } else if (strncmp(command[0].tok, RENDER_BOUNDS,
+                       sizeof(RENDER_BOUNDS)) == 0) {
+      /* BEGIN: rb */
+      toggle_render_bounds();
+      /* END: rb */
     } else if (strncmp(command[0].tok, QUIT, sizeof(QUIT)) == 0) {
       /* BEGIN: quit */
       quit();
       /* END: quit */
+    } else if (strncmp(command[0].tok, SET_SIM_DIST,
+                       sizeof(SET_SIM_DIST)) == 0) {
+      float val = create_float(1);
+      if (val != FLT_MAX) {
+        set_sim_dist(val);
+      } else {
+        command_not_found();
+      }
+    } else if (strncmp(command[0].tok, SET_RENDER_DIST,
+                       sizeof(SET_RENDER_DIST)) == 0) {
+      float val = create_float(1);
+      if (val != FLT_MAX) {
+        set_render_dist(val);
+      } else {
+        command_not_found();
+      }
     } else {
       /* NON-RECOGNIZED IDENTIFIER */
       command_not_found();

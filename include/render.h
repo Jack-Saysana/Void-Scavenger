@@ -45,6 +45,7 @@ static mat4 persp_proj = GLM_MAT4_IDENTITY_INIT;
 static int hit_boxes = 0;
 static int wire_frame = 0;
 static int render_arena = 0;
+static int render_bounds = 0;
 
 #define CHECK_ASSETS_LOADED (\
 !player_model || !alien_models[0] || !alien_models[1] || !player_ship_model || \
@@ -68,8 +69,10 @@ static int render_arena = 0;
 void query_render_dist();
 void render_game_entity(ENTITY *);
 void render_oct_tree(SIMULATION *);
+void render_dead_zones();
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 
 void get_cam_matrix(CAM *, mat4);
 void player_ship_thrust_move();
+ENTITY **get_dead_zones();
