@@ -241,6 +241,7 @@ void input_keys(GLFWwindow *window) {
         }  else if (i == GLFW_KEY_P && !holding_alpha[i - GLFW_KEY_A]) {
           /* Handle P press (Ship Parts at Space Mode) */
           toggle_ship_parts();
+        }
       }
       holding_alpha[i - GLFW_KEY_A] = 1;
     } else if (glfwGetKey(window, i) != GLFW_PRESS) {
