@@ -1,7 +1,9 @@
+#include <stdio.h>
+#include <cglm/cglm.h>
 #include <GLFW/glfw3.h>
 #include <engine/engine.h>
+#include <const.h>
 #include <global_vars.h>
-#include <stdio.h>
 
 #define MAX_CMD_LEN (100)
 
@@ -29,6 +31,7 @@ int holding_minus = 0;
 int holding_tilde = 0;
 int holding_slash = 0;
 int first_mouse_move = 0;
+int can_shoot = 1;
 float mouse_sens = 0.05;
 vec2 prev_mouse_pos;
 
@@ -55,5 +58,8 @@ void update_console_cursor(char *);
 void disable_console_cursor();
 void enable_console_cursor();
 void add_timer(float, void *, int);
+size_t init_projectile(vec3, vec3, float, PROJ_SOURCE, S_WEAPON_T, float,
+                       float, size_t);
+int projectile_insert_sim(size_t);
 void toggle_inventory();
 void toggle_ship_parts();

@@ -10,6 +10,7 @@
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 
 ENTITY *init_obstacle_ent();
+ENTITY *init_station_obstacle_ent(size_t);
 
 size_t init_wrapper(SOBJ_T, ENTITY *, void *);
 void delete_wrapper(size_t);

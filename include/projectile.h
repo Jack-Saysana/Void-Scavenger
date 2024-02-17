@@ -6,7 +6,7 @@
 
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
-
+void integrate_projectile(size_t);
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 

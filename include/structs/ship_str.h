@@ -34,6 +34,8 @@ typedef struct weapon_t {
   float damage;
   float fire_rate;
   float max_power_draw;
+  float proj_speed;
+  float range;
 } S_WEAPON;
 
 typedef struct wing_t {
@@ -62,6 +64,10 @@ typedef struct ship_t {
 
   float cur_health;
   float cur_shield;
+  float cur_speed;
+  float cur_ang_speed;
+  // Flag denoting if the ship is current invulnerable to damage
+  int invuln;
 } SHIP;
 
 #endif

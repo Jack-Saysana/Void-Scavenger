@@ -18,6 +18,7 @@ typedef enum simulation_obj_type {
   ITEM_OBJ,
   OBSTACLE_OBJ,
   CORRIDOR_OBJ,
+  DEAD_ZONE_OBJ,
 } SOBJ_T;
 
 typedef struct {
@@ -29,6 +30,9 @@ typedef struct {
   // Flag indicating whether the wrapper, its entity and its game object should
   // be deleted at the end of the frame
   int to_delete;
+  // Flag indicating whether the entity attached to the wrapper should be have
+  // its state refreshed in the various game simulations
+  int to_refresh;
 } SOBJ;
 
 #endif

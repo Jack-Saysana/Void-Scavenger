@@ -14,5 +14,8 @@ void keyboard_input(GLFWwindow *);
 void decrement_current_timer(float);
 void update_ui_components();
 
+void player_ship_thrust_move();
 void handle_collisions();
+void enemy_behavior();
 int delete_stale_objects();
+void refresh_objects();

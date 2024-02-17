@@ -73,7 +73,7 @@ void decrement_current_timer(float delta) {
     return;
   }
   if ((head->data->time -= delta) <= 0.0) {
-    float residual = head->data->time - delta;  
+    float residual = head->data->time - delta;
     if (residual < 0.0) {
       residual *= -1.0;
     }
@@ -90,15 +90,33 @@ void decrement_current_timer(float delta) {
 }
 
 /*
+  For each timer whose mem attribute matches "prev", update it to "updated"
+*/
+void update_timer_memory(void *prev, void *updated) {
+  if (!head) {
+    return;
+  }
+  TIMERS *cur = head;
+  while (cur) {
+    if (cur->data->mem == prev) {
+      cur->data->mem = updated;
+    }
+    cur = cur->next;
+  }
+}
+
+/*
   Dispatcher to perform the expiration event
 */
 void timer_dispatcher(TIMERS *timer) {
   /* When timer has expired, set location stored in pointer */
   /* to the value passed in originally                      */
-  if (timer->data->set_to == FUNC_PTR) {
-    ((func_ptr) (timer->data->mem))();   
-  } else {
-    *((int *) timer->data->mem) = timer->data->set_to;
+  if (timer->data->mem) {
+    if (timer->data->set_to == FUNC_PTR) {
+      ((func_ptr) (timer->data->mem))();
+    } else {
+      *((int *) timer->data->mem) = timer->data->set_to;
+    }
   }
   free(timer->data);
   free(timer);
@@ -120,7 +138,7 @@ void free_timer_queue() {
   TIMERS *curr = head;
   TIMERS *next;
   while (curr) {
-    next = curr->next; 
+    next = curr->next;
     if (curr->data) {
       free(curr->data);
     }
@@ -137,6 +155,6 @@ void print_timer_queue() {
   while (temp) {
     printf("node: %p | Time: %f | mem: %p | set_to: %d\n",
             temp, temp->data->time, temp->data->mem, temp->data->set_to);
-    temp = temp->next;  
+    temp = temp->next;
   }
 }

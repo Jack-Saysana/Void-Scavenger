@@ -26,6 +26,7 @@
 #define T_IMMUTABLE (0x4)
 
 // Simulation constants
+#define SIM_RANGE_INF (0xFFFFFFFF)
 #define ALLOW_DEFAULT    (0x1)
 #define ALLOW_HURT_BOXES (0x2)
 #define ALLOW_HIT_BOXES  (0x4)

@@ -9,7 +9,7 @@ void console_ui_initialize() {
   set_ui_enabled(console_root, 0);
   set_ui_pivot(console_root, PIVOT_TOP_LEFT);
   set_ui_display(console_root, 0);
-  
+
   /* Actual console itself */
   console = add_ui_comp(console_root, (vec2) { 0.0 , 0.0 }, 0.5, 0.05,
                         RELATIVE_POS | POS_UNIT_RATIO |
@@ -23,7 +23,7 @@ void console_ui_initialize() {
   /* Console error component - is only shown when error occurs */
   console_error = add_ui_comp(console_root, (vec2) { 0.0, -0.05 }, 0.500001, 0.05,
                             RELATIVE_POS | POS_UNIT_RATIO |
-                            WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | 
+                            WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
                             LINE_UNIT_RATIO_Y);
   set_ui_pivot(console_error, PIVOT_TOP_LEFT);
   set_ui_enabled(console_error, 0);
@@ -54,15 +54,13 @@ void disable_console() {
 /* =============== CONSOLE =============== */
 
 void update_console_text(char *cmd) {
-  set_ui_text(console, cmd, 0.75, T_LEFT, fixed_sys, 
-              (vec3) { 0.0, 0.0, 0.0 });
+  set_ui_text(console, cmd, 0.75, T_LEFT, fixed_sys, GLM_VEC3_ONE);
 }
 
 /* =============== CONSOLE ERROR =============== */
 
 void set_console_error(char *error) {
-  set_ui_text(console_error, error, 0.75, T_CENTER, fixed_sys,
-              (vec3) { 0.0, 0.0, 0.0 });
+  set_ui_text(console_error, error, 0.75, T_CENTER, fixed_sys, GLM_VEC3_ONE);
   set_ui_enabled(console_error, 1);
 }
 
@@ -73,8 +71,7 @@ void disable_console_error() {
 /* ============== CONSOLE CURSOR ================= */
 
 void update_console_cursor(char *string) {
-  set_ui_text(console_cursor, string, 0.75, T_LEFT, fixed_sys,
-              (vec3) { 0.0, 0.0, 0.0 });
+  set_ui_text(console_cursor, string, 0.75, T_LEFT, fixed_sys, GLM_VEC3_ONE);
 }
 
 void disable_console_cursor() {

@@ -54,6 +54,7 @@ size_t init_projectile(vec3 pos, vec3 dir, float speed, PROJ_SOURCE source,
   projectile->source = source;
   projectile->type = type;
   projectile->range = range;
+  projectile->damage = damage;
 
   num_projectiles++;
   if (num_projectiles == proj_buff_len) {
@@ -109,22 +110,37 @@ void projectile_remove_sim(size_t index) {
   sim_remove_entity(render_sim, projectiles[index].ent);
 }
 
-// ========================== COLLECTIVE OPERATIONS ==========================
+void sim_refresh_proj(size_t index) {
+  PROJ *proj = projectiles + index;
+  COLLIDER *cur_col = NULL;
+  for (size_t i = 0; i < proj->ent->model->num_colliders; i++) {
+    cur_col = proj->ent->model->colliders + i;
+    if (cur_col->category == HIT_BOX) {
+      refresh_collider(render_sim, proj->ent, i);
+      refresh_collider(combat_sim, proj->ent, i);
+    }
+  }
+}
+
+// ============================= GENERAL HELPERS =============================
 
 void integrate_projectiles() {
+  for (size_t i = 0; i < num_projectiles; i++) {
+    integrate_projectile(i);
+  }
+}
+
+void integrate_projectile(size_t index) {
   vec3 movement = GLM_VEC3_ZERO_INIT;
   vec3 old_pos = GLM_VEC3_ZERO_INIT;
-  PROJ *cur_proj = NULL;
-  for (size_t i = 0; i < num_projectiles; i++) {
-    cur_proj = projectiles + i;
-    glm_vec3_copy(cur_proj->ent->translation, old_pos);
-    glm_vec3_scale(cur_proj->ent->velocity, DELTA_TIME, movement);
-    glm_vec3_add(movement, cur_proj->ent->translation,
-                 cur_proj->ent->translation);
+  PROJ *cur_proj = projectiles + index;
+  glm_vec3_copy(cur_proj->ent->translation, old_pos);
+  glm_vec3_scale(cur_proj->ent->velocity, DELTA_TIME, movement);
+  glm_vec3_add(movement, cur_proj->ent->translation,
+               cur_proj->ent->translation);
 
-    cur_proj->range -= glm_vec3_distance(old_pos, cur_proj->ent->translation);
-    if (cur_proj->range <= 0.0) {
-      object_wrappers[cur_proj->wrapper_offset].to_delete = 1;
-    }
+  cur_proj->range -= glm_vec3_distance(old_pos, cur_proj->ent->translation);
+  if (cur_proj->range <= 0.0) {
+    object_wrappers[cur_proj->wrapper_offset].to_delete = 1;
   }
 }

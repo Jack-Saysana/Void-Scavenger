@@ -45,19 +45,77 @@ void parse() {
 void console_dispatcher() {
   if (command[0].kind == IDENTIFIER) {
     if (strncmp(command[0].tok, SET, sizeof(SET)) == 0) {
-      /* BEGIN: set  */
+      /* BEGIN: set */
       if (command[1].kind == IDENTIFIER) {
         if (strncmp(command[1].tok, CURSOR, sizeof(CURSOR)) == 0) {
-          /*BEGIN: cursor*/
-            if (command[2].kind == IDENTIFIER && strncmp(command[2].tok, ON, sizeof(ON)) == 0) {
+          /* BEGIN: set cursor */
+            if (command[2].kind == IDENTIFIER &&
+                strncmp(command[2].tok, ON, sizeof(ON)) == 0) {
+              /* BEGIN: set cursor on */
               cursor_on(1);
-            } else if (command[2].kind == IDENTIFIER && strncmp(command[2].tok, OFF, sizeof(OFF)) == 0) {
+              /* END: set cursor on */
+            } else if (command[2].kind == IDENTIFIER &&
+                       strncmp(command[2].tok, OFF, sizeof(OFF)) == 0) {
+              /* BEGIN: set cursor off */
               cursor_on(0);
+              /* END: set cursor off */
             } else {
               command_not_found();
             }
-          /*END: cursor*/
-        } else {
+          /* END: set cursor */
+        } else if (strncmp(command[1].tok, GAMEMODE, sizeof(GAMEMODE)) == 0) {
+          /* BEGIN: set gamemode */
+          if (command[2].kind == IDENTIFIER) {
+            if (strncmp(command[2].tok, STATION, sizeof(STATION)) == 0) {
+              /* BEGIN: set gamemode station */
+              set_gamemode_station();
+              /* END: set gamemode station */
+            } else if (strncmp(command[2].tok, SPACE, sizeof(SPACE)) == 0) {
+              /* BEGIN: set gamemode space */
+              set_gamemode_space();
+              /* END: set gamemode space */
+            } else {
+              command_not_found();
+            }
+          } else {
+            command_not_found();
+          }
+          /* END: set gamemode */
+        } else if (strncmp(command[1].tok, PLAYER, sizeof(PLAYER)) == 0) {
+          /* BEGIN: set player */
+          if (command[2].kind == IDENTIFIER) {
+            if (strncmp(command[2].tok, STATION, sizeof(STATION)) == 0) {
+              /* BEGIN: set player station */
+              if (command[3].kind == IDENTIFIER) {
+                if (strncmp(command[3].tok, SPEED, sizeof(SPEED)) == 0) {
+                  /* BEGIN: set player station speed */
+                  if (command[4].kind == NUMBER && command[5].kind == DOT &&
+                      command[6].kind == NUMBER) {
+                    /* BEGIN: set player station speed [float] */
+                    float input = create_float(4);
+                    if (input == FLT_MAX) {
+                      command_not_found();
+                      return;
+                    }
+                    set_player_station_speed(input);
+                    /* END: set player station speed [float] */
+                  }
+                  /* END: set player station speed */
+                } else {
+                  command_not_found();
+                }
+              } else {
+                command_not_found();
+              }
+              /* END: set player station */
+            } else {
+              command_not_found();
+            }
+          } else {
+            command_not_found();
+          }
+          /* END: set player */
+        }  else {
           command_not_found();
         }
       } else {
@@ -102,6 +160,36 @@ void console_dispatcher() {
       /* BEGIN: hb */
       toggle_hit_boxes();
       /* END: hb */
+    } else if (strncmp(command[0].tok, RENDER_ARENA,
+                       sizeof(RENDER_ARENA)) == 0) {
+      /* BEGIN: ra */
+      toggle_render_arena();
+      /* END: ra */
+    } else if (strncmp(command[0].tok, RENDER_BOUNDS,
+                       sizeof(RENDER_BOUNDS)) == 0) {
+      /* BEGIN: rb */
+      toggle_render_bounds();
+      /* END: rb */
+    } else if (strncmp(command[0].tok, QUIT, sizeof(QUIT)) == 0) {
+      /* BEGIN: quit */
+      quit();
+      /* END: quit */
+    } else if (strncmp(command[0].tok, SET_SIM_DIST,
+                       sizeof(SET_SIM_DIST)) == 0) {
+      float val = create_float(1);
+      if (val != FLT_MAX) {
+        set_sim_dist(val);
+      } else {
+        command_not_found();
+      }
+    } else if (strncmp(command[0].tok, SET_RENDER_DIST,
+                       sizeof(SET_RENDER_DIST)) == 0) {
+      float val = create_float(1);
+      if (val != FLT_MAX) {
+        set_render_dist(val);
+      } else {
+        command_not_found();
+      }
     } else {
       /* NON-RECOGNIZED IDENTIFIER */
       command_not_found();
@@ -138,6 +226,8 @@ enum KIND peek_token() {
 }
 
 /* Creates and returns a float from three tokens on the stack */
+/* Note: Pass in the index to the number before the decimal   */
+/* in the float from the console                              */
 float create_float(int start) {
   char fl[6];
   int index = command[start].num_chars;
