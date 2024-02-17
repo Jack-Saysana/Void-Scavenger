@@ -7,7 +7,7 @@ and station mode.
 */
 
 /*
-  Init stats UI globaly, call by general_ui.c init_scene()
+  Init stats UI globaly, call by general_ui.c init_ui_components()
 
   Return
     0 if successful
@@ -200,7 +200,7 @@ int init_stats() {
 }
 
 /*
-  Update stats UI per frame, call by render.c render_scene()
+  Update stats UI per frame, call by general_ui.c update_ui_components()
 */
 void update_stats() {
   // check current game mode

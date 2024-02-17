@@ -8,7 +8,7 @@ mode ship parts.
 */
 
 /*
-  Init ship parts UI globaly, call by general_ui.c init_scene()
+  Init ship parts UI globaly, call by general_ui.c init_ui_components()
 
   Return
     0 if successful
@@ -157,7 +157,7 @@ int init_ship_parts() {
 }
 
 /*
-  Update ship parts UI per frame, call by render.c render_scene()
+  Update ship parts UI per frame, call by general_ui.c update_ui_components()
 */
 void update_ship_parts() {
   // check current game mode
