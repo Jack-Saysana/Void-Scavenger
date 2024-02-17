@@ -8,6 +8,9 @@
 typedef struct ship_parts {
   UI_COMP *ui_ship_parts_root;
 
+  UI_COMP *ui_ship_parts_background;
+  UI_COMP *ui_ship_top_view;
+
   UI_COMP *ui_reactor_background;
   UI_COMP *ui_reactor_icon;
 
