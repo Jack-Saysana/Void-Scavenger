@@ -96,7 +96,7 @@ void mouse_button_callback(GLFWwindow *window, int button, int action,
       if(can_shoot) {
         /* firerate timer */
         can_shoot = 0;
-        add_timer(st_player.fire_rate, (void *) &can_shoot, 1);
+        add_timer(st_player.fire_rate, (void *) &can_shoot, 1, NULL);
         /* forward vector from player*/
         vec3 forward;
         forward[0] = camera.view[2][0];
@@ -118,7 +118,7 @@ void mouse_button_callback(GLFWwindow *window, int button, int action,
       if (can_shoot) {
         /* fire rate timer */
         can_shoot = 0;
-        add_timer(player_ship.weapon.fire_rate, (void *) &can_shoot, 1);
+        add_timer(player_ship.weapon.fire_rate, (void *) &can_shoot, 1, NULL);
         /* get ship vectors */
         vec3 ship_forward;
         glm_quat_rotatev(player_ship.ent->rotation, (vec3){-1.0, 0.0, 0.0}, ship_forward);
@@ -397,9 +397,9 @@ void retreat_cursor() {
 void update_cursor_enabledness() {
   if (cons_cursor_enabled) {
     /* Set timer to disable cursor */
-    add_timer(0.25, (void *) (disable_console_cursor), -1000);
+    add_timer(0.25, (void *) (disable_console_cursor), -1000, NULL);
   } else {
     /* Set timer to enable cursor */
-    add_timer(0.25,(void *) (enable_console_cursor), -1000);
+    add_timer(0.25,(void *) (enable_console_cursor), -1000, NULL);
   }
 }

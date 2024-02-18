@@ -13,7 +13,7 @@ void close_error_message() {
 void show_error_message(const char *error) {
   set_console_error(error);
   close_error ce = &close_error_message;
-  add_timer(1.5, ce, -1000);
+  add_timer(1.5, ce, -1000, NULL);
 }
 
 void command_not_found() {

@@ -55,6 +55,7 @@ size_t init_projectile(vec3 pos, vec3 dir, float speed, PROJ_SOURCE source,
   projectile->type = type;
   projectile->range = range;
   projectile->damage = damage;
+  projectile->collision = 0;
 
   num_projectiles++;
   if (num_projectiles == proj_buff_len) {
@@ -143,4 +144,9 @@ void integrate_projectile(size_t index) {
   if (cur_proj->range <= 0.0) {
     object_wrappers[cur_proj->wrapper_offset].to_delete = 1;
   }
+}
+
+void proj_collision_anim(size_t index) {
+  glm_vec3_zero(projectiles[index].ent->velocity);
+  projectiles[index].collision = 1;
 }

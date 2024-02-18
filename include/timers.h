@@ -8,11 +8,12 @@
 
 #define FUNC_PTR (-1000)
 
-typedef void (*func_ptr)();
+typedef void (*func_ptr)(void *);
 
 typedef struct timer {
   float time;
   void *mem;
+  void *args;
   int set_to;
 } TIMER;
 
@@ -27,7 +28,7 @@ static TIMERS *head;
 static TIMERS *tail;
 
 /* ========================== INTERNALLY DEFINED =========================== */
-void add_timer(float, void *, int);
+void add_timer(float, void *, int, void *);
 void decrement_current_timer(float);
 void timer_dispatcher(TIMERS *);
 int init_timer_queue();
