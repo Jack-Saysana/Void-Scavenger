@@ -215,7 +215,17 @@ void query_render_dist() {
 void render_game_entity(ENTITY *ent) {
   SOBJ *wrapper = object_wrappers + (size_t) ent->data;
   if (wrapper->type == PROJ_OBJ) {
-    draw_entity(proj_shader, ent);
+    if (projectiles[(size_t) wrapper->data].collision) {
+      glUseProgram(proj_shader);
+      mat4 model = GLM_MAT4_IDENTITY_INIT;
+      glm_translate(model, ent->translation);
+      glm_quat_rotate(model, ent->rotation, model);
+      glm_scale(model, ent->scale);
+      set_mat4("model", model, proj_shader);
+      draw_model(proj_shader, sphere_model);
+    } else {
+      draw_entity(proj_shader, ent);
+    }
   } else {
     draw_entity(entity_shader, ent);
   }

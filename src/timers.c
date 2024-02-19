@@ -106,6 +106,19 @@ void update_timer_memory(void *prev, void *updated) {
   }
 }
 
+void update_timer_args(void *mem, void *prev, void *updated) {
+  if (!head) {
+    return;
+  }
+  TIMERS *cur = head;
+  while (cur) {
+    if (cur->data->mem == mem && cur->data->args == prev) {
+      cur->data->args = updated;
+    }
+    cur = cur->next;
+  }
+}
+
 /*
   Dispatcher to perform the expiration event
 */
