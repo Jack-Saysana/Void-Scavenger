@@ -27,6 +27,18 @@ void init_ui_components() {
     exit(1);
   }
 
+  // Initialize ship parts
+  if (init_ship_parts()) {
+    printf("Could not initialize ship parts!\n");
+    exit(1);
+  }
+
+  // Initialize skill tree
+  if (init_skill_tree()) {
+    printf("Could not initialize skill tree!\n");
+    exit(1);
+  }
+  
   coordinates_ui_initialize();
   init_terminal_ui();
 }
@@ -42,4 +54,6 @@ void update_ui_components() {
   // update UI components
   update_stats();
   update_inventory();
+  update_ship_parts();
+  update_skill_tree();
 }

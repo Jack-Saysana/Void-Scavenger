@@ -200,6 +200,9 @@ void input_keys(GLFWwindow *window) {
         } else if (i == GLFW_KEY_I && !holding_alpha[i - GLFW_KEY_A]) {
           /* Handle I press */
           toggle_inventory();
+        } else if (i == GLFW_KEY_K && !holding_alpha[i - GLFW_KEY_A]) {
+          /* Handle I press */
+          toggle_skill_tree();
         } else if (i == GLFW_KEY_E && get_terminal_ui_state() &&
                    !holding_alpha[i - GLFW_KEY_A]) {
           set_gamemode_space();
@@ -241,6 +244,9 @@ void input_keys(GLFWwindow *window) {
           versor rot_quat = GLM_QUAT_IDENTITY_INIT;
           glm_mat4_quat(rotation, rot_quat);
           glm_quat_mul(rot_quat, player_ship.ent->rotation, player_ship.ent->rotation);
+        }  else if (i == GLFW_KEY_P && !holding_alpha[i - GLFW_KEY_A]) {
+          /* Handle P press (Ship Parts at Space Mode) */
+          toggle_ship_parts();
         }
       }
       holding_alpha[i - GLFW_KEY_A] = 1;

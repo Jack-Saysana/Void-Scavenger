@@ -7,7 +7,7 @@ and station mode.
 */
 
 /*
-  Init stats UI globaly, call by general_ui.c init_scene()
+  Init stats UI globaly, call by general_ui.c init_ui_components()
 
   Return
     0 if successful
@@ -200,7 +200,7 @@ int init_stats() {
 }
 
 /*
-  Update stats UI per frame, call by render.c render_scene()
+  Update stats UI per frame, call by general_ui.c update_ui_components()
 */
 void update_stats() {
   // check current game mode
@@ -242,7 +242,7 @@ void switch_space_hud() {
   set_ui_enabled(stats.ui_health_root, 1);
   set_ui_enabled(stats.ui_energy_root, 1);
   set_ui_enabled(stats.ui_thruster_root, 1);
-  set_ui_enabled(stats.ui_exp_root, 1);
+  set_ui_enabled(stats.ui_exp_root, 0);
 
   // set health bar and shield to space style
   set_ui_pos(stats.ui_shield_root, (vec2) { 0.04, -0.6 });
