@@ -64,8 +64,8 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
     b_wrapper = object_wrappers + (size_t) cols[i].b_ent->data;
 
     if (a_wrapper->type == PROJ_OBJ && b_wrapper->type == PROJ_OBJ) {
-      start_proj_collision_anim((size_t) a_wrapper->data);
-      start_proj_collision_anim((size_t) b_wrapper->data);
+      //start_proj_collision_anim((size_t) a_wrapper->data);
+      //start_proj_collision_anim((size_t) b_wrapper->data);
       continue;
     } else if (a_wrapper->type == PROJ_OBJ) {
       proj_wrapper = a_wrapper;

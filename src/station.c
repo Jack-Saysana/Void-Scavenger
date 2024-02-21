@@ -56,7 +56,6 @@ size_t init_corridor(vec3 pos, versor rotation, size_t type) {
   corr->ent->rotation[2] = rotation[2];
   corr->ent->rotation[3] = rotation[3];
   glm_vec3_copy((vec3) { 1.0, 1.0, 1.0 }, corr->ent->scale);
-  
 
   if (++num_corridors == corridor_buff_len) {
     int status = double_buffer((void **) &cd_obs, &corridor_buff_len,
@@ -348,6 +347,22 @@ void create_station_corridors() {
   int right = 0;
   int type = -1;
   int rotation = 0;
+  int item_spawn_chance = 30;
+  int enemy_spawn_chance = 10;
+  int enemy_variation = 20;
+  if (difficulty == MEDIUM) {
+    enemy_spawn_chance = 20;
+    enemy_variation = 30;
+  } else if (difficulty == HARD) {
+    enemy_spawn_chance = 40;
+    item_spawn_chance = 15;
+    enemy_variation = 50;
+  } else if (difficulty == BADASS) {
+    enemy_spawn_chance = 60;
+    item_spawn_chance = 10;
+    enemy_variation = 70;
+  }
+
   for (int x = 1; x < maze_size - 1; x++) {
     for (int z = 1; z < maze_size - 1; z++) {
       /* Check above, below, left, and right */
@@ -428,7 +443,7 @@ void create_station_corridors() {
         corridor_insert_sim(index);
 
         /* Chance for there to spawn elements in any given corridor */
-        if (gen_rand_int(100) <= 30) {
+        if (gen_rand_int(100) <= item_spawn_chance) {
           /* Chances of getting a big or small obstacle */
           if (gen_rand_int(100) <= 30) {
             /* Large obstacle */
@@ -441,6 +456,18 @@ void create_station_corridors() {
             } else {
               spawn_small_station_obstacle(position);
             }
+          }
+        }
+
+        vec3 enemy_pos = GLM_VEC3_ZERO_INIT;
+        glm_vec3_copy(position, enemy_pos);
+        position[Y] = 4.0;
+        // Chance for an enemy to spawn in any given corridor
+        if (gen_rand_int(100) <= enemy_spawn_chance) {
+          if (gen_rand_int(100) <= enemy_variation) {
+            spawn_st_enemy(position, BRUTE);
+          } else {
+            spawn_st_enemy(position, NORMAL);
           }
         }
       }

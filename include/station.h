@@ -82,3 +82,5 @@ void seed_random();
 void station_obstacle_insert_sim(size_t);
 int space_obstacle_insert_sim(size_t);
 size_t init_station_obstacle(int, vec3, vec3, versor, float);
+
+void spawn_st_enemy(vec3, int);

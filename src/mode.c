@@ -47,24 +47,20 @@ int init_space_mode() {
     return -1;
   }
 
-  SHIP *cur_enemy = NULL;
-  size_t e_index = 0;
   srand(glfwGetTime());
+  vec3 pos = GLM_VEC3_ZERO_INIT;
+  versor rot = GLM_QUAT_IDENTITY_INIT;
   int num_enemies = BASE_NUM_ENEMIES + (rand() % 5) - 2;
   if (num_enemies > 0) {
     for (int i = 0; i < num_enemies; i++) {
-      e_index = init_enemy_ship(0);
-      cur_enemy = sp_enemies + e_index;
-      gen_rand_vec3(&cur_enemy->ent->translation, 2.0 * SPACE_SIZE);
-      cur_enemy->ent->translation[X] -= SPACE_SIZE;
-      cur_enemy->ent->translation[Y] -= SPACE_SIZE;
-      cur_enemy->ent->translation[Z] -= SPACE_SIZE;
+      gen_rand_vec3(&pos, 2.0 * SPACE_SIZE);
+      pos[X] -= SPACE_SIZE;
+      pos[Y] -= SPACE_SIZE;
+      pos[Z] -= SPACE_SIZE;
 
-      gen_rand_vec4(&cur_enemy->ent->rotation, 1.0);
-      glm_quat_normalize(cur_enemy->ent->rotation);
-
-      // TODO vary enemy ship parts
-      sp_enemy_insert_sim(e_index);
+      gen_rand_vec4(&rot, 1.0);
+      glm_quat_normalize(rot);
+      spawn_sp_enemy(pos, rot, 0);
     }
   }
 

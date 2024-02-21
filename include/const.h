@@ -29,9 +29,12 @@
 #define BRUTE (0)
 #define NORMAL (1)
 
-#define E_BASE_HEALTH (100.0)
-#define E_BASE_SPEED (1.0)
-#define E_BASE_FIRERATE (0.1)
+#define E_BASE_HEALTH_NORMAL (100.0)
+#define E_BASE_HEALTH_BRUTE (150.0)
+#define E_BASE_SPEED_NORMAL (1.0)
+#define E_BASE_SPEED_BRUTE (0.75)
+#define E_BASE_FIRERATE_NORMAL (0.05)
+#define E_BASE_FIRERATE_BRUTE (0.1)
 
 // Projectile Constants
 #define NUM_PROJ_TYPES (2)
