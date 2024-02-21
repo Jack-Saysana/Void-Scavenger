@@ -71,7 +71,6 @@ int init_scene() {
   station_obstacles[18] = load_model("./assets/station_obstacles/stool/stool.obj");
   station_obstacles[19] = load_model("./assets/station_obstacles/table/table.obj");
 
-
   if (CHECK_ASSETS_LOADED) {
     fprintf(stderr, "Error: failed to initialize game models\n");
     return -1;

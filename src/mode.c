@@ -418,10 +418,6 @@ void clear_dead_zones() {
 }
 
 int insert_sp_station() {
-  if (mode != SPACE) {
-    return -1;
-  }
-
   sp_station = init_station_ent();
   init_wrapper(STATION_OBJ, sp_station, NULL);
 

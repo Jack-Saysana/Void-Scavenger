@@ -36,3 +36,4 @@ void init_space_mode();
 void init_station_mode();
 void cleanup_game();
 void refresh_sim_distances();
+void free_timer_queue();

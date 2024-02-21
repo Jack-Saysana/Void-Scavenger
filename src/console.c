@@ -34,6 +34,7 @@ void set_gamemode_station() {
   if (mode == STATION) {
     return;
   }
+  free_timer_queue();
   clear_space_mode();
   init_station_mode();
 }
@@ -42,6 +43,7 @@ void set_gamemode_space() {
   if (mode == SPACE) {
     return;
   }
+  free_timer_queue();
   clear_station_mode();
   init_space_mode();
 }

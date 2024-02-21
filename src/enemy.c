@@ -23,6 +23,7 @@ int init_enemy_buffer() {
 
 void free_enemy_buffer() {
   free(st_enemies);
+  st_enemies = NULL;
 }
 
 int init_enemy_ship_buffer() {
@@ -39,6 +40,7 @@ int init_enemy_ship_buffer() {
 
 void free_enemy_ship_buffer() {
   free(sp_enemies);
+  sp_enemies = NULL;
 }
 
 // =============================== STATION MODE ==============================
@@ -333,9 +335,8 @@ void sp_enemy_pathfind(size_t index) {
   glm_vec3_cross(forward, up, side);
   glm_vec3_normalize(side);
 
-  float turning_rad = ((2.0 * enemy->thruster.max_vel *
-                       (1.0 - enemy->wing.max_ang_vel)) /
-                       enemy->wing.max_ang_vel) + 30.0;
+  // TODO Actually calculate turning radius
+  float turning_rad = 70.0;
 
   // Steer ship away from arena edges
   vec3 target_dir = { 0.0, 0.0, 0.0 };
