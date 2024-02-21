@@ -11,6 +11,10 @@
 #include <structs/obstacle_str.h>
 #include <structs/corridor_str.h>
 #include <structs/obj_wrapper_str.h>
+#include <ui/structs/stats_ui_str.h>
+#include <ui/structs/inventory_ui_str.h>
+#include <ui/structs/ship_parts_ui_str.h>
+#include <ui/structs/skill_tree_ui_str.h>
 
 // Insert common global variables below
 // Text Font Vars
@@ -74,5 +78,11 @@ extern int maze_size;
 // Simulation settings
 extern float RENDER_DIST;
 extern float SIM_DIST;
+
+// UI globals
+extern STATS stats;
+extern INVENTORY inventory;
+extern SHIP_PARTS ship_parts;
+extern SKILL_TREE skill_tree;
 
 #endif
