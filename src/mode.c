@@ -13,6 +13,8 @@
 // ================================ SPACE MODE ===============================
 
 int init_space_mode() {
+  mode = SPACE;
+  reset_camera(&camera);
   /* Ensure coordinates are enabled */
   enable_coordinates();
 
@@ -42,6 +44,8 @@ int init_space_mode() {
 
   // Initialize ship entity values
   reset_physics(player_ship.ent);
+  player_ship.wrapper_offset = init_wrapper(PLAYER_SHIP_OBJ, player_ship.ent,
+                                            (void *) &player_ship);
 
   // Place player ship entity into simulations
   status = player_ship_insert_sim();
@@ -82,7 +86,6 @@ int init_space_mode() {
   spawn_asteroids();
   spawn_space_debris();
 
-  mode = SPACE;
   return 0;
 }
 
@@ -147,6 +150,8 @@ void clear_space_mode() {
 // ============================== STATION MODE ===============================
 
 int init_station_mode() {
+  mode = STATION;
+  reset_camera(&camera);
   /* Turn off the coordinates */
   disable_coordinates();
 
@@ -172,9 +177,8 @@ int init_station_mode() {
 
   // Initialize player entity values
   reset_physics(st_player.ent);
-  glm_vec3_copy((vec3) { 2.5, 5.0, 2.5 }, st_player.ent->translation);
-  glm_vec3_copy(st_player.ent->translation, camera.pos);
-
+  st_player.wrapper_offset = init_wrapper(PLAYER_OBJ, st_player.ent,
+                                          (void *) &st_player);
   // Place station entities in simulations
   status = init_enemy_buffer();
   if (status) {
@@ -202,7 +206,6 @@ int init_station_mode() {
     return -1;
   }
 
-  mode = STATION;
   return 0;
 }
 

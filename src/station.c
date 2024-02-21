@@ -455,9 +455,9 @@ void create_station_corridors() {
           glm_vec3_copy(position, st_player.ent->translation);
           spawn_player = 0;
         }
-        
+
         // Try to spawn terminal
-        if (!found_terminal_room && gen_rand_int(100) <= 100) {
+        if (!found_terminal_room && gen_rand_int(100) <= 10) {
           gen_terminal_location(type, rotation, position, term_pos, term_rot);
           spawn_st_terminal(term_pos, term_rot);
           found_terminal_room = 1;

@@ -98,3 +98,4 @@ void disable_coordinates();
 void enable_coordinates();
 
 void update_perspective();
+void reset_camera(CAM *);

@@ -204,8 +204,10 @@ void input_keys(GLFWwindow *window) {
           glm_quat_rotatev(st_player.ent->rotation, (vec3){-1.0, 0.0, 0.0}, player_forward);
           glm_normalize(player_forward);
           glm_vec3_scale(player_forward, st_player.speed, player_forward);
-          glm_vec3_copy(player_forward, st_player.ent->velocity);
-        } else if (i == GLFW_KEY_S) {
+          glm_vec3_add(player_forward, st_player.ent->velocity,
+                       st_player.ent->velocity);
+        }
+        if (i == GLFW_KEY_S) {
           /* Handle S press */
           // move_camera(&camera, MOVE_BACKWARD);
           vec3 player_forward;
@@ -213,8 +215,10 @@ void input_keys(GLFWwindow *window) {
           glm_normalize(player_forward);
           glm_vec3_scale(player_forward, st_player.speed, player_forward);
           glm_vec3_negate(player_forward);
-          glm_vec3_copy(player_forward, st_player.ent->velocity);
-        } else if (i == GLFW_KEY_A) {
+          glm_vec3_add(player_forward, st_player.ent->velocity,
+                       st_player.ent->velocity);
+        }
+        if (i == GLFW_KEY_A) {
           /* Handle A press */
           // move_camera(&camera, MOVE_LEFT);
           vec3 player_left;
@@ -222,8 +226,10 @@ void input_keys(GLFWwindow *window) {
                             player_left);
           glm_normalize(player_left);
           glm_vec3_scale(player_left, st_player.speed, player_left);
-          glm_vec3_copy(player_left, st_player.ent->velocity);
-        } else if (i == GLFW_KEY_D) {
+          glm_vec3_add(player_left, st_player.ent->velocity,
+                       st_player.ent->velocity);
+        }
+        if (i == GLFW_KEY_D) {
           /* Handle D press */
           // move_camera(&camera, MOVE_RIGHT);
           vec3 player_left;
@@ -232,14 +238,18 @@ void input_keys(GLFWwindow *window) {
           glm_normalize(player_left);
           glm_vec3_scale(player_left, st_player.speed, player_left);
           glm_vec3_negate(player_left);
-          glm_vec3_copy(player_left, st_player.ent->velocity);
-        } else if (i == GLFW_KEY_I && !holding_alpha[i - GLFW_KEY_A]) {
+          glm_vec3_add(player_left, st_player.ent->velocity,
+                       st_player.ent->velocity);
+        }
+        if (i == GLFW_KEY_I && !holding_alpha[i - GLFW_KEY_A]) {
           /* Handle I press */
           toggle_inventory();
-        } else if (i == GLFW_KEY_K && !holding_alpha[i - GLFW_KEY_A]) {
+        }
+        if (i == GLFW_KEY_K && !holding_alpha[i - GLFW_KEY_A]) {
           /* Handle I press */
           toggle_skill_tree();
-        } else if (i == GLFW_KEY_E && get_terminal_ui_state() &&
+        }
+        if (i == GLFW_KEY_E && get_terminal_ui_state() &&
                    !holding_alpha[i - GLFW_KEY_A]) {
           set_gamemode_space();
         }

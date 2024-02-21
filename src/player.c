@@ -24,12 +24,6 @@ int init_player() {
   st_player.ent->type |= T_DRIVING;
   st_player.ent->inv_mass = 1.0;
 
-  st_player.wrapper_offset = init_wrapper(PLAYER_OBJ, st_player.ent,
-                                          (void *) &st_player);
-  if (st_player.wrapper_offset == INVALID_INDEX) {
-    return -1;
-  }
-
   st_player.max_health = P_BASE_HEALTH;
   st_player.cur_health = P_BASE_HEALTH;
   st_player.speed = P_BASE_SPEED;
@@ -121,12 +115,6 @@ int init_player_ship() {
   }
   player_ship.ent->type |= T_DRIVING;
   player_ship.ent->inv_mass = 1.0;
-
-  player_ship.wrapper_offset = init_wrapper(PLAYER_SHIP_OBJ, player_ship.ent,
-                                            (void *) &player_ship);
-  if (player_ship.wrapper_offset == INVALID_INDEX) {
-    return -1;
-  }
 
   player_ship.cur_health = player_ship.hull.max_health;
   player_ship.cur_shield = player_ship.shield.max_shield;
