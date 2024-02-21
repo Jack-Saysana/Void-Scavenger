@@ -6,7 +6,7 @@
 
 static ENTITY *dead_zones[6] = { NULL };
 static ENTITY *sp_station = NULL;
-//static ENTITY *st_terminal = NULL;
+static ENTITY *st_terminal = NULL;
 
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
@@ -16,6 +16,7 @@ int insert_dead_zones();
 void clear_dead_zones();
 int insert_sp_station();
 void clear_sp_station();
+void clear_st_terminal();
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 

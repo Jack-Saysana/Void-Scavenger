@@ -213,6 +213,7 @@ void clear_station_mode() {
   free_sim(render_sim);
   free_sim(event_sim);
   clear_dead_zones();
+  clear_st_terminal();
 
   // Free non-player entities
   for (size_t i = 0; i < num_enemies; i++) {
@@ -462,6 +463,42 @@ int insert_sp_station() {
 void clear_sp_station() {
   delete_wrapper((size_t) sp_station->data);
   free_entity(sp_station);
+}
+
+int spawn_st_terminal(vec3 position, versor rotation) {
+  st_terminal = init_terminal_ent();
+  init_wrapper(TERMINAL_OBJ, st_terminal, NULL);
+
+  st_terminal->type |= T_IMMUTABLE;
+  glm_vec3_copy(position, st_terminal->translation);
+  glm_quat_copy(rotation, st_terminal->rotation);
+
+  int status = sim_add_entity(physics_sim, st_terminal, ALLOW_HURT_BOXES);
+  if (status) {
+    return -1;
+  }
+
+  status = sim_add_entity(combat_sim, st_terminal, ALLOW_HURT_BOXES);
+  if (status) {
+    return -1;
+  }
+
+  status = sim_add_entity(event_sim, st_terminal, ALLOW_DEFAULT);
+  if (status) {
+    return -1;
+  }
+
+  status = sim_add_entity(render_sim, st_terminal, ALLOW_DEFAULT);
+  if (status) {
+    return -1;
+  }
+
+  return 0;
+}
+
+void clear_st_terminal() {
+  delete_wrapper((size_t) st_terminal->data);
+  free_entity(st_terminal);
 }
 
 ENTITY **get_dead_zones() {

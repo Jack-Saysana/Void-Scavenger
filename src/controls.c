@@ -200,6 +200,9 @@ void input_keys(GLFWwindow *window) {
         } else if (i == GLFW_KEY_I && !holding_alpha[i - GLFW_KEY_A]) {
           /* Handle I press */
           toggle_inventory();
+        } else if (i == GLFW_KEY_E && get_terminal_ui_state() &&
+                   !holding_alpha[i - GLFW_KEY_A]) {
+          set_gamemode_space();
         }
       } else if (!console_enabled && mode == SPACE) {
         if (i == GLFW_KEY_W) {

@@ -96,6 +96,7 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
 }
 
 void handle_event_collisions(COLLISION *cols, size_t num_cols) {
+  set_terminal_ui(0);
   int player_out_of_bounds = 0;
 
   SOBJ *target_wrapper = NULL;
@@ -105,6 +106,12 @@ void handle_event_collisions(COLLISION *cols, size_t num_cols) {
   for (size_t i = 0; i < num_cols; i++) {
     a_wrapper = object_wrappers + (size_t) cols[i].a_ent->data;
     b_wrapper = object_wrappers + (size_t) cols[i].b_ent->data;
+
+    if ((a_wrapper->type == TERMINAL_OBJ && b_wrapper->type == PLAYER_OBJ) ||
+        (a_wrapper->type == PLAYER_OBJ && b_wrapper->type == TERMINAL_OBJ)) {
+      set_terminal_ui(1);
+      continue;
+    }
 
     if ((a_wrapper->type == PLAYER_SHIP_OBJ &&
           b_wrapper->type == STATION_OBJ) ||
@@ -127,7 +134,7 @@ void handle_event_collisions(COLLISION *cols, size_t num_cols) {
       player_out_of_bounds = 1;
       decrement_player_health(10.0, 1.0);
     } else if (target_wrapper->type == ENEMY_SHIP_OBJ) {
-      decrement_enemy_health((size_t) target_wrapper->data, 10.0, 1.0);
+      decrement_enemy_health((size_t) target_wrapper->data, 5.0, 1.0);
     } else if (target_wrapper->type == OBSTACLE_OBJ) {
       target_wrapper->to_delete = 1;
     }

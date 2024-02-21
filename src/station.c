@@ -23,6 +23,7 @@ int init_corridor_buffer() {
 
 void free_corridor_buffer() {
   free(cd_obs);
+  cd_obs = NULL;
 }
 
 /* ==================== CORRIDOR OBJECT INIT AND DELETE ==================== */
@@ -363,6 +364,13 @@ void create_station_corridors() {
     enemy_variation = 70;
   }
 
+  int found_terminal_room = 0;
+  int backup_room_t = -1;
+  int backup_room_rot = 0;
+  vec3 backup_room_pos = GLM_VEC3_ZERO_INIT;
+  versor term_rot = GLM_QUAT_IDENTITY_INIT;
+  vec3 term_pos = GLM_VEC3_ZERO_INIT;
+
   for (int x = 1; x < maze_size - 1; x++) {
     for (int z = 1; z < maze_size - 1; z++) {
       /* Check above, below, left, and right */
@@ -442,6 +450,15 @@ void create_station_corridors() {
         size_t index = init_corridor(position, rot, type);
         corridor_insert_sim(index);
 
+        // Try to spawn terminal
+        if (!found_terminal_room && gen_rand_int(100) <= 100) {
+          gen_terminal_location(type, rotation, position, term_pos, term_rot);
+          spawn_st_terminal(term_pos, term_rot);
+          found_terminal_room = 1;
+          // If terminal spawns, dont spawn enemies or items in the room
+          continue;
+        }
+
         /* Chance for there to spawn elements in any given corridor */
         if (gen_rand_int(100) <= item_spawn_chance) {
           /* Chances of getting a big or small obstacle */
@@ -470,9 +487,22 @@ void create_station_corridors() {
             spawn_st_enemy(position, NORMAL);
           }
         }
+
+        if (backup_room_t == -1) {
+          backup_room_t = type;
+          backup_room_rot = rotation;
+          glm_vec3_copy(position, backup_room_pos);
+        }
       }
     }
   }
+
+  if (!found_terminal_room) {
+    gen_terminal_location(backup_room_t, backup_room_rot, backup_room_pos,
+                          term_pos, term_rot);
+    spawn_st_terminal(term_pos, term_rot);
+  }
+
   free_maze(maze);
 }
 
@@ -547,4 +577,26 @@ void spawn_large_station_obstacle(vec3 position) {
                                 scale, q,
                                 2.0 * (gen_rand_float(3.0) + 1.0));
   station_obstacle_insert_sim(index);
+}
+
+void gen_terminal_location(int type, int rotation, vec3 pos, vec3 dest_pos,
+                           versor dest_rot) {
+  if (type == TYPE_ONE_WAY) {
+    CREATE_QUATERNION(glm_rad(180 + rotation), dest_rot);
+  } else if (type == TYPE_FOUR_WAY) {
+    CREATE_QUATERNION(glm_rad(45 + rotation), dest_rot);
+  } else if (type == TYPE_CORNER) {
+    CREATE_QUATERNION(glm_rad(180 + rotation), dest_rot);
+  } else if (type == TYPE_T_JUNCT) {
+    CREATE_QUATERNION(glm_rad(90 + rotation), dest_rot);
+  } else if (type == TYPE_CORRIDOR) {
+    CREATE_QUATERNION(glm_rad(90 + rotation), dest_rot);
+  }
+  vec3 offset = { 1.5, 0.0, 0.0 };
+  if (type == TYPE_FOUR_WAY) {
+    offset[X] = 2.0;
+  }
+  glm_quat_rotatev(dest_rot, offset, offset);
+  glm_vec3_add(pos, offset, dest_pos);
+  dest_pos[Y] = 2.0;
 }

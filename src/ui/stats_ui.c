@@ -206,7 +206,6 @@ void update_stats() {
   // check current game mode
   if (mode == SPACE) {
     switch_space_hud();
-    
     // update stats
     // TODO: Should be functional in sprint 2
     set_ui_height(stats.ui_shield_bar, 0.9);
@@ -245,17 +244,17 @@ void switch_space_hud() {
   set_ui_pos(stats.ui_shield_icon, (vec2) { 0.0, -1.02 });
   set_ui_width(stats.ui_shield_icon, 1.0);
   set_ui_height(stats.ui_shield_icon, 1.0);
-  set_ui_options(stats.ui_shield_root, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_X);
+  set_ui_options(stats.ui_shield_icon, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_X);
 
   set_ui_pos(stats.ui_shield_border, (vec2) { 0.1, -1.0 });
   set_ui_width(stats.ui_shield_border, 0.8);
   set_ui_height(stats.ui_shield_border, -1.0);
-  set_ui_options(stats.ui_shield_root, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
+  set_ui_options(stats.ui_shield_border, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
 
   set_ui_pos(stats.ui_shield_bar, (vec2) { 0.0, 0.0 });
   set_ui_width(stats.ui_shield_bar, 1.0);
   set_ui_height(stats.ui_shield_bar, 0.8);
-  set_ui_options(stats.ui_shield_root, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
+  set_ui_options(stats.ui_shield_bar, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
 
   set_ui_pos(stats.ui_health_root, (vec2) { 0.07, -0.6 });
   set_ui_width(stats.ui_health_root, 0.02);

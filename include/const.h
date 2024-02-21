@@ -48,7 +48,7 @@
 #define STATION_SIZE (80.0)
 #define STATION_DEPTH (6)
 #define ST_BASE_RENDER_DIST (32.0)
-#define ST_BASE_SIM_DIST (36.0)
+#define ST_BASE_SIM_DIST (8.0)
 #define SP_BASE_RENDER_DIST (256.0)
 #define SP_BASE_SIM_DIST (256.0)
 #define BASE_NUM_ENEMIES (5)

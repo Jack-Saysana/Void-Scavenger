@@ -13,6 +13,7 @@ void console_ui_initialize();
 int init_stats();
 int init_inventory();
 void coordinates_ui_initialize();
+void init_terminal_ui();
 void update_coordinates();
 void update_stats();
 void update_inventory();
