@@ -5,7 +5,7 @@
 
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
-
+int space_obstacle_insert_sim(size_t);
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 
@@ -15,4 +15,10 @@ ENTITY *init_station_obstacle_ent(size_t);
 size_t init_wrapper(SOBJ_T, ENTITY *, void *);
 void delete_wrapper(size_t);
 
+/* Generation of asteroid positioning, speed, dir, etc... */
 int gen_rand_int(int);
+void gen_rand_vec3(vec3 *, float);
+void gen_rand_vec4(vec4 *, float);
+float gen_rand_float(float);
+
+void add_timer(float, void *, int);

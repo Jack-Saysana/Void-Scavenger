@@ -134,6 +134,26 @@ size_t init_station_obstacle(int type, vec3 pos, vec3 scale, versor rotation,
   return num_obstacles - 1;
 }
 
+void spawn_random_asteroid() {
+  vec3 pos = GLM_VEC3_ZERO_INIT;
+  vec3 vel = GLM_VEC3_ZERO_INIT;
+  vec3 ang_vel = GLM_VEC3_ZERO_INIT;
+  vec3 scale = GLM_VEC3_ZERO_INIT;
+  float mass = 0.0;
+  gen_rand_vec3(&pos, 50.0);
+  gen_rand_vec3(&vel, 3.0);
+  gen_rand_vec3(&ang_vel, 1.5);
+  gen_rand_vec3(&scale, 3.0);
+  float scale_fac = gen_rand_float(3.0) + 0.1;
+  mass = 2.0 * scale_fac;
+  scale[X] = scale_fac;
+  scale[Y] = scale_fac;
+  scale[Z] = scale_fac;
+  size_t location = init_space_obstacle(TYPE_ASTEROID, pos, vel,
+                                        ang_vel, scale, mass);
+  space_obstacle_insert_sim(location);
+}
+
 void delete_space_obstacle(size_t index) {
   if (index >= num_obstacles) {
     return;
@@ -147,6 +167,9 @@ void delete_space_obstacle(size_t index) {
   sp_obs[index] = sp_obs[num_obstacles];
   SOBJ *wrapper = object_wrappers + sp_obs[index].wrapper_offset;
   wrapper->data = (void *) index;
+
+  /* Set timer to spawn another space obstacle */
+  add_timer(5.0, spawn_random_asteroid, -1000);
 }
 
 void delete_station_obstacle(size_t index) {
