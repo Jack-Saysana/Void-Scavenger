@@ -168,7 +168,7 @@ void sim_refresh_st_enemy(size_t index) {
 void spawn_st_enemy(vec3 pos, int type) {
   size_t index = init_enemy(type);
   glm_vec3_copy(pos, st_enemies[index].ent->translation);
-  glm_vec3_copy((vec3) { 1.0, 0.01, 0.0 }, st_enemies[index].ent->velocity);
+  glm_vec3_copy((vec3) { 0.0, 0.01, 0.0 }, st_enemies[index].ent->velocity);
   st_enemy_insert_sim(index);
 }
 

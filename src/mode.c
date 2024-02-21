@@ -35,6 +35,11 @@ int init_space_mode() {
     return -1;
   }
 
+  status = insert_sp_station();
+  if (status) {
+    return -1;
+  }
+
   // Initialize ship entity values
   reset_physics(player_ship.ent);
 
@@ -115,6 +120,7 @@ void clear_space_mode() {
   free_sim(render_sim);
   free_sim(event_sim);
   clear_dead_zones();
+  clear_sp_station();
 
   // Free non-player entities
   for (size_t i = 0; i < num_enemies; i++) {
@@ -409,6 +415,57 @@ void clear_dead_zones() {
     delete_wrapper((size_t) dead_zones[i]->data);
     free_entity(dead_zones[i]);
   }
+}
+
+int insert_sp_station() {
+  if (mode != SPACE) {
+    return -1;
+  }
+
+  sp_station = init_station_ent();
+  init_wrapper(STATION_OBJ, sp_station, NULL);
+
+  gen_rand_vec3(&sp_station->translation, 2.0 * (SPACE_SIZE - 100.0));
+  glm_vec3_sub(sp_station->translation, (vec3) { SPACE_SIZE - 100.0,
+               SPACE_SIZE - 100.0, SPACE_SIZE - 100.0 },
+               sp_station->translation);
+  for (int i = 0; i < 3; i++) {
+    if (sp_station->translation[i] > 0.0) {
+      sp_station->translation[i] += 50.0;
+    } else {
+      sp_station->translation[i] -= 50.0;
+    }
+  }
+  fprintf(stderr, "Station location: (%f, %f, %f)\n",
+          sp_station->translation[X], sp_station->translation[Y],
+          sp_station->translation[Z]);
+
+  int status = sim_add_entity(physics_sim, sp_station, ALLOW_HURT_BOXES);
+  if (status) {
+    return -1;
+  }
+
+  status = sim_add_entity(combat_sim, sp_station, ALLOW_HURT_BOXES);
+  if (status) {
+    return -1;
+  }
+
+  status = sim_add_entity(event_sim, sp_station, ALLOW_HURT_BOXES);
+  if (status) {
+    return -1;
+  }
+
+  status = sim_add_entity(render_sim, sp_station, ALLOW_DEFAULT);
+  if (status) {
+    return -1;
+  }
+
+  return 0;
+}
+
+void clear_sp_station() {
+  delete_wrapper((size_t) sp_station->data);
+  free_entity(sp_station);
 }
 
 ENTITY **get_dead_zones() {

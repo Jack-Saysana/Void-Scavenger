@@ -27,3 +27,5 @@ void projectile_remove_sim(size_t index);
 void add_timer(float, void *, int, void *);
 void set_coords_warning();
 void stop_coords_warning();
+
+void set_gamemode_station();

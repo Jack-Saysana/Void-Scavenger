@@ -37,6 +37,8 @@ int init_scene() {
   sphere_model = load_model("./assets/misc/sphere/sphere.obj");
   render_sphere_model = load_model("./assets/misc/render_sphere/render_sphere.obj");
   cube_model = load_model("./assets/misc/cube/cube.obj");
+  station_model = load_model("./assets/set_pieces/station/station.obj");
+  terminal_model = load_model("./assets/set_pieces/terminal/terminal.obj");
   dead_zone_model = load_model("./assets/misc/dead_zone/dead_zone.obj");
   asteroid_models[0] = load_model("./assets/set_pieces/asteroid_1/asteroid_1.obj");
   asteroid_models[1] = load_model("./assets/set_pieces/asteroid_2/asteroid_2.obj");
@@ -298,6 +300,14 @@ ENTITY *init_corridor_ent(size_t index) {
 
 ENTITY *init_dead_zone_ent() {
   return init_entity(dead_zone_model);
+}
+
+ENTITY *init_station_ent() {
+  return init_entity(station_model);
+}
+
+ENTITY *init_terminal_ent() {
+  return init_entity(terminal_model);
 }
 
 void toggle_hit_boxes() {

@@ -106,6 +106,14 @@ void handle_event_collisions(COLLISION *cols, size_t num_cols) {
     a_wrapper = object_wrappers + (size_t) cols[i].a_ent->data;
     b_wrapper = object_wrappers + (size_t) cols[i].b_ent->data;
 
+    if ((a_wrapper->type == PLAYER_SHIP_OBJ &&
+          b_wrapper->type == STATION_OBJ) ||
+        (a_wrapper->type == STATION_OBJ &&
+         b_wrapper->type == PLAYER_SHIP_OBJ)) {
+      set_gamemode_station();
+      return;
+    }
+
     if (a_wrapper->type == DEAD_ZONE_OBJ && b_wrapper->type != DEAD_ZONE_OBJ) {
       target_wrapper = b_wrapper;
     } else if (a_wrapper->type != DEAD_ZONE_OBJ &&
