@@ -176,20 +176,46 @@ void console_dispatcher() {
       /* END: quit */
     } else if (strncmp(command[0].tok, SET_SIM_DIST,
                        sizeof(SET_SIM_DIST)) == 0) {
+      /* BEGIN: ssd */
       float val = create_float(1);
       if (val != FLT_MAX) {
         set_sim_dist(val);
       } else {
         command_not_found();
       }
+      /* END: ssd */
     } else if (strncmp(command[0].tok, SET_RENDER_DIST,
                        sizeof(SET_RENDER_DIST)) == 0) {
+      /* BEGIN: srd */
       float val = create_float(1);
       if (val != FLT_MAX) {
         set_render_dist(val);
       } else {
         command_not_found();
       }
+      /* END: srd */
+    } else if (strncmp(command[0].tok, RESET, sizeof(RESET)) == 0) {
+      /* BEGIN: reset */
+      if (command[1].kind == IDENTIFIER) {
+        if (strncmp(command[1].tok, STATION, sizeof(STATION)) == 0) {
+          /* BEGIN: reset station */
+          reset_station();
+          /* END: reset station */
+        } else if (strncmp(command[1].tok, SPACE, sizeof(SPACE)) == 0) {
+          /* BEGIN: reset space */
+          reset_space();
+          /* END: reset space */
+        } else {
+          command_not_found();
+        }
+      } else {
+        command_not_found();
+      }
+      /* END: reset */
+    } else if (strncmp(command[0].tok, FPS, sizeof(FPS)) == 0) {
+      /* BEGIN: fps */
+      fps_toggle();
+      /* END: fps */
     } else {
       /* NON-RECOGNIZED IDENTIFIER */
       command_not_found();

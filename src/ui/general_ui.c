@@ -40,6 +40,7 @@ void init_ui_components() {
   }
   
   coordinates_ui_initialize();
+  fps_ui_initialize();
   init_terminal_ui();
 }
 
@@ -50,6 +51,9 @@ void init_ui_components() {
 void update_ui_components() {
   if (coordinates_enabled) {
     update_coordinates();
+  }
+  if (fps_enabled) {
+    update_fps();
   }
   // update UI components
   update_stats();

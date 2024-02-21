@@ -23,6 +23,7 @@ int main() {
     float CUR_TIME = glfwGetTime();
     DELTA_TIME = CUR_TIME - LAST_FRAME;
     LAST_FRAME = CUR_TIME;
+    REAL_DELTA = DELTA_TIME;
     if (DELTA_TIME > 0.016) {
       DELTA_TIME = 0.016;
     }
