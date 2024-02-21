@@ -57,10 +57,12 @@ void move_camera(CAM *, MOVE_DIR);
 void update_console_cursor(char *);
 void disable_console_cursor();
 void enable_console_cursor();
-void add_timer(float, void *, int);
+void add_timer(float, void *, int, void *);
 size_t init_projectile(vec3, vec3, float, PROJ_SOURCE, S_WEAPON_T, float,
                        float, size_t);
 int projectile_insert_sim(size_t);
 void toggle_inventory();
 void toggle_ship_parts();
 void toggle_skill_tree();
+int get_terminal_ui_state();
+void set_gamemode_space();

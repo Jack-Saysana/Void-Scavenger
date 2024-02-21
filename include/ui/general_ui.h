@@ -15,6 +15,7 @@ int init_inventory();
 int init_ship_parts();
 int init_skill_tree();
 void coordinates_ui_initialize();
+void init_terminal_ui();
 void update_coordinates();
 void update_stats();
 void update_inventory();

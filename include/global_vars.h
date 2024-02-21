@@ -27,6 +27,14 @@ typedef enum game_mode {
 } GAME_MODE;
 extern GAME_MODE mode;
 
+typedef enum difficulty {
+  EASY,
+  MEDIUM,
+  HARD,
+  BADASS
+} DIFF;
+extern DIFF difficulty;
+
 // Game camera
 extern CAM camera;
 

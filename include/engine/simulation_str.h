@@ -7,6 +7,8 @@
 typedef struct simulation_collider {
   ENTITY *entity;
   size_t collider_offset;
+  size_t index;
+  int status;
 } SIM_COLLIDER;
 
 typedef struct simulation {

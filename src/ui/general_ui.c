@@ -40,6 +40,7 @@ void init_ui_components() {
   }
   
   coordinates_ui_initialize();
+  init_terminal_ui();
 }
 
 /*
