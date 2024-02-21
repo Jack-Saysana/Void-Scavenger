@@ -5,7 +5,7 @@
 
 /*
                                    STATS
-Implements the functionality for defining UI components for both ship mode 
+Implements the functionality for defining UI components for both ship mode
 and station mode.
 */
 
@@ -20,3 +20,4 @@ void switch_station_hud();
 
 /* ================= EXTERNALLY DEFINED FUNCTIONS ================ */
 
+float calc_power_usage(SHIP *);

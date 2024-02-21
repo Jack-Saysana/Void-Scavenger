@@ -7,3 +7,8 @@
 
 */
 
+float calc_power_usage(SHIP *ship) {
+  float thruster_usage = ship->thruster.max_power_draw *
+                         (ship->cur_speed / ship->thruster.max_vel);
+  return thruster_usage + ship->shield.power_draw;
+}

@@ -2,7 +2,7 @@
 
 /*
                                    STATS
-Implements the functionality for defining UI components for both ship mode 
+Implements the functionality for defining UI components for both ship mode
 and station mode.
 */
 
@@ -206,21 +206,30 @@ void update_stats() {
   // check current game mode
   if (mode == SPACE) {
     switch_space_hud();
+    float power_level = (player_ship.reactor.max_output -
+                         calc_power_usage(&player_ship)) /
+                         player_ship.reactor.max_output;
     // update stats
     // TODO: Should be functional in sprint 2
-    set_ui_height(stats.ui_shield_bar, 0.9);
-    set_ui_height(stats.ui_health_bar, 0.7);
-    set_ui_height(stats.ui_energy_bar, 0.5);
-    set_ui_height(stats.ui_thruster_bar, 0.3);
+    set_ui_height(stats.ui_shield_bar,
+                  player_ship.cur_shield / player_ship.shield.max_shield);
+    set_ui_height(stats.ui_health_bar,
+                  player_ship.cur_health / player_ship.hull.max_health);
+    set_ui_height(stats.ui_energy_bar, power_level);
+    set_ui_height(stats.ui_thruster_bar,
+                  player_ship.cur_speed / player_ship.thruster.max_vel);
 
   } else if (mode == STATION) {
     switch_station_hud();
 
     // update stats
     // TODO: Should be functional in sprint 2
-    set_ui_width(stats.ui_shield_bar, 0.9);
-    set_ui_width(stats.ui_health_bar, 0.7);
-    set_ui_width(stats.ui_exp_bar, 0.5);
+    set_ui_width(stats.ui_shield_bar,
+                 st_player.cur_shield / st_player.max_shield);
+    set_ui_width(stats.ui_health_bar,
+                 st_player.cur_health / st_player.max_health);
+    set_ui_width(stats.ui_exp_bar,
+                 st_player.cur_experience / st_player.max_experience);
   }
 }
 

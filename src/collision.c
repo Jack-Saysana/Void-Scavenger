@@ -167,6 +167,7 @@ void decrement_player_health(float damage, float timing) {
   if (mode == SPACE && !player_ship.invuln) {
     player_ship.cur_health -= damage;
     if (player_ship.cur_health <= 0.0) {
+      player_ship.cur_health = 0.0;
       fprintf(stderr, "END GAME\n");
     } else {
       player_ship.invuln = 1;
@@ -175,6 +176,7 @@ void decrement_player_health(float damage, float timing) {
   } else if (mode == STATION && !st_player.invuln) {
     st_player.cur_health -= damage;
     if (st_player.cur_health <= 0.0) {
+      st_player.cur_health = 0.0;
       fprintf(stderr, "END GAME\n");
     } else {
       st_player.invuln = 1;

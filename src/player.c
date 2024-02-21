@@ -34,6 +34,7 @@ int init_player() {
   st_player.cur_health = P_BASE_HEALTH;
   st_player.speed = P_BASE_SPEED;
   st_player.fire_rate = P_BASE_FIRERATE;
+  st_player.max_experience = P_BASE_MAX_EXP;
   st_player.invuln = 0;
 
   return 0;
