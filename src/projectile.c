@@ -55,6 +55,7 @@ size_t init_projectile(vec3 pos, vec3 dir, float speed, PROJ_SOURCE source,
   projectile->type = type;
   projectile->range = range;
   projectile->damage = damage;
+  projectile->collision = 0;
 
   num_projectiles++;
   if (num_projectiles == proj_buff_len) {
@@ -87,6 +88,8 @@ void delete_projectile(size_t index) {
   projectiles[index] = projectiles[num_projectiles];
   SOBJ *wrapper = object_wrappers + projectiles[index].wrapper_offset;
   wrapper->data = (void *) index;
+  update_timer_args(proj_collision_anim, (void *) num_projectiles,
+                    (void *) index);
 }
 
 int projectile_insert_sim(size_t index) {
@@ -142,5 +145,28 @@ void integrate_projectile(size_t index) {
   cur_proj->range -= glm_vec3_distance(old_pos, cur_proj->ent->translation);
   if (cur_proj->range <= 0.0) {
     object_wrappers[cur_proj->wrapper_offset].to_delete = 1;
+  }
+}
+
+void start_proj_collision_anim(size_t index) {
+  glm_vec3_zero(projectiles[index].ent->velocity);
+  projectiles[index].collision = 1;
+  add_timer(0.016, proj_collision_anim, -1000, (void *) index);
+  if (mode == SPACE) {
+    glm_vec3_copy((vec3) { 1.0, 1.0, 1.0 }, projectiles[index].ent->scale);
+  } else {
+    glm_vec3_copy((vec3) { 0.25, 0.25, 0.25 }, projectiles[index].ent->scale);
+  }
+}
+
+void proj_collision_anim(void *arg) {
+  PROJ *proj = projectiles + (size_t) arg;
+  vec3 scale_inc = { 0.01, 0.01, 0.01 };
+  glm_vec3_add(proj->ent->scale, scale_inc, proj->ent->scale);
+  if ((mode == SPACE && proj->ent->scale[X] >= 1.5) ||
+      (mode == STATION && proj->ent->scale[X] >= 0.3)) {
+    object_wrappers[(size_t) proj->wrapper_offset].to_delete = 1;
+  } else {
+    add_timer(0.016, proj_collision_anim, -1000, arg);
   }
 }

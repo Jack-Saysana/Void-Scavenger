@@ -5,6 +5,7 @@
 #define P_BASE_HEALTH (100.0)
 #define P_BASE_SPEED (10.0)
 #define P_BASE_FIRERATE (0.1)
+#define P_BASE_MAX_EXP (100.0)
 
 // Ship constants
 #define S_BASE_PWR_OUTPUT (100.0)
@@ -29,9 +30,12 @@
 #define BRUTE (0)
 #define NORMAL (1)
 
-#define E_BASE_HEALTH (100.0)
-#define E_BASE_SPEED (1.0)
-#define E_BASE_FIRERATE (0.1)
+#define E_BASE_HEALTH_NORMAL (100.0)
+#define E_BASE_HEALTH_BRUTE (150.0)
+#define E_BASE_SPEED_NORMAL (1.0)
+#define E_BASE_SPEED_BRUTE (0.75)
+#define E_BASE_FIRERATE_NORMAL (0.05)
+#define E_BASE_FIRERATE_BRUTE (0.1)
 
 // Projectile Constants
 #define NUM_PROJ_TYPES (2)
@@ -45,7 +49,7 @@
 #define STATION_SIZE (80.0)
 #define STATION_DEPTH (6)
 #define ST_BASE_RENDER_DIST (32.0)
-#define ST_BASE_SIM_DIST (36.0)
+#define ST_BASE_SIM_DIST (8.0)
 #define SP_BASE_RENDER_DIST (256.0)
 #define SP_BASE_SIM_DIST (256.0)
 #define BASE_NUM_ENEMIES (5)

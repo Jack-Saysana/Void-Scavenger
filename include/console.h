@@ -28,7 +28,7 @@ void set_gamemode_space();
 
 // ====================== EXTERNALLY DEFINED FUNCTIONS =======================
 void print_parse_table();
-void add_timer(float, void *, int);
+void add_timer(float, void *, int, void *);
 void set_console_error(const char *);
 void disable_console_error();
 void clear_space_mode();
@@ -39,3 +39,4 @@ void cleanup_game();
 void refresh_sim_distances();
 void enable_fps();
 void disable_fps();
+void free_timer_queue();

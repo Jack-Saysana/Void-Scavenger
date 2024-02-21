@@ -29,6 +29,8 @@ static MODEL *asteroid_models[NUM_ASTEROID_TYPES] = { NULL, NULL, NULL, NULL,
                                                       NULL };
 static MODEL *corridor_models[NUM_CORRIDOR_TYPES] = { NULL, NULL, NULL, NULL,
                                                       NULL };
+static MODEL *station_model = NULL;
+static MODEL *terminal_model = NULL;
 static MODEL *dead_zone_model = NULL;
 static MODEL *station_obstacles[NUM_STATION_OBSTACLE_TYPES] = {
   NULL, NULL, NULL, NULL, NULL,
@@ -50,7 +52,8 @@ static int render_bounds = 0;
 #define CHECK_ASSETS_LOADED (\
 !player_model || !alien_models[0] || !alien_models[1] || !player_ship_model || \
 !alien_ship_models[0] || !projectile_models[0] || !projectile_models[1] || \
-!sphere_model || !render_sphere_model || !cube_model || \
+!sphere_model || !render_sphere_model || !cube_model || !station_model ||\
+!terminal_model || \
 !asteroid_models[0] || !asteroid_models[1] || !asteroid_models[2] || \
 !asteroid_models[3] || !asteroid_models[4] || !corridor_models[0] || \
 !corridor_models[1] || !corridor_models[2] || !corridor_models[3] || \

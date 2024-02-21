@@ -37,6 +37,8 @@ int init_scene() {
   sphere_model = load_model("./assets/misc/sphere/sphere.obj");
   render_sphere_model = load_model("./assets/misc/render_sphere/render_sphere.obj");
   cube_model = load_model("./assets/misc/cube/cube.obj");
+  station_model = load_model("./assets/set_pieces/station/station.obj");
+  terminal_model = load_model("./assets/set_pieces/terminal/terminal.obj");
   dead_zone_model = load_model("./assets/misc/dead_zone/dead_zone.obj");
   asteroid_models[0] = load_model("./assets/set_pieces/asteroid_1/asteroid_1.obj");
   asteroid_models[1] = load_model("./assets/set_pieces/asteroid_2/asteroid_2.obj");
@@ -68,7 +70,6 @@ int init_scene() {
   station_obstacles[17] = load_model("./assets/station_obstacles/hose_3/hose_3.obj");
   station_obstacles[18] = load_model("./assets/station_obstacles/stool/stool.obj");
   station_obstacles[19] = load_model("./assets/station_obstacles/table/table.obj");
-
 
   if (CHECK_ASSETS_LOADED) {
     fprintf(stderr, "Error: failed to initialize game models\n");
@@ -112,7 +113,7 @@ int init_scene() {
   }
   glm_vec3_copy((vec3) {0.0, 0.0, 0.0}, camera.pos);
   camera.pitch = 0.0;
-  camera.yaw = 0.0;
+  camera.yaw = -90.0;
 
   return 0;
 }
@@ -215,7 +216,17 @@ void query_render_dist() {
 void render_game_entity(ENTITY *ent) {
   SOBJ *wrapper = object_wrappers + (size_t) ent->data;
   if (wrapper->type == PROJ_OBJ) {
-    draw_entity(proj_shader, ent);
+    if (projectiles[(size_t) wrapper->data].collision) {
+      glUseProgram(proj_shader);
+      mat4 model = GLM_MAT4_IDENTITY_INIT;
+      glm_translate(model, ent->translation);
+      glm_quat_rotate(model, ent->rotation, model);
+      glm_scale(model, ent->scale);
+      set_mat4("model", model, proj_shader);
+      draw_model(proj_shader, sphere_model);
+    } else {
+      draw_entity(proj_shader, ent);
+    }
   } else {
     draw_entity(entity_shader, ent);
   }
@@ -288,6 +299,14 @@ ENTITY *init_corridor_ent(size_t index) {
 
 ENTITY *init_dead_zone_ent() {
   return init_entity(dead_zone_model);
+}
+
+ENTITY *init_station_ent() {
+  return init_entity(station_model);
+}
+
+ENTITY *init_terminal_ent() {
+  return init_entity(terminal_model);
 }
 
 void toggle_hit_boxes() {

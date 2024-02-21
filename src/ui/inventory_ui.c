@@ -1,5 +1,4 @@
 #include <ui/inventory_ui.h>
-#include <stdio.h>
 
 /*
                                    INVENTORY
@@ -8,7 +7,7 @@ mode inventory.
 */
 
 /*
-  Init stats UI globaly, call by general_ui.c init_scene()
+  Init inventory UI globaly, call by general_ui.c init_ui_components()
 
   Return
     0 if successful
@@ -37,7 +36,7 @@ int init_inventory() {
     inventory.ui_inventory_info_background, // UI_COMP *parent
     (vec2) { 0.025, -0.05 }, // vec2 pos
     0.95, // float width
-    0.3, // float height
+    0.2833, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(inventory.ui_inventory_info_title_background, "assets/ui/hud_color_bg.png");
@@ -54,9 +53,9 @@ int init_inventory() {
 
   inventory.ui_inventory_info_content_background = add_ui_comp(
     inventory.ui_inventory_info_background, // UI_COMP *parent
-    (vec2) { 0.025, -0.4 }, // vec2 pos
+    (vec2) { 0.025, -0.3833 }, // vec2 pos
     0.95, // float width
-    0.55, // float height
+    0.5666, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(inventory.ui_inventory_info_content_background, "assets/ui/hud_color.png");
@@ -65,7 +64,7 @@ int init_inventory() {
     inventory.ui_inventory_info_content_background, // UI_COMP *parent
     (vec2) { 0.1, -0.1 }, // vec2 pos
     0.8, // float width
-    0.5, // float height
+    0.4, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_Y
   );
   set_ui_texture(inventory.ui_inventory_info_content_text, "assets/transparent.png");
@@ -109,7 +108,7 @@ int init_inventory() {
 }
 
 /*
-  Update stats UI per frame, call by render.c render_scene()
+  Update inventory UI per frame, call by general_ui.c update_ui_components()
 */
 void update_inventory() {
   // check current game mode
@@ -127,6 +126,7 @@ void toggle_inventory() {
     set_ui_enabled(inventory.ui_inventory_root, 0);
   } else {
     set_ui_enabled(inventory.ui_inventory_root, 1);
+    set_ui_enabled(skill_tree.ui_skill_tree_root, 0);
   }
 }
 

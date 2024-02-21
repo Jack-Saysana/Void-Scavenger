@@ -23,6 +23,7 @@ int init_enemy_buffer() {
 
 void free_enemy_buffer() {
   free(st_enemies);
+  st_enemies = NULL;
 }
 
 int init_enemy_ship_buffer() {
@@ -39,6 +40,7 @@ int init_enemy_ship_buffer() {
 
 void free_enemy_ship_buffer() {
   free(sp_enemies);
+  sp_enemies = NULL;
 }
 
 // =============================== STATION MODE ==============================
@@ -68,11 +70,19 @@ size_t init_enemy(size_t index) {
     return -1;
   }
 
-  new_enemy->max_health = E_BASE_HEALTH;
-  new_enemy->cur_health = E_BASE_HEALTH;
-  new_enemy->cur_speed = E_BASE_SPEED;
-  new_enemy->fire_rate = E_BASE_FIRERATE;
-  new_enemy->weapon_type = RANGED;
+  if (index == BRUTE) {
+    new_enemy->max_health = E_BASE_HEALTH_BRUTE;
+    new_enemy->cur_health = E_BASE_HEALTH_BRUTE;
+    new_enemy->cur_speed = E_BASE_SPEED_BRUTE;
+    new_enemy->fire_rate = E_BASE_FIRERATE_BRUTE;
+    new_enemy->weapon_type = RANGED;
+  } else {
+    new_enemy->max_health = E_BASE_HEALTH_NORMAL;
+    new_enemy->cur_health = E_BASE_HEALTH_NORMAL;
+    new_enemy->cur_speed = E_BASE_SPEED_NORMAL;
+    new_enemy->fire_rate = E_BASE_FIRERATE_NORMAL;
+    new_enemy->weapon_type = RANGED;
+  }
   new_enemy->invuln = 0;
 
   num_enemies++;
@@ -155,6 +165,13 @@ void sim_refresh_st_enemy(size_t index) {
       refresh_collider(combat_sim, enemy->ent, i);
     }
   }
+}
+
+void spawn_st_enemy(vec3 pos, int type) {
+  size_t index = init_enemy(type);
+  glm_vec3_copy(pos, st_enemies[index].ent->translation);
+  glm_vec3_copy((vec3) { 0.0, 0.01, 0.0 }, st_enemies[index].ent->velocity);
+  st_enemy_insert_sim(index);
 }
 
 // =============================== SPACE MODE ================================
@@ -288,11 +305,20 @@ void sim_refresh_sp_enemy(size_t index) {
   }
 }
 
+void spawn_sp_enemy(vec3 pos, versor rot, int type) {
+  size_t index = init_enemy_ship(type);
+  glm_vec3_copy(pos, sp_enemies[index].ent->translation);
+  glm_quat_copy(rot, sp_enemies[index].ent->rotation);
+  sp_enemy_insert_sim(index);
+}
+
 // ================================ BEHAVIOR =================================
 
 void enemy_behavior() {
   for (size_t i = 0; i < num_enemies; i++) {
-    sp_enemy_pathfind(i);
+    if (mode == SPACE) {
+      sp_enemy_pathfind(i);
+    }
   }
 }
 
@@ -309,9 +335,8 @@ void sp_enemy_pathfind(size_t index) {
   glm_vec3_cross(forward, up, side);
   glm_vec3_normalize(side);
 
-  float turning_rad = ((2.0 * enemy->thruster.max_vel *
-                       (1.0 - enemy->wing.max_ang_vel)) /
-                       enemy->wing.max_ang_vel) + 30.0;
+  // TODO Actually calculate turning radius
+  float turning_rad = 70.0;
 
   // Steer ship away from arena edges
   vec3 target_dir = { 0.0, 0.0, 0.0 };

@@ -6,10 +6,24 @@
   and returning the proper view matrix.
 
 */
+void reset_camera(CAM *cam) {
+  glm_mat4_identity(cam->view);
+  glm_vec3_zero(cam->pos);
+  cam->pitch = 0.0;
+  cam->yaw = -90.0;
+}
 
 void get_cam_matrix(CAM *cam, mat4 dest) {
   if (mode == STATION) {
     vec3 negcam = GLM_VEC3_ZERO_INIT;
+    glm_vec3_copy(st_player.ent->translation, cam->pos);
+    cam->pos[1] += 0.65;
+    vec3 player_forward;
+    mat4 playerrot;
+    glm_quat_mat4(st_player.ent->rotation, playerrot);
+    glm_mat4_mulv3(playerrot, (vec3){-1.0, 0.0, 0.0}, 1.0, player_forward);
+    glm_vec3_scale(player_forward, 0.15, player_forward);
+    glm_vec3_add(cam->pos, player_forward, cam->pos);
     glm_vec3_negate_to(cam->pos, negcam);
     glm_mat4_identity(cam->view);
     glm_rotate_x(cam->view, glm_rad(cam->pitch), cam->view);

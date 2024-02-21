@@ -24,6 +24,8 @@ typedef struct projectile {
   float damage;
   // Max distance the projectile can continue to travel before despawning
   float range;
+  // Flag denoting if projectile is currently in its collision animation
+  int collision;
 } PROJ;
 
 #endif

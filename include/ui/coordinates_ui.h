@@ -6,7 +6,7 @@
 #include <engine/engine.h>
 
 #define COORDS_SIZE (128)
-#define VEC3_RED    {1.0f, 0.0f, 0.0f} 
+#define VEC3_RED    {1.0f, 0.0f, 0.0f}
 #define VEC3_WHITE  {1.0f, 1.0f, 1.0f}
 #define WARNING_TIME (0.15)
 
@@ -25,4 +25,4 @@ void set_coords_color_white();
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 void get_player_coordinates(vec3);
-void add_timer(float, void *, int);
+void add_timer(float, void *, int, void *);

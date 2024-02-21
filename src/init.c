@@ -50,7 +50,6 @@ int init_game() {
     return -1;
   }
 
-
   return 0;
 }
 

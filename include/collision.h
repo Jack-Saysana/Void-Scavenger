@@ -20,7 +20,13 @@ void update_query_spheres();
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 
 void integrate_projectiles();
+void start_proj_collision_anim(size_t);
 void delete_projectile(size_t);
 void projectile_remove_sim(size_t index);
 
-void add_timer(float, void *, int);
+void add_timer(float, void *, int, void *);
+void set_coords_warning();
+void stop_coords_warning();
+
+void set_gamemode_station();
+void set_terminal_ui(int);
