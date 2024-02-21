@@ -52,3 +52,5 @@ float RENDER_DIST = 0.0;
 float SIM_DIST = 0.0;
 
 F_GLYPH *fixed_sys = NULL;
+
+float REAL_DELTA = 0.0;

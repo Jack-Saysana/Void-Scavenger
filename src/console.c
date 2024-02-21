@@ -64,3 +64,23 @@ void set_render_dist(float dist) {
   RENDER_DIST = dist;
   refresh_sim_distances();
 }
+
+void reset_station() {
+  clear_station_mode();
+  init_station_mode();
+}
+
+void reset_space() {
+  clear_space_mode();
+  init_space_mode();
+}
+
+void fps_toggle() {
+  if (!fps_enabled) {
+    fps_enabled = 1;
+    enable_fps();
+  } else {
+    fps_enabled = 0;
+    disable_fps();
+  }
+}

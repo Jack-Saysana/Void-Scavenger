@@ -5,6 +5,7 @@
 
 extern F_GLYPH *fixed_sys;
 extern unsigned int coordinates_enabled;
+extern unsigned int fps_enabled;
 
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
@@ -13,6 +14,8 @@ void console_ui_initialize();
 int init_stats();
 int init_inventory();
 void coordinates_ui_initialize();
+void fps_ui_initialize();
 void update_coordinates();
 void update_stats();
 void update_inventory();
+void update_fps();

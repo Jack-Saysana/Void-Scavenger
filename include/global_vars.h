@@ -75,4 +75,7 @@ extern int maze_size;
 extern float RENDER_DIST;
 extern float SIM_DIST;
 
+// FPS
+extern float REAL_DELTA;
+
 #endif
