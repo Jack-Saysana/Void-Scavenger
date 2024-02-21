@@ -348,6 +348,7 @@ void create_station_corridors() {
   int right = 0;
   int type = -1;
   int rotation = 0;
+  int spawn_player = 1;
   for (int x = 1; x < maze_size - 1; x++) {
     for (int z = 1; z < maze_size - 1; z++) {
       /* Check above, below, left, and right */
@@ -426,6 +427,11 @@ void create_station_corridors() {
                       (((float) z - 1) * 5.0) - (2.5 * maze_size) }, position);
         size_t index = init_corridor(position, rot, type);
         corridor_insert_sim(index);
+
+        if (spawn_player) {
+          glm_vec3_copy(position, st_player.ent->translation);
+          spawn_player = 0;
+        }
 
         /* Chance for there to spawn elements in any given corridor */
         if (gen_rand_int(100) <= 30) {

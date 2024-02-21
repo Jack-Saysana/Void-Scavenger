@@ -67,6 +67,13 @@ void mouse_pos_callback(GLFWwindow *window, double x_pos, double y_pos) {
     if (camera.yaw > 360 || camera.yaw < -360) {
       camera.yaw = (int)(camera.yaw) % 360;
     }
+    vec3 player_up;
+    glm_quat_rotatev(st_player.ent->rotation, (vec3){0.0, 1.0, 0.0}, player_up);
+    mat4 rotation = GLM_MAT4_IDENTITY_INIT;
+    glm_rotate(rotation, glm_rad(-mouse_dif[0]), player_up);
+    versor rot_quat = GLM_QUAT_IDENTITY_INIT;
+    glm_mat4_quat(rotation, rot_quat);
+    glm_quat_mul(rot_quat, st_player.ent->rotation, st_player.ent->rotation);
   } else if (mode == SPACE) {
     /* rotates the ships pitch and yaw*/
     mat4 rotation = GLM_MAT4_IDENTITY_INIT;
@@ -99,11 +106,14 @@ void mouse_button_callback(GLFWwindow *window, int button, int action,
         add_timer(st_player.fire_rate, (void *) &can_shoot, 1);
         /* forward vector from player*/
         vec3 forward;
-        forward[0] = camera.view[2][0];
-        forward[1] = camera.view[2][1];
-        forward[2] = -camera.view[2][2];
+        mat4 inv_cam = GLM_MAT4_IDENTITY_INIT;
+        glm_mat4_inv(camera.view, inv_cam);
+        forward[0] = inv_cam[2][0];
+        forward[1] = inv_cam[2][1];
+        forward[2] = inv_cam[2][2];
         glm_vec3_normalize(forward);
-        /* spwans projectile*/
+        glm_vec3_negate(forward);
+        /* spawns projectile*/
         size_t proj_index = init_projectile(camera.pos,
                                             forward,
                                             10.0 + st_player.speed,
@@ -173,6 +183,8 @@ void mouse_button_callback(GLFWwindow *window, int button, int action,
 
 void input_keys(GLFWwindow *window) {
   /* Letters */
+  st_player.ent->velocity[X] = 0;
+  st_player.ent->velocity[Z] = 0;
   int console_enabled = is_console_enabled();
   if (console_enabled) {
     update_cursor_enabledness();
@@ -187,16 +199,40 @@ void input_keys(GLFWwindow *window) {
         /* FPS movment */
         if (i == GLFW_KEY_W) {
           /* Handle W press */
-          move_camera(&camera, MOVE_FORWARD);
+          //move_camera(&camera, MOVE_FORWARD);
+          vec3 player_forward;
+          glm_quat_rotatev(st_player.ent->rotation, (vec3){-1.0, 0.0, 0.0}, player_forward);
+          glm_normalize(player_forward);
+          glm_vec3_scale(player_forward, st_player.speed, player_forward);
+          glm_vec3_copy(player_forward, st_player.ent->velocity);
         } else if (i == GLFW_KEY_S) {
           /* Handle S press */
-          move_camera(&camera, MOVE_BACKWARD);
+          // move_camera(&camera, MOVE_BACKWARD);
+          vec3 player_forward;
+          glm_quat_rotatev(st_player.ent->rotation, (vec3){-1.0, 0.0, 0.0}, player_forward);
+          glm_normalize(player_forward);
+          glm_vec3_scale(player_forward, st_player.speed, player_forward);
+          glm_vec3_negate(player_forward);
+          glm_vec3_copy(player_forward, st_player.ent->velocity);
         } else if (i == GLFW_KEY_A) {
           /* Handle A press */
-          move_camera(&camera, MOVE_LEFT);
+          // move_camera(&camera, MOVE_LEFT);
+          vec3 player_left;
+          glm_quat_rotatev(st_player.ent->rotation, (vec3){0.0, 0.0, 1.0},
+                            player_left);
+          glm_normalize(player_left);
+          glm_vec3_scale(player_left, st_player.speed, player_left);
+          glm_vec3_copy(player_left, st_player.ent->velocity);
         } else if (i == GLFW_KEY_D) {
           /* Handle D press */
-          move_camera(&camera, MOVE_RIGHT);
+          // move_camera(&camera, MOVE_RIGHT);
+          vec3 player_left;
+          glm_quat_rotatev(st_player.ent->rotation, (vec3){0.0, 0.0, 1.0},
+                            player_left);
+          glm_normalize(player_left);
+          glm_vec3_scale(player_left, st_player.speed, player_left);
+          glm_vec3_negate(player_left);
+          glm_vec3_copy(player_left, st_player.ent->velocity);
         } else if (i == GLFW_KEY_I && !holding_alpha[i - GLFW_KEY_A]) {
           /* Handle I press */
           toggle_inventory();

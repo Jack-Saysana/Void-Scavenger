@@ -173,12 +173,6 @@ int init_station_mode() {
   glm_vec3_copy((vec3) { 2.5, 5.0, 2.5 }, st_player.ent->translation);
   glm_vec3_copy(st_player.ent->translation, camera.pos);
 
-  // Place player entity in simulation
-  status = player_insert_sim();
-  if (status) {
-    return -1;
-  }
-
   // Place station entities in simulations
   status = init_enemy_buffer();
   if (status) {
@@ -199,6 +193,12 @@ int init_station_mode() {
     return -1;
   }
   create_station_corridors();
+
+  // Place player entity in simulation
+  status = player_insert_sim();
+  if (status) {
+    return -1;
+  }
 
   mode = STATION;
   return 0;
