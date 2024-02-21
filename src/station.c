@@ -371,6 +371,7 @@ void create_station_corridors() {
   versor term_rot = GLM_QUAT_IDENTITY_INIT;
   vec3 term_pos = GLM_VEC3_ZERO_INIT;
 
+  int spawn_player = 1;
   for (int x = 1; x < maze_size - 1; x++) {
     for (int z = 1; z < maze_size - 1; z++) {
       /* Check above, below, left, and right */
@@ -450,6 +451,11 @@ void create_station_corridors() {
         size_t index = init_corridor(position, rot, type);
         corridor_insert_sim(index);
 
+        if (spawn_player) {
+          glm_vec3_copy(position, st_player.ent->translation);
+          spawn_player = 0;
+        }
+        
         // Try to spawn terminal
         if (!found_terminal_room && gen_rand_int(100) <= 100) {
           gen_terminal_location(type, rotation, position, term_pos, term_rot);
