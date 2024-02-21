@@ -33,6 +33,9 @@ int init_skill_tree() {
   );
   set_ui_texture(skill_tree.ui_skill_tree_background, "assets/ui/hud_color_50.png");
 
+  // set layer to front
+  set_manual_layer(skill_tree.ui_skill_tree_background, 0.01);
+
   // set init visibility
   set_ui_enabled(skill_tree.ui_skill_tree_root, 0);
   

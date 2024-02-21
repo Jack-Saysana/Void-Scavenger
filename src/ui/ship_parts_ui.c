@@ -150,6 +150,9 @@ int init_ship_parts() {
   );
   set_ui_texture(ship_parts.ui_thruster_icon, "assets/ui/parts_thruster_icon.png");
 
+  // set layer to front
+  set_manual_layer(ship_parts.ui_ship_parts_root, 0.01);
+
   // set init visibility
   set_ui_enabled(ship_parts.ui_ship_parts_root, 0);
   
