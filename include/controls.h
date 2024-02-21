@@ -63,3 +63,4 @@ size_t init_projectile(vec3, vec3, float, PROJ_SOURCE, S_WEAPON_T, float,
 int projectile_insert_sim(size_t);
 void toggle_inventory();
 void toggle_ship_parts();
+void toggle_skill_tree();

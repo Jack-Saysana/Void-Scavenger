@@ -32,6 +32,12 @@ void init_ui_components() {
     printf("Could not initialize ship parts!\n");
     exit(1);
   }
+
+  // Initialize skill tree
+  if (init_skill_tree()) {
+    printf("Could not initialize skill tree!\n");
+    exit(1);
+  }
   
   coordinates_ui_initialize();
 }
@@ -48,4 +54,5 @@ void update_ui_components() {
   update_stats();
   update_inventory();
   update_ship_parts();
+  update_skill_tree();
 }
