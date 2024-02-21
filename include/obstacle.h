@@ -3,6 +3,8 @@
 #include <const.h>
 #include <global_vars.h>
 
+#define AMOUNT_MOVE_TOWARDS_ORIGIN (10.0)
+
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
 int space_obstacle_insert_sim(size_t);
