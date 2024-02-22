@@ -18,6 +18,12 @@ typedef struct station_enemy {
   ENTITY *ent;
   // Offset of respective wrapper in the object_wrapper buffer
   size_t wrapper_offset;
+  // Offset of corridor the enemy currently resides in
+  size_t target_corridor;
+
+  // Pathfinding data
+  // Vector directing the enemy away from other enemies
+  vec3 nearby_enemies;
 
   float max_health;
   float cur_health;
@@ -25,6 +31,9 @@ typedef struct station_enemy {
   float fire_rate;
   E_WEAP_T weapon_type;
   int invuln;
+
+  // Animation data
+  unsigned int cur_frame;
 } ST_ENEMY;
 
 #endif

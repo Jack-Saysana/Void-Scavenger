@@ -69,6 +69,8 @@ size_t init_enemy(size_t index) {
   if (new_enemy->wrapper_offset == INVALID_INDEX) {
     return -1;
   }
+  new_enemy->target_corridor = INVALID_INDEX;
+  glm_vec3_zero(new_enemy->nearby_enemies);
 
   if (index == BRUTE) {
     new_enemy->max_health = E_BASE_HEALTH_BRUTE;
@@ -84,6 +86,7 @@ size_t init_enemy(size_t index) {
     new_enemy->weapon_type = RANGED;
   }
   new_enemy->invuln = 0;
+  new_enemy->cur_frame = INVALID_FRAME;
 
   num_enemies++;
   if (num_enemies == enemy_buff_len) {
@@ -104,6 +107,10 @@ void delete_enemy(size_t index) {
   }
 
   update_timer_memory(&st_enemies[index].invuln, NULL);
+  update_timer_args(st_enemy_walk_cycle, (void *) index,
+                    (void *) INVALID_INDEX);
+  update_timer_args(st_enemy_hurt_anim, (void *) index,
+                    (void *) INVALID_INDEX);
   free_entity(st_enemies[index].ent);
   delete_wrapper(st_enemies[index].wrapper_offset);
 
@@ -115,6 +122,10 @@ void delete_enemy(size_t index) {
   st_enemies[index] = st_enemies[num_enemies];
   update_timer_memory(&st_enemies[num_enemies].invuln,
                       &st_enemies[index].invuln);
+  update_timer_args(st_enemy_walk_cycle, (void *) num_enemies,
+                    (void *) index);
+  update_timer_args(st_enemy_hurt_anim, (void *) num_enemies,
+                    (void *) index);
   SOBJ *wrapper = object_wrappers + st_enemies[index].wrapper_offset;
   wrapper->data = (void *) index;
 }
@@ -318,6 +329,8 @@ void enemy_behavior() {
   for (size_t i = 0; i < num_enemies; i++) {
     if (mode == SPACE) {
       sp_enemy_pathfind(i);
+    } else if (mode == STATION) {
+      st_enemy_pathfind(i);
     }
   }
 }
@@ -429,5 +442,108 @@ void sp_enemy_pathfind(size_t index) {
 }
 
 void st_enemy_pathfind(size_t index) {
+  ST_ENEMY *enemy = st_enemies + index;
+  if (enemy->invuln) {
+    return;
+  }
+  vec3 forward = GLM_VEC3_ZERO_INIT;
+  vec3 enemy_pos_2d = { enemy->ent->translation[X], 0.0,
+                        enemy->ent->translation[Z] };
+  vec3 nearby_enemies = GLM_VEC3_ZERO_INIT;
+  glm_vec3_normalize_to(enemy->nearby_enemies, nearby_enemies);
+  glm_vec3_zero(enemy->nearby_enemies);
+  enemy->ent->velocity[X] = 0.0;
+  enemy->ent->velocity[Z] = 0.0;
+  glm_vec3_zero(enemy->ent->ang_velocity);
+  if (enemy->target_corridor == INVALID_INDEX) {
+    enemy->cur_frame = INVALID_FRAME;
+    update_timer_args(st_enemy_walk_cycle, (void *) index,
+                      (void *) INVALID_INDEX);
+    return;
+  }
 
+  glm_quat_rotatev(enemy->ent->rotation, (vec3) { -1.0, 0.0, 0.0 }, forward);
+  if (enemy->cur_frame == INVALID_FRAME) {
+    enemy->cur_frame = 0;
+    add_timer(0.016, st_enemy_walk_cycle, -1000, (void *) index);
+  }
+
+  // Calculate direction of targeted corridor
+  CORRIDOR *cd = cd_obs + enemy->target_corridor;
+  vec3 cd_pos_2d = { cd->ent->translation[X], 0.0, cd->ent->translation[Z] };
+  float to_cd_center = glm_vec3_distance(enemy_pos_2d, cd_pos_2d);
+  vec3 target_cd_dir = GLM_VEC3_ZERO_INIT;
+  if (to_cd_center > 1.0) {
+    glm_vec3_sub(cd_pos_2d, enemy_pos_2d, target_cd_dir);
+  } else {
+    // Search for new target corridor (in the future this will be some sort of
+    // pathfinding algorithm)
+    for (int i = 0; i < 4; i++) {
+      if (cd->neighbors[i] != INVALID_INDEX) {
+        enemy->target_corridor = cd->neighbors[i];
+        break;
+      }
+    }
+  }
+
+  vec3 target_dir = GLM_VEC3_ZERO_INIT;
+  glm_vec3_add(nearby_enemies, target_cd_dir, target_dir);
+  glm_vec3_normalize(target_dir);
+
+  float alignment = glm_vec3_dot(target_dir, forward);
+  if (alignment >= 0.75) {
+    glm_vec3_scale_as(forward, enemy->cur_speed, enemy->ent->velocity);
+  }
+  if (alignment < 0.9) {
+    vec3 test_dir = GLM_VEC3_ZERO_INIT;
+    glm_vec3_cross(forward, target_dir, test_dir);
+    glm_vec3_normalize(test_dir);
+    if (glm_vec3_dot(test_dir, (vec3) { 0.0, 1.0, 0.0 }) > 0.0) {
+      glm_vec3_copy((vec3) { 0.0, 1.0, 0.0 }, enemy->ent->ang_velocity);
+    } else {
+      glm_vec3_copy((vec3) { 0.0, -1.0, 0.0 }, enemy->ent->ang_velocity);
+    }
+  }
+}
+
+// =================================== MISC ==================================
+
+void st_enemy_walk_cycle(void *args) {
+  size_t index = (size_t) args;
+  if (index == INVALID_INDEX) {
+    return;
+  }
+
+  ST_ENEMY *enemy = st_enemies + index;
+  if (enemy->invuln) {
+    return;
+  }
+  size_t duration = enemy->ent->model->animations[E_ANIM_WALK].duration;
+  animate(enemy->ent, E_ANIM_WALK, enemy->cur_frame);
+  enemy->cur_frame = (enemy->cur_frame + 1) % duration;
+
+  add_timer(0.016, st_enemy_walk_cycle, -1000, args);
+}
+
+void st_enemy_hurt_anim(void *args) {
+  size_t index = (size_t) args;
+  if (index == INVALID_INDEX) {
+    return;
+  }
+
+  ST_ENEMY *enemy = st_enemies + index;
+  size_t duration = enemy->ent->model->animations[E_ANIM_HURT].duration;
+  animate(enemy->ent, E_ANIM_HURT, enemy->cur_frame);
+
+  if (enemy->cur_frame < duration) {
+    enemy->cur_frame++;
+    add_timer(0.04, st_enemy_hurt_anim, -1000, args);
+  } else {
+    if (enemy->cur_health <= 0.0) {
+      object_wrappers[enemy->wrapper_offset].to_delete = 1;;
+    } else {
+      enemy->cur_frame = INVALID_FRAME;
+      enemy->invuln = 0;
+    }
+  }
 }

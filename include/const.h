@@ -14,7 +14,7 @@
 #define S_BASE_SHIELD_RECHARGE (5.0)
 #define S_BASE_SHIELD_DELAY (2.0)
 #define S_BASE_PWR_DRAW (25.0)
-#define S_BASE_DAMAGE (1000.0)
+#define S_BASE_DAMAGE (100.0)
 #define S_BASE_FIRERATE (0.1)
 #define S_BASE_PROJ_SPEED (50.0)
 #define S_BASE_RANGE (100.0)
@@ -26,6 +26,10 @@
 // Enemy Constants
 #define NUM_ALIEN_TYPES (2)
 #define NUM_ALIEN_SHIP_TYPES (2)
+#define E_ANIM_HURT (0)
+#define E_ANIM_SHOOTING (1)
+#define E_ANIM_STANDING (2)
+#define E_ANIM_WALK (3)
 
 #define BRUTE (0)
 #define NORMAL (1)
@@ -66,6 +70,10 @@
 #define TYPE_CORNER (2)
 #define TYPE_T_JUNCT (3)
 #define TYPE_CORRIDOR (4)
+#define NEIGHBOR_POS_X (0)
+#define NEIGHBOR_NEG_X (1)
+#define NEIGHBOR_POS_Z (2)
+#define NEIGHBOR_NEG_Z (3)
 
 // Station obstacle constants
 #define NUM_STATION_OBSTACLE_TYPES (20)
@@ -104,5 +112,7 @@
 #define RIGHT (3)
 #define FORWARD (4)
 #define BACK (5)
+
+#define INVALID_FRAME (0xFFFFFFFF)
 
 #endif
