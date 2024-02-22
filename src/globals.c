@@ -7,7 +7,7 @@
 */
 
 GAME_MODE mode = SPACE;
-DIFF difficulty = BADASS;
+DIFF difficulty = MEDIUM;
 
 CAM camera;
 

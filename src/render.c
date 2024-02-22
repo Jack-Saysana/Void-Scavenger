@@ -16,7 +16,7 @@ int init_scene() {
   entity_shader = init_shader_prog("./src/shaders/entity/shader.vs", NULL,
                                    "./src/shaders/entity/shader.fs");
   model_shader = init_shader_prog("./src/shaders/model/shader.vs", NULL,
-                                  "./src/shaders/model/shader.fs");
+                                  "./src/shaders/entity/shader.fs");
   ui_shader = init_shader_prog("./src/shaders/ui/shader.vs", NULL,
                                "./src/shaders/ui/shader.fs");
   basic_shader = init_shader_prog("./src/shaders/basic/shader.vs", NULL,
@@ -40,6 +40,8 @@ int init_scene() {
   station_model = load_model("./assets/set_pieces/station/station.obj");
   terminal_model = load_model("./assets/set_pieces/terminal/terminal.obj");
   dead_zone_model = load_model("./assets/misc/dead_zone/dead_zone.obj");
+  shotgun_model = load_model("./assets/set_pieces/shotgun/shotgun.obj");
+  rifle_model = load_model("./assets/set_pieces/rifle/rifle.obj");
   asteroid_models[0] = load_model("./assets/set_pieces/asteroid_1/asteroid_1.obj");
   asteroid_models[1] = load_model("./assets/set_pieces/asteroid_2/asteroid_2.obj");
   asteroid_models[2] = load_model("./assets/set_pieces/asteroid_3/asteroid_3.obj");
@@ -158,6 +160,7 @@ void render_scene(GLFWwindow *window) {
   glUseProgram(model_shader);
   set_mat4("projection", persp_proj, model_shader);
   set_mat4("view", view, model_shader);
+  set_vec3("camera_pos", camera.pos, model_shader);
 
   glUseProgram(basic_shader);
   set_mat4("projection", persp_proj, basic_shader);
@@ -227,6 +230,20 @@ void render_game_entity(ENTITY *ent) {
     } else {
       draw_entity(proj_shader, ent);
     }
+  } else if (wrapper->type == ENEMY_OBJ) {
+    ST_ENEMY *enemy = st_enemies + (size_t) wrapper->data;
+    glUseProgram(model_shader);
+    mat4 model = GLM_MAT4_IDENTITY_INIT;
+    if (enemy->max_health > 100.0) {
+      get_enemy_hand_mat((size_t) wrapper->data, BRUTE, model);
+      set_mat4("model", model, model_shader);
+      draw_model(model_shader, shotgun_model);
+    } else {
+      get_enemy_hand_mat((size_t) wrapper->data, NORMAL, model);
+      set_mat4("model", model, model_shader);
+      draw_model(model_shader, rifle_model);
+    }
+    draw_entity(entity_shader, ent);
   } else {
     draw_entity(entity_shader, ent);
   }

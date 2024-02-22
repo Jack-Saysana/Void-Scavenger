@@ -499,14 +499,14 @@ void st_enemy_pathfind(size_t index) {
     glm_vec3_cross(forward, target_dir, test_dir);
     glm_vec3_normalize(test_dir);
     if (glm_vec3_dot(test_dir, (vec3) { 0.0, 1.0, 0.0 }) > 0.0) {
-      glm_vec3_copy((vec3) { 0.0, 1.0, 0.0 }, enemy->ent->ang_velocity);
+      glm_vec3_copy((vec3) { 0.0, 3.0, 0.0 }, enemy->ent->ang_velocity);
     } else {
-      glm_vec3_copy((vec3) { 0.0, -1.0, 0.0 }, enemy->ent->ang_velocity);
+      glm_vec3_copy((vec3) { 0.0, -3.0, 0.0 }, enemy->ent->ang_velocity);
     }
   }
 }
 
-// =================================== MISC ==================================
+// ================================= ANIMATION ===============================
 
 void st_enemy_walk_cycle(void *args) {
   size_t index = (size_t) args;
@@ -537,7 +537,7 @@ void st_enemy_hurt_anim(void *args) {
 
   if (enemy->cur_frame < duration) {
     enemy->cur_frame++;
-    add_timer(0.04, st_enemy_hurt_anim, -1000, args);
+    add_timer(0.03, st_enemy_hurt_anim, -1000, args);
   } else {
     if (enemy->cur_health <= 0.0) {
       object_wrappers[enemy->wrapper_offset].to_delete = 1;;
@@ -546,4 +546,27 @@ void st_enemy_hurt_anim(void *args) {
       enemy->invuln = 0;
     }
   }
+}
+
+// =================================== MISC ==================================
+
+void get_enemy_hand_mat(size_t index, int type, mat4 dest) {
+  ENTITY *ent = st_enemies[index].ent;
+  mat4 to_world_space = GLM_MAT4_IDENTITY_INIT;
+  glm_translate(to_world_space, ent->translation);
+  glm_quat_rotate(to_world_space, ent->rotation, to_world_space);
+  glm_scale(to_world_space, ent->scale);
+
+  BONE *bone = NULL;
+  mat4 to_entity_space = GLM_MAT4_IDENTITY_INIT;
+  if (type == NORMAL) {
+    bone = ent->model->bones + 15;
+    glm_mat4_mul(to_world_space, ent->final_b_mats[15], to_world_space);
+  } else {
+    bone = ent->model->bones + 14;
+    glm_mat4_mul(to_world_space, ent->final_b_mats[14], to_world_space);
+  }
+  glm_translate(to_entity_space, bone->base);
+
+  glm_mat4_mul(to_world_space, to_entity_space, dest);
 }

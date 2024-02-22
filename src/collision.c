@@ -240,7 +240,7 @@ void decrement_enemy_health(size_t index, float damage, float timing) {
       enemy->cur_health -= damage;
       enemy->invuln = 1;
       enemy->cur_frame = 0;
-      add_timer(0.04, st_enemy_hurt_anim, -1000, (void *) index);
+      add_timer(0.03, st_enemy_hurt_anim, -1000, (void *) index);
     }
   }
 }
