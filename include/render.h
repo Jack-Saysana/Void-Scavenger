@@ -75,10 +75,11 @@ void query_render_dist();
 void render_game_entity(ENTITY *);
 void render_oct_tree(SIMULATION *);
 void render_dead_zones();
+void get_bone_equip_mat(ENTITY *, size_t, mat4);
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 
 void get_cam_matrix(CAM *, mat4);
 void player_ship_thrust_move();
 ENTITY **get_dead_zones();
-void get_enemy_hand_mat(size_t, int, mat4);
+void get_player_gun_mat(mat4);

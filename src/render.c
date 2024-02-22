@@ -182,6 +182,13 @@ void render_scene(GLFWwindow *window) {
   if (render_bounds) {
     render_dead_zones();
   }
+  if (mode == STATION) {
+    mat4 gun_mat = GLM_MAT4_IDENTITY_INIT;
+    get_player_gun_mat(gun_mat);
+    glUseProgram(model_shader);
+    set_mat4("model", gun_mat, model_shader);
+    draw_model(model_shader, rifle_model);
+  }
 
   render_game_entity(render_sphere);
   render_game_entity(sim_sphere);
@@ -235,11 +242,11 @@ void render_game_entity(ENTITY *ent) {
     glUseProgram(model_shader);
     mat4 model = GLM_MAT4_IDENTITY_INIT;
     if (enemy->max_health > 100.0) {
-      get_enemy_hand_mat((size_t) wrapper->data, BRUTE, model);
+      get_bone_equip_mat(ent, 14, model);
       set_mat4("model", model, model_shader);
       draw_model(model_shader, shotgun_model);
     } else {
-      get_enemy_hand_mat((size_t) wrapper->data, NORMAL, model);
+      get_bone_equip_mat(ent, 15, model);
       set_mat4("model", model, model_shader);
       draw_model(model_shader, rifle_model);
     }
@@ -281,6 +288,21 @@ void render_oct_tree(SIMULATION *sim) {
 }
 
 // ================================= HELPERS =================================
+
+void get_bone_equip_mat(ENTITY *ent, size_t index, mat4 dest) {
+  mat4 to_world_space = GLM_MAT4_IDENTITY_INIT;
+  glm_translate(to_world_space, ent->translation);
+  glm_quat_rotate(to_world_space, ent->rotation, to_world_space);
+  glm_scale(to_world_space, ent->scale);
+
+  BONE *bone = NULL;
+  mat4 to_entity_space = GLM_MAT4_IDENTITY_INIT;
+  bone = ent->model->bones + index;
+  glm_mat4_mul(to_world_space, ent->final_b_mats[index], to_world_space);
+  glm_translate(to_entity_space, bone->base);
+
+  glm_mat4_mul(to_world_space, to_entity_space, dest);
+}
 
 ENTITY *init_player_ent() {
   return init_entity(player_model);
@@ -345,3 +367,4 @@ void toggle_render_bounds() {
 void update_perspective() {
   glm_perspective(glm_rad(45.0), RES_X / RES_Y, 0.1f, RENDER_DIST, persp_proj);
 }
+

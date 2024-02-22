@@ -548,25 +548,3 @@ void st_enemy_hurt_anim(void *args) {
   }
 }
 
-// =================================== MISC ==================================
-
-void get_enemy_hand_mat(size_t index, int type, mat4 dest) {
-  ENTITY *ent = st_enemies[index].ent;
-  mat4 to_world_space = GLM_MAT4_IDENTITY_INIT;
-  glm_translate(to_world_space, ent->translation);
-  glm_quat_rotate(to_world_space, ent->rotation, to_world_space);
-  glm_scale(to_world_space, ent->scale);
-
-  BONE *bone = NULL;
-  mat4 to_entity_space = GLM_MAT4_IDENTITY_INIT;
-  if (type == NORMAL) {
-    bone = ent->model->bones + 15;
-    glm_mat4_mul(to_world_space, ent->final_b_mats[15], to_world_space);
-  } else {
-    bone = ent->model->bones + 14;
-    glm_mat4_mul(to_world_space, ent->final_b_mats[14], to_world_space);
-  }
-  glm_translate(to_entity_space, bone->base);
-
-  glm_mat4_mul(to_world_space, to_entity_space, dest);
-}
