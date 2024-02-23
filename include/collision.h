@@ -30,3 +30,4 @@ void stop_coords_warning();
 
 void set_gamemode_station();
 void set_terminal_ui(int);
+void st_enemy_hurt_anim(void *);

@@ -193,3 +193,24 @@ void get_player_coordinates(vec3 coords) {
     glm_vec3_copy(st_player.ent->translation, coords);
   }
 }
+
+void get_player_gun_mat(mat4 dest) {
+  mat4 to_player_space = GLM_MAT4_IDENTITY_INIT;
+  glm_rotate(to_player_space, glm_rad(camera.pitch),
+             (vec3) { 0.0, 0.0, 1.0 });
+  glm_translate(to_player_space, (vec3) { -0.3, -0.25, 0.0 });
+  mat4 temp = GLM_MAT4_IDENTITY_INIT;
+  glm_mat4_ins3((mat3) {
+    { 0.0, 0.0, 1.0 },
+    { -1.0, 0.0, 0.0 },
+    { 0.0, -1.0, 0.0 }
+  }, temp);
+  glm_mat4_transpose(temp);
+  glm_mat4_mul(to_player_space, temp, to_player_space);
+
+  glm_mat4_identity(dest);
+  glm_translate(dest, camera.pos);
+  glm_quat_rotate(dest, st_player.ent->rotation, dest);
+  glm_scale(dest, st_player.ent->scale);
+  glm_mat4_mul(dest, to_player_space, dest);
+}

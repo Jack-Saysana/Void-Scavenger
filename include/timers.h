@@ -33,3 +33,8 @@ void decrement_current_timer(float);
 void timer_dispatcher(TIMERS *);
 int init_timer_queue();
 void free_timer_queue();
+
+/* ========================== EXTERNALLY DEFINED =========================== */
+
+void prepare_object_movement();
+void update_object_movement();

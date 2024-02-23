@@ -73,6 +73,7 @@ void decrement_current_timer(float delta) {
   if (!head) {
     return;
   }
+  prepare_object_movement();
   if ((head->data->time -= delta) <= 0.0) {
     float residual = head->data->time - delta;
     if (residual < 0.0) {
@@ -88,6 +89,7 @@ void decrement_current_timer(float delta) {
       timer_dispatcher(temp);
     }
   }
+  update_object_movement();
 }
 
 /*

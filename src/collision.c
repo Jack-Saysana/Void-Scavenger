@@ -44,11 +44,31 @@ void handle_collisions() {
 }
 
 void handle_physics_collisions(COLLISION *cols, size_t num_cols) {
+  SOBJ *a_wrapper = NULL;
+  SOBJ *b_wrapper = NULL;
+  ST_ENEMY *cur_enemy = NULL;
   for (size_t i = 0; i < num_cols; i++) {
     impulse_resolution(physics_sim, cols[i]);
 
-    object_wrappers[(size_t) cols[i].a_ent->data].to_refresh = 1;
-    object_wrappers[(size_t) cols[i].b_ent->data].to_refresh = 1;
+    a_wrapper = object_wrappers + (size_t) cols[i].a_ent->data;
+    b_wrapper = object_wrappers + (size_t) cols[i].b_ent->data;
+
+    a_wrapper->to_refresh = 1;
+    b_wrapper->to_refresh = 1;
+
+    cur_enemy = NULL;
+    if (a_wrapper->type == ENEMY_OBJ && b_wrapper->type == CORRIDOR_OBJ) {
+      cur_enemy = st_enemies + (size_t) a_wrapper->data;
+      if (cur_enemy->target_corridor == INVALID_INDEX) {
+        cur_enemy->target_corridor = (size_t) b_wrapper->data;
+      }
+    } else if (a_wrapper->type == CORRIDOR_OBJ &&
+               b_wrapper->type == ENEMY_OBJ) {
+      cur_enemy = st_enemies + (size_t) b_wrapper->data;
+      if (cur_enemy->target_corridor == INVALID_INDEX) {
+        cur_enemy->target_corridor = (size_t) a_wrapper->data;
+      }
+    }
   }
 }
 
@@ -103,16 +123,32 @@ void handle_event_collisions(COLLISION *cols, size_t num_cols) {
 
   SOBJ *a_wrapper = NULL;
   SOBJ *b_wrapper = NULL;
+  vec3 temp = GLM_VEC3_ZERO_INIT;
   for (size_t i = 0; i < num_cols; i++) {
     a_wrapper = object_wrappers + (size_t) cols[i].a_ent->data;
     b_wrapper = object_wrappers + (size_t) cols[i].b_ent->data;
 
+    // Direct enemies away from one another
+    if (a_wrapper->type == ENEMY_OBJ && b_wrapper->type == ENEMY_OBJ) {
+      glm_vec3_sub(st_enemies[(size_t) a_wrapper->data].ent->translation,
+                   st_enemies[(size_t) b_wrapper->data].ent->translation,
+                   temp);
+      temp[Y] = 0.0;
+      glm_vec3_add(temp, st_enemies[(size_t) a_wrapper->data].nearby_enemies,
+                   st_enemies[(size_t) a_wrapper->data].nearby_enemies);
+      glm_vec3_negate(temp);
+      glm_vec3_add(temp, st_enemies[(size_t) b_wrapper->data].nearby_enemies,
+                   st_enemies[(size_t) b_wrapper->data].nearby_enemies);
+    }
+
+    // Display terminal ui if player close to terminal
     if ((a_wrapper->type == TERMINAL_OBJ && b_wrapper->type == PLAYER_OBJ) ||
         (a_wrapper->type == PLAYER_OBJ && b_wrapper->type == TERMINAL_OBJ)) {
       set_terminal_ui(1);
       continue;
     }
 
+    // Switch to station mode upon collision with space station
     if ((a_wrapper->type == PLAYER_SHIP_OBJ &&
           b_wrapper->type == STATION_OBJ) ||
         (a_wrapper->type == STATION_OBJ &&
@@ -121,6 +157,7 @@ void handle_event_collisions(COLLISION *cols, size_t num_cols) {
       return;
     }
 
+    // Decrement player/enemy health upon collision with deadzones
     if (a_wrapper->type == DEAD_ZONE_OBJ && b_wrapper->type != DEAD_ZONE_OBJ) {
       target_wrapper = b_wrapper;
     } else if (a_wrapper->type != DEAD_ZONE_OBJ &&
@@ -201,12 +238,9 @@ void decrement_enemy_health(size_t index, float damage, float timing) {
     ST_ENEMY *enemy = st_enemies + index;
     if (!enemy->invuln) {
       enemy->cur_health -= damage;
-      if (enemy->cur_health <= 0.0) {
-        object_wrappers[(size_t) enemy->wrapper_offset].to_delete = 1;
-      } else {
-        enemy->invuln = 1;
-        add_timer(timing, &enemy->invuln, 0, NULL);
-      }
+      enemy->invuln = 1;
+      enemy->cur_frame = 0;
+      add_timer(0.03, st_enemy_hurt_anim, -1000, (void *) index);
     }
   }
 }

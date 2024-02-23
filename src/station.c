@@ -48,6 +48,10 @@ size_t init_corridor(vec3 pos, versor rotation, size_t type) {
     return -1;
   }
 
+  for (int i = 0; i < 4; i++) {
+    corr->neighbors[i] = INVALID_INDEX;
+  }
+
   /* Initialize corridor entity data */
   glm_vec3_copy(pos, corr->ent->translation);
   glm_vec3_copy((vec3) GLM_VEC3_ZERO_INIT, corr->ent->ang_velocity);
@@ -339,15 +343,6 @@ Legend:
 
 */
 void create_station_corridors() {
-  int **maze = gen_maze();
-  /* x = movement in OpenGL X-axis along maze */
-  /* z = movement in OpenGL Z-axis along maze */
-  int up = 0;
-  int down = 0;
-  int left = 0;
-  int right = 0;
-  int type = -1;
-  int rotation = 0;
   int item_spawn_chance = 30;
   int enemy_spawn_chance = 10;
   int enemy_variation = 20;
@@ -363,102 +358,94 @@ void create_station_corridors() {
     item_spawn_chance = 10;
     enemy_variation = 70;
   }
-
   int found_terminal_room = 0;
   int backup_room_t = -1;
   int backup_room_rot = 0;
   vec3 backup_room_pos = GLM_VEC3_ZERO_INIT;
   versor term_rot = GLM_QUAT_IDENTITY_INIT;
   vec3 term_pos = GLM_VEC3_ZERO_INIT;
-
   int spawn_player = 1;
-  for (int x = 1; x < maze_size - 1; x++) {
-    for (int z = 1; z < maze_size - 1; z++) {
-      /* Check above, below, left, and right */
-      /* Outputs of macros are stored in up, down, left, and right */
-      /* if up, down, left, or right == UP, output is 1, otherwise 0 */
-      if (maze[x][z] == IN) {
-        CHECK_UP(maze, x, z, up)
-        CHECK_DOWN(maze, x, z, down)
-        CHECK_LEFT(maze, x, z, left)
-        CHECK_RIGHT(maze, x, z, right)
-        if (up & down & left & right) {
-          type = TYPE_FOUR_WAY;
-          rotation = 0;
-        } else if (up & ~down & ~left & ~right) {
-          type = TYPE_ONE_WAY;
-          rotation = 0;
-        } else if (~up & down & ~left & ~right) {
-          type = TYPE_ONE_WAY;
-          rotation = 180;
-        } else if (~up & ~down & left & ~right) {
-          type = TYPE_ONE_WAY;
-          rotation = 90;
-        } else if (~up & ~down & ~left & right) {
-          type = TYPE_ONE_WAY;
-          rotation = 270;
-        } else if (up & down & left & ~right) {
-          type = TYPE_T_JUNCT;
-          rotation = 180;
-        } else if (~up & down & left & right) {
-          type = TYPE_T_JUNCT;
-          rotation = 270;
-        } else if (up & down & ~left & right) {
-          type = TYPE_T_JUNCT;
-          rotation = 0;
-        } else if (up & ~down & left & right) {
-          type = TYPE_T_JUNCT;
-          rotation = 90;
-        } else if (up & down & ~left & ~right) {
-          type = TYPE_CORRIDOR;
-          rotation = 0;
-        } else if (~up & ~down & left & right) {
-          type = TYPE_CORRIDOR;
-          rotation = 90;
-        } else if (~up & down & left & ~right) {
-          type = TYPE_CORNER;
-          rotation = 180;
-        } else if (~up & down & ~left & right) {
-          type = TYPE_CORNER;
-          rotation = 270;
-        } else if (up & ~down & ~left & right) {
-          type = TYPE_CORNER;
-          rotation = 0;
-        } else if (up & ~down & left & ~right) {
-          type = TYPE_CORNER;
-          rotation = 90;
-        } else {
-          fprintf(stderr, "Could not find a matching corridor layout for (%d, %d)!\n", x, z);
-          continue;
-        }
-        versor rot;
-        if (rotation == 90) {
-          glm_quat_identity(rot);
-        } else if (rotation == 180) {
-          glm_quat_init(rot, 0.0, 1 / sqrt(2), 0.0, 1 / sqrt(2));
-        } else if (rotation == 270) {
-          glm_quat_init(rot, 0.0, 1.0, 0.0, 0.0);
-        } else if (rotation == 0) {
-          glm_quat_init(rot, 0.0, 1 / sqrt(2), 0.0, -1 / sqrt(2));
+  int j = 0;
+  int x_off = 0;
+  int z_off = 0;
+  int cur_type = 0;
+  int cur_rot = 0;
+  vec3 position = GLM_VEC3_ZERO_INIT;
+  ivec2 cur_coords = { 0, 0 };
+  size_t cur_index = INVALID_INDEX;
+  size_t index = INVALID_INDEX;
+
+  int **maze = gen_maze();
+  // Create list of already created corridors
+  size_t *visited = malloc(sizeof(size_t) * maze_size * maze_size);
+  for (size_t i = 0; i < maze_size * maze_size; i++) {
+    visited[i] = INVALID_INDEX;
+  }
+
+  // Create stack used to traverse the valid maze tiles
+  ivec2 *stack = malloc(sizeof(ivec2) * BUFF_STARTING_LEN);
+  // Initialize the first maze tile in the stack and mark it visited
+  glm_ivec2_copy((ivec2) { 1, 1 }, stack[0]);
+  visited[maze_size + 1] = gen_cd_obj(maze, stack[0], backup_room_pos,
+                                      &backup_room_t, &backup_room_rot);
+  size_t stack_top = 1;
+  size_t stack_size = BUFF_STARTING_LEN;
+
+  while (stack_top) {
+    stack_top--;
+    glm_ivec2_copy(stack[stack_top], cur_coords);
+    cur_index = (cur_coords[X] * maze_size) + cur_coords[Y];
+
+    // Iterate over the children of the current cell, populating the
+    // neighbors buffer
+    for (int i = 0; i < 4; i++) {
+      x_off = 0;
+      z_off = 0;
+      if (i == 0) {
+        x_off = 1;
+        j = 1;
+      } else if (i == 1) {
+        x_off = -1;
+        j = 0;
+      } else if (i == 2) {
+        z_off = 1;
+        j = 3;
+      } else {
+        z_off = -1;
+        j = 2;
+      }
+      if (maze[cur_coords[X] + x_off][cur_coords[Y] + z_off] != IN) {
+        continue;
+      }
+
+      index = ((cur_coords[X] + x_off) * maze_size) + cur_coords[Y] + z_off;
+      if (visited[index] == INVALID_INDEX) {
+        // Child cell is not visited, so create a new corridor object and push
+        // it on the stack
+        glm_ivec2_copy((ivec2) { cur_coords[X] + x_off,
+                                 cur_coords[Y] + z_off }, stack[stack_top]);
+        visited[index] = gen_cd_obj(maze, stack[stack_top], position,
+                                    &cur_type, &cur_rot);
+        stack_top++;
+        if (stack_top == stack_size) {
+          int status = double_buffer((void **) &stack, &stack_size,
+                                     sizeof(ivec2));
+          if (status) {
+            fprintf(stderr, "Error: Unable to reallocate corridor stack\n");
+            exit(1);
+          }
         }
 
-        /* Initialize corridor */
-        vec3 position = GLM_VEC3_ZERO_INIT;
-        glm_vec3_copy((vec3) {
-                      (((float) x - 1) * 5.0) - (2.5 * maze_size),
-                      2.0,
-                      (((float) z - 1) * 5.0) - (2.5 * maze_size) }, position);
-        size_t index = init_corridor(position, rot, type);
-        corridor_insert_sim(index);
-
+        // Try to spawn player in new corridor
         if (spawn_player) {
           glm_vec3_copy(position, st_player.ent->translation);
           spawn_player = 0;
         }
 
-        // Try to spawn terminal
+        // Try to spawn terminal in new corridor
         if (!found_terminal_room && gen_rand_int(100) <= 10) {
-          gen_terminal_location(type, rotation, position, term_pos, term_rot);
+          gen_terminal_location(cur_type, cur_rot, position, term_pos,
+                                term_rot);
           spawn_st_terminal(term_pos, term_rot);
           found_terminal_room = 1;
           // If terminal spawns, dont spawn enemies or items in the room
@@ -495,11 +482,14 @@ void create_station_corridors() {
         }
 
         if (backup_room_t == -1) {
-          backup_room_t = type;
-          backup_room_rot = rotation;
+          backup_room_t = cur_type;
+          backup_room_rot = cur_rot;
           glm_vec3_copy(position, backup_room_pos);
         }
       }
+      // Update the neighbor buffers of the adjacent cells
+      cd_obs[visited[cur_index]].neighbors[i] = visited[index];
+      cd_obs[visited[index]].neighbors[j] = visited[cur_index];
     }
   }
 
@@ -510,6 +500,8 @@ void create_station_corridors() {
   }
 
   free_maze(maze);
+  free(visited);
+  free(stack);
 }
 
 void spawn_small_station_obstacle(vec3 position) {
@@ -605,4 +597,100 @@ void gen_terminal_location(int type, int rotation, vec3 pos, vec3 dest_pos,
   glm_quat_rotatev(dest_rot, offset, offset);
   glm_vec3_add(pos, offset, dest_pos);
   dest_pos[Y] = 2.0;
+}
+
+size_t gen_cd_obj(int **maze, ivec2 coords, vec3 pos_dest, int *type_dest,
+                  int *rot_dest) {
+  /* x = movement in OpenGL X-axis along maze */
+  /* z = movement in OpenGL Z-axis along maze */
+  int up = 0;
+  int down = 0;
+  int left = 0;
+  int right = 0;
+  int type = -1;
+  int rotation = 0;
+  /* Check above, below, left, and right */
+  /* Outputs of macros are stored in up, down, left, and right */
+  /* if up, down, left, or right == UP, output is 1, otherwise 0 */
+  CHECK_UP(maze, coords[X], coords[Y], up)
+  CHECK_DOWN(maze, coords[X], coords[Y], down)
+  CHECK_LEFT(maze, coords[X], coords[Y], left)
+  CHECK_RIGHT(maze, coords[X], coords[Y], right)
+  if (up & down & left & right) {
+    type = TYPE_FOUR_WAY;
+    rotation = 0;
+  } else if (up & ~down & ~left & ~right) {
+    type = TYPE_ONE_WAY;
+    rotation = 0;
+  } else if (~up & down & ~left & ~right) {
+    type = TYPE_ONE_WAY;
+    rotation = 180;
+  } else if (~up & ~down & left & ~right) {
+    type = TYPE_ONE_WAY;
+    rotation = 90;
+  } else if (~up & ~down & ~left & right) {
+    type = TYPE_ONE_WAY;
+    rotation = 270;
+  } else if (up & down & left & ~right) {
+    type = TYPE_T_JUNCT;
+    rotation = 180;
+  } else if (~up & down & left & right) {
+    type = TYPE_T_JUNCT;
+    rotation = 270;
+  } else if (up & down & ~left & right) {
+    type = TYPE_T_JUNCT;
+    rotation = 0;
+  } else if (up & ~down & left & right) {
+    type = TYPE_T_JUNCT;
+    rotation = 90;
+  } else if (up & down & ~left & ~right) {
+    type = TYPE_CORRIDOR;
+    rotation = 0;
+  } else if (~up & ~down & left & right) {
+    type = TYPE_CORRIDOR;
+    rotation = 90;
+  } else if (~up & down & left & ~right) {
+    type = TYPE_CORNER;
+    rotation = 180;
+  } else if (~up & down & ~left & right) {
+    type = TYPE_CORNER;
+    rotation = 270;
+  } else if (up & ~down & ~left & right) {
+    type = TYPE_CORNER;
+    rotation = 0;
+  } else if (up & ~down & left & ~right) {
+    type = TYPE_CORNER;
+    rotation = 90;
+  } else {
+    fprintf(stderr, "Could not find a matching corridor layout for (%d, %d)!\n", coords[X], coords[Y]);
+    return INVALID_INDEX;
+  }
+  versor rot;
+  if (rotation == 90) {
+    glm_quat_identity(rot);
+  } else if (rotation == 180) {
+    glm_quat_init(rot, 0.0, 1 / sqrt(2), 0.0, 1 / sqrt(2));
+  } else if (rotation == 270) {
+    glm_quat_init(rot, 0.0, 1.0, 0.0, 0.0);
+  } else if (rotation == 0) {
+    glm_quat_init(rot, 0.0, 1 / sqrt(2), 0.0, -1 / sqrt(2));
+  }
+
+  /* Initialize corridor */
+  vec3 position = GLM_VEC3_ZERO_INIT;
+  glm_vec3_copy((vec3) {
+                (((float) coords[X] - 1) * 5.0) - (2.5 * maze_size),
+                2.0,
+                (((float) coords[Y] - 1) * 5.0) - (2.5 * maze_size) },
+                position);
+  size_t index = init_corridor(position, rot, type);
+  corridor_insert_sim(index);
+  for (int i = 0; i < 4; i++) {
+    cd_obs[index].neighbors[i] = INVALID_INDEX;
+  }
+
+  glm_vec3_copy(position, pos_dest);
+  *type_dest = type;
+  *rot_dest = rotation;
+  return index;
 }
