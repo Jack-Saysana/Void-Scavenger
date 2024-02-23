@@ -1,5 +1,6 @@
 #include <GLFW/glfw3.h>
 #include <engine/engine.h>
+#include <globals.h>
 
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 

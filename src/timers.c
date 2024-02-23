@@ -7,7 +7,7 @@
   mem - location in memory to set
   set_to - value to change the location in memory to
 */
-void add_timer(float time, void *mem, int set_to) {
+void add_timer(float time, void *mem, int set_to, void *func_args) {
   if (time <= 0.0) {
     return;
   }
@@ -24,6 +24,7 @@ void add_timer(float time, void *mem, int set_to) {
   new->data->time = time;
   new->data->mem = mem;
   new->data->set_to = set_to;
+  new->data->args = func_args;
   new->next = NULL;
   new->prev = NULL;
 
@@ -72,6 +73,7 @@ void decrement_current_timer(float delta) {
   if (!head) {
     return;
   }
+  prepare_object_movement();
   if ((head->data->time -= delta) <= 0.0) {
     float residual = head->data->time - delta;
     if (residual < 0.0) {
@@ -87,6 +89,7 @@ void decrement_current_timer(float delta) {
       timer_dispatcher(temp);
     }
   }
+  update_object_movement();
 }
 
 /*
@@ -105,6 +108,19 @@ void update_timer_memory(void *prev, void *updated) {
   }
 }
 
+void update_timer_args(void *mem, void *prev, void *updated) {
+  if (!head) {
+    return;
+  }
+  TIMERS *cur = head;
+  while (cur) {
+    if (cur->data->mem == mem && cur->data->args == prev) {
+      cur->data->args = updated;
+    }
+    cur = cur->next;
+  }
+}
+
 /*
   Dispatcher to perform the expiration event
 */
@@ -113,7 +129,7 @@ void timer_dispatcher(TIMERS *timer) {
   /* to the value passed in originally                      */
   if (timer->data->mem) {
     if (timer->data->set_to == FUNC_PTR) {
-      ((func_ptr) (timer->data->mem))();
+      ((func_ptr) (timer->data->mem))(timer->data->args);
     } else {
       *((int *) timer->data->mem) = timer->data->set_to;
     }

@@ -5,6 +5,8 @@
 #include <global_vars.h>
 
 static ENTITY *dead_zones[6] = { NULL };
+static ENTITY *sp_station = NULL;
+static ENTITY *st_terminal = NULL;
 
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
@@ -12,6 +14,9 @@ void spawn_asteroids();
 void spawn_space_debris();
 int insert_dead_zones();
 void clear_dead_zones();
+int insert_sp_station();
+void clear_sp_station();
+void clear_st_terminal();
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 
@@ -41,6 +46,7 @@ void sp_enemy_remove_sim(size_t);
 void delete_projectile(size_t);
 void projectile_remove_sim(size_t);
 
+void spawn_sp_enemy(vec3, versor, int);
 void delete_space_obstacle(size_t);
 void space_obstacle_remove_sim(size_t);
 
@@ -82,7 +88,14 @@ void seed_random();
 // Dead zone placement
 ENTITY *init_dead_zone_ent();
 
+// Station placement
+ENTITY *init_station_ent();
+
+// Terminal placement
+ENTITY *init_terminal_ent();
+
 void disable_coordinates();
 void enable_coordinates();
 
 void update_perspective();
+void reset_camera(CAM *);

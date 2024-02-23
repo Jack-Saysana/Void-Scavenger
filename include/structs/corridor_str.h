@@ -5,6 +5,7 @@ typedef struct corridor {
   ENTITY *ent;
   // Offset of respective wrapper in the object_wrapper buffer
   size_t wrapper_offset;
+  size_t neighbors[4];
 } CORRIDOR;
 
 #endif

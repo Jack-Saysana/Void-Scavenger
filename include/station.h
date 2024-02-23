@@ -1,9 +1,9 @@
-#include <global_vars.h>
-#include <const.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <stdio.h>
-#include <cglm/quat.h>
+#include <cglm/cglm.h>
+#include <const.h>
+#include <global_vars.h>
 
 #define IN            (0)
 #define OUT           (1)
@@ -65,6 +65,8 @@
 void free_maze(int **);
 void spawn_small_station_obstacle(vec3);
 void spawn_large_station_obstacle(vec3);
+void gen_terminal_location(int, int, vec3, vec3, versor);
+size_t gen_cd_obj(int **, ivec2, vec3, int *, int *);
 
 /* ======================== EXTERNALLY DEFINED FUNCTIONS ================== */
 int double_buffer(void **, size_t *, size_t);
@@ -82,3 +84,6 @@ void seed_random();
 void station_obstacle_insert_sim(size_t);
 int space_obstacle_insert_sim(size_t);
 size_t init_station_obstacle(int, vec3, vec3, versor, float);
+
+void spawn_st_enemy(vec3, int);
+void spawn_st_terminal(vec3, versor);

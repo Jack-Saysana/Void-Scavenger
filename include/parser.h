@@ -27,6 +27,8 @@
 #define QUIT                 ("quit")
 #define PLAYER               ("player")
 #define SPEED                ("speed")
+#define RESET                ("reset")
+#define FPS                  ("fps")
 
 #define MAX_TOKS (10)
 
@@ -59,3 +61,6 @@ void enable_coordinates();
 void disable_coordinates();
 void set_render_dist(float);
 void set_sim_dist(float);
+void reset_station();
+void reset_space();
+void fps_toggle();

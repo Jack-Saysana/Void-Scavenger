@@ -2,12 +2,12 @@
 
 /*
                                    STATS
-Implements the functionality for defining UI components for both ship mode 
+Implements the functionality for defining UI components for both ship mode
 and station mode.
 */
 
 /*
-  Init stats UI globaly, call by general_ui.c init_scene()
+  Init stats UI globaly, call by general_ui.c init_ui_components()
 
   Return
     0 if successful
@@ -200,28 +200,36 @@ int init_stats() {
 }
 
 /*
-  Update stats UI per frame, call by render.c render_scene()
+  Update stats UI per frame, call by general_ui.c update_ui_components()
 */
 void update_stats() {
   // check current game mode
   if (mode == SPACE) {
     switch_space_hud();
-    
+    float power_level = (player_ship.reactor.max_output -
+                         calc_power_usage(&player_ship)) /
+                         player_ship.reactor.max_output;
     // update stats
     // TODO: Should be functional in sprint 2
-    set_ui_height(stats.ui_shield_bar, 0.9);
-    set_ui_height(stats.ui_health_bar, 0.7);
-    set_ui_height(stats.ui_energy_bar, 0.5);
-    set_ui_height(stats.ui_thruster_bar, 0.3);
+    set_ui_height(stats.ui_shield_bar,
+                  player_ship.cur_shield / player_ship.shield.max_shield);
+    set_ui_height(stats.ui_health_bar,
+                  player_ship.cur_health / player_ship.hull.max_health);
+    set_ui_height(stats.ui_energy_bar, power_level);
+    set_ui_height(stats.ui_thruster_bar,
+                  player_ship.cur_speed / player_ship.thruster.max_vel);
 
   } else if (mode == STATION) {
     switch_station_hud();
 
     // update stats
     // TODO: Should be functional in sprint 2
-    set_ui_width(stats.ui_shield_bar, 0.9);
-    set_ui_width(stats.ui_health_bar, 0.7);
-    set_ui_width(stats.ui_exp_bar, 0.5);
+    set_ui_width(stats.ui_shield_bar,
+                 st_player.cur_shield / st_player.max_shield);
+    set_ui_width(stats.ui_health_bar,
+                 st_player.cur_health / st_player.max_health);
+    set_ui_width(stats.ui_exp_bar,
+                 st_player.cur_experience / st_player.max_experience);
   }
 }
 
@@ -234,7 +242,7 @@ void switch_space_hud() {
   set_ui_enabled(stats.ui_health_root, 1);
   set_ui_enabled(stats.ui_energy_root, 1);
   set_ui_enabled(stats.ui_thruster_root, 1);
-  set_ui_enabled(stats.ui_exp_root, 1);
+  set_ui_enabled(stats.ui_exp_root, 0);
 
   // set health bar and shield to space style
   set_ui_pos(stats.ui_shield_root, (vec2) { 0.04, -0.6 });
@@ -245,17 +253,17 @@ void switch_space_hud() {
   set_ui_pos(stats.ui_shield_icon, (vec2) { 0.0, -1.02 });
   set_ui_width(stats.ui_shield_icon, 1.0);
   set_ui_height(stats.ui_shield_icon, 1.0);
-  set_ui_options(stats.ui_shield_root, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_X);
+  set_ui_options(stats.ui_shield_icon, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_X);
 
   set_ui_pos(stats.ui_shield_border, (vec2) { 0.1, -1.0 });
   set_ui_width(stats.ui_shield_border, 0.8);
   set_ui_height(stats.ui_shield_border, -1.0);
-  set_ui_options(stats.ui_shield_root, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
+  set_ui_options(stats.ui_shield_border, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
 
   set_ui_pos(stats.ui_shield_bar, (vec2) { 0.0, 0.0 });
   set_ui_width(stats.ui_shield_bar, 1.0);
   set_ui_height(stats.ui_shield_bar, 0.8);
-  set_ui_options(stats.ui_shield_root, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
+  set_ui_options(stats.ui_shield_bar, ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y);
 
   set_ui_pos(stats.ui_health_root, (vec2) { 0.07, -0.6 });
   set_ui_width(stats.ui_health_root, 0.02);

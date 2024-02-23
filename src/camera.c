@@ -6,6 +6,12 @@
   and returning the proper view matrix.
 
 */
+void reset_camera(CAM *cam) {
+  glm_mat4_identity(cam->view);
+  glm_vec3_zero(cam->pos);
+  cam->pitch = 0.0;
+  cam->yaw = -90.0;
+}
 
 void get_cam_matrix(CAM *cam, mat4 dest) {
   if (mode == STATION) {

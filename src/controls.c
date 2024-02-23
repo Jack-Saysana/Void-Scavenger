@@ -103,7 +103,7 @@ void mouse_button_callback(GLFWwindow *window, int button, int action,
       if(can_shoot) {
         /* firerate timer */
         can_shoot = 0;
-        add_timer(st_player.fire_rate, (void *) &can_shoot, 1);
+        add_timer(st_player.fire_rate, (void *) &can_shoot, 1, NULL);
         /* forward vector from player*/
         vec3 forward;
         mat4 inv_cam = GLM_MAT4_IDENTITY_INIT;
@@ -128,7 +128,7 @@ void mouse_button_callback(GLFWwindow *window, int button, int action,
       if (can_shoot) {
         /* fire rate timer */
         can_shoot = 0;
-        add_timer(player_ship.weapon.fire_rate, (void *) &can_shoot, 1);
+        add_timer(player_ship.weapon.fire_rate, (void *) &can_shoot, 1, NULL);
         /* get ship vectors */
         vec3 ship_forward;
         glm_quat_rotatev(player_ship.ent->rotation, (vec3){-1.0, 0.0, 0.0}, ship_forward);
@@ -204,8 +204,10 @@ void input_keys(GLFWwindow *window) {
           glm_quat_rotatev(st_player.ent->rotation, (vec3){-1.0, 0.0, 0.0}, player_forward);
           glm_normalize(player_forward);
           glm_vec3_scale(player_forward, st_player.speed, player_forward);
-          glm_vec3_copy(player_forward, st_player.ent->velocity);
-        } else if (i == GLFW_KEY_S) {
+          glm_vec3_add(player_forward, st_player.ent->velocity,
+                       st_player.ent->velocity);
+        }
+        if (i == GLFW_KEY_S) {
           /* Handle S press */
           // move_camera(&camera, MOVE_BACKWARD);
           vec3 player_forward;
@@ -213,8 +215,10 @@ void input_keys(GLFWwindow *window) {
           glm_normalize(player_forward);
           glm_vec3_scale(player_forward, st_player.speed, player_forward);
           glm_vec3_negate(player_forward);
-          glm_vec3_copy(player_forward, st_player.ent->velocity);
-        } else if (i == GLFW_KEY_A) {
+          glm_vec3_add(player_forward, st_player.ent->velocity,
+                       st_player.ent->velocity);
+        }
+        if (i == GLFW_KEY_A) {
           /* Handle A press */
           // move_camera(&camera, MOVE_LEFT);
           vec3 player_left;
@@ -222,8 +226,10 @@ void input_keys(GLFWwindow *window) {
                             player_left);
           glm_normalize(player_left);
           glm_vec3_scale(player_left, st_player.speed, player_left);
-          glm_vec3_copy(player_left, st_player.ent->velocity);
-        } else if (i == GLFW_KEY_D) {
+          glm_vec3_add(player_left, st_player.ent->velocity,
+                       st_player.ent->velocity);
+        }
+        if (i == GLFW_KEY_D) {
           /* Handle D press */
           // move_camera(&camera, MOVE_RIGHT);
           vec3 player_left;
@@ -232,10 +238,20 @@ void input_keys(GLFWwindow *window) {
           glm_normalize(player_left);
           glm_vec3_scale(player_left, st_player.speed, player_left);
           glm_vec3_negate(player_left);
-          glm_vec3_copy(player_left, st_player.ent->velocity);
-        } else if (i == GLFW_KEY_I && !holding_alpha[i - GLFW_KEY_A]) {
+          glm_vec3_add(player_left, st_player.ent->velocity,
+                       st_player.ent->velocity);
+        }
+        if (i == GLFW_KEY_I && !holding_alpha[i - GLFW_KEY_A]) {
           /* Handle I press */
           toggle_inventory();
+        }
+        if (i == GLFW_KEY_K && !holding_alpha[i - GLFW_KEY_A]) {
+          /* Handle I press */
+          toggle_skill_tree();
+        }
+        if (i == GLFW_KEY_E && get_terminal_ui_state() &&
+                   !holding_alpha[i - GLFW_KEY_A]) {
+          set_gamemode_space();
         }
       } else if (!console_enabled && mode == SPACE) {
         if (i == GLFW_KEY_W) {
@@ -274,6 +290,9 @@ void input_keys(GLFWwindow *window) {
           versor rot_quat = GLM_QUAT_IDENTITY_INIT;
           glm_mat4_quat(rotation, rot_quat);
           glm_quat_mul(rot_quat, player_ship.ent->rotation, player_ship.ent->rotation);
+        }  else if (i == GLFW_KEY_P && !holding_alpha[i - GLFW_KEY_A]) {
+          /* Handle P press (Ship Parts at Space Mode) */
+          toggle_ship_parts();
         }
       }
       holding_alpha[i - GLFW_KEY_A] = 1;
@@ -433,9 +452,9 @@ void retreat_cursor() {
 void update_cursor_enabledness() {
   if (cons_cursor_enabled) {
     /* Set timer to disable cursor */
-    add_timer(0.25, (void *) (disable_console_cursor), -1000);
+    add_timer(0.25, (void *) (disable_console_cursor), -1000, NULL);
   } else {
     /* Set timer to enable cursor */
-    add_timer(0.25,(void *) (enable_console_cursor), -1000);
+    add_timer(0.25,(void *) (enable_console_cursor), -1000, NULL);
   }
 }

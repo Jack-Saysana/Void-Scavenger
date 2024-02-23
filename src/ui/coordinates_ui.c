@@ -31,17 +31,21 @@ void update_coordinates() {
 }
 
 void set_coords_warning() {
+  if (is_coords_colors_switching){
+    return;
+  }
+
   is_coords_colors_switching = 1;
-  add_timer(WARNING_TIME, set_coords_color_red, -1000);
+  add_timer(WARNING_TIME, set_coords_color_red, -1000, NULL);
 }
 
 void stop_coords_warning() {
-  is_coords_colors_switching = 0; 
+  is_coords_colors_switching = 0;
 }
 
 void set_coords_color_red() {
   if (is_coords_colors_switching) {
-    add_timer(WARNING_TIME, set_coords_color_white, -1000);
+    add_timer(WARNING_TIME, set_coords_color_white, -1000, NULL);
     glm_vec3_copy((vec3) VEC3_RED, coords_color);
   } else {
     glm_vec3_copy((vec3) VEC3_WHITE, coords_color);
@@ -50,7 +54,7 @@ void set_coords_color_red() {
 
 void set_coords_color_white() {
   if (is_coords_colors_switching) {
-    add_timer(WARNING_TIME, set_coords_color_red, -1000);
+    add_timer(WARNING_TIME, set_coords_color_red, -1000, NULL);
     glm_vec3_copy((vec3) VEC3_WHITE, coords_color);
   } else {
     glm_vec3_copy((vec3) VEC3_WHITE, coords_color);

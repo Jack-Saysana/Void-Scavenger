@@ -16,7 +16,7 @@ int init_scene() {
   entity_shader = init_shader_prog("./src/shaders/entity/shader.vs", NULL,
                                    "./src/shaders/entity/shader.fs");
   model_shader = init_shader_prog("./src/shaders/model/shader.vs", NULL,
-                                  "./src/shaders/model/shader.fs");
+                                  "./src/shaders/entity/shader.fs");
   ui_shader = init_shader_prog("./src/shaders/ui/shader.vs", NULL,
                                "./src/shaders/ui/shader.fs");
   basic_shader = init_shader_prog("./src/shaders/basic/shader.vs", NULL,
@@ -37,7 +37,11 @@ int init_scene() {
   sphere_model = load_model("./assets/misc/sphere/sphere.obj");
   render_sphere_model = load_model("./assets/misc/render_sphere/render_sphere.obj");
   cube_model = load_model("./assets/misc/cube/cube.obj");
+  station_model = load_model("./assets/set_pieces/station/station.obj");
+  terminal_model = load_model("./assets/set_pieces/terminal/terminal.obj");
   dead_zone_model = load_model("./assets/misc/dead_zone/dead_zone.obj");
+  shotgun_model = load_model("./assets/set_pieces/shotgun/shotgun.obj");
+  rifle_model = load_model("./assets/set_pieces/rifle/rifle.obj");
   asteroid_models[0] = load_model("./assets/set_pieces/asteroid_1/asteroid_1.obj");
   asteroid_models[1] = load_model("./assets/set_pieces/asteroid_2/asteroid_2.obj");
   asteroid_models[2] = load_model("./assets/set_pieces/asteroid_3/asteroid_3.obj");
@@ -68,7 +72,6 @@ int init_scene() {
   station_obstacles[17] = load_model("./assets/station_obstacles/hose_3/hose_3.obj");
   station_obstacles[18] = load_model("./assets/station_obstacles/stool/stool.obj");
   station_obstacles[19] = load_model("./assets/station_obstacles/table/table.obj");
-
 
   if (CHECK_ASSETS_LOADED) {
     fprintf(stderr, "Error: failed to initialize game models\n");
@@ -157,6 +160,7 @@ void render_scene(GLFWwindow *window) {
   glUseProgram(model_shader);
   set_mat4("projection", persp_proj, model_shader);
   set_mat4("view", view, model_shader);
+  set_vec3("camera_pos", camera.pos, model_shader);
 
   glUseProgram(basic_shader);
   set_mat4("projection", persp_proj, basic_shader);
@@ -177,6 +181,13 @@ void render_scene(GLFWwindow *window) {
   }
   if (render_bounds) {
     render_dead_zones();
+  }
+  if (mode == STATION) {
+    mat4 gun_mat = GLM_MAT4_IDENTITY_INIT;
+    get_player_gun_mat(gun_mat);
+    glUseProgram(model_shader);
+    set_mat4("model", gun_mat, model_shader);
+    draw_model(model_shader, rifle_model);
   }
 
   render_game_entity(render_sphere);
@@ -215,7 +226,31 @@ void query_render_dist() {
 void render_game_entity(ENTITY *ent) {
   SOBJ *wrapper = object_wrappers + (size_t) ent->data;
   if (wrapper->type == PROJ_OBJ) {
-    draw_entity(proj_shader, ent);
+    if (projectiles[(size_t) wrapper->data].collision) {
+      glUseProgram(proj_shader);
+      mat4 model = GLM_MAT4_IDENTITY_INIT;
+      glm_translate(model, ent->translation);
+      glm_quat_rotate(model, ent->rotation, model);
+      glm_scale(model, ent->scale);
+      set_mat4("model", model, proj_shader);
+      draw_model(proj_shader, sphere_model);
+    } else {
+      draw_entity(proj_shader, ent);
+    }
+  } else if (wrapper->type == ENEMY_OBJ) {
+    ST_ENEMY *enemy = st_enemies + (size_t) wrapper->data;
+    glUseProgram(model_shader);
+    mat4 model = GLM_MAT4_IDENTITY_INIT;
+    if (enemy->max_health > 100.0) {
+      get_bone_equip_mat(ent, 14, model);
+      set_mat4("model", model, model_shader);
+      draw_model(model_shader, shotgun_model);
+    } else {
+      get_bone_equip_mat(ent, 15, model);
+      set_mat4("model", model, model_shader);
+      draw_model(model_shader, rifle_model);
+    }
+    draw_entity(entity_shader, ent);
   } else {
     draw_entity(entity_shader, ent);
   }
@@ -254,6 +289,21 @@ void render_oct_tree(SIMULATION *sim) {
 
 // ================================= HELPERS =================================
 
+void get_bone_equip_mat(ENTITY *ent, size_t index, mat4 dest) {
+  mat4 to_world_space = GLM_MAT4_IDENTITY_INIT;
+  glm_translate(to_world_space, ent->translation);
+  glm_quat_rotate(to_world_space, ent->rotation, to_world_space);
+  glm_scale(to_world_space, ent->scale);
+
+  BONE *bone = NULL;
+  mat4 to_entity_space = GLM_MAT4_IDENTITY_INIT;
+  bone = ent->model->bones + index;
+  glm_mat4_mul(to_world_space, ent->final_b_mats[index], to_world_space);
+  glm_translate(to_entity_space, bone->base);
+
+  glm_mat4_mul(to_world_space, to_entity_space, dest);
+}
+
 ENTITY *init_player_ent() {
   return init_entity(player_model);
 }
@@ -290,6 +340,14 @@ ENTITY *init_dead_zone_ent() {
   return init_entity(dead_zone_model);
 }
 
+ENTITY *init_station_ent() {
+  return init_entity(station_model);
+}
+
+ENTITY *init_terminal_ent() {
+  return init_entity(terminal_model);
+}
+
 void toggle_hit_boxes() {
   hit_boxes = !hit_boxes;
 }
@@ -309,3 +367,4 @@ void toggle_render_bounds() {
 void update_perspective() {
   glm_perspective(glm_rad(45.0), RES_X / RES_Y, 0.1f, RENDER_DIST, persp_proj);
 }
+

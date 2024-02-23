@@ -13,7 +13,7 @@ void close_error_message() {
 void show_error_message(const char *error) {
   set_console_error(error);
   close_error ce = &close_error_message;
-  add_timer(1.5, ce, -1000);
+  add_timer(1.5, ce, -1000, NULL);
 }
 
 void command_not_found() {
@@ -34,6 +34,7 @@ void set_gamemode_station() {
   if (mode == STATION) {
     return;
   }
+  free_timer_queue();
   clear_space_mode();
   init_station_mode();
 }
@@ -42,6 +43,7 @@ void set_gamemode_space() {
   if (mode == SPACE) {
     return;
   }
+  free_timer_queue();
   clear_station_mode();
   init_space_mode();
 }
@@ -63,4 +65,24 @@ void set_sim_dist(float dist) {
 void set_render_dist(float dist) {
   RENDER_DIST = dist;
   refresh_sim_distances();
+}
+
+void reset_station() {
+  clear_station_mode();
+  init_station_mode();
+}
+
+void reset_space() {
+  clear_space_mode();
+  init_space_mode();
+}
+
+void fps_toggle() {
+  if (!fps_enabled) {
+    fps_enabled = 1;
+    enable_fps();
+  } else {
+    fps_enabled = 0;
+    disable_fps();
+  }
 }

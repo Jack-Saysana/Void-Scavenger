@@ -44,11 +44,31 @@ void handle_collisions() {
 }
 
 void handle_physics_collisions(COLLISION *cols, size_t num_cols) {
+  SOBJ *a_wrapper = NULL;
+  SOBJ *b_wrapper = NULL;
+  ST_ENEMY *cur_enemy = NULL;
   for (size_t i = 0; i < num_cols; i++) {
     impulse_resolution(physics_sim, cols[i]);
 
-    object_wrappers[(size_t) cols[i].a_ent->data].to_refresh = 1;
-    object_wrappers[(size_t) cols[i].b_ent->data].to_refresh = 1;
+    a_wrapper = object_wrappers + (size_t) cols[i].a_ent->data;
+    b_wrapper = object_wrappers + (size_t) cols[i].b_ent->data;
+
+    a_wrapper->to_refresh = 1;
+    b_wrapper->to_refresh = 1;
+
+    cur_enemy = NULL;
+    if (a_wrapper->type == ENEMY_OBJ && b_wrapper->type == CORRIDOR_OBJ) {
+      cur_enemy = st_enemies + (size_t) a_wrapper->data;
+      if (cur_enemy->target_corridor == INVALID_INDEX) {
+        cur_enemy->target_corridor = (size_t) b_wrapper->data;
+      }
+    } else if (a_wrapper->type == CORRIDOR_OBJ &&
+               b_wrapper->type == ENEMY_OBJ) {
+      cur_enemy = st_enemies + (size_t) b_wrapper->data;
+      if (cur_enemy->target_corridor == INVALID_INDEX) {
+        cur_enemy->target_corridor = (size_t) a_wrapper->data;
+      }
+    }
   }
 }
 
@@ -64,8 +84,8 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
     b_wrapper = object_wrappers + (size_t) cols[i].b_ent->data;
 
     if (a_wrapper->type == PROJ_OBJ && b_wrapper->type == PROJ_OBJ) {
-      a_wrapper->to_delete = 1;
-      b_wrapper->to_delete = 1;
+      //start_proj_collision_anim((size_t) a_wrapper->data);
+      //start_proj_collision_anim((size_t) b_wrapper->data);
       continue;
     } else if (a_wrapper->type == PROJ_OBJ) {
       proj_wrapper = a_wrapper;
@@ -78,6 +98,10 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
     }
 
     PROJ *proj = projectiles + (size_t) proj_wrapper->data;
+    if (proj->collision) {
+      continue;
+    }
+
     if (proj->source == SRC_ENEMY && (target_wrapper->type == PLAYER_OBJ ||
         target_wrapper->type == PLAYER_SHIP_OBJ)) {
       decrement_player_health(proj->damage, 0.1);
@@ -87,19 +111,53 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
       decrement_enemy_health((size_t) target_wrapper->data, proj->damage, 0.1);
     }
 
-    proj_wrapper->to_delete = 1;
+    start_proj_collision_anim((size_t) proj_wrapper->data);
   }
 }
 
 void handle_event_collisions(COLLISION *cols, size_t num_cols) {
+  set_terminal_ui(0);
+  int player_out_of_bounds = 0;
+
   SOBJ *target_wrapper = NULL;
 
   SOBJ *a_wrapper = NULL;
   SOBJ *b_wrapper = NULL;
+  vec3 temp = GLM_VEC3_ZERO_INIT;
   for (size_t i = 0; i < num_cols; i++) {
     a_wrapper = object_wrappers + (size_t) cols[i].a_ent->data;
     b_wrapper = object_wrappers + (size_t) cols[i].b_ent->data;
 
+    // Direct enemies away from one another
+    if (a_wrapper->type == ENEMY_OBJ && b_wrapper->type == ENEMY_OBJ) {
+      glm_vec3_sub(st_enemies[(size_t) a_wrapper->data].ent->translation,
+                   st_enemies[(size_t) b_wrapper->data].ent->translation,
+                   temp);
+      temp[Y] = 0.0;
+      glm_vec3_add(temp, st_enemies[(size_t) a_wrapper->data].nearby_enemies,
+                   st_enemies[(size_t) a_wrapper->data].nearby_enemies);
+      glm_vec3_negate(temp);
+      glm_vec3_add(temp, st_enemies[(size_t) b_wrapper->data].nearby_enemies,
+                   st_enemies[(size_t) b_wrapper->data].nearby_enemies);
+    }
+
+    // Display terminal ui if player close to terminal
+    if ((a_wrapper->type == TERMINAL_OBJ && b_wrapper->type == PLAYER_OBJ) ||
+        (a_wrapper->type == PLAYER_OBJ && b_wrapper->type == TERMINAL_OBJ)) {
+      set_terminal_ui(1);
+      continue;
+    }
+
+    // Switch to station mode upon collision with space station
+    if ((a_wrapper->type == PLAYER_SHIP_OBJ &&
+          b_wrapper->type == STATION_OBJ) ||
+        (a_wrapper->type == STATION_OBJ &&
+         b_wrapper->type == PLAYER_SHIP_OBJ)) {
+      set_gamemode_station();
+      return;
+    }
+
+    // Decrement player/enemy health upon collision with deadzones
     if (a_wrapper->type == DEAD_ZONE_OBJ && b_wrapper->type != DEAD_ZONE_OBJ) {
       target_wrapper = b_wrapper;
     } else if (a_wrapper->type != DEAD_ZONE_OBJ &&
@@ -110,12 +168,19 @@ void handle_event_collisions(COLLISION *cols, size_t num_cols) {
     }
 
     if (target_wrapper->type == PLAYER_SHIP_OBJ) {
+      player_out_of_bounds = 1;
       decrement_player_health(10.0, 1.0);
     } else if (target_wrapper->type == ENEMY_SHIP_OBJ) {
-      decrement_enemy_health((size_t) target_wrapper->data, 10.0, 1.0);
+      decrement_enemy_health((size_t) target_wrapper->data, 5.0, 1.0);
     } else if (target_wrapper->type == OBSTACLE_OBJ) {
       target_wrapper->to_delete = 1;
     }
+  }
+
+  if (player_out_of_bounds) {
+    set_coords_warning();
+  } else {
+    stop_coords_warning();
   }
 }
 
@@ -139,18 +204,20 @@ void decrement_player_health(float damage, float timing) {
   if (mode == SPACE && !player_ship.invuln) {
     player_ship.cur_health -= damage;
     if (player_ship.cur_health <= 0.0) {
+      player_ship.cur_health = 0.0;
       fprintf(stderr, "END GAME\n");
     } else {
       player_ship.invuln = 1;
-      add_timer(timing, &player_ship.invuln, 0);
+      add_timer(timing, &player_ship.invuln, 0, NULL);
     }
   } else if (mode == STATION && !st_player.invuln) {
     st_player.cur_health -= damage;
     if (st_player.cur_health <= 0.0) {
+      st_player.cur_health = 0.0;
       fprintf(stderr, "END GAME\n");
     } else {
       st_player.invuln = 1;
-      add_timer(timing, &st_player.invuln, 0);
+      add_timer(timing, &st_player.invuln, 0, NULL);
     }
   }
 }
@@ -164,19 +231,16 @@ void decrement_enemy_health(size_t index, float damage, float timing) {
         object_wrappers[(size_t) enemy->wrapper_offset].to_delete = 1;
       } else {
         enemy->invuln = 1;
-        add_timer(timing, &enemy->invuln, 0);
+        add_timer(timing, &enemy->invuln, 0, NULL);
       }
     }
   } else if (mode == STATION) {
     ST_ENEMY *enemy = st_enemies + index;
     if (!enemy->invuln) {
       enemy->cur_health -= damage;
-      if (enemy->cur_health <= 0.0) {
-        object_wrappers[(size_t) enemy->wrapper_offset].to_delete = 1;
-      } else {
-        enemy->invuln = 1;
-        add_timer(timing, &enemy->invuln, 0);
-      }
+      enemy->invuln = 1;
+      enemy->cur_frame = 0;
+      add_timer(0.03, st_enemy_hurt_anim, -1000, (void *) index);
     }
   }
 }
