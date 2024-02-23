@@ -3,6 +3,7 @@
 
 // Player constants
 #define P_BASE_HEALTH (100.0)
+#define P_BASE_SHIELD (100.0)
 #define P_BASE_SPEED (10.0)
 #define P_BASE_FIRERATE (0.1)
 #define P_BASE_MAX_EXP (100.0)
@@ -10,7 +11,7 @@
 // Ship constants
 #define S_BASE_PWR_OUTPUT (100.0)
 #define S_BASE_HEALTH (100.0)
-#define S_BASE_SHIELD (25.0)
+#define S_BASE_SHIELD (100.0)
 #define S_BASE_SHIELD_RECHARGE (5.0)
 #define S_BASE_SHIELD_DELAY (2.0)
 #define S_BASE_PWR_DRAW (25.0)
