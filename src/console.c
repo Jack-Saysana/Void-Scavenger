@@ -86,3 +86,24 @@ void fps_toggle() {
     disable_fps();
   }
 }
+
+void set_arena(float size) {
+  space_size = size;
+  reset_space();
+}
+
+void set_player_health(float health, int mode) {
+  if (mode == SPACE) {
+    player_ship.cur_health = health;
+  } else {
+    st_player.cur_health = health;
+  }
+}
+
+void set_player_shield(float shield, int mode) {
+  if (mode == SPACE) {
+    player_ship.cur_shield = shield;
+  } else {
+    st_player.cur_shield = shield;
+  }
+}

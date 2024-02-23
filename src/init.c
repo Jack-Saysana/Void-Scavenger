@@ -9,6 +9,10 @@
 */
 
 int init_game() {
+
+  // Init required globals
+  space_size = BASE_SPACE_SIZE;
+
   // Add init functions below...
   int status = 0;
   status = init_scene();

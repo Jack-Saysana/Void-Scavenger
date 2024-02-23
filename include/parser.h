@@ -4,6 +4,7 @@
 #include <structs/lexer_str.h>
 #include <structs/parser_str.h>
 #include <float.h>
+#include <global_vars.h>
 
 /* DEFINES */
 /* Command identifiers and arguments */
@@ -22,13 +23,16 @@
 #define SET_SIM_DIST         ("ssd")
 #define SET_RENDER_DIST      ("srd")
 #define GAMEMODE             ("gamemode")
-#define STATION              ("station")
-#define SPACE                ("space")
+#define STATION_CMD          ("station")
+#define SPACE_CMD            ("space")
 #define QUIT                 ("quit")
 #define PLAYER               ("player")
 #define SPEED                ("speed")
 #define RESET                ("reset")
 #define FPS                  ("fps")
+#define ARENA                ("arena")
+#define SHIELD               ("shield")
+#define HEALTH               ("health")
 
 #define MAX_TOKS (10)
 
@@ -64,3 +68,6 @@ void set_sim_dist(float);
 void reset_station();
 void reset_space();
 void fps_toggle();
+void set_arena(float);
+void set_player_health(float, int);
+void set_player_shield(float, int);

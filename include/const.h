@@ -48,7 +48,7 @@
 #define STAT_PROJ (1)
 
 // Simulation constants
-#define SPACE_SIZE (256.0)
+#define BASE_SPACE_SIZE (256.0)
 #define SPACE_DEPTH (8)
 #define STATION_SIZE (80.0)
 #define STATION_DEPTH (6)

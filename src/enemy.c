@@ -354,20 +354,20 @@ void sp_enemy_pathfind(size_t index) {
   // Steer ship away from arena edges
   vec3 target_dir = { 0.0, 0.0, 0.0 };
   float target_speed = enemy->thruster.max_vel;
-  if (e_pos[X] >= SPACE_SIZE - turning_rad) {
-    target_dir[X] = (SPACE_SIZE - turning_rad) - e_pos[X];
-  } else if (e_pos[X] <= turning_rad - SPACE_SIZE) {
-    target_dir[X] = (turning_rad - SPACE_SIZE) - e_pos[X];
+  if (e_pos[X] >= space_size - turning_rad) {
+    target_dir[X] = (space_size - turning_rad) - e_pos[X];
+  } else if (e_pos[X] <= turning_rad - space_size) {
+    target_dir[X] = (turning_rad - space_size) - e_pos[X];
   }
-  if (e_pos[Y] >= SPACE_SIZE - turning_rad) {
-    target_dir[Y] = (SPACE_SIZE - turning_rad) - e_pos[Y];
-  } else if (e_pos[Y] <= turning_rad - SPACE_SIZE) {
-    target_dir[Y] = (turning_rad - SPACE_SIZE) - e_pos[Y];
+  if (e_pos[Y] >= space_size - turning_rad) {
+    target_dir[Y] = (space_size - turning_rad) - e_pos[Y];
+  } else if (e_pos[Y] <= turning_rad - space_size) {
+    target_dir[Y] = (turning_rad - space_size) - e_pos[Y];
   }
-  if (e_pos[Z] >= SPACE_SIZE - turning_rad) {
-    target_dir[Z] = (SPACE_SIZE - turning_rad) - e_pos[Z];
-  } else if (e_pos[Z] <= turning_rad - SPACE_SIZE) {
-    target_dir[Z] = (turning_rad - SPACE_SIZE) - e_pos[Z];
+  if (e_pos[Z] >= space_size - turning_rad) {
+    target_dir[Z] = (space_size - turning_rad) - e_pos[Z];
+  } else if (e_pos[Z] <= turning_rad - space_size) {
+    target_dir[Z] = (turning_rad - space_size) - e_pos[Z];
   }
   // Slow down ship as it approaches a collision
   float speed_modifier = glm_vec3_norm(target_dir);

@@ -95,4 +95,7 @@ extern INVENTORY inventory;
 extern SHIP_PARTS ship_parts;
 extern SKILL_TREE skill_tree;
 
+// Arena globals
+extern float space_size;
+
 #endif

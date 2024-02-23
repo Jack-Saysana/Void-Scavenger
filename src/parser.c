@@ -66,11 +66,12 @@ void console_dispatcher() {
         } else if (strncmp(command[1].tok, GAMEMODE, sizeof(GAMEMODE)) == 0) {
           /* BEGIN: set gamemode */
           if (command[2].kind == IDENTIFIER) {
-            if (strncmp(command[2].tok, STATION, sizeof(STATION)) == 0) {
+            if (strncmp(command[2].tok, STATION_CMD, sizeof(STATION_CMD)) == 0) {
               /* BEGIN: set gamemode station */
               set_gamemode_station();
               /* END: set gamemode station */
-            } else if (strncmp(command[2].tok, SPACE, sizeof(SPACE)) == 0) {
+
+            } else if (strncmp(command[2].tok, SPACE_CMD, sizeof(SPACE_CMD)) == 0) {
               /* BEGIN: set gamemode space */
               set_gamemode_space();
               /* END: set gamemode space */
@@ -81,10 +82,27 @@ void console_dispatcher() {
             command_not_found();
           }
           /* END: set gamemode */
+        } else if (strncmp(command[1].tok, ARENA, sizeof(ARENA)) == 0) {
+          /* BEGIN: set arena */
+          if (command[2].kind == NUMBER &&
+            (command[3].kind == DOT || command[3].kind == END)) {
+            /* BEGIN: set arena [float] */
+            float size = create_float(2);
+            if (size != FLT_MAX) {
+              set_arena(size);
+            } else {
+              command_not_found();
+            }
+            return;
+            /* END: set arena [float] */
+          } else {
+            command_not_found();
+          }
+          /* END: set arena */
         } else if (strncmp(command[1].tok, PLAYER, sizeof(PLAYER)) == 0) {
           /* BEGIN: set player */
           if (command[2].kind == IDENTIFIER) {
-            if (strncmp(command[2].tok, STATION, sizeof(STATION)) == 0) {
+            if (strncmp(command[2].tok, STATION_CMD, sizeof(STATION_CMD)) == 0) {
               /* BEGIN: set player station */
               if (command[3].kind == IDENTIFIER) {
                 if (strncmp(command[3].tok, SPEED, sizeof(SPEED)) == 0) {
@@ -101,6 +119,28 @@ void console_dispatcher() {
                     /* END: set player station speed [float] */
                   }
                   /* END: set player station speed */
+                } else if (strncmp(command[3].tok, HEALTH, sizeof(HEALTH)) == 0) {
+                  /* BEGIN: set player station health */
+                  if (command[4].kind == NUMBER) {
+                    float input = create_float(4);
+                    if (input == FLT_MAX) {
+                      command_not_found();
+                    }
+                    set_player_health(input, STATION);
+                    return;
+                  }
+                  /* END: set player station health */
+                } else if (strncmp(command[3].tok, SHIELD, sizeof(SHIELD)) == 0) {
+                  /* BEGIN: set player station shield */
+                  if (command[4].kind == NUMBER) {
+                    float input = create_float(4);
+                    if (input == FLT_MAX) {
+                      command_not_found();
+                    }
+                    set_player_shield(input, STATION);
+                    return;
+                  }
+                  /* END: set player station shield */
                 } else {
                   command_not_found();
                 }
@@ -108,6 +148,38 @@ void console_dispatcher() {
                 command_not_found();
               }
               /* END: set player station */
+            } else if (strncmp(command[2].tok, SPACE_CMD, sizeof(SPACE_CMD)) == 0 ) {
+              /* START: set player space */
+              if (command[3].kind == IDENTIFIER) {
+                if (strncmp(command[3].tok, HEALTH, sizeof(HEALTH)) == 0) {
+                  /* START: set player space health */
+                  if (command[4].kind == NUMBER) {
+                    float input = create_float(4);
+                    if (input == FLT_MAX) {
+                      command_not_found();
+                    }
+                    set_player_health(input, SPACE);
+                    return;
+                  }
+                  /* END: set player space health */
+                } else if (strncmp(command[3].tok, SHIELD, sizeof(SHIELD)) == 0 ){
+                  /* START: set player space shield */
+                  if (command[4].kind == NUMBER) {
+                    float input = create_float(4);
+                    if (input == FLT_MAX) {
+                      command_not_found();
+                    }
+                    set_player_shield(input, SPACE);
+                    return;
+                  }
+                  /* END: set player space shield */
+                } else {
+                  command_not_found();
+                }
+              } else {
+                command_not_found();
+              }
+              /* END: set player space */
             } else {
               command_not_found();
             }
@@ -197,11 +269,11 @@ void console_dispatcher() {
     } else if (strncmp(command[0].tok, RESET, sizeof(RESET)) == 0) {
       /* BEGIN: reset */
       if (command[1].kind == IDENTIFIER) {
-        if (strncmp(command[1].tok, STATION, sizeof(STATION)) == 0) {
+        if (strncmp(command[1].tok, STATION_CMD, sizeof(STATION_CMD)) == 0) {
           /* BEGIN: reset station */
           reset_station();
           /* END: reset station */
-        } else if (strncmp(command[1].tok, SPACE, sizeof(SPACE)) == 0) {
+        } else if (strncmp(command[1].tok, SPACE_CMD, sizeof(SPACE_CMD)) == 0) {
           /* BEGIN: reset space */
           reset_space();
           /* END: reset space */

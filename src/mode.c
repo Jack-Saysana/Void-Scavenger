@@ -27,10 +27,10 @@ int init_space_mode() {
   update_perspective();
 
   // Initialize simulations
-  physics_sim = init_sim(SPACE_SIZE, SPACE_DEPTH);
-  combat_sim = init_sim(SPACE_SIZE, SPACE_DEPTH);
-  render_sim = init_sim(SPACE_SIZE, SPACE_DEPTH);
-  event_sim = init_sim(SPACE_SIZE, SPACE_DEPTH);
+  physics_sim = init_sim(space_size, SPACE_DEPTH);
+  combat_sim = init_sim(space_size, SPACE_DEPTH);
+  render_sim = init_sim(space_size, SPACE_DEPTH);
+  event_sim = init_sim(space_size, SPACE_DEPTH);
 
   int status = insert_dead_zones();
   if (status) {
@@ -63,10 +63,10 @@ int init_space_mode() {
   int num_enemies = BASE_NUM_ENEMIES + (rand() % 5) - 2;
   if (num_enemies > 0) {
     for (int i = 0; i < num_enemies; i++) {
-      gen_rand_vec3(&pos, 2.0 * SPACE_SIZE);
-      pos[X] -= SPACE_SIZE;
-      pos[Y] -= SPACE_SIZE;
-      pos[Z] -= SPACE_SIZE;
+      gen_rand_vec3(&pos, 2.0 * space_size);
+      pos[X] -= space_size;
+      pos[Y] -= space_size;
+      pos[Z] -= space_size;
 
       gen_rand_vec4(&rot, 1.0);
       glm_quat_normalize(rot);
@@ -351,7 +351,7 @@ void switch_game_modes() {
 int insert_dead_zones() {
   float max_extent = 0.0;
   if (mode == SPACE) {
-    max_extent = SPACE_SIZE;
+    max_extent = space_size;
   } else {
     max_extent = STATION_SIZE;
   }
@@ -426,9 +426,9 @@ int insert_sp_station() {
   sp_station = init_station_ent();
   init_wrapper(STATION_OBJ, sp_station, NULL);
 
-  gen_rand_vec3(&sp_station->translation, 2.0 * (SPACE_SIZE - 100.0));
-  glm_vec3_sub(sp_station->translation, (vec3) { SPACE_SIZE - 100.0,
-               SPACE_SIZE - 100.0, SPACE_SIZE - 100.0 },
+  gen_rand_vec3(&sp_station->translation, 2.0 * (space_size - 100.0));
+  glm_vec3_sub(sp_station->translation, (vec3) { space_size - 100.0,
+               space_size - 100.0, space_size - 100.0 },
                sp_station->translation);
   for (int i = 0; i < 3; i++) {
     if (sp_station->translation[i] > 0.0) {
