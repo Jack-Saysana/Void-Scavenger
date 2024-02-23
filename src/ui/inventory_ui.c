@@ -124,9 +124,11 @@ void update_inventory() {
 void toggle_inventory() {
   if (inventory.ui_inventory_root->enabled) {
     set_ui_enabled(inventory.ui_inventory_root, 0);
+    CURSOR_ENABLED = 0;
   } else {
     set_ui_enabled(inventory.ui_inventory_root, 1);
     set_ui_enabled(skill_tree.ui_skill_tree_root, 0);
+    CURSOR_ENABLED = 1;
   }
 }
 

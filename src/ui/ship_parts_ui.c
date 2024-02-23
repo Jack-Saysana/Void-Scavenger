@@ -177,7 +177,9 @@ void update_ship_parts() {
 void toggle_ship_parts() {
   if (ship_parts.ui_ship_parts_root->enabled) {
     set_ui_enabled(ship_parts.ui_ship_parts_root, 0);
+    CURSOR_ENABLED = 0;
   } else {
     set_ui_enabled(ship_parts.ui_ship_parts_root, 1);
+    CURSOR_ENABLED = 1;
   }
 }

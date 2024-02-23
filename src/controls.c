@@ -54,7 +54,7 @@ void mouse_pos_callback(GLFWwindow *window, double x_pos, double y_pos) {
   vec2 mouse_dif;
   mouse_dif[0] = x_pos - prev_mouse_pos[0];
   mouse_dif[1] = y_pos - prev_mouse_pos[1];
-  if (mode == STATION) {
+  if (!CURSOR_ENABLED && mode == STATION) {
     /* updates pitch and yaw of camera */
     glm_vec2_scale(mouse_dif, mouse_sens, mouse_dif);
     camera.pitch += mouse_dif[1];
@@ -74,7 +74,7 @@ void mouse_pos_callback(GLFWwindow *window, double x_pos, double y_pos) {
     versor rot_quat = GLM_QUAT_IDENTITY_INIT;
     glm_mat4_quat(rotation, rot_quat);
     glm_quat_mul(rot_quat, st_player.ent->rotation, st_player.ent->rotation);
-  } else if (mode == SPACE) {
+  } else if (!CURSOR_ENABLED && mode == SPACE) {
     /* rotates the ships pitch and yaw*/
     mat4 rotation = GLM_MAT4_IDENTITY_INIT;
     vec3 ship_up;
@@ -97,6 +97,9 @@ void mouse_scroll_callback(GLFWwindow *window, double x_off, double y_off) {
 
 void mouse_button_callback(GLFWwindow *window, int button, int action,
                            int mods) {
+  if (CURSOR_ENABLED) {
+    return;
+  }
   // Insert mouse button handling here...
   if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
     if (mode == STATION) {
