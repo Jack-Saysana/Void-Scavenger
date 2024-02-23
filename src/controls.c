@@ -81,8 +81,8 @@ void mouse_pos_callback(GLFWwindow *window, double x_pos, double y_pos) {
     vec3 ship_side;
     glm_quat_rotatev(player_ship.ent->rotation, (vec3){0.0, 1.0, 0.0}, ship_up);
     glm_quat_rotatev(player_ship.ent->rotation, (vec3){0.0, 0.0, 1.0}, ship_side);
-    glm_rotate(rotation, glm_rad(-mouse_dif[1] * DELTA_TIME), ship_side);
-    glm_rotate(rotation, glm_rad(-mouse_dif[0] * DELTA_TIME), ship_up);
+    glm_rotate(rotation, glm_rad(5.0 * -mouse_dif[1] * DELTA_TIME), ship_side);
+    glm_rotate(rotation, glm_rad(5.0 * -mouse_dif[0] * DELTA_TIME), ship_up);
     versor rot_quat = GLM_QUAT_IDENTITY_INIT;
     glm_mat4_quat(rotation, rot_quat);
     glm_quat_mul(rot_quat, player_ship.ent->rotation, player_ship.ent->rotation);

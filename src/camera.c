@@ -46,7 +46,9 @@ void get_cam_matrix(CAM *cam, mat4 dest) {
     glm_vec3_negate_to(ship_forward, ship_view[2]);
     glm_mat4_inv(ship_view, ship_view);
     mat4 trans = GLM_MAT4_IDENTITY_INIT;
-    glm_translate(trans, (vec3){0.0, -3.0, -20.0});
+    float speed_offset = (player_ship.cur_speed /
+                          player_ship.thruster.max_vel) * 20.0;
+    glm_translate(trans, (vec3){0.0, -3.0, -20.0 - speed_offset});
     mat4 to_ship = GLM_MAT4_IDENTITY_INIT;
     vec3 negpos;
     glm_vec3_negate_to(player_ship.ent->translation, negpos);
