@@ -161,6 +161,10 @@ void start_proj_collision_anim(size_t index) {
 
 void proj_collision_anim(void *arg) {
   PROJ *proj = projectiles + (size_t) arg;
+  if (proj->ent == NULL) {
+    return;
+  }
+
   vec3 scale_inc = { 0.01, 0.01, 0.01 };
   glm_vec3_add(proj->ent->scale, scale_inc, proj->ent->scale);
   if ((mode == SPACE && proj->ent->scale[X] >= 1.5) ||

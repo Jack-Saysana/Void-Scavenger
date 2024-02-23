@@ -18,6 +18,9 @@ int init_space_mode() {
   /* Ensure coordinates are enabled */
   enable_coordinates();
 
+  /* Re-enable shooting (if not already) */
+  enable_shooting();
+
   // Initialize proper render distances
   RENDER_DIST = SP_BASE_RENDER_DIST;
   glm_vec3_copy((vec3) { RENDER_DIST, RENDER_DIST, RENDER_DIST },
@@ -155,6 +158,9 @@ int init_station_mode() {
   reset_camera(&camera);
   /* Turn off the coordinates */
   disable_coordinates();
+  
+  /* Re-enable shooting (if not already) */
+  enable_shooting();
 
   // Initialize proper render distances
   RENDER_DIST = ST_BASE_RENDER_DIST;

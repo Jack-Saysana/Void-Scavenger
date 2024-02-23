@@ -461,3 +461,7 @@ void update_cursor_enabledness() {
     add_timer(0.25,(void *) (enable_console_cursor), -1000, NULL);
   }
 }
+
+void enable_shooting() {
+  can_shoot = 1;
+}
