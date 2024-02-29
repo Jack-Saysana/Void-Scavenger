@@ -37,6 +37,7 @@ void console_ui_initialize() {
   set_ui_pivot(console_cursor, PIVOT_TOP_LEFT);
   set_ui_enabled(console_cursor, 1);
   cons_cursor_enabled = 1;
+  set_ui_texture(console_cursor, "assets/transparent.png");
 }
 
 int is_console_enabled() {

@@ -252,6 +252,11 @@ void delete_enemy_ship(size_t index) {
     return;
   }
 
+  // Clear target UI If deleted enemy is currently targeted
+  if (index == get_target_ship_index()) {
+    set_target_ship_index(INVALID_INDEX);
+  }
+
   update_timer_memory(&sp_enemies[index].invuln, NULL);
   free_entity(sp_enemies[index].ent);
   delete_wrapper(sp_enemies[index].wrapper_offset);
@@ -266,6 +271,11 @@ void delete_enemy_ship(size_t index) {
                       &st_enemies[index].invuln);
   SOBJ *wrapper = object_wrappers + sp_enemies[index].wrapper_offset;
   wrapper->data = (void *) index;
+
+  // Update target UI
+  if (num_enemies == get_target_ship_index()) {
+    set_target_ship_index(index);
+  }
 }
 
 int sp_enemy_insert_sim(size_t index) {

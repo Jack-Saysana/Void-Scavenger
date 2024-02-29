@@ -101,6 +101,9 @@
 #define STATION_SMALL_OBJS         (9)
 #define STATION_LARGE_OBJS         (11)
 
+// Targeting System consts
+#define MAX_TARGET_DIST (100.0)
+
 // Misc
 #define X (0)
 #define Y (1)

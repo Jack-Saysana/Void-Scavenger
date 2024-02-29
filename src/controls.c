@@ -434,6 +434,16 @@ void input_keys(GLFWwindow *window) {
   } else if (glfwGetKey(window, GLFW_KEY_SLASH) != GLFW_PRESS) {
     holding_slash = 0;
   }
+
+  /* Tab */
+  if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS) {
+    if (mode == SPACE && !holding_tab) {
+      target_nearest_enemy();
+    }
+    holding_tab = 1;
+  } else {
+    holding_tab = 0;
+  }
 }
 
 void advance_cursor() {

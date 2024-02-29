@@ -368,3 +368,9 @@ void update_perspective() {
   glm_perspective(glm_rad(45.0), RES_X / RES_Y, 0.1f, RENDER_DIST, persp_proj);
 }
 
+void to_screen_space(vec4 pos, vec4 dest) {
+  mat4 view = GLM_MAT4_IDENTITY_INIT;
+  get_cam_matrix(&camera, view);
+  glm_mat4_mulv(view, pos, dest);
+  glm_mat4_mulv(persp_proj, dest, dest);
+}

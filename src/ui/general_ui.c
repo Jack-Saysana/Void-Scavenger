@@ -38,10 +38,11 @@ void init_ui_components() {
     printf("Could not initialize skill tree!\n");
     exit(1);
   }
-  
+
   coordinates_ui_initialize();
   fps_ui_initialize();
   init_terminal_ui();
+  init_target_ui();
 }
 
 /*
@@ -60,4 +61,5 @@ void update_ui_components() {
   update_inventory();
   update_ship_parts();
   update_skill_tree();
+  update_target_ui();
 }
