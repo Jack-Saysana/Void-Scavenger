@@ -1,5 +1,6 @@
 #include <global_vars.h>
 #include <const.h>
+#include <time.h>
 
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 

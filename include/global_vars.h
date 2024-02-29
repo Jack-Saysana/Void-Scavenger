@@ -98,4 +98,10 @@ extern SKILL_TREE skill_tree;
 // Arena globals
 extern float space_size;
 
+// Keyboard flags
+extern int keyboard_enabled;
+
+// Time
+extern time_t start_time;
+
 #endif

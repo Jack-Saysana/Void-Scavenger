@@ -36,7 +36,9 @@ int init_controls() {
 
 void keyboard_input(GLFWwindow *window) {
   // Insert keyboard handlers here...
-  input_keys(window);
+  if (keyboard_enabled) {
+    input_keys(window);
+  }
 }
 
 void fb_size_callback(GLFWwindow *window, int res_x, int res_y) {
@@ -255,6 +257,7 @@ void input_keys(GLFWwindow *window) {
         if (i == GLFW_KEY_E && get_terminal_ui_state() &&
                    !holding_alpha[i - GLFW_KEY_A]) {
           set_gamemode_space();
+          st_player.total_levels_completed++;
         }
       } else if (!console_enabled && mode == SPACE) {
         if (i == GLFW_KEY_W) {
@@ -464,4 +467,8 @@ void update_cursor_enabledness() {
 
 void enable_shooting() {
   can_shoot = 1;
+}
+
+void set_keyboard_enabledness(int set) {
+  keyboard_enabled = set;
 }

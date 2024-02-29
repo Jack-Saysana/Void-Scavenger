@@ -48,6 +48,7 @@ typedef struct player {
   size_t total_enemies_defeated;
   size_t total_ships_defeated;
   double total_distance_flown;
+  double total_distance_walked;
   double total_damage_dealt;
   double total_damage_taken;
   double total_experience;

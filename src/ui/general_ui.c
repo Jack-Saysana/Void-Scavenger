@@ -42,6 +42,7 @@ void init_ui_components() {
   coordinates_ui_initialize();
   fps_ui_initialize();
   init_terminal_ui();
+  game_over_ui_initialize();
 }
 
 /*

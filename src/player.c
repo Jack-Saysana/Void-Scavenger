@@ -32,7 +32,53 @@ int init_player() {
   st_player.max_experience = P_BASE_MAX_EXP;
   st_player.invuln = 0;
 
+  st_player.total_levels_completed = 0;
+  st_player.total_enemies_defeated = 0;
+  st_player.total_ships_defeated = 0;
+  st_player.total_distance_flown = 0.0;
+  st_player.total_distance_walked = 0.0;
+  st_player.total_damage_dealt = 0.0;
+  st_player.total_damage_taken = 0.0;
+  st_player.total_experience = 0.0;
+
   return 0;
+}
+
+void reset_player() {
+  st_player.max_health = P_BASE_HEALTH;
+  st_player.cur_health = P_BASE_HEALTH;
+  st_player.max_shield = P_BASE_SHIELD;
+  st_player.speed = P_BASE_SPEED;
+  st_player.fire_rate = P_BASE_FIRERATE;
+  st_player.max_experience = P_BASE_MAX_EXP;
+  st_player.invuln = 0;
+
+  st_player.total_levels_completed = 0;
+  st_player.total_enemies_defeated = 0;
+  st_player.total_ships_defeated = 0;
+  st_player.total_distance_flown = 0.0;
+  st_player.total_distance_walked = 0.0;
+  st_player.total_damage_dealt = 0.0;
+  st_player.total_damage_taken = 0.0;
+  st_player.total_experience = 0.0;
+
+  player_ship.reactor.max_output = S_BASE_PWR_OUTPUT;
+  player_ship.hull.max_health = S_BASE_HEALTH;
+  player_ship.shield.max_shield = S_BASE_SHIELD;
+  player_ship.shield.recharge_rate = S_BASE_SHIELD_RECHARGE;
+  player_ship.shield.recharge_delay = S_BASE_SHIELD_DELAY;
+  player_ship.shield.power_draw = S_BASE_PWR_DRAW;
+  player_ship.weapon.type = BALLISTIC;
+  player_ship.weapon.damage = S_BASE_DAMAGE;
+  player_ship.weapon.fire_rate = S_BASE_FIRERATE;
+  player_ship.weapon.max_power_draw = S_BASE_PWR_DRAW;
+  player_ship.weapon.proj_speed = S_BASE_PROJ_SPEED;
+  player_ship.weapon.range = S_BASE_RANGE;
+  player_ship.wing.max_ang_vel = S_BASE_ANG_VEL;
+  player_ship.wing.max_ang_accel = S_BASE_ANG_ACCEL;
+  player_ship.thruster.max_vel = S_BASE_VEL;
+  player_ship.thruster.max_accel = S_BASE_ACCEL;
+  player_ship.thruster.max_power_draw = S_BASE_PWR_DRAW;
 }
 
 // De-allocate player resources at end of game
