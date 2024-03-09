@@ -44,6 +44,10 @@ SP_OBSTACLE *sp_obs = NULL;
 size_t num_obstacles = 0;
 size_t obs_buff_len = 0;
 
+ST_SP *st_sp = NULL;
+size_t num_ship_parts = 0;
+size_t sp_buff_len = 0;
+
 CORRIDOR *cd_obs = NULL;
 size_t num_corridors = 0;
 size_t corridor_buff_len = 0;

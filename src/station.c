@@ -296,6 +296,26 @@ void free_maze(int **maze) {
   free(maze);
 }
 
+/*
+  Rarity Table:
+    Gold   (5%)
+    Purple (10%)
+    Green  (20%)
+    Blue   (30%)
+    White  (35%)
+*/
+int ship_parts_rng() {
+  int part_spawn_chance[RARITY_LEVELS] = {
+    65, 35, 15, 5, 0 
+  };
+  int rand = gen_rand_int(100);
+  for (int i = 0; i < RARITY_LEVELS && rand > -1; i++) {
+    if (rand > part_spawn_chance[i]) {
+      return i;
+    } 
+  }
+  return WHITE_RARITY;
+}
 
 /*
 Legend:
@@ -346,6 +366,7 @@ void create_station_corridors() {
   int item_spawn_chance = 30;
   int enemy_spawn_chance = 10;
   int enemy_variation = 20;
+  int sp_spawn_chance = 10;
   if (difficulty == MEDIUM) {
     enemy_spawn_chance = 20;
     enemy_variation = 30;
@@ -353,10 +374,12 @@ void create_station_corridors() {
     enemy_spawn_chance = 40;
     item_spawn_chance = 15;
     enemy_variation = 50;
+    sp_spawn_chance = 5;
   } else if (difficulty == BADASS) {
     enemy_spawn_chance = 60;
     item_spawn_chance = 10;
     enemy_variation = 70;
+    sp_spawn_chance = 2;
   }
   int found_terminal_room = 0;
   int backup_room_t = -1;
@@ -481,6 +504,10 @@ void create_station_corridors() {
           }
         }
 
+        if (gen_rand_int(100) <= sp_spawn_chance) {
+          spawn_ship_part(position);
+        }
+
         if (backup_room_t == -1) {
           backup_room_t = cur_type;
           backup_room_rot = cur_rot;
@@ -504,6 +531,46 @@ void create_station_corridors() {
   free(stack);
 }
 
+void spawn_ship_part(vec3 position) {
+  int type = gen_rand_int(NUM_STATION_SHIP_PART_TYPES);
+  if (type == TYPE_WEAPON) {
+    switch (gen_rand_int(3)) {
+      case 0:
+        type = TYPE_WEAPON_BALLISTIC;
+        break;
+      case 1:
+        type = TYPE_WEAPON_LASER;
+        break;
+      default:
+        type = TYPE_WEAPON_PLASMA;
+        break;
+    }
+  }
+  
+  vec3 offset = GLM_VEC3_ZERO_INIT;
+  glm_vec3_copy(position, offset);
+  object_random_offset(offset);
+
+  vec3 scale = GLM_VEC3_ZERO_INIT;
+  versor q;
+  /* Randomly rotate the obstacle around the y axis */
+  CREATE_QUATERNION(gen_rand_float(360.0), q)
+  glm_vec3_copy((vec3) { 1.0, 1.0, 1.0 }, scale);
+  int rarity = ship_parts_rng();
+  if (rarity == RARITY_ERR) {
+    fprintf(stderr, "Ship part RNG failed!\n");
+    return;
+  }
+
+  size_t index = init_station_ship_part(type, rarity, offset, scale, q,
+                                        2.0 * (gen_rand_float(3.0) + 1.0));
+  
+  if (station_ship_part_insert_sim(index) == -1) {
+    fprintf(stderr, "Failed to insert station ship part into simulation!\n");
+    exit(0);
+  }
+}
+
 void spawn_small_station_obstacle(vec3 position) {
   int small_obstacles[STATION_SMALL_OBJS] = {
     TYPE_AMMO_CRATE_0,
@@ -517,28 +584,11 @@ void spawn_small_station_obstacle(vec3 position) {
     TYPE_HOSE_3
   };
 
-  vec3 offset = GLM_VEC3_ZERO_INIT;
-  int offset_randomness = gen_rand_int(4);
   int obstacle_type = small_obstacles[gen_rand_int(STATION_SMALL_OBJS)];
-  switch (offset_randomness) {
-    case 0:
-      glm_vec3_copy((vec3) { gen_rand_float(1.0), 1.0, gen_rand_float(1.0) },
-                             offset);
-      break;
-    case 1:
-      glm_vec3_copy((vec3) { -gen_rand_float(1.0), 1.0, gen_rand_float(1.0) },
-                             offset);
-      break;
-    case 2:
-      glm_vec3_copy((vec3) { gen_rand_float(1.0), 1.0, -gen_rand_float(1.0) },
-                             offset);
-      break;
-    case 3:
-      glm_vec3_copy((vec3) { -gen_rand_float(1.0), 1.0, -gen_rand_float(1.0) },
-                             offset);
-      break;
-  }
-  glm_vec3_add(position, offset, offset);
+
+  vec3 offset = GLM_VEC3_ZERO_INIT;
+  glm_vec3_copy(position, offset);
+  object_random_offset(offset);
 
   vec3 scale = GLM_VEC3_ZERO_INIT;
   versor q;
@@ -662,7 +712,8 @@ size_t gen_cd_obj(int **maze, ivec2 coords, vec3 pos_dest, int *type_dest,
     type = TYPE_CORNER;
     rotation = 90;
   } else {
-    fprintf(stderr, "Could not find a matching corridor layout for (%d, %d)!\n", coords[X], coords[Y]);
+    fprintf(stderr, "Could not find a matching corridor layout for (%d, %d)!\n",
+            coords[X], coords[Y]);
     return INVALID_INDEX;
   }
   versor rot;
@@ -693,4 +744,28 @@ size_t gen_cd_obj(int **maze, ivec2 coords, vec3 pos_dest, int *type_dest,
   *type_dest = type;
   *rot_dest = rotation;
   return index;
+}
+
+void object_random_offset(vec3 pos) {
+  vec3 offset = GLM_VEC3_ZERO_INIT;
+  int offset_randomness = gen_rand_int(4);
+  switch (offset_randomness) {
+    case 0:
+      glm_vec3_copy((vec3) { gen_rand_float(1.0), 1.0, gen_rand_float(1.0) },
+                             offset);
+      break;
+    case 1:
+      glm_vec3_copy((vec3) { -gen_rand_float(1.0), 1.0, gen_rand_float(1.0) },
+                             offset);
+      break;
+    case 2:
+      glm_vec3_copy((vec3) { gen_rand_float(1.0), 1.0, -gen_rand_float(1.0) },
+                             offset);
+      break;
+    case 3:
+      glm_vec3_copy((vec3) { -gen_rand_float(1.0), 1.0, -gen_rand_float(1.0) },
+                             offset);
+      break;
+  }
+  glm_vec3_add(pos, offset, pos);
 }

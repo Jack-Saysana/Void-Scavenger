@@ -71,6 +71,7 @@ void set_game_over_stats() {
   time(&cur_time);
   float time_played = difftime(cur_time, start_time);
   float minutes_played = time_played / 60.0;
+  float hours_played = minutes_played / 60.0;
   if (minutes_played >= 1.0) {
     time_played = fmodf(time_played, 60.0);
   }
@@ -83,7 +84,7 @@ void set_game_over_stats() {
            " Damage Dealt: %.1lf\n"
            " Damage Taken: %.1lf\n"
            " Total Experience %.1lf\n"
-           " Time Played: %.0f min %.0f sec\n",
+           " Time Played: %.0f hrs %.0f min %.0f sec\n",
            st_player.total_levels_completed,
            st_player.total_distance_flown,
            st_player.total_distance_walked,
@@ -92,6 +93,7 @@ void set_game_over_stats() {
            st_player.total_damage_dealt,
            st_player.total_damage_taken,
            st_player.total_experience,
+           hours_played,
            minutes_played,
            time_played
            );

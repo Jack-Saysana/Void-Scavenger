@@ -59,6 +59,9 @@ void delete_wrapper(size_t index) {
     return;
   }
 
+  if (object_wrappers[index].type == STATION_SP_OBJ) {
+    printf("delete\n");
+  }
   object_wrappers[index] = object_wrappers[num_wrappers];
   SOBJ *old_wrapper = object_wrappers + num_wrappers;
   old_wrapper->entity->data = (void *) index;
@@ -83,6 +86,8 @@ void delete_wrapper(size_t index) {
     }
   } else if (old_wrapper->type == CORRIDOR_OBJ) {
     cd_obs[(size_t) old_wrapper->data].wrapper_offset = index;
+  } else if (old_wrapper->type == STATION_SP_OBJ) {
+    st_sp[(size_t) old_wrapper->data].wrapper_offset = index;
   }
 }
 
@@ -108,5 +113,7 @@ void refresh_wrapper(size_t index) {
     }
   } else if (wrapper->type == CORRIDOR_OBJ) {
     sim_refresh_corridor((size_t) wrapper->data);
+  } else if (wrapper->type == STATION_SP_OBJ) {
+    sim_refresh_station_ship_part((size_t) wrapper->data);
   }
 }

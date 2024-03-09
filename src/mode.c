@@ -201,6 +201,11 @@ int init_station_mode() {
     return -1;
   }
 
+  status = init_station_ship_parts_buffer();
+  if (status) {
+    return -1;
+  }
+
   status = init_corridor_buffer();
   if (status) {
     return -1;
@@ -241,15 +246,20 @@ void clear_station_mode() {
   for (size_t i = 0; i < num_corridors; i++) {
     free_entity(cd_obs[i].ent);
   }
+  for (size_t i = 0; i < num_ship_parts; i++) {
+    free_entity(st_sp[i].ent);
+  }
   num_enemies = 0;
   num_projectiles = 0;
   num_items = 0;
   num_obstacles = 0;
   num_corridors = 0;
+  num_ship_parts = 0;
 
   free_enemy_buffer();
   free_corridor_buffer();
   free_station_obstacle_buffer();
+  free_station_ship_parts_buffer();
 
   // Reset wrapper buffer length
   num_wrappers = 0;
@@ -315,6 +325,17 @@ int delete_stale_objects() {
       corridor_remove_sim(i);
       delete_corridor(i);
       i--;
+    }
+  }
+
+  if (mode == STATION) {
+    for (size_t i = 0; i < num_ship_parts; i++) {
+      cur_wrapper = object_wrappers + st_sp[i].wrapper_offset;
+      if (cur_wrapper->to_delete) {
+        station_ship_part_remove_sim(i);
+        delete_station_ship_part(i);
+        i--;
+      }
     }
   }
 

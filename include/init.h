@@ -18,7 +18,7 @@ int init_space_mode();
 int init_station_mode();
 void init_ui_components();
 int init_timer_queue();
-void free_timer_queue();
+int init_station_ship_parts_buffer();
 
 void cleanup_gl();
 void cleanup_scene();
@@ -26,3 +26,5 @@ void free_wrapper_buffer();
 void free_player();
 void free_player_ship();
 void free_projectile_buffer();
+void free_timer_queue();
+void free_station_ship_parts_buffer();
