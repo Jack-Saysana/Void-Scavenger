@@ -44,6 +44,7 @@ void init_ui_components() {
   init_terminal_ui();
   init_target_ui();
   init_radar_ui();
+  init_waypoint_ui();
 }
 
 /*
@@ -64,4 +65,5 @@ void update_ui_components() {
   update_skill_tree();
   update_target_ui();
   update_radar_ui();
+  update_waypoint_ui();
 }

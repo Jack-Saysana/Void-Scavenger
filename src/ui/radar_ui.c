@@ -17,6 +17,15 @@ void init_radar_ui() {
 }
 
 void update_radar_ui() {
+  if (mode != SPACE) {
+    warning_state = OFF;
+    set_ui_enabled(radar_warning, 0);
+    set_ui_enabled(radar_ui, 0);
+    return;
+  } else {
+    set_ui_enabled(radar_ui, 1);
+  }
+
   set_ui_texture_unit(radar_ui, render_radar_ui());
 
   if (warning_state) {

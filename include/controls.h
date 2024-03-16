@@ -68,3 +68,4 @@ void toggle_skill_tree();
 int get_terminal_ui_state();
 void set_gamemode_space();
 void target_nearest_enemy();
+void toggle_st_waypoint();

@@ -56,6 +56,7 @@ void init_target_ui() {
                                   SIZE_UNIT_RATIO);
   set_ui_texture(target_health_bar, "assets/ui/hud_color_50.png");
 
+  // Target Waypoint
 
   target_waypoint = add_ui_comp(UI_ROOT_COMP, (vec2) { 0.0, 0.0 }, 0.1, 0.1,
                                 ABSOLUTE_POS | POS_UNIT_RATIO |

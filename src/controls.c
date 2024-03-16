@@ -297,6 +297,9 @@ void input_keys(GLFWwindow *window) {
           /* Handle P press (Ship Parts at Space Mode) */
           toggle_ship_parts();
         }
+        if (i == GLFW_KEY_C && !holding_alpha[i - GLFW_KEY_A]) {
+          toggle_st_waypoint();
+        }
       }
       holding_alpha[i - GLFW_KEY_A] = 1;
     } else if (glfwGetKey(window, i) != GLFW_PRESS) {

@@ -14,6 +14,7 @@
 
 int init_space_mode() {
   mode = SPACE;
+  toggle_st_waypoint();
   reset_camera(&camera);
   /* Ensure coordinates are enabled */
   enable_coordinates();
@@ -516,4 +517,8 @@ ENTITY **get_dead_zones() {
     return dead_zones;
   }
   return NULL;
+}
+
+void get_sp_station_pos(vec3 dest) {
+  glm_vec3_copy(sp_station->translation, dest);
 }
