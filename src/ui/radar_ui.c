@@ -3,13 +3,32 @@
 void init_radar_ui() {
   radar_ui_fb = framebuffer_init(RES_X, RES_Y);
 
-  radar_ui = add_ui_comp(UI_ROOT_COMP, (vec2) { 0.5, -0.875 }, 0.25, 0.25,
+  radar_warning = add_ui_comp(UI_ROOT_COMP, (vec2) { 0.5, -0.8 }, 0.15, 0.02,
+                              ABSOLUTE_POS | POS_UNIT_RATIO |
+                              SIZE_UNIT_RATIO_Y);
+  set_ui_texture(radar_warning, "assets/transparent.png");
+  set_ui_pivot(radar_warning, PIVOT_CENTER);
+  set_ui_text(radar_warning, "COLLISION IMMINENT", 0.75, T_CENTER, fixed_sys,
+              GLM_VEC3_ONE);
+
+  radar_ui = add_ui_comp(UI_ROOT_COMP, (vec2) { 0.5, -0.875 }, 0.15, 0.15,
                          ABSOLUTE_POS | POS_UNIT_RATIO | SIZE_UNIT_RATIO_Y);
   set_ui_pivot(radar_ui, PIVOT_CENTER);
 }
 
 void update_radar_ui() {
   set_ui_texture_unit(radar_ui, render_radar_ui());
+
+  if (warning_state) {
+    set_ui_enabled(radar_warning, 1);
+    if (warning_state == RED) {
+      set_ui_text_col(radar_warning, GLM_VEC3_ONE);
+    } else if (warning_state == WHITE) {
+      set_ui_text_col(radar_warning, (vec3) { 1.0, 0.0, 0.0 });
+    }
+  } else {
+    set_ui_enabled(radar_warning, 0);
+  }
 }
 
 void update_radar_fb() {
@@ -28,9 +47,16 @@ unsigned int render_radar_ui() {
   glEnable(GL_DEPTH_TEST);
 
   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-  glLineWidth(5.0);
+  glLineWidth(RES_X * 0.01);
   glUseProgram(basic_shader);
-  set_vec3("col", (vec3) { 0.0, 0.0, 1.0 }, basic_shader);
+
+  if (warning_state == RED) {
+    set_vec3("col", (vec3) { 1.0, 0.0, 0.0 }, basic_shader);
+  } else if (warning_state == WHITE) {
+    set_vec3("col", (vec3) { 1.0, 1.0, 1.0 }, basic_shader);
+  } else {
+    set_vec3("col", (vec3) { 0.0, 0.0, 1.0 }, basic_shader);
+  }
 
   mat4 proj = GLM_MAT4_IDENTITY_INIT;
   glm_perspective(glm_rad(45.0), 1.0, 0.1f, 100.0, proj);
@@ -73,6 +99,8 @@ unsigned int render_radar_ui() {
                                    player_ship.ent->translation,
                                    SEARCH_RADIUS);
 
+  int warning_trigger = 0;
+  float dist = 0.0;
   SOBJ *wrapper = NULL;
   for (size_t i = 0; i < num_cols; i++) {
     wrapper = object_wrappers + (size_t) cols[i].b_ent->data;
@@ -86,8 +114,11 @@ unsigned int render_radar_ui() {
 
     glm_vec3_sub(cols[i].b_ent->translation, player_ship.ent->translation,
                  e_pos);
-    if (glm_vec3_norm(e_pos) > SEARCH_RADIUS) {
+    dist = glm_vec3_norm(e_pos);
+    if (dist > SEARCH_RADIUS) {
       continue;
+    } else if (wrapper->type == OBSTACLE_OBJ && dist < WARNING_THRESHOLD) {
+      warning_trigger = 1;
     }
 
     glm_vec3_scale(e_pos, 1.0 / SEARCH_RADIUS, e_pos);
@@ -103,6 +134,13 @@ unsigned int render_radar_ui() {
   }
   free(cols);
 
+  if (warning_trigger && warning_state == OFF) {
+    warning_state = RED;
+    add_timer(WARNING_TIME, update_radar_warning, -1000, NULL);
+  } else if (!warning_trigger) {
+    warning_state = OFF;
+  }
+
   // Draw player "blip"
 
   set_vec3("col", (vec3) { 0.0, 1.0, 1.0 }, basic_shader);
@@ -113,4 +151,14 @@ unsigned int render_radar_ui() {
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
   return radar_ui_fb.color_texture;
+}
+
+void update_radar_warning(void *args) {
+  if (warning_state == WHITE) {
+    warning_state = RED;
+    add_timer(WARNING_TIME, update_radar_warning, -1000, NULL);
+  } else if (warning_state == RED) {
+    warning_state = WHITE;
+    add_timer(WARNING_TIME, update_radar_warning, -1000, NULL);
+  }
 }
