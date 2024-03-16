@@ -19,8 +19,10 @@ int init_scene() {
                                   "./src/shaders/entity/shader.fs");
   ui_shader = init_shader_prog("./src/shaders/ui/shader.vs", NULL,
                                "./src/shaders/ui/shader.fs");
-  basic_shader = init_shader_prog("./src/shaders/basic/shader.vs", NULL,
+  basic_shader = init_shader_prog("./src/shaders/model/shader.vs", NULL,
                                   "./src/shaders/basic/shader.fs");
+  collider_shader = init_shader_prog("./src/shaders/basic/shader.vs", NULL,
+                                     "./src/shaders/basic/shader.fs");
   bone_shader = init_shader_prog("./src/shaders/bone/shader.vs", NULL,
                                  "./src/shaders/bone/shader.fs");
   proj_shader = init_shader_prog("./src/shaders/projectile/shader.vs", NULL,
@@ -37,6 +39,7 @@ int init_scene() {
   sphere_model = load_model("./assets/misc/sphere/sphere.obj");
   render_sphere_model = load_model("./assets/misc/render_sphere/render_sphere.obj");
   cube_model = load_model("./assets/misc/cube/cube.obj");
+  tri_prism_model = load_model("./assets/misc/tri_prism/tri_prism.obj");
   station_model = load_model("./assets/set_pieces/station/station.obj");
   terminal_model = load_model("./assets/set_pieces/terminal/terminal.obj");
   dead_zone_model = load_model("./assets/misc/dead_zone/dead_zone.obj");
@@ -148,7 +151,7 @@ void render_scene(GLFWwindow *window) {
   glClearColor(0.0, 0.0, 0.0, 1.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  // Insert rendering logic below...
+  // Render to main scene
   mat4 view = GLM_MAT4_IDENTITY_INIT;
   get_cam_matrix(&camera, view);
 
@@ -165,6 +168,10 @@ void render_scene(GLFWwindow *window) {
   glUseProgram(basic_shader);
   set_mat4("projection", persp_proj, basic_shader);
   set_mat4("view", view, basic_shader);
+
+  glUseProgram(collider_shader);
+  set_mat4("projection", persp_proj, collider_shader);
+  set_mat4("view", view, collider_shader);
 
   glUseProgram(proj_shader);
   set_mat4("projection", persp_proj, proj_shader);
@@ -255,10 +262,10 @@ void render_game_entity(ENTITY *ent) {
     draw_entity(entity_shader, ent);
   }
   if (hit_boxes) {
-    glUseProgram(basic_shader);
+    glUseProgram(collider_shader);
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    set_vec3("test_col", (vec3) { 1.0, 0.0, 1.0 }, basic_shader);
-    draw_colliders(basic_shader, ent, sphere_model);
+    set_vec3("col", (vec3) { 1.0, 0.0, 1.0 }, collider_shader);
+    draw_colliders(collider_shader, ent, sphere_model);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   }
 }
@@ -270,20 +277,20 @@ void render_dead_zones() {
   }
 
   for (int i = 0; i < 6; i++) {
-    glUseProgram(basic_shader);
+    glUseProgram(collider_shader);
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    set_vec3("test_col", (vec3) { 0.0, 1.0, 0.0 }, basic_shader);
-    draw_colliders(basic_shader, dead_zones[i], sphere_model);
+    set_vec3("col", (vec3) { 0.0, 1.0, 0.0 }, collider_shader);
+    draw_colliders(collider_shader, dead_zones[i], sphere_model);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   }
 }
 
 void render_oct_tree(SIMULATION *sim) {
-  glUseProgram(model_shader);
+  glUseProgram(basic_shader);
   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-  set_vec3("col", (vec3) { 1.0, 1.0, 0.0 }, model_shader);
+  set_vec3("col", (vec3) { 1.0, 1.0, 0.0 }, basic_shader);
   draw_oct_tree(cube_model, sim->oct_tree, (vec3) { 0.0, 0.0, 0.0 },
-                sim->oct_tree->max_extent, model_shader, 0, 1);
+                sim->oct_tree->max_extent, basic_shader, 0, 1);
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
@@ -348,6 +355,18 @@ ENTITY *init_terminal_ent() {
   return init_entity(terminal_model);
 }
 
+MODEL *get_sphere_model() {
+  return sphere_model;
+}
+
+MODEL *get_tri_prism_model() {
+  return tri_prism_model;
+}
+
+unsigned int get_basic_shader() {
+  return basic_shader;
+}
+
 void toggle_hit_boxes() {
   hit_boxes = !hit_boxes;
 }
@@ -366,6 +385,8 @@ void toggle_render_bounds() {
 
 void update_perspective() {
   glm_perspective(glm_rad(45.0), RES_X / RES_Y, 0.1f, RENDER_DIST, persp_proj);
+
+  update_radar_fb();
 }
 
 void to_screen_space(vec4 pos, vec4 dest) {
@@ -374,3 +395,4 @@ void to_screen_space(vec4 pos, vec4 dest) {
   glm_mat4_mulv(view, pos, dest);
   glm_mat4_mulv(persp_proj, dest, dest);
 }
+

@@ -13,6 +13,7 @@ static unsigned int entity_shader = 0;
 static unsigned int model_shader = 0;
 static unsigned int ui_shader = 0;
 static unsigned int basic_shader = 0;
+static unsigned int collider_shader = 0;
 static unsigned int bone_shader = 0;
 static unsigned int proj_shader = 0;
 
@@ -25,6 +26,7 @@ static MODEL *projectile_models[NUM_PROJ_TYPES] = { NULL, NULL };
 static MODEL *sphere_model = NULL;
 static MODEL *render_sphere_model = NULL;
 static MODEL *cube_model = NULL;
+static MODEL *tri_prism_model = NULL;
 static MODEL *asteroid_models[NUM_ASTEROID_TYPES] = { NULL, NULL, NULL, NULL,
                                                       NULL };
 static MODEL *corridor_models[NUM_CORRIDOR_TYPES] = { NULL, NULL, NULL, NULL,
@@ -54,8 +56,8 @@ static int render_bounds = 0;
 #define CHECK_ASSETS_LOADED (\
 !player_model || !alien_models[0] || !alien_models[1] || !player_ship_model || \
 !alien_ship_models[0] || !projectile_models[0] || !projectile_models[1] || \
-!sphere_model || !render_sphere_model || !cube_model || !station_model ||\
-!terminal_model || !rifle_model || !shotgun_model || \
+!sphere_model || !render_sphere_model || !cube_model || !tri_prism_model || \
+!station_model || !terminal_model || !rifle_model || !shotgun_model || \
 !asteroid_models[0] || !asteroid_models[1] || !asteroid_models[2] || \
 !asteroid_models[3] || !asteroid_models[4] || !corridor_models[0] || \
 !corridor_models[1] || !corridor_models[2] || !corridor_models[3] || \
@@ -83,3 +85,4 @@ void get_cam_matrix(CAM *, mat4);
 void player_ship_thrust_move();
 ENTITY **get_dead_zones();
 void get_player_gun_mat(mat4);
+void update_radar_fb();

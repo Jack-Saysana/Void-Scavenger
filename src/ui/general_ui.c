@@ -43,6 +43,7 @@ void init_ui_components() {
   fps_ui_initialize();
   init_terminal_ui();
   init_target_ui();
+  init_radar_ui();
 }
 
 /*
@@ -62,4 +63,5 @@ void update_ui_components() {
   update_ship_parts();
   update_skill_tree();
   update_target_ui();
+  update_radar_ui();
 }

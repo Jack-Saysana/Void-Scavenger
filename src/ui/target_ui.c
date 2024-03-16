@@ -155,9 +155,9 @@ void update_target_ui() {
       }
     } else {
       if (screen_space[Y] > -0.5) {
-        screen_space[Y] = 0.0;
-      } else {
         screen_space[Y] = -1.0;
+      } else {
+        screen_space[Y] = 0.0;
       }
     }
   }
