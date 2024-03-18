@@ -261,13 +261,38 @@ void render_game_entity(ENTITY *ent) {
   } else {
     draw_entity(entity_shader, ent);
   }
+  if (wrapper->type == ENEMY_SHIP_OBJ) {
+    SHIP *enemy = sp_enemies + (size_t) wrapper->data;
+    if (enemy->render_shield > 0.0) {
+      render_shield(ent, enemy->render_shield);
+    }
+  } else if (wrapper->type == PLAYER_SHIP_OBJ) {
+    if (player_ship.render_shield > 0.0) {
+      render_shield(ent, player_ship.render_shield);
+    }
+  }
   if (hit_boxes) {
     glUseProgram(collider_shader);
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    set_vec3("col", (vec3) { 1.0, 0.0, 1.0 }, collider_shader);
+    set_vec4("col", (vec4) { 1.0, 0.0, 1.0, 1.0 }, collider_shader);
     draw_colliders(collider_shader, ent, sphere_model);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   }
+}
+
+void render_shield(ENTITY *ent, float shield_state) {
+  MODEL *shield_model = ent->model;
+  mat4 model = GLM_MAT4_IDENTITY_INIT;
+  glm_translate(model, ent->translation);
+  glm_quat_rotate(model, ent->rotation, model);
+  glm_scale(model, ent->scale);
+  glm_scale(model, (vec3) { 1.1, 1.1, 1.1 });
+
+  glUseProgram(basic_shader);
+  set_mat4("model", model, basic_shader);
+  set_vec4("col", (vec4) { 0.0, 1.0, 1.0, 0.1 * sin(shield_state * M_PI) },
+           basic_shader);
+  draw_model(basic_shader, shield_model);
 }
 
 void render_dead_zones() {
@@ -279,7 +304,7 @@ void render_dead_zones() {
   for (int i = 0; i < 6; i++) {
     glUseProgram(collider_shader);
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    set_vec3("col", (vec3) { 0.0, 1.0, 0.0 }, collider_shader);
+    set_vec4("col", (vec4) { 0.0, 1.0, 0.0, 1.0 }, collider_shader);
     draw_colliders(collider_shader, dead_zones[i], sphere_model);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   }
@@ -288,7 +313,7 @@ void render_dead_zones() {
 void render_oct_tree(SIMULATION *sim) {
   glUseProgram(basic_shader);
   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-  set_vec3("col", (vec3) { 1.0, 1.0, 0.0 }, basic_shader);
+  set_vec4("col", (vec4) { 1.0, 1.0, 0.0, 1.0 }, basic_shader);
   draw_oct_tree(cube_model, sim->oct_tree, (vec3) { 0.0, 0.0, 0.0 },
                 sim->oct_tree->max_extent, basic_shader, 0, 1);
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);

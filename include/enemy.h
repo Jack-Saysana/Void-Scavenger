@@ -11,6 +11,7 @@ void sp_enemy_pathfind(size_t);
 void st_enemy_pathfind(size_t);
 void st_enemy_walk_cycle(void *);
 void st_enemy_hurt_anim(void *);
+void sp_enemy_shield_dmg(void *);
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 

@@ -258,6 +258,8 @@ void delete_enemy_ship(size_t index) {
   }
 
   update_timer_memory(&sp_enemies[index].invuln, NULL);
+  update_timer_args(sp_enemy_shield_dmg, (void *) index,
+                    (void *) INVALID_INDEX);
   free_entity(sp_enemies[index].ent);
   delete_wrapper(sp_enemies[index].wrapper_offset);
 
@@ -267,8 +269,10 @@ void delete_enemy_ship(size_t index) {
   }
 
   sp_enemies[index] = sp_enemies[num_enemies];
-  update_timer_memory(&st_enemies[num_enemies].invuln,
-                      &st_enemies[index].invuln);
+  update_timer_memory(&sp_enemies[num_enemies].invuln,
+                      &sp_enemies[index].invuln);
+  update_timer_args(sp_enemy_shield_dmg, (void *) num_enemies,
+                    (void *) index);
   SOBJ *wrapper = object_wrappers + sp_enemies[index].wrapper_offset;
   wrapper->data = (void *) index;
 
@@ -558,3 +562,20 @@ void st_enemy_hurt_anim(void *args) {
   }
 }
 
+void sp_enemy_shield_dmg(void *args) {
+  size_t index = (size_t) args;
+  if (index == INVALID_INDEX) {
+    return;
+  }
+
+  SHIP *enemy = sp_enemies + index;
+  if (enemy->render_shield < 1.0) {
+    enemy->render_shield += 0.05;
+    if (enemy->render_shield > 1.0) {
+      enemy->render_shield = 1.0;
+    }
+    add_timer(0.03, sp_enemy_shield_dmg, -1000, args);
+  } else {
+    enemy->render_shield = 0.0;
+  }
+}

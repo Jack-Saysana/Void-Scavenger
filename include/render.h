@@ -1,3 +1,4 @@
+#include <math.h>
 #include <glad/glad.h>
 #include <cglm/cglm.h>
 #include <global_vars.h>
@@ -78,6 +79,7 @@ void render_game_entity(ENTITY *);
 void render_oct_tree(SIMULATION *);
 void render_dead_zones();
 void get_bone_equip_mat(ENTITY *, size_t, mat4);
+void render_shield(ENTITY *, float);
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 

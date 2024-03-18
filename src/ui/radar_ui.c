@@ -60,11 +60,11 @@ unsigned int render_radar_ui() {
   glUseProgram(basic_shader);
 
   if (warning_state == RED) {
-    set_vec3("col", (vec3) { 1.0, 0.0, 0.0 }, basic_shader);
+    set_vec4("col", (vec4) { 1.0, 0.0, 0.0, 1.0 }, basic_shader);
   } else if (warning_state == WHITE) {
-    set_vec3("col", (vec3) { 1.0, 1.0, 1.0 }, basic_shader);
+    set_vec4("col", (vec4) { 1.0, 1.0, 1.0, 1.0 }, basic_shader);
   } else {
-    set_vec3("col", (vec3) { 0.0, 0.0, 1.0 }, basic_shader);
+    set_vec4("col", (vec4) { 0.0, 0.0, 1.0, 1.0 }, basic_shader);
   }
 
   mat4 proj = GLM_MAT4_IDENTITY_INIT;
@@ -114,9 +114,9 @@ unsigned int render_radar_ui() {
   for (size_t i = 0; i < num_cols; i++) {
     wrapper = object_wrappers + (size_t) cols[i].b_ent->data;
     if (wrapper->type == ENEMY_SHIP_OBJ) {
-      set_vec3("col", (vec3) { 1.0, 0.0, 0.0 }, basic_shader);
+      set_vec4("col", (vec4) { 1.0, 0.0, 0.0, 1.0 }, basic_shader);
     } else if (wrapper->type == OBSTACLE_OBJ) {
-      set_vec3("col", (vec3) { 0.0, 1.0, 0.0 }, basic_shader);
+      set_vec4("col", (vec4) { 0.0, 1.0, 0.0, 1.0 }, basic_shader);
     } else {
       continue;
     }
@@ -152,7 +152,7 @@ unsigned int render_radar_ui() {
 
   // Draw player "blip"
 
-  set_vec3("col", (vec3) { 0.0, 1.0, 1.0 }, basic_shader);
+  set_vec4("col", (vec4) { 0.0, 1.0, 1.0, 1.0 }, basic_shader);
   glm_mat4_identity(model);
   glm_scale(model, (vec3) { 0.01, 0.01, 0.01 });
   set_mat4("model", model, basic_shader);

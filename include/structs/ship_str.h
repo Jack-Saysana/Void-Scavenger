@@ -68,6 +68,8 @@ typedef struct ship_t {
   float cur_ang_speed;
   // Flag denoting if the ship is current invulnerable to damage
   int invuln;
+  // Float denoting the current opacity of the ship's shield
+  float render_shield;
 } SHIP;
 
 #endif

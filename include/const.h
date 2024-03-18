@@ -101,6 +101,10 @@
 #define STATION_SMALL_OBJS         (9)
 #define STATION_LARGE_OBJS         (11)
 
+// Misc. Combat Constants
+#define BASE_COLLISION_DAMAGE_VEL (30.0)
+#define BASE_COLLISION_DAMAGE     (50.0)
+
 // Targeting System consts
 #define MAX_TARGET_DIST (100.0)
 

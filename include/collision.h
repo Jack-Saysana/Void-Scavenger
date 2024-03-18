@@ -12,7 +12,9 @@ void handle_event_collisions(COLLISION *, size_t);
 void prepare_object_movement();
 void update_object_movement();
 
+void decrement_player_shield(float, float);
 void decrement_player_health(float, float);
+void decrement_enemy_shield(size_t, float, float);
 void decrement_enemy_health(size_t, float, float);
 
 void update_query_spheres();
@@ -31,3 +33,6 @@ void stop_coords_warning();
 void set_gamemode_station();
 void set_terminal_ui(int);
 void st_enemy_hurt_anim(void *);
+void sp_enemy_shield_dmg(void *);
+void sp_player_shield_dmg(void *);
+void player_health_dmg();

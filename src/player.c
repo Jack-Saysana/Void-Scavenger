@@ -215,3 +215,17 @@ void get_player_gun_mat(mat4 dest) {
   glm_scale(dest, st_player.ent->scale);
   glm_mat4_mul(dest, to_player_space, dest);
 }
+
+// ================================= ANIMATION ===============================
+
+void sp_player_shield_dmg(void *args) {
+  if (player_ship.render_shield < 1.0) {
+    player_ship.render_shield += 0.05;
+    if (player_ship.render_shield > 1.0) {
+      player_ship.render_shield = 1.0;
+    }
+    add_timer(0.03, sp_player_shield_dmg, -1000, NULL);
+  } else {
+    player_ship.render_shield = 0.0;
+  }
+}

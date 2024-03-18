@@ -44,14 +44,29 @@ void handle_collisions() {
 }
 
 void handle_physics_collisions(COLLISION *cols, size_t num_cols) {
+  SOBJ *proj_wrapper = NULL;
+  SOBJ *target_wrapper = NULL;
+
   SOBJ *a_wrapper = NULL;
   SOBJ *b_wrapper = NULL;
   ST_ENEMY *cur_enemy = NULL;
-  for (size_t i = 0; i < num_cols; i++) {
-    impulse_resolution(physics_sim, cols[i]);
 
+  vec3 rel_vel = GLM_VEC3_ZERO_INIT;
+  float damage = 0.0;
+  for (size_t i = 0; i < num_cols; i++) {
+    proj_wrapper = NULL;
+    target_wrapper = NULL;
     a_wrapper = object_wrappers + (size_t) cols[i].a_ent->data;
     b_wrapper = object_wrappers + (size_t) cols[i].b_ent->data;
+    glm_vec3_sub(a_wrapper->entity->velocity, b_wrapper->entity->velocity,
+                 rel_vel);
+    damage = (glm_vec3_norm(rel_vel) * BASE_COLLISION_DAMAGE) /
+             BASE_COLLISION_DAMAGE_VEL;
+    if (damage < 10.0) {
+      damage = 0.0;
+    }
+
+    impulse_resolution(physics_sim, cols[i]);
 
     a_wrapper->to_refresh = 1;
     b_wrapper->to_refresh = 1;
@@ -69,6 +84,45 @@ void handle_physics_collisions(COLLISION *cols, size_t num_cols) {
         cur_enemy->target_corridor = (size_t) a_wrapper->data;
       }
     }
+
+    // Ship-on-ship
+    if (a_wrapper->type == PLAYER_SHIP_OBJ &&
+        b_wrapper->type == ENEMY_SHIP_OBJ) {
+      decrement_player_shield(damage, 1.0);
+      decrement_enemy_shield((size_t) b_wrapper->data, damage, 1.0);
+      continue;
+    } else if (a_wrapper->type == ENEMY_SHIP_OBJ &&
+               b_wrapper->type == PLAYER_SHIP_OBJ) {
+      decrement_player_shield(damage, 1.0);
+      decrement_enemy_shield((size_t) a_wrapper->data, damage, 1.0);
+      continue;
+    } else if (a_wrapper->type == ENEMY_SHIP_OBJ &&
+               b_wrapper->type == ENEMY_SHIP_OBJ)  {
+      decrement_enemy_shield((size_t) a_wrapper->data, damage, 1.0);
+      decrement_enemy_shield((size_t) b_wrapper->data, damage, 1.0);
+      continue;
+    }
+
+    // Debris-on-ship
+    if (a_wrapper->type == OBSTACLE_OBJ && b_wrapper->type != OBSTACLE_OBJ &&
+        b_wrapper->type != PROJ_OBJ) {
+      proj_wrapper = a_wrapper;
+      target_wrapper = b_wrapper;
+    } else if (b_wrapper->type == OBSTACLE_OBJ &&
+               a_wrapper->type != OBSTACLE_OBJ &&
+               a_wrapper->type != PROJ_OBJ) {
+      proj_wrapper = b_wrapper;
+      target_wrapper = a_wrapper;
+    }
+    if (proj_wrapper && target_wrapper) {
+      if (target_wrapper->type == PLAYER_SHIP_OBJ) {
+        decrement_player_shield(damage, 1.0);
+      } else if (target_wrapper->type == ENEMY_SHIP_OBJ) {
+        decrement_enemy_shield((size_t) target_wrapper->data, damage, 1.0);
+      }
+
+      continue;
+    }
   }
 }
 
@@ -80,17 +134,16 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
   SOBJ *b_wrapper = NULL;
 
   for (size_t i = 0; i < num_cols; i++) {
+    proj_wrapper = NULL;
+    target_wrapper = NULL;
     a_wrapper = object_wrappers + (size_t) cols[i].a_ent->data;
     b_wrapper = object_wrappers + (size_t) cols[i].b_ent->data;
 
-    if (a_wrapper->type == PROJ_OBJ && b_wrapper->type == PROJ_OBJ) {
-      //start_proj_collision_anim((size_t) a_wrapper->data);
-      //start_proj_collision_anim((size_t) b_wrapper->data);
-      continue;
-    } else if (a_wrapper->type == PROJ_OBJ) {
+    // Projectile on ship/character
+    if (a_wrapper->type == PROJ_OBJ && b_wrapper->type != PROJ_OBJ) {
       proj_wrapper = a_wrapper;
       target_wrapper = b_wrapper;
-    } else if (b_wrapper->type == PROJ_OBJ) {
+    } else if (b_wrapper->type == PROJ_OBJ && a_wrapper->type != PROJ_OBJ) {
       proj_wrapper = b_wrapper;
       target_wrapper = a_wrapper;
     } else {
@@ -104,11 +157,11 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
 
     if (proj->source == SRC_ENEMY && (target_wrapper->type == PLAYER_OBJ ||
         target_wrapper->type == PLAYER_SHIP_OBJ)) {
-      decrement_player_health(proj->damage, 0.1);
+      decrement_player_shield(proj->damage, 0.1);
     } else if (proj->source == SRC_PLAYER &&
                (target_wrapper->type == ENEMY_OBJ ||
                 target_wrapper->type == ENEMY_SHIP_OBJ)) {
-      decrement_enemy_health((size_t) target_wrapper->data, proj->damage, 0.1);
+      decrement_enemy_shield((size_t) target_wrapper->data, proj->damage, 0.1);
     }
 
     start_proj_collision_anim((size_t) proj_wrapper->data);
@@ -200,7 +253,43 @@ void update_object_movement() {
 
 // ================================= HELPERS =================================
 
+void decrement_player_shield(float damage, float timing) {
+  if (mode == SPACE && !player_ship.invuln) {
+    if (player_ship.cur_shield && damage) {
+      sp_player_shield_dmg(NULL);
+    }
+    player_ship.cur_shield -= damage;
+    if (player_ship.cur_shield <= 0.0) {
+      player_health_dmg();
+      player_ship.cur_health += player_ship.cur_shield;
+      player_ship.cur_shield = 0.0;
+    }
+    if (player_ship.cur_health <= 0.0) {
+      player_ship.cur_health = 0.0;
+      fprintf(stderr, "END GAME\n");
+    } else {
+      player_ship.invuln = 1;
+      add_timer(timing, &player_ship.invuln, 0, NULL);
+    }
+  } else if (mode == STATION && !st_player.invuln) {
+    st_player.cur_shield -= damage;
+    if (st_player.cur_shield <= 0.0) {
+      player_health_dmg();
+      st_player.cur_health += st_player.cur_shield;
+      st_player.cur_shield = 0.0;
+    }
+    if (st_player.cur_health <= 0.0) {
+      st_player.cur_health = 0.0;
+      fprintf(stderr, "END GAME\n");
+    } else {
+      st_player.invuln = 1;
+      add_timer(timing, &st_player.invuln, 0, NULL);
+    }
+  }
+}
+
 void decrement_player_health(float damage, float timing) {
+  player_health_dmg();
   if (mode == SPACE && !player_ship.invuln) {
     player_ship.cur_health -= damage;
     if (player_ship.cur_health <= 0.0) {
@@ -218,6 +307,36 @@ void decrement_player_health(float damage, float timing) {
     } else {
       st_player.invuln = 1;
       add_timer(timing, &st_player.invuln, 0, NULL);
+    }
+  }
+}
+
+void decrement_enemy_shield(size_t index, float damage, float timing) {
+  if (mode == SPACE) {
+    SHIP *enemy = sp_enemies + index;
+    if (!enemy->invuln) {
+      if (enemy->cur_shield && damage) {
+        sp_enemy_shield_dmg((void *) index);
+      }
+      enemy->cur_shield -= damage;
+      if (enemy->cur_shield <= 0.0) {
+        enemy->cur_health += enemy->cur_shield;
+        enemy->cur_shield = 0.0;
+      }
+      if (enemy->cur_health <= 0.0) {
+        object_wrappers[(size_t) enemy->wrapper_offset].to_delete = 1;
+      } else {
+        enemy->invuln = 1;
+        add_timer(timing, &enemy->invuln, 0, NULL);
+      }
+    }
+  } else if (mode == STATION) {
+    ST_ENEMY *enemy = st_enemies + index;
+    if (!enemy->invuln) {
+      enemy->cur_health -= damage;
+      enemy->invuln = 1;
+      enemy->cur_frame = 0;
+      st_enemy_hurt_anim((void *) index);
     }
   }
 }
@@ -240,7 +359,7 @@ void decrement_enemy_health(size_t index, float damage, float timing) {
       enemy->cur_health -= damage;
       enemy->invuln = 1;
       enemy->cur_frame = 0;
-      add_timer(0.03, st_enemy_hurt_anim, -1000, (void *) index);
+      st_enemy_hurt_anim((void *) index);
     }
   }
 }
