@@ -40,6 +40,8 @@ typedef struct inv_slot {
     S_THRUSTER thruster;
   } data;
   I_SLOT_ID type;
+  unsigned int weapon_type;
+  int rarity;
 } I_SLOT;
 
 typedef struct player {

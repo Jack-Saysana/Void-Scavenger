@@ -5,9 +5,10 @@
 #include <global_vars.h>
 #include <cglm/cglm.h>
 
+extern size_t i_size;
+
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
-
-
+void reset_inventory();
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 

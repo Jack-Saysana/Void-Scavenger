@@ -11,7 +11,6 @@
 #include <structs/obstacle_str.h>
 #include <structs/corridor_str.h>
 #include <structs/obj_wrapper_str.h>
-#include <structs/station_ship_part_str.h>
 #include <ui/structs/stats_ui_str.h>
 #include <ui/structs/inventory_ui_str.h>
 #include <ui/structs/ship_parts_ui_str.h>
@@ -77,11 +76,6 @@ extern ST_OBSTACLE* st_obs;
 extern SP_OBSTACLE* sp_obs;
 extern size_t num_obstacles;
 extern size_t obs_buff_len;
-
-// Currently spawned ship parts in station mode
-extern ST_SP *st_sp;
-extern size_t num_ship_parts;
-extern size_t sp_buff_len;
 
 // Currently active station corridors
 extern CORRIDOR *cd_obs;

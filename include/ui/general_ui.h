@@ -25,3 +25,4 @@ void update_fps();
 void update_ship_parts();
 void update_skill_tree();
 void game_over_ui_initialize();
+void init_item_prompt_ui();

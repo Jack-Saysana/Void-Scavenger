@@ -9,6 +9,7 @@ void console_ui_initialize() {
   set_ui_enabled(console_root, 0);
   set_ui_pivot(console_root, PIVOT_TOP_LEFT);
   set_ui_display(console_root, 0);
+  set_ui_texture(console_root, "assets/transparent.png");
 
   /* Actual console itself */
   console = add_ui_comp(console_root, (vec2) { 0.0 , 0.0 }, 0.5, 0.05,
@@ -36,6 +37,7 @@ void console_ui_initialize() {
                         LINE_UNIT_RATIO_Y);
   set_ui_pivot(console_cursor, PIVOT_TOP_LEFT);
   set_ui_enabled(console_cursor, 1);
+  set_ui_texture(console_cursor, "assets/transparent.png");
   cons_cursor_enabled = 1;
 }
 

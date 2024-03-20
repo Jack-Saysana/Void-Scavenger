@@ -53,16 +53,16 @@ void space_obstacle_remove_sim(size_t);
 void delete_station_obstacle(size_t);
 void station_obstacle_remove_sim(size_t);
 
-void delete_station_ship_part(size_t);
-void station_ship_part_remove_sim(size_t);
+void delete_item(size_t);
+void item_remove_sim(size_t);
 
 void refresh_wrapper(size_t);
 
 /* Obstacles for station and space mode */
 int init_space_obstacle_buffer();
 int init_station_obstacle_buffer();
-int init_station_ship_parts_buffer();
-void free_station_ship_parts_buffer();
+int init_items_buffer();
+void free_items_buffer();
 void free_space_obstacle_buffer();
 void free_station_obstacle_buffer();
 size_t init_space_obstacle(int, vec3, vec3, vec3, vec3, float);
@@ -106,3 +106,5 @@ void update_perspective();
 void reset_camera(CAM *);
 
 void enable_shooting();
+
+void reset_inventory();

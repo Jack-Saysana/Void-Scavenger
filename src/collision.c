@@ -150,6 +150,7 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
 
 void handle_event_collisions(COLLISION *cols, size_t num_cols) {
   set_terminal_ui(0);
+  set_item_prompt(0);
   int player_out_of_bounds = 0;
 
   SOBJ *target_wrapper = NULL;
@@ -178,6 +179,13 @@ void handle_event_collisions(COLLISION *cols, size_t num_cols) {
     if ((a_wrapper->type == TERMINAL_OBJ && b_wrapper->type == PLAYER_OBJ) ||
         (a_wrapper->type == PLAYER_OBJ && b_wrapper->type == TERMINAL_OBJ)) {
       set_terminal_ui(1);
+      continue;
+    }
+
+    // Display station part pickup prompt if player close to part
+    if ((a_wrapper->type == PLAYER_OBJ && b_wrapper->type == ITEM_OBJ) ||
+        (a_wrapper->type == ITEM_OBJ && b_wrapper->type == PLAYER_OBJ)) {
+      set_item_prompt(1);
       continue;
     }
 

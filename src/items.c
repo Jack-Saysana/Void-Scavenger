@@ -1,42 +1,43 @@
-#include <ship_parts.h>
+#include <items.h>
 
 // ==================== BUFFER INITIALIZATION AND CLEANUP ====================
 
-int init_station_ship_parts_buffer() {
-  st_sp = malloc(sizeof(ST_SP) * BUFF_STARTING_LEN);
-  if (st_sp == NULL) {
-    fprintf(stderr, "Error: Unable to allocate station ship parts buffer\n");
+int init_items_buffer() {
+  items = malloc(sizeof(ST_ITEM) * BUFF_STARTING_LEN);
+  if (items == NULL) {
+    fprintf(stderr, "Error: Unable to allocate items buffer\n");
     return -1;
   }
-  num_ship_parts = 0;
-  sp_buff_len = BUFF_STARTING_LEN;
+  num_items = 0;
+  item_buff_len = BUFF_STARTING_LEN;
 
   return 0;
 }
 
-void free_station_ship_parts_buffer() {
-  free(st_sp);
-  st_sp = NULL;
+void free_items_buffer() {
+  free(items);
+  items = NULL;
 }
 
 // ================== INDIVIDUAL INITIALIZATION AND CLEANUP ==================
 
-size_t init_station_ship_part(int type, int rarity, vec3 pos, vec3 scale, 
+size_t init_item(int type, int rarity, vec3 pos, vec3 scale, 
                               versor rotation, float mass) {
-  if (st_sp == NULL) {
-    fprintf(stderr, "Error: Inserting into a deallocated space part buffer\n");
+  if (items == NULL) {
+    fprintf(stderr, "Error: Inserting into a deallocated item buffer\n");
     return INVALID_INDEX;
   }
 
-  ST_SP *part = st_sp + num_ship_parts;
-  part->ent = init_station_ship_part_ent(type);
+  ST_ITEM *part = items + num_items;
+  part->type = type;
+  part->ent = init_item_ent(part->type);
   if (part->ent == NULL) {
-    fprintf(stderr, "Error: Unable to allocate ship part entity\n");
+    fprintf(stderr, "Error: Unable to allocate item entity\n");
     return INVALID_INDEX;
   }
 
-  part->wrapper_offset = init_wrapper(STATION_SP_OBJ, part->ent,
-                                           (void *) num_ship_parts);
+  part->wrapper_offset = init_wrapper(ITEM_OBJ, part->ent,
+                                           (void *) num_items);
   if (part->wrapper_offset == INVALID_INDEX) {
     return -1;
   }
@@ -53,37 +54,37 @@ size_t init_station_ship_part(int type, int rarity, vec3 pos, vec3 scale,
   glm_vec3_copy(scale, part->ent->scale);
   part->ent->inv_mass = 1.0 / mass;
 
-  num_ship_parts++;
-  if (num_ship_parts == sp_buff_len) {
-    int status = double_buffer((void **) &st_sp, &sp_buff_len,
-                               sizeof(ST_SP));
+  num_items++;
+  if (num_items == item_buff_len) {
+    int status = double_buffer((void **) &items, &item_buff_len,
+                               sizeof(ST_ITEM));
     if (status) {
-      fprintf(stderr, "Error: Unable to reallocate space parts buffer\n");
+      fprintf(stderr, "Error: Unable to reallocate items buffer\n");
       return INVALID_INDEX;
     }
   }
 
-  return num_ship_parts - 1;
+  return num_items - 1;
 }
 
-int station_ship_part_insert_sim(size_t index) {
-  int status = sim_add_entity(physics_sim, st_sp[index].ent,
+int item_insert_sim(size_t index) {
+  int status = sim_add_entity(physics_sim, items[index].ent,
                               ALLOW_DEFAULT);
   if (status) {
     return -1;
   }
 
-  status = sim_add_entity(combat_sim, st_sp[index].ent, ALLOW_DEFAULT);
+  status = sim_add_entity(combat_sim, items[index].ent, ALLOW_DEFAULT);
   if (status) {
     return -1;
   }
 
-  status = sim_add_entity(render_sim, st_sp[index].ent, ALLOW_DEFAULT);
+  status = sim_add_entity(render_sim, items[index].ent, ALLOW_DEFAULT);
   if (status) {
     return -1;
   }
 
-  status = sim_add_entity(event_sim, st_sp[index].ent, ALLOW_DEFAULT);
+  status = sim_add_entity(event_sim, items[index].ent, ALLOW_HURT_BOXES);
   if (status) {
     return -1;
   }
@@ -91,30 +92,30 @@ int station_ship_part_insert_sim(size_t index) {
   return 0;
 }
 
-void delete_station_ship_part(size_t index) {
-  if (index >= num_ship_parts) {
+void delete_item(size_t index) {
+  if (index >= num_items) {
     return;
   }
 
-  free_entity(st_sp[index].ent);
-  delete_wrapper(st_sp[index].wrapper_offset);
+  free_entity(items[index].ent);
+  delete_wrapper(items[index].wrapper_offset);
 
-  num_ship_parts--;
+  num_items--;
 
-  st_sp[index] = st_sp[num_ship_parts];
-  SOBJ *wrapper = object_wrappers + st_sp[index].wrapper_offset;
+  items[index] = items[num_items];
+  SOBJ *wrapper = object_wrappers + items[index].wrapper_offset;
   wrapper->data = (void *) index;
 }
 
-void station_ship_part_remove_sim(size_t index) {
-  sim_remove_entity(physics_sim, st_sp[index].ent);
-  sim_remove_entity(combat_sim, st_sp[index].ent);
-  sim_remove_entity(render_sim, st_sp[index].ent);
-  sim_remove_entity(event_sim, st_sp[index].ent);
+void item_remove_sim(size_t index) {
+  sim_remove_entity(physics_sim, items[index].ent);
+  sim_remove_entity(combat_sim, items[index].ent);
+  sim_remove_entity(render_sim, items[index].ent);
+  sim_remove_entity(event_sim, items[index].ent);
 }
 
-void sim_refresh_station_ship_part(size_t index) {
-  ST_SP *obs = st_sp + index;
+void sim_refresh_item(size_t index) {
+  ST_ITEM *obs = items + index;
   COLLIDER *cur_col = NULL;
   for (size_t i = 0; i < obs->ent->model->num_colliders; i++) {
     cur_col = obs->ent->model->colliders + i;
@@ -133,12 +134,12 @@ void sim_refresh_station_ship_part(size_t index) {
   Sets the changes to which the part will have on the ship. The numbers
   which are assigned are designed to be OFFSETS, not actual replacements.
 */
-void set_enhancements(ST_SP *part, int type, int rarity) {
+void set_enhancements(ST_ITEM *part, int type, int rarity) {
   if (part) {
     memset(&part->enhancements, 0, sizeof(part->enhancements));
     part->type = type;
     part->rarity = rarity;
-    if (type == TYPE_ENGINE) {
+    if (type == TYPE_THRUSTER) {
       part->enhancements.thruster.max_vel = S_BASE_VEL;
       part->enhancements.thruster.max_accel = S_BASE_ACCEL;
       part->enhancements.thruster.max_power_draw = S_BASE_PWR_DRAW;
@@ -334,3 +335,4 @@ void set_enhancements(ST_SP *part, int type, int rarity) {
     return;
   }
 }
+
