@@ -66,3 +66,5 @@ void toggle_ship_parts();
 void toggle_skill_tree();
 int get_terminal_ui_state();
 void set_gamemode_space();
+int get_item_prompt_state();
+void pickup_item();

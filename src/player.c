@@ -8,13 +8,15 @@
 */
 
 // =============================== STATION MODE ==============================
-
 // Initialize player struct at beginning of game
 int init_player() {
   memset(&st_player, 0, sizeof(PLAYER));
 
   // TODO allocate player skills
-  // TODO allocate player inventory
+
+  // Allocate player inventory
+  st_player.inventory = (I_SLOT *) (malloc(sizeof(I_SLOT) * i_size));
+  reset_inventory();
 
   st_player.ent = init_player_ent();
   if (st_player.ent == NULL) {
@@ -42,6 +44,13 @@ int init_player() {
   st_player.total_experience = 0.0;
 
   return 0;
+}
+
+void reset_inventory() {
+  for (size_t i = 0; i < i_size; i++) {
+    memset(&st_player.inventory[i], 0, sizeof(I_SLOT));
+    st_player.inventory[i].type = I_SLOT_EMPTY;
+  }
 }
 
 void reset_player() {
@@ -79,10 +88,15 @@ void reset_player() {
   player_ship.thruster.max_vel = S_BASE_VEL;
   player_ship.thruster.max_accel = S_BASE_ACCEL;
   player_ship.thruster.max_power_draw = S_BASE_PWR_DRAW;
+
+  reset_inventory();
 }
 
 // De-allocate player resources at end of game
 void free_player() {
+  if (st_player.inventory) {
+    free(st_player.inventory);
+  }
   free_entity(st_player.ent);
   delete_wrapper(st_player.wrapper_offset);
 }

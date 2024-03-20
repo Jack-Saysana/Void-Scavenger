@@ -26,7 +26,7 @@
 
 // Station Ship Parts Constants
 #define NUM_STATION_SHIP_PART_TYPES (6)
-#define TYPE_ENGINE                 (0)
+#define TYPE_THRUSTER               (0)
 #define TYPE_HULL                   (1)
 #define TYPE_REACTOR                (2)
 #define TYPE_SHIELD                 (3)

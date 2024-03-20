@@ -12,7 +12,6 @@
 #define OFF                  (0)
 #define ON                   (1)
 
-static UI_COMP *game_over_root_root;
 static UI_COMP *game_over_root;
 static UI_COMP *game_over_restart;
 static UI_COMP *game_over_quit;

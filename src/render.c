@@ -74,7 +74,7 @@ int init_scene() {
   station_obstacles[17] = load_model(st_obs_dir "/hose_3/hose_3.obj");
   station_obstacles[18] = load_model(st_obs_dir "/stool/stool.obj");
   station_obstacles[19] = load_model(st_obs_dir "/table/table.obj");
-  station_ship_parts[0] = load_model(st_ship_parts_dir "/engine/engine.obj");
+  station_ship_parts[0] = load_model(st_ship_parts_dir "/thrusters/thrusters.obj");
   station_ship_parts[1] = load_model(st_ship_parts_dir "/hull/hull.obj");
   station_ship_parts[2] = load_model(st_ship_parts_dir "/reactor/reactor.obj");
   station_ship_parts[3] = load_model(st_ship_parts_dir "/shield/shield.obj");
@@ -262,18 +262,18 @@ void render_game_entity(ENTITY *ent) {
       draw_model(model_shader, rifle_model);
     }
     draw_entity(entity_shader, ent);
-  } else if (wrapper->type == STATION_SP_OBJ) {
+  } else if (wrapper->type == ITEM_OBJ) {
     /* TODO: Update to new shader */
-    ST_SP *part = st_sp + (size_t) wrapper->data;
+    ST_ITEM *part = items + (size_t) wrapper->data;
     glUseProgram(model_shader);
     mat4 model = GLM_MAT4_IDENTITY_INIT;
     glm_translate(model, ent->translation);
     glm_quat_rotate(model, ent->rotation, model);
     glm_scale(model, ent->scale);
     set_mat4("model", model, model_shader);
-    if (part->type == TYPE_WEAPON_BALLISTIC ||
-        part->type == TYPE_WEAPON_LASER ||
-        part->type == TYPE_WEAPON_PLASMA) {
+    if (part->type == PART_WEAPON_BALLISTIC ||
+        part->type == PART_WEAPON_LASER ||
+        part->type == PART_WEAPON_PLASMA) {
       draw_model(model_shader, station_ship_parts[TYPE_WEAPON]); 
     } else {
       draw_model(model_shader, station_ship_parts[part->type]); 
@@ -376,10 +376,11 @@ ENTITY *init_terminal_ent() {
   return init_entity(terminal_model);
 }
 
-ENTITY *init_station_ship_part_ent(size_t type) {
-  if (type == TYPE_WEAPON || type == TYPE_WEAPON_BALLISTIC ||
-      type == TYPE_WEAPON_LASER || type == TYPE_WEAPON_PLASMA) {
-      type = TYPE_WEAPON;
+ENTITY *init_item_ent(PART_T type) {
+  if (type == PART_WEAPON_PLASMA || 
+      type == PART_WEAPON_BALLISTIC ||
+      type == PART_WEAPON_LASER) {
+    return init_entity(station_ship_parts[TYPE_WEAPON]);
   }
   return init_entity(station_ship_parts[type]);
 }

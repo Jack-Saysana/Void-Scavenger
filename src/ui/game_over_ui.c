@@ -2,13 +2,7 @@
 
 void game_over_ui_initialize() {
   /* Root component - all children for game over screen are parented by */
-  /* this component                                                     */
-  game_over_root_root = add_ui_comp(UI_ROOT_COMP, (vec2) { 0.0, 0.0 }, 
-                               1.0, 1.0,
-                               ABSOLUTE_POS | POS_UNIT_RATIO |
-                               SIZE_UNIT_RATIO);
-
-  game_over_root = add_ui_comp(game_over_root_root, (vec2) { 0.5, -0.5 }, 0.45, 
+  game_over_root = add_ui_comp(UI_ROOT_COMP, (vec2) { 0.5, -0.5 }, 0.45, 
                                0.45 * INVERSE_GOLDEN_RATIO,
                                RELATIVE_POS | POS_UNIT_RATIO |
                                WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_X |

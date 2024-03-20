@@ -91,5 +91,5 @@ size_t init_station_obstacle(int, vec3, vec3, versor, float);
 void spawn_st_enemy(vec3, int);
 void spawn_st_terminal(vec3, versor);
 
-size_t init_station_ship_part(int, int, vec3, vec3, versor, float);
-int station_ship_part_insert_sim(size_t);
+size_t init_item(int, int, vec3, vec3, versor, float);
+int item_insert_sim(size_t);

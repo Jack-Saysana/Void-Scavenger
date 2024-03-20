@@ -12,5 +12,6 @@
 #include "./spatial_algebra.h"
 #include "./ui_component.h"
 #include "./ui_component_str.h"
+#include "./framebuffer.h"
 
 #endif

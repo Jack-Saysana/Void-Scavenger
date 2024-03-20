@@ -162,6 +162,9 @@ int init_station_mode() {
   /* Re-enable shooting (if not already) */
   enable_shooting();
 
+  /* Clear inventory */
+  reset_inventory();
+
   // Initialize proper render distances
   RENDER_DIST = ST_BASE_RENDER_DIST;
   glm_vec3_copy((vec3) {RENDER_DIST, RENDER_DIST, RENDER_DIST },
@@ -201,7 +204,7 @@ int init_station_mode() {
     return -1;
   }
 
-  status = init_station_ship_parts_buffer();
+  status = init_items_buffer();
   if (status) {
     return -1;
   }
@@ -246,20 +249,16 @@ void clear_station_mode() {
   for (size_t i = 0; i < num_corridors; i++) {
     free_entity(cd_obs[i].ent);
   }
-  for (size_t i = 0; i < num_ship_parts; i++) {
-    free_entity(st_sp[i].ent);
-  }
   num_enemies = 0;
   num_projectiles = 0;
   num_items = 0;
   num_obstacles = 0;
   num_corridors = 0;
-  num_ship_parts = 0;
 
   free_enemy_buffer();
   free_corridor_buffer();
   free_station_obstacle_buffer();
-  free_station_ship_parts_buffer();
+  free_items_buffer();
 
   // Reset wrapper buffer length
   num_wrappers = 0;
@@ -294,10 +293,15 @@ int delete_stale_objects() {
       i--;
     }
   }
-  for (size_t i = 0; i < num_items; i++) {
-    cur_wrapper = object_wrappers + items[i].wrapper_offset;
-    if (cur_wrapper->to_delete) {
-      // Delete item
+  if (mode == STATION) {
+    for (size_t i = 0; i < num_items; i++) {
+      cur_wrapper = object_wrappers + items[i].wrapper_offset;
+      if (cur_wrapper->to_delete) {
+        // Delete item
+        item_remove_sim(i);
+        delete_item(i);
+        i--;
+      }
     }
   }
   for (size_t i = 0; i < num_obstacles; i++) {
@@ -325,17 +329,6 @@ int delete_stale_objects() {
       corridor_remove_sim(i);
       delete_corridor(i);
       i--;
-    }
-  }
-
-  if (mode == STATION) {
-    for (size_t i = 0; i < num_ship_parts; i++) {
-      cur_wrapper = object_wrappers + st_sp[i].wrapper_offset;
-      if (cur_wrapper->to_delete) {
-        station_ship_part_remove_sim(i);
-        delete_station_ship_part(i);
-        i--;
-      }
     }
   }
 

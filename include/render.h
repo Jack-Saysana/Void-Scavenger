@@ -3,6 +3,7 @@
 #include <global_vars.h>
 #include <engine/engine.h>
 #include <structs/camera_str.h>
+#include <structs/item_str.h>
 #include <const.h>
 #include <global_vars.h>
 

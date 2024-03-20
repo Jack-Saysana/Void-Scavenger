@@ -562,11 +562,11 @@ void spawn_ship_part(vec3 position) {
     return;
   }
 
-  size_t index = init_station_ship_part(type, rarity, offset, scale, q,
-                                        2.0 * (gen_rand_float(3.0) + 1.0));
+  size_t index = init_item(type, rarity, offset, scale, q,
+                           2.0 * (gen_rand_float(3.0) + 1.0));
   
-  if (station_ship_part_insert_sim(index) == -1) {
-    fprintf(stderr, "Failed to insert station ship part into simulation!\n");
+  if (item_insert_sim(index) == -1) {
+    fprintf(stderr, "Failed to insert item into simulation!\n");
     exit(0);
   }
 }
