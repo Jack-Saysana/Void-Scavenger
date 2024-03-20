@@ -12,5 +12,6 @@ void draw_colliders(unsigned int shader, ENTITY *entity, MODEL *sphere);
 void draw_model(unsigned int shader, MODEL *model);
 void free_model(MODEL *model);
 void free_entity(ENTITY *entity);
+void free_textures();
 
 #endif
