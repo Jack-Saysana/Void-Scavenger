@@ -26,7 +26,7 @@ int init_ship_parts() {
 
   ship_parts.ui_ship_parts_background = add_ui_comp(
     ship_parts.ui_ship_parts_root, // UI_COMP *parent
-    (vec2) { 0.20, 0 }, // vec2 pos
+    (vec2) { 0.15, 0 }, // vec2 pos
     1.0, // float width
     1.0, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_Y | HEIGHT_UNIT_RATIO_Y
@@ -150,6 +150,53 @@ int init_ship_parts() {
   );
   set_ui_texture(ship_parts.ui_thruster_icon, "assets/ui/parts_thruster_icon.png");
 
+  ship_parts.ui_ship_parts_info_background = add_ui_comp(
+    ship_parts.ui_ship_parts_root, // UI_COMP *parent
+    (vec2) { 0.7, -0.7 }, // vec2 pos
+    0.24, // float width
+    0.24, // float height
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
+  );
+  set_ui_texture(ship_parts.ui_ship_parts_info_background, "assets/ui/test.png");
+
+  ship_parts.ui_ship_parts_info_title_background = add_ui_comp(
+    ship_parts.ui_ship_parts_info_background, // UI_COMP *parent
+    (vec2) { 0.025, -0.05 }, // vec2 pos
+    0.95, // float width
+    0.2833, // float height
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
+  );
+  set_ui_texture(ship_parts.ui_ship_parts_info_title_background, "assets/ui/hud_color_bg.png");
+
+  ship_parts.ui_ship_parts_info_title_text = add_ui_comp(
+    ship_parts.ui_ship_parts_info_title_background, // UI_COMP *parent
+    (vec2) { 0.1, -0.1 }, // vec2 pos
+    0.8, // float width
+    0.8, // float height
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_Y
+  );
+  set_ui_texture(ship_parts.ui_ship_parts_info_title_text, "assets/transparent.png");
+  set_ui_text(ship_parts.ui_ship_parts_info_title_text, "title", 1.0, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+
+  ship_parts.ui_ship_parts_info_content_background = add_ui_comp(
+    ship_parts.ui_ship_parts_info_background, // UI_COMP *parent
+    (vec2) { 0.025, -0.3833 }, // vec2 pos
+    0.95, // float width
+    0.5666, // float height
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
+  );
+  set_ui_texture(ship_parts.ui_ship_parts_info_content_background, "assets/ui/hud_color.png");
+
+  ship_parts.ui_ship_parts_info_content_text = add_ui_comp(
+    ship_parts.ui_ship_parts_info_content_background, // UI_COMP *parent
+    (vec2) { 0.1, -0.1 }, // vec2 pos
+    0.8, // float width
+    0.4, // float height
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_Y
+  );
+  set_ui_texture(ship_parts.ui_ship_parts_info_content_text, "assets/transparent.png");
+  set_ui_text(ship_parts.ui_ship_parts_info_content_text, "content", 1.0, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+
   // set layer to front
   // set_manual_layer(ship_parts.ui_ship_parts_root, 0.01);
 
@@ -180,6 +227,7 @@ void toggle_ship_parts() {
     CURSOR_ENABLED = 0;
   } else {
     set_ui_enabled(ship_parts.ui_ship_parts_root, 1);
+    set_ui_enabled(inventory.ui_inventory_root, 0);
     CURSOR_ENABLED = 1;
   }
 }
