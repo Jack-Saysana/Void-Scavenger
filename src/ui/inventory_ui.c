@@ -88,6 +88,7 @@ int init_inventory() {
       ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_Y | HEIGHT_UNIT_RATIO_Y
     );
     set_ui_texture(inventory.ui_inventory_slot_background[i], "assets/ui/hud_color_bg.png");
+    // Performance Issue
     // set_ui_on_hover(inventory.ui_inventory_slot_background[i], slot_on_hover, NULL);
     // set_ui_no_hover(inventory.ui_inventory_slot_background[i], slot_on_no_hover, NULL);
 
@@ -114,7 +115,6 @@ void update_inventory() {
   // check current game mode
   if (mode == SPACE) {
     // set visibility
-    set_ui_enabled(inventory.ui_inventory_root, 0);
   } else if (mode == STATION) {
     // update inventory slots
     // TODO: Should be functional in sprint 2
@@ -128,6 +128,7 @@ void toggle_inventory() {
   } else {
     set_ui_enabled(inventory.ui_inventory_root, 1);
     set_ui_enabled(skill_tree.ui_skill_tree_root, 0);
+    set_ui_enabled(ship_parts.ui_ship_parts_root, 0);
     CURSOR_ENABLED = 1;
   }
 }
