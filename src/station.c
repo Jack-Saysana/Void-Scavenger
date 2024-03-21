@@ -565,9 +565,14 @@ void spawn_ship_part(vec3 position) {
   size_t index = init_item(type, rarity, offset, scale, q,
                            2.0 * (gen_rand_float(3.0) + 1.0));
   
+  if (index == INVALID_INDEX) {
+    fprintf(stderr, "Failed to init an item!\n");
+    return;
+  }
+
   if (item_insert_sim(index) == -1) {
     fprintf(stderr, "Failed to insert item into simulation!\n");
-    exit(0);
+    exit(1);
   }
 }
 

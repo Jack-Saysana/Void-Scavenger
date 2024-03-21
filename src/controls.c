@@ -265,6 +265,12 @@ void input_keys(GLFWwindow *window) {
           /* Handle picking up an item */
           pickup_item();
         }
+        if (i == GLFW_KEY_Q && !holding_alpha[i - GLFW_KEY_A]) {
+          size_t to_drop = find_first_filled();
+          if (to_drop != INVALID_INDEX) {
+            drop_item(to_drop);
+          }
+        }
       } else if (!console_enabled && mode == SPACE) {
         if (i == GLFW_KEY_W) {
           /* Handle W press */

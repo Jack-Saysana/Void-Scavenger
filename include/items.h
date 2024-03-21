@@ -11,6 +11,8 @@
 #define PURPLE_DIFF (1.25)
 #define GOLD_DIFF   (1.5)
 
+extern size_t i_size;
+
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
 void set_enhancements(ST_ITEM *, int, int);
@@ -21,3 +23,5 @@ size_t init_wrapper(SOBJ_T, ENTITY *, void *);
 void delete_wrapper(size_t);
 
 ENTITY *init_item_ent(PART_T);
+
+float gen_rand_float(float);

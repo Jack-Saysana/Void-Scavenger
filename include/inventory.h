@@ -4,10 +4,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#define NOT_WEAPON (8008135)
-#define BALLISTIC  (0)
-#define LASER      (1)
-#define PLASMA     (2)
 
 extern size_t i_size;
 
@@ -16,3 +12,5 @@ I_SLOT *inv_first_avail();
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 size_t sim_get_nearby(SIMULATION *sim, COLLISION **dest, vec3 pos, float range);
+size_t restore_item(size_t);
+int item_insert_sim(size_t);

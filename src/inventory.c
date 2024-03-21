@@ -45,7 +45,7 @@ void pickup_item() {
       slot->type = I_SLOT_SHIELD;
       break;
     case PART_WEAPON_BALLISTIC:
-      slot->weapon_type = BALLISTIC;
+      slot->weapon_type = W_BALLISTIC;
     case PART_WEAPON_LASER:
       slot->weapon_type = LASER;
     case PART_WEAPON_PLASMA:
@@ -64,6 +64,25 @@ void pickup_item() {
   temp->to_delete = 1;
 }
 
+void drop_item(size_t inv_slot) {
+  size_t index = restore_item(inv_slot);
+  if (index == INVALID_INDEX) {
+    fprintf(stderr, "Failed to restore item!\n");
+    return;
+  }
+  if (item_insert_sim(index) == -1) {
+    fprintf(stderr, "Failed to insert item into simulation!\n");
+    exit(0);
+  } 
+
+  /* Reset inventory slot */
+  I_SLOT *slot = st_player.inventory + inv_slot;
+  slot->type = I_SLOT_EMPTY;
+  memset(&slot->data, 0, sizeof(slot->data));
+  slot->weapon_type = NOT_WEAPON;
+  slot->rarity = WHITE_RARITY;
+}
+
 I_SLOT *inv_first_avail() {
   for (size_t i = 0; i < i_size; i++) {
     if (st_player.inventory[i].type == I_SLOT_EMPTY) {
@@ -71,4 +90,13 @@ I_SLOT *inv_first_avail() {
     }
   }
   return NULL;
+}
+
+size_t find_first_filled() {
+  for (size_t i = 0; i < i_size; i++) {
+    if (st_player.inventory[i].type != I_SLOT_EMPTY) {
+      return i;
+    }
+  }
+  return INVALID_INDEX;
 }

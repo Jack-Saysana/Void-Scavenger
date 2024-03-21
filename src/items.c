@@ -19,7 +19,7 @@ void free_items_buffer() {
   items = NULL;
 }
 
-// ================== INDIVIDUAL INITIALIZATION AND CLEANUP ==================
+// ================== INDIVIDUAL INITIALIZATION AND CLEANUP ================== 
 
 size_t init_item(int type, int rarity, vec3 pos, vec3 scale, 
                               versor rotation, float mass) {
@@ -53,6 +53,81 @@ size_t init_item(int type, int rarity, vec3 pos, vec3 scale,
   glm_vec3_copy(pos, part->ent->translation);
   glm_vec3_copy(scale, part->ent->scale);
   part->ent->inv_mass = 1.0 / mass;
+
+  num_items++;
+  if (num_items == item_buff_len) {
+    int status = double_buffer((void **) &items, &item_buff_len,
+                               sizeof(ST_ITEM));
+    if (status) {
+      fprintf(stderr, "Error: Unable to reallocate items buffer\n");
+      return INVALID_INDEX;
+    }
+  }
+
+  return num_items - 1;
+}
+
+size_t restore_item(size_t inv_slot_num) {
+  if (inv_slot_num > i_size) {
+    fprintf(stderr, "Trying to restore item from inventory that doens't exist");
+    return INVALID_INDEX;
+  }
+
+  if (!items) {
+    fprintf(stderr, "Trying to restore item into an unallocated item buffer");
+    return INVALID_INDEX;
+  }
+
+  I_SLOT *slot = st_player.inventory + inv_slot_num;
+  if (slot->type == I_SLOT_EMPTY) {
+    return INVALID_INDEX;
+  }
+
+  ST_ITEM *part = items + num_items;
+
+  /* Translate from slot type to part type */
+  if (slot->type == I_SLOT_REACTOR) {
+    part->type = PART_REACTOR;
+  } else if (slot->type == I_SLOT_HULL) {
+    part->type = PART_HULL;
+  } else if (slot->type == I_SLOT_SHIELD) {
+    part->type = PART_SHIELD;
+  } else if (slot->type == I_SLOT_WEAPON) {
+    if (slot->weapon_type == W_LASER) {
+      part->type = PART_WEAPON_LASER;
+    } else if (slot->weapon_type == W_BALLISTIC) {
+      part->type = PART_WEAPON_BALLISTIC;
+    } else if (slot->weapon_type == W_PLASMA) {
+      part->type = PART_WEAPON_PLASMA;
+    }
+  } else if (slot->type == I_SLOT_THRUSTER) {
+    part->type = PART_THRUSTER;
+  }
+
+  part->ent = init_item_ent(part->type);
+  if (part->ent == NULL) {
+    fprintf(stderr, "Error: Unable to allocate item entity\n");
+    return INVALID_INDEX;
+  }
+
+  part->wrapper_offset = init_wrapper(ITEM_OBJ, part->ent,
+                                           (void *) num_items);
+  if (part->wrapper_offset == INVALID_INDEX) {
+    return -1;
+  }
+  /* Copy over part data */
+  memcpy(&part->enhancements, &slot->data, sizeof(slot->data));
+  part->rarity = slot->rarity;
+  
+  glm_vec3_copy((vec3) { 0.0, 0.0, 0.0 }, part->ent->ang_velocity);
+  glm_vec3_copy((vec3) { 0.0, 0.01, 0.0 }, part->ent->velocity);
+  part->ent->rotation[0] = 0.0;
+  part->ent->rotation[1] = 0.0;
+  part->ent->rotation[2] = 0.0;
+  part->ent->rotation[3] = 0.0;
+  glm_vec3_copy(st_player.ent->translation, part->ent->translation);
+  glm_vec3_copy(GLM_VEC3_ONE, part->ent->scale);
+  part->ent->inv_mass = 1.0 / (2.0 * (gen_rand_float(3.0) + 1.0));
 
   num_items++;
   if (num_items == item_buff_len) {
@@ -130,10 +205,6 @@ void sim_refresh_item(size_t index) {
 
 // ================================= HELPERS =================================
 
-/*
-  Sets the changes to which the part will have on the ship. The numbers
-  which are assigned are designed to be OFFSETS, not actual replacements.
-*/
 void set_enhancements(ST_ITEM *part, int type, int rarity) {
   if (part) {
     memset(&part->enhancements, 0, sizeof(part->enhancements));
