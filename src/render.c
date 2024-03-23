@@ -404,7 +404,7 @@ float get_total_load_state() {
 void reset_load_state() {
   pthread_mutex_lock(&load_state_lock);
   finished_loading = 0;
-  pthread_mutex_unlock(&load_state_lock);
   load_error = 0;
   num_loaded = 0;
+  pthread_mutex_unlock(&load_state_lock);
 }
