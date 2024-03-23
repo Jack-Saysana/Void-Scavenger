@@ -23,7 +23,8 @@ extern F_GLYPH *fixed_sys;
 // Current game mode
 typedef enum game_mode {
   STATION,
-  SPACE
+  SPACE,
+  LOADING
 } GAME_MODE;
 extern GAME_MODE mode;
 

@@ -190,7 +190,7 @@ void player_ship_thrust_move() {
 void get_player_coordinates(vec3 coords) {
   if (mode == SPACE) {
     glm_vec3_copy(player_ship.ent->translation, coords);
-  } else {
+  } else if (mode == STATION) {
     glm_vec3_copy(st_player.ent->translation, coords);
   }
 }

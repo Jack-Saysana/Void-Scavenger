@@ -53,6 +53,11 @@ void init_ui_components() {
   updates are called from.
 */
 void update_ui_components() {
+  update_loading_ui();
+  if (mode == LOADING) {
+    return;
+  }
+
   if (coordinates_enabled) {
     update_coordinates();
   }

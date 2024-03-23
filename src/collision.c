@@ -8,6 +8,10 @@
 */
 
 void handle_collisions() {
+  if (mode != SPACE && mode != STATION) {
+    return;
+  }
+
   // Update simulations
   update_query_spheres();
   prepare_object_movement();

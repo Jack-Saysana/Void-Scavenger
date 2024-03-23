@@ -35,6 +35,9 @@ int init_controls() {
 // ================================= HANDLERS ================================
 
 void keyboard_input(GLFWwindow *window) {
+  if (mode == LOADING) {
+    return;
+  }
   // Insert keyboard handlers here...
   input_keys(window);
 }

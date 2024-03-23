@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <engine/engine.h>
+#include <global_vars.h>
 
 extern F_GLYPH *fixed_sys;
 extern unsigned int coordinates_enabled;
@@ -32,3 +33,4 @@ void update_target_ui();
 void update_radar_ui();
 void update_waypoint_ui();
 void update_damage_ui();
+void update_loading_ui();
