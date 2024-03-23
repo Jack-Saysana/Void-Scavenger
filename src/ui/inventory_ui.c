@@ -101,7 +101,7 @@ int init_inventory() {
     // set_ui_on_hover(inventory.ui_inventory_slot_background[i],
     //                 slot_on_hover, NULL);
     // set_ui_no_hover(inventory.ui_inventory_slot_background[i],
-    //                 slot_on_no_hover, NULL);
+    //                 slot_off_hover, NULL);
 
     inventory.ui_inventory_slot_icon[i] = add_ui_comp(
       inventory.ui_inventory_slot_background[i], // UI_COMP *parent
@@ -110,8 +110,23 @@ int init_inventory() {
       0.6, // float height
       ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_Y | HEIGHT_UNIT_RATIO_Y
     );
+    // switch (i%3) {
+    //   case 0:
+    //     set_ui_texture(inventory.ui_inventory_slot_icon[i], "assets/ui/energy_icon.png");
+    //     set_ui_texture(inventory.ui_inventory_slot_icon[i], "assets/ui/energy_icon.png");
+    //     set_ui_texture(inventory.ui_inventory_slot_icon[i], "assets/ui/energy_icon.png");
+    //     break;
+    //   case 1:
+    //     set_ui_texture(inventory.ui_inventory_slot_icon[i], "assets/ui/health_icon.png");
+    //     break;
+    //   case 2:
+    //     set_ui_texture(inventory.ui_inventory_slot_icon[i], "assets/ui/parts_thruster_icon.png");
+    //     break;
+    // }
     set_ui_texture(inventory.ui_inventory_slot_icon[i],
-                   "assets/ui/health_icon.png");
+                    "assets/ui/health_icon.png");
+    set_ui_on_click(inventory.ui_inventory_slot_icon[i],
+                    slot_on_click, NULL);
   }
 
   // set init visibility
@@ -130,6 +145,10 @@ void update_inventory() {
   } else if (mode == STATION) {
     // update inventory slots
     // TODO: Should be functional in sprint 2
+    // set_ui_texture(inventory.ui_inventory_slot_icon[0], "assets/ui/parts/i_reactor_blue.png");
+    // for (int i = 0; i < 1; i++) {
+    //   update_slot(inventory.ui_inventory_slot_icon[i], st_player.inventory + i);
+    // }
   }
 }
 
@@ -155,7 +174,7 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, void *unused) {
               0.5, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
 }
 
-void slot_on_no_hover(UI_COMP *ui_inventory_slot, void *unused) {
+void slot_off_hover(UI_COMP *ui_inventory_slot, void *unused) {
   // update when slot item on hover
   // TODO: Should be functional in sprint 2
   set_ui_texture(ui_inventory_slot, "assets/ui/hud_color_bg.png");
@@ -163,4 +182,151 @@ void slot_on_no_hover(UI_COMP *ui_inventory_slot, void *unused) {
               fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
   set_ui_text(inventory.ui_inventory_info_content_text, "content", 1.0, T_LEFT,
               fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+}
+
+void slot_on_click(UI_COMP *ui_inventory_slot, void *unused) {
+  // set_ui_text(inventory.ui_inventory_info_title_text, "clicked", 1.0, T_LEFT, 
+  //             fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+  // set_ui_text(inventory.ui_inventory_info_content_text, "clicked", 1.0, T_LEFT,
+  //             fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+}
+
+void update_slot(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
+  switch (inventory_slot->type) {
+    case I_SLOT_REACTOR:
+      switch (inventory_slot->rarity) {
+        case BLUE_RARITY:
+          set_ui_texture(ui_inventory_slot, "assets/ui/parts/i_reactor_blue.png");
+          break;
+        case GREEN_RARITY:
+          set_ui_texture(ui_inventory_slot, "assets/ui/parts/i_reactor_green.png");
+          break;
+        case PURPLE_RARITY:
+          set_ui_texture(ui_inventory_slot, "assets/ui/parts/i_reactor_purple.png");
+          break;
+        case GOLD_RARITY:
+          set_ui_texture(ui_inventory_slot, "assets/ui/parts/i_reactor_gold.png");
+          break;
+      }
+      break;
+    case I_SLOT_HULL:
+      switch (inventory_slot->rarity) {
+        case BLUE_RARITY:
+          set_ui_texture(ui_inventory_slot, "assets/ui/parts/i_hull_blue.png");
+          break;
+        case GREEN_RARITY:
+          set_ui_texture(ui_inventory_slot, "assets/ui/parts/i_hull_green.png");
+          break;
+        case PURPLE_RARITY:
+          set_ui_texture(ui_inventory_slot, "assets/ui/parts/i_hull_purple.png");
+          break;
+        case GOLD_RARITY:
+          set_ui_texture(ui_inventory_slot, "assets/ui/parts/i_hull_gold.png");
+          break;
+      }
+      break;
+    case I_SLOT_SHIELD:
+      switch (inventory_slot->rarity) {
+        case BLUE_RARITY:
+          set_ui_texture(ui_inventory_slot, "assets/ui/parts/i_shield_blue.png");
+          break;
+        case GREEN_RARITY:
+          set_ui_texture(ui_inventory_slot, "assets/ui/parts/i_shield_green.png");
+          break;
+        case PURPLE_RARITY:
+          set_ui_texture(ui_inventory_slot, "assets/ui/parts/i_shield_purple.png");
+          break;
+        case GOLD_RARITY:
+          set_ui_texture(ui_inventory_slot, "assets/ui/parts/i_shield_gold.png");
+          break;
+      }
+      break;
+    case I_SLOT_WEAPON:
+      switch(inventory_slot->weapon_type) {
+        case W_LASER:
+          switch (inventory_slot->rarity) {
+            case BLUE_RARITY:
+              set_ui_texture(ui_inventory_slot, "assets/ui/parts/w_laser_blue.png");
+              break;
+            case GREEN_RARITY:
+              set_ui_texture(ui_inventory_slot, "assets/ui/parts/w_laser_green.png");
+              break;
+            case PURPLE_RARITY:
+              set_ui_texture(ui_inventory_slot, "assets/ui/parts/w_laser_purple.png");
+              break;
+            case GOLD_RARITY:
+              set_ui_texture(ui_inventory_slot, "assets/ui/parts/w_laser_gold.png");
+              break;
+          }
+          break;
+        case W_BALLISTIC:
+          switch (inventory_slot->rarity) {
+            case BLUE_RARITY:
+              set_ui_texture(ui_inventory_slot, "assets/ui/parts/w_ballistic_blue.png");
+              break;
+            case GREEN_RARITY:
+              set_ui_texture(ui_inventory_slot, "assets/ui/parts/w_ballistic_green.png");
+              break;
+            case PURPLE_RARITY:
+              set_ui_texture(ui_inventory_slot, "assets/ui/parts/w_ballistic_purple.png");
+              break;
+            case GOLD_RARITY:
+              set_ui_texture(ui_inventory_slot, "assets/ui/parts/w_ballistic_gold.png");
+              break;
+          }
+          break;
+        case W_PLASMA:
+          switch (inventory_slot->rarity) {
+            case BLUE_RARITY:
+              set_ui_texture(ui_inventory_slot, "assets/ui/parts/w_plasma_blue.png");
+              break;
+            case GREEN_RARITY:
+              set_ui_texture(ui_inventory_slot, "assets/ui/parts/w_plasma_green.png");
+              break;
+            case PURPLE_RARITY:
+              set_ui_texture(ui_inventory_slot, "assets/ui/parts/w_plasma_purple.png");
+              break;
+            case GOLD_RARITY:
+              set_ui_texture(ui_inventory_slot, "assets/ui/parts/w_plasma_gold.png");
+              break;
+          }
+          break;
+      }
+      break;
+    case I_SLOT_WING:
+      switch (inventory_slot->rarity) {
+        case BLUE_RARITY:
+          set_ui_texture(ui_inventory_slot, "assets/ui/parts/i_wing_blue.png");
+          break;
+        case GREEN_RARITY:
+          set_ui_texture(ui_inventory_slot, "assets/ui/parts/i_wing_green.png");
+          break;
+        case PURPLE_RARITY:
+          set_ui_texture(ui_inventory_slot, "assets/ui/parts/i_wing_purple.png");
+          break;
+        case GOLD_RARITY:
+          set_ui_texture(ui_inventory_slot, "assets/ui/parts/i_wing_gold.png");
+          break;
+      }
+      break;
+    case I_SLOT_THRUSTER:
+      switch (inventory_slot->rarity) {
+        case BLUE_RARITY:
+          set_ui_texture(ui_inventory_slot, "assets/ui/parts/i_thruster_blue.png");
+          break;
+        case GREEN_RARITY:
+          set_ui_texture(ui_inventory_slot, "assets/ui/parts/i_thruster_green.png");
+          break;
+        case PURPLE_RARITY:
+          set_ui_texture(ui_inventory_slot, "assets/ui/parts/i_thruster_purple.png");
+          break;
+        case GOLD_RARITY:
+          set_ui_texture(ui_inventory_slot, "assets/ui/parts/i_thruster_gold.png");
+          break;
+      }
+      break;
+    default:
+      // set_ui_texture(ui_inventory_slot, "assets/ui/hud_color_bg.png");
+      break;
+  }
 }
