@@ -27,6 +27,9 @@ int barebones_init() {
     return -1;
   }
 
+  barebones_ui_init();
+  clear_models();
+
   return 0;
 }
 
@@ -78,6 +81,11 @@ void cleanup_game() {
   free_player_ship();
   free_projectile_buffer();
   free_wrapper_buffer();
+  free_enemy_buffer();
+  free_enemy_ship_buffer();
+  free_space_obstacle_buffer();
+  free_station_obstacle_buffer();
+  free_corridor_buffer();
   // Add cleanup functions above...
   free_timer_queue();
   cleanup_gl();

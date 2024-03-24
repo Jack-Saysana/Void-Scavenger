@@ -14,8 +14,16 @@
 // Functions used for loading/initializing assets
 #include <load_assets.h>
 
+void clear_models() {
+  memset(&c_mods, 0, sizeof(COMMON_MODELS));
+  memset(&sp_mods, 0, sizeof(SP_MODELS));
+  memset(&st_mods, 0, sizeof(ST_MODELS));
+}
+
 int init_scene() {
   // Init shaders below...
+  cubemap_shader = init_shader_prog("./src/shaders/cubemap/shader.vs", NULL,
+                                    "./src/shaders/cubemap/shader.fs");
   entity_shader = init_shader_prog("./src/shaders/entity/shader.vs", NULL,
                                    "./src/shaders/entity/shader.fs");
   model_shader = init_shader_prog("./src/shaders/model/shader.vs", NULL,
@@ -30,6 +38,17 @@ int init_scene() {
                                  "./src/shaders/bone/shader.fs");
   proj_shader = init_shader_prog("./src/shaders/projectile/shader.vs", NULL,
                                  "./src/shaders/projectile/shader.fs");
+
+  // Init cubemaps below...
+  char *sb_paths[] = {
+    "./assets/textures/skybox_right.png",
+    "./assets/textures/skybox_left.png",
+    "./assets/textures/skybox_up.png",
+    "./assets/textures/skybox_down.png",
+    "./assets/textures/skybox_front.png",
+    "./assets/textures/skybox_back.png"
+  };
+  gen_cubemap(sb_paths, &skybox);
 
   // Init models below...
   init_common_assets();
@@ -90,9 +109,17 @@ void render_scene(GLFWwindow *window) {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // Render to main scene
-  if (mode != LOADING) {
+  if (mode == SPACE || mode == STATION) {
     mat4 view = GLM_MAT4_IDENTITY_INIT;
     get_cam_matrix(&camera, view);
+    mat4 skybox_view = GLM_MAT4_IDENTITY_INIT;
+    glm_mat4_copy(view, skybox_view);
+    glm_vec3_zero(skybox_view[3]);
+
+    glUseProgram(cubemap_shader);
+    set_mat4("projection", persp_proj, cubemap_shader);
+    set_mat4("view", skybox_view, cubemap_shader);
+    set_vec3("camera_pos", camera.pos, cubemap_shader);
 
     glUseProgram(entity_shader);
     set_mat4("projection", persp_proj, entity_shader);
@@ -121,6 +148,8 @@ void render_scene(GLFWwindow *window) {
     } else {
       glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
+
+    render_skybox();
 
     if (render_arena) {
       render_oct_tree(physics_sim);
@@ -218,6 +247,17 @@ void render_game_entity(ENTITY *ent) {
     draw_colliders(collider_shader, ent, c_mods.sphere_model.model);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   }
+}
+
+void render_skybox() {
+  glDepthMask(GL_FALSE);
+  glUseProgram(cubemap_shader);
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_CUBE_MAP, skybox);
+  set_mat4("model", GLM_MAT4_IDENTITY, cubemap_shader);
+  set_int("cube_map", 0, cubemap_shader);
+  draw_model(cubemap_shader, c_mods.cube_model.model);
+  glDepthMask(GL_TRUE);
 }
 
 void render_shield(ENTITY *ent, float shield_state) {

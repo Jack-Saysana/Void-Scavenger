@@ -42,10 +42,12 @@ int init_station_obstacle_buffer() {
 
 void free_space_obstacle_buffer() {
   free(sp_obs);
+  sp_obs = NULL;
 }
 
 void free_station_obstacle_buffer() {
   free(st_obs);
+  st_obs = NULL;
 }
 
 // ================== INDIVIDUAL INITIALIZATION AND CLEANUP ==================

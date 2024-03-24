@@ -1,5 +1,17 @@
 #include <ui/general_ui.h>
 
+void barebones_ui_init() {
+  if (import_font("assets/font/fixed_sys.bin",
+                  "assets/font/fixed_sys.png",
+                  &fixed_sys) == -1) {
+    printf("Could not load fixed_sys!\n");
+    exit(1);
+  }
+
+  init_loading_ui();
+  init_main_menu_ui();
+}
+
 /*
   Calls all the initialization functions for
   the individual ui components. Called in main
@@ -7,12 +19,6 @@
 */
 void init_ui_components() {
   /* Add ui components initialization functions below... */
-  if (import_font("assets/font/fixed_sys.bin",
-                  "assets/font/fixed_sys.png",
-                  &fixed_sys) == -1) {
-    printf("Could not load fixed_sys!\n");
-    exit(1);
-  }
   console_ui_initialize();
 
   // Initialize stats
@@ -54,7 +60,8 @@ void init_ui_components() {
 */
 void update_ui_components() {
   update_loading_ui();
-  if (mode == LOADING) {
+  update_main_menu_ui();
+  if (mode != SPACE && mode != STATION) {
     return;
   }
 

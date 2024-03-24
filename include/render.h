@@ -1,5 +1,6 @@
 #include <pthread.h>
 #include <math.h>
+#include <string.h>
 #include <glad/glad.h>
 #include <cglm/cglm.h>
 #include <global_vars.h>
@@ -17,6 +18,7 @@ typedef struct loaded_model {
 // ================================= GLOBALS =================================
 
 // Shaders
+unsigned int cubemap_shader;
 unsigned int entity_shader;
 unsigned int model_shader;
 unsigned int ui_shader;
@@ -58,6 +60,9 @@ typedef struct st_models {
 } ST_MODELS;
 ST_MODELS st_mods;
 
+// Cubemaps
+unsigned int skybox;
+
 // Model loading state info
 pthread_mutex_t load_state_lock;
 int finished_loading = 0;
@@ -83,6 +88,7 @@ void render_game_entity(ENTITY *);
 void render_oct_tree(SIMULATION *);
 void render_dead_zones();
 void get_bone_equip_mat(ENTITY *, size_t, mat4);
+void render_skybox();
 void render_shield(ENTITY *, float);
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================

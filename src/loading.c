@@ -8,7 +8,6 @@
 */
 
 void loading_init() {
-  init_loading_ui();
   reset_load_state();
   pthread_create(&loading_thread, NULL, load_assets, NULL);
 }
