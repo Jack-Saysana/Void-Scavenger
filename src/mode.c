@@ -101,9 +101,9 @@ void spawn_asteroids() {
   vec3 scale = GLM_VEC3_ZERO_INIT;
   float mass = 0.0;
   for (int i = 0; i < NUM_ASTEROIDS; i++) {
-    gen_rand_vec3(&pos, 10.0);
-    gen_rand_vec3(&vel, 3.0);
-    gen_rand_vec3(&ang_vel, 1.5);
+    gen_rand_vec3_plus_minus(&pos, space_size);
+    gen_rand_vec3_plus_minus(&vel, 5.0);
+    gen_rand_vec3_plus_minus(&ang_vel, 1.5);
     gen_rand_vec3(&scale, 3.0);
     float scale_fac = gen_rand_float(3.0) + 0.1;
     mass = 2.0 * scale_fac;
