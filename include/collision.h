@@ -36,3 +36,5 @@ void st_enemy_hurt_anim(void *);
 void sp_enemy_shield_dmg(void *);
 void sp_player_shield_dmg(void *);
 void player_health_dmg();
+
+float gen_rand_float_plus_minus(float);

@@ -141,6 +141,17 @@ void console_dispatcher() {
                     return;
                   }
                   /* END: set player station shield */
+                } else if (strncmp(command[3].tok, XP, sizeof(XP)) == 0) {
+                  /* BEGIN: set player station xp */
+                  if (command[4].kind == NUMBER) {
+                    float input = create_float(4);
+                    if (input == FLT_MAX) {
+                      command_not_found();
+                    }
+                    set_player_xp(input);
+                    return;
+                  }
+                  /*END: set player station xp*/
                 } else {
                   command_not_found();
                 }

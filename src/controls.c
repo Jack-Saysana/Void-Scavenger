@@ -258,6 +258,7 @@ void input_keys(GLFWwindow *window) {
         if (i == GLFW_KEY_E && get_terminal_ui_state() &&
                    !holding_alpha[i - GLFW_KEY_A]) {
           set_gamemode_space();
+          st_player.total_levels_completed++;
         }
       } else if (!console_enabled && mode == SPACE) {
         if (i == GLFW_KEY_W) {

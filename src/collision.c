@@ -166,6 +166,21 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
                (target_wrapper->type == ENEMY_OBJ ||
                 target_wrapper->type == ENEMY_SHIP_OBJ)) {
       decrement_enemy_shield((size_t) target_wrapper->data, proj->damage, 0.1);
+      if (mode == STATION && st_enemies[(size_t)target_wrapper->data].cur_health <= 0.0 && 
+          st_enemies[(size_t)target_wrapper->data].dropped_xp == 0) {
+        /*Enemey killed by player */
+        st_enemies[(size_t)target_wrapper->data].dropped_xp = 1;
+        float xp = st_enemies[(size_t)target_wrapper->data].amount_xp + E_LEVEL_SCALE * st_player.total_levels_completed;
+        xp +=  gen_rand_float_plus_minus(xp/E_XP_RANGE);
+        st_player.cur_experience += (int)xp;
+        st_player.total_experience += (int) xp;
+        if (st_player.cur_experience >= st_player.max_experience) {
+          st_player.cur_experience -= st_player.max_experience;
+          st_player.cur_level++;
+          st_player.max_experience += P_LEVEL_SCALE*st_player.cur_level;
+          st_player.skill_points++;
+        }
+      }
     }
 
     start_proj_collision_anim((size_t) proj_wrapper->data);

@@ -78,15 +78,18 @@ size_t init_enemy(size_t index) {
     new_enemy->cur_speed = E_BASE_SPEED_BRUTE;
     new_enemy->fire_rate = E_BASE_FIRERATE_BRUTE;
     new_enemy->weapon_type = RANGED;
+    new_enemy->amount_xp = E_BRUTE_XP;
   } else {
     new_enemy->max_health = E_BASE_HEALTH_NORMAL;
     new_enemy->cur_health = E_BASE_HEALTH_NORMAL;
     new_enemy->cur_speed = E_BASE_SPEED_NORMAL;
     new_enemy->fire_rate = E_BASE_FIRERATE_NORMAL;
     new_enemy->weapon_type = RANGED;
+    new_enemy->amount_xp = E_BASE_XP;
   }
   new_enemy->invuln = 0;
   new_enemy->cur_frame = INVALID_FRAME;
+  new_enemy->dropped_xp = 0;
 
   num_enemies++;
   if (num_enemies == enemy_buff_len) {

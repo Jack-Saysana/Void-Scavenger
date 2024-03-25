@@ -7,6 +7,7 @@
 #define P_BASE_SPEED (10.0)
 #define P_BASE_FIRERATE (0.1)
 #define P_BASE_MAX_EXP (100.0)
+#define P_LEVEL_SCALE (50.0)
 
 // Ship constants
 #define S_BASE_PWR_OUTPUT (100.0)
@@ -41,6 +42,10 @@
 #define E_BASE_SPEED_BRUTE (1.75)
 #define E_BASE_FIRERATE_NORMAL (0.05)
 #define E_BASE_FIRERATE_BRUTE (0.1)
+#define E_BASE_XP (20.0)
+#define E_BRUTE_XP (30.0)
+#define E_LEVEL_SCALE (10.0)
+#define E_XP_RANGE (4.0)
 
 // Projectile Constants
 #define NUM_PROJ_TYPES (2)

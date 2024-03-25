@@ -107,3 +107,7 @@ void set_player_shield(float shield, int mode) {
     st_player.cur_shield = shield;
   }
 }
+
+void set_player_xp(float xp) {
+  st_player.cur_experience = xp;
+}

@@ -26,6 +26,8 @@ int init_player() {
 
   st_player.max_health = P_BASE_HEALTH;
   st_player.cur_health = P_BASE_HEALTH;
+  st_player.cur_level = 0;
+  st_player.skill_points = 0;
   st_player.max_shield = P_BASE_SHIELD;
   st_player.speed = P_BASE_SPEED;
   st_player.fire_rate = P_BASE_FIRERATE;
