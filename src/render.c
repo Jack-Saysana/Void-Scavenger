@@ -80,7 +80,6 @@ int init_scene() {
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  CURSOR_ENABLED = 0;
 
   glm_vec3_copy((vec3) {0.0, 0.0, 0.0}, camera.pos);
   camera.pitch = 0.0;
@@ -391,8 +390,20 @@ MODEL *get_tri_prism_model() {
   return c_mods.tri_prism_model.model;
 }
 
+MODEL *get_player_ship_model() {
+  return sp_mods.player_ship_model.model;
+}
+
 unsigned int get_basic_shader() {
   return basic_shader;
+}
+
+unsigned int get_model_shader() {
+  return model_shader;
+}
+
+unsigned int get_cubemap_shader() {
+  return cubemap_shader;
 }
 
 void toggle_hit_boxes() {
@@ -415,6 +426,7 @@ void update_perspective() {
   glm_perspective(glm_rad(45.0), RES_X / RES_Y, 0.1f, RENDER_DIST, persp_proj);
 
   update_radar_fb();
+  update_main_menu_fb();
 }
 
 void to_screen_space(vec4 pos, vec4 dest) {

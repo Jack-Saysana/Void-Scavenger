@@ -23,6 +23,7 @@ int init_player() {
   }
   st_player.ent->type |= T_DRIVING;
   st_player.ent->inv_mass = 1.0;
+  st_player.wrapper_offset = INVALID_INDEX;
 
   st_player.max_health = P_BASE_HEALTH;
   st_player.cur_health = P_BASE_HEALTH;
@@ -116,6 +117,7 @@ int init_player_ship() {
   }
   player_ship.ent->type |= T_DRIVING;
   player_ship.ent->inv_mass = 1.0;
+  player_ship.wrapper_offset = INVALID_INDEX;
 
   player_ship.cur_health = player_ship.hull.max_health;
   player_ship.cur_shield = player_ship.shield.max_shield;

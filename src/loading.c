@@ -20,7 +20,7 @@ int query_loading_status() {
       return -1;
     }
 
-    mode = SPACE;
+    mode = MAIN_MENU;
     status = init_game();
     if (status) {
       return -1;

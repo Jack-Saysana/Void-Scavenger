@@ -9,7 +9,6 @@ void barebones_ui_init() {
   }
 
   init_loading_ui();
-  init_main_menu_ui();
 }
 
 /*
@@ -52,6 +51,7 @@ void init_ui_components() {
   init_radar_ui();
   init_waypoint_ui();
   init_damage_ui();
+  init_main_menu_ui();
 }
 
 /*
@@ -60,8 +60,7 @@ void init_ui_components() {
 */
 void update_ui_components() {
   update_loading_ui();
-  update_main_menu_ui();
-  if (mode != SPACE && mode != STATION) {
+  if (mode == LOADING) {
     return;
   }
 
@@ -80,4 +79,5 @@ void update_ui_components() {
   update_radar_ui();
   update_waypoint_ui();
   update_damage_ui();
+  update_main_menu_ui();
 }

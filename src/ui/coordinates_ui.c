@@ -10,7 +10,7 @@ void coordinates_ui_initialize() {
                              WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_PIXEL |
                              LINE_UNIT_RATIO_Y);
   set_ui_pivot(coordinates, PIVOT_TOP_RIGHT);
-  coordinates_enabled = 1;
+  coordinates_enabled = 0;
   set_ui_texture(coordinates, "assets/transparent.png");
 
 }

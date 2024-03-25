@@ -54,7 +54,7 @@ size_t init_wrapper(SOBJ_T type, ENTITY *entity, void *data) {
 }
 
 void delete_wrapper(size_t index) {
-  if (object_wrappers == NULL) {
+  if (object_wrappers == NULL || index == INVALID_INDEX) {
     return;
   }
 

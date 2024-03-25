@@ -98,3 +98,4 @@ void player_ship_thrust_move();
 ENTITY **get_dead_zones();
 void get_player_gun_mat(mat4);
 void update_radar_fb();
+void update_main_menu_fb();

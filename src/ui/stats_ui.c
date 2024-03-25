@@ -230,6 +230,8 @@ void update_stats() {
                  st_player.cur_health / st_player.max_health);
     set_ui_width(stats.ui_exp_bar,
                  st_player.cur_experience / st_player.max_experience);
+  } else {
+    set_ui_enabled(stats.ui_stats_root, 0);
   }
 }
 
@@ -238,6 +240,7 @@ void update_stats() {
 */
 void switch_space_hud() {
   // set visibility
+  set_ui_enabled(stats.ui_stats_root, 1);
   set_ui_enabled(stats.ui_shield_root, 1);
   set_ui_enabled(stats.ui_health_root, 1);
   set_ui_enabled(stats.ui_energy_root, 1);
@@ -291,6 +294,7 @@ void switch_space_hud() {
 */
 void switch_station_hud() {
   // set visibility
+  set_ui_enabled(stats.ui_stats_root, 1);
   set_ui_enabled(stats.ui_shield_root, 1);
   set_ui_enabled(stats.ui_health_root, 1);
   set_ui_enabled(stats.ui_energy_root, 0);

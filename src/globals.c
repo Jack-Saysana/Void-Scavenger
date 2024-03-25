@@ -6,7 +6,7 @@
 
 */
 
-GAME_MODE mode = MAIN_MENU;
+GAME_MODE mode = LOADING;
 DIFF difficulty = MEDIUM;
 
 CAM camera;

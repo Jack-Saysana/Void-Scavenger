@@ -19,6 +19,8 @@ int main() {
     return -1;
   }
 
+  loading_init();
+
   while (!glfwWindowShouldClose(window)) {
     float CUR_TIME = glfwGetTime();
     DELTA_TIME = CUR_TIME - LAST_FRAME;

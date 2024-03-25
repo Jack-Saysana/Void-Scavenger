@@ -13,8 +13,6 @@ int init_wrapper_buffer();
 int init_player();
 int init_player_ship();
 int init_projectile_buffer();
-int init_space_mode();
-int init_station_mode();
 void barebones_ui_init();
 void init_ui_components();
 int init_timer_queue();
