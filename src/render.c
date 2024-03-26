@@ -173,6 +173,13 @@ void query_render_dist() {
 void render_game_entity(ENTITY *ent) {
   SOBJ *wrapper = object_wrappers + (size_t) ent->data;
   if (wrapper->type == PROJ_OBJ) {
+    if ( projectiles[(size_t) wrapper->data].type == BALLISTIC) {
+      set_vec3("col",(vec3){0.98, 0.98, 0.02}, proj_shader);
+    } else if ( projectiles[(size_t) wrapper->data].type == PLASMA) {
+      set_vec3("col",(vec3){0.0, 0.0, 1.0}, proj_shader);
+    } else if ( projectiles[(size_t) wrapper->data].type == LASER) {
+      set_vec3("col",(vec3){1.0, 0.0, 0.0}, proj_shader);
+    }
     if (projectiles[(size_t) wrapper->data].collision) {
       glUseProgram(proj_shader);
       mat4 model = GLM_MAT4_IDENTITY_INIT;

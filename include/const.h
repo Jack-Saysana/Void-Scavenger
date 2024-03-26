@@ -24,10 +24,21 @@
 #define S_BASE_ANG_ACCEL (0.25)
 #define S_BASE_VEL (10.0)
 #define S_BASE_ACCEL (5.0)
+#define S_E_HEALTH_TYPE_BASE_HEALTH (160.0)
+#define S_E_HEALTH_TYPE_BASE_SHIELD (40.0)
+#define S_E_SHIELD_TYPE_BASE_HEALTH (40.0)
+#define S_E_SHIELD_TYPE_BASE_SHIELD (160.0)
+#define S_E_MID_SPEED_BASE_VEL (20.0)
+#define S_E_MID_SPEED_BASE_ACCEL (6.0)
+#define S_E_HIGH_SPEED_BASE_VEL (30.0)
+#define S_E_HIGH_SPEED_BASE_ACCEL (7.0)
+#define S_E_ULTRA_SPEED_BASE_VEL (40.0)
+#define S_E_ULTRA_SPEED_BASE_ACCEL (8.0)
 
 // Enemy Constants
 #define NUM_ALIEN_TYPES (2)
-#define NUM_ALIEN_SHIP_TYPES (2)
+#define NUM_ALIEN_SHIP_TYPES (7)
+#define NUM_ALIEN_MOV_TYPES (4)
 #define E_ANIM_HURT (0)
 #define E_ANIM_SHOOTING (1)
 #define E_ANIM_STANDING (2)
@@ -35,6 +46,20 @@
 
 #define BRUTE (0)
 #define NORMAL (1)
+
+#define STANDARD_BALLISTIC (0)
+#define HEALTH_BALLISTIC (1)
+#define SHIELD_BALLISTIC (2)
+#define STANDARD_PLASMA (3)
+#define STANDARD_LASER (4)
+#define HEALTH_LASER (5)
+#define SHIELD_PLASMA (6)
+
+#define E_LOW_SPEED (0)
+#define E_MID_SPEED (1)
+#define E_HIGH_SPEED (2)
+#define E_ULTRA_SPEED (3)
+
 
 #define E_BASE_HEALTH_NORMAL (100.0)
 #define E_BASE_HEALTH_BRUTE (150.0)
@@ -46,6 +71,14 @@
 #define E_BRUTE_XP (30.0)
 #define E_LEVEL_SCALE (10.0)
 #define E_XP_RANGE (4.0)
+#define E_TYPE_UPDATE_0 (1.0)
+#define E_TYPE_UPDATE_1 (4.0)
+#define E_TYPE_UPDATE_2 (6.0)
+#define E_ATTACK_TYPE_TIER_0 (0.0)
+#define E_ATTACK_TYPE_TIER_1 (2.0)
+#define E_ATTACK_TYPE_TIER_2 (4.0)
+#define E_ATTACK_TYPE_TIER_3 (6.0)
+#define E_BASE_NUM_TYPES (2)
 
 // Projectile Constants
 #define NUM_PROJ_TYPES (2)
