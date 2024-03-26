@@ -37,7 +37,8 @@
 
 // Enemy Constants
 #define NUM_ALIEN_TYPES (2)
-#define NUM_ALIEN_SHIP_TYPES (7)
+#define NUM_ALIEN_SHIP_TYPES (3)
+#define NUM_ALIEN_ATTACK_TYPES (7)
 #define NUM_ALIEN_MOV_TYPES (4)
 #define E_ANIM_HURT (0)
 #define E_ANIM_SHOOTING (1)

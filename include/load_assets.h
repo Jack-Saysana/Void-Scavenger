@@ -50,6 +50,8 @@ void free_common_assets() {
 void load_sp_assets() {
   sp_mods.player_ship_model = read_model("./assets/actors/player_ship/player_ship.obj");
   sp_mods.alien_ship_models[0] = read_model("./assets/actors/alien_ship_1/alien_ship_1.obj");
+  sp_mods.alien_ship_models[1] = read_model("./assets/actors/alien_ship_2/alien_ship_2.obj");
+  sp_mods.alien_ship_models[2] = read_model("./assets/actors/alien_ship_3/alien_ship_3.obj");
   sp_mods.proj_model = read_model("./assets/misc/sp_projectile/sp_projectile.obj");
   sp_mods.station_model = read_model("./assets/set_pieces/station/station.obj");
   sp_mods.asteroid_models[0] = read_model("./assets/set_pieces/asteroid_1/asteroid_1.obj");

@@ -99,7 +99,7 @@ int init_player_ship() {
   player_ship.shield.recharge_rate = S_BASE_SHIELD_RECHARGE;
   player_ship.shield.recharge_delay = S_BASE_SHIELD_DELAY;
   player_ship.shield.power_draw = S_BASE_PWR_DRAW;
-  player_ship.weapon.type = PLASMA;
+  player_ship.weapon.type = BALLISTIC;
   player_ship.weapon.damage = S_BASE_DAMAGE;
   player_ship.weapon.fire_rate = S_BASE_FIRERATE;
   player_ship.weapon.max_power_draw = S_BASE_PWR_DRAW;

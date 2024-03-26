@@ -195,7 +195,7 @@ size_t init_enemy_ship(int index, int mov_type) {
     fprintf(stderr, "Error: inserting into deallocated enemy buffer\n");
     return INVALID_INDEX;
   }
-  if (index >= NUM_ALIEN_SHIP_TYPES || index >= NUM_ALIEN_MOV_TYPES) {
+  if (index >= NUM_ALIEN_ATTACK_TYPES || mov_type >= NUM_ALIEN_MOV_TYPES) {
     fprintf(stderr, "error: invalid enemy type\n");
     return INVALID_INDEX;
   }
@@ -203,7 +203,13 @@ size_t init_enemy_ship(int index, int mov_type) {
   SHIP *new_enemy = sp_enemies + num_enemies;
   memset(new_enemy, 0, sizeof(SHIP));
 
-  new_enemy->ent = init_alien_ship_ent(index);
+  if (index == STANDARD_BALLISTIC || index == STANDARD_LASER || index == STANDARD_PLASMA) {
+    new_enemy->ent = init_alien_ship_ent(STANDARD_BALLISTIC);
+  } else if (index == HEALTH_BALLISTIC || index == HEALTH_LASER) {
+    new_enemy->ent = init_alien_ship_ent(HEALTH_BALLISTIC);
+  } else {
+    new_enemy->ent = init_alien_ship_ent(SHIELD_BALLISTIC);
+  }
   if (new_enemy->ent == NULL) {
     fprintf(stderr, "Error: Unable to allocate enemy entity\n");
     return INVALID_INDEX;;
