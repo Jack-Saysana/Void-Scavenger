@@ -148,8 +148,9 @@ void render_scene(GLFWwindow *window) {
       glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 
-    render_skybox();
-
+    if (mode == SPACE) {
+      render_skybox();
+    }
     if (render_arena) {
       render_oct_tree(physics_sim);
     }

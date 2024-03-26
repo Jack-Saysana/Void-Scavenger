@@ -108,6 +108,9 @@
 // Targeting System consts
 #define MAX_TARGET_DIST (100.0)
 
+// Pathfinding consts
+#define ST_ENEMY_SEARCH_DEPTH (4)
+
 // Misc
 #define X (0)
 #define Y (1)

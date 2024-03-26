@@ -53,7 +53,6 @@ void handle_physics_collisions(COLLISION *cols, size_t num_cols) {
 
   SOBJ *a_wrapper = NULL;
   SOBJ *b_wrapper = NULL;
-  ST_ENEMY *cur_enemy = NULL;
 
   vec3 rel_vel = GLM_VEC3_ZERO_INIT;
   float damage = 0.0;
@@ -74,20 +73,6 @@ void handle_physics_collisions(COLLISION *cols, size_t num_cols) {
 
     a_wrapper->to_refresh = 1;
     b_wrapper->to_refresh = 1;
-
-    cur_enemy = NULL;
-    if (a_wrapper->type == ENEMY_OBJ && b_wrapper->type == CORRIDOR_OBJ) {
-      cur_enemy = st_enemies + (size_t) a_wrapper->data;
-      if (cur_enemy->target_corridor == INVALID_INDEX) {
-        cur_enemy->target_corridor = (size_t) b_wrapper->data;
-      }
-    } else if (a_wrapper->type == CORRIDOR_OBJ &&
-               b_wrapper->type == ENEMY_OBJ) {
-      cur_enemy = st_enemies + (size_t) b_wrapper->data;
-      if (cur_enemy->target_corridor == INVALID_INDEX) {
-        cur_enemy->target_corridor = (size_t) a_wrapper->data;
-      }
-    }
 
     // Ship-on-ship
     if (a_wrapper->type == PLAYER_SHIP_OBJ &&
@@ -180,10 +165,22 @@ void handle_event_collisions(COLLISION *cols, size_t num_cols) {
 
   SOBJ *a_wrapper = NULL;
   SOBJ *b_wrapper = NULL;
+  ST_ENEMY *cur_enemy = NULL;
   vec3 temp = GLM_VEC3_ZERO_INIT;
   for (size_t i = 0; i < num_cols; i++) {
     a_wrapper = object_wrappers + (size_t) cols[i].a_ent->data;
     b_wrapper = object_wrappers + (size_t) cols[i].b_ent->data;
+
+    // Update target corridor of enemies
+    cur_enemy = NULL;
+    if (a_wrapper->type == ENEMY_OBJ && b_wrapper->type == CORRIDOR_OBJ) {
+      cur_enemy = st_enemies + (size_t) a_wrapper->data;
+      cur_enemy->cur_corridor = (size_t) b_wrapper->data;
+    } else if (a_wrapper->type == CORRIDOR_OBJ &&
+               b_wrapper->type == ENEMY_OBJ) {
+      cur_enemy = st_enemies + (size_t) b_wrapper->data;
+      cur_enemy->cur_corridor = (size_t) a_wrapper->data;
+    }
 
     // Direct enemies away from one another
     if (a_wrapper->type == ENEMY_OBJ && b_wrapper->type == ENEMY_OBJ) {

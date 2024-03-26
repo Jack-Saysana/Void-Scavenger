@@ -18,8 +18,10 @@ typedef struct station_enemy {
   ENTITY *ent;
   // Offset of respective wrapper in the object_wrapper buffer
   size_t wrapper_offset;
-  // Offset of corridor the enemy currently resides in
+  // Offset of corridor the enemy is moving towards 
   size_t target_corridor;
+  // Offset of corridor the enemy currently resides in
+  size_t cur_corridor;
 
   // Pathfinding data
   // Vector directing the enemy away from other enemies
