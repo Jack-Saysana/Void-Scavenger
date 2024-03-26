@@ -163,7 +163,7 @@ int init_station_mode() {
   enable_shooting();
 
   /* Clear inventory */
-  reset_inventory();
+  // reset_inventory();
 
   // Initialize proper render distances
   RENDER_DIST = ST_BASE_RENDER_DIST;
