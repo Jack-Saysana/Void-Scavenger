@@ -8,8 +8,29 @@
 
 */
 
-int init_game() {
+int barebones_init() {
+  int status = init_ui("assets/misc/quad/quad.obj", "src/shaders/ui/shader.vs",
+                       "src/shaders/ui/shader.fs",
+                       "src/shaders/font/shader.vs",
+                       "src/shaders/font/shader.fs");
+  if (status) {
+    return -1;
+  }
 
+  status = init_controls();
+  if (status) {
+    return -1;
+  }
+
+  status = init_timer_queue();
+  if (status) {
+    return -1;
+  }
+
+  return 0;
+}
+
+int init_game() {
   // Init required globals
   space_size = BASE_SPACE_SIZE;
   time(&start_time);
@@ -21,12 +42,6 @@ int init_game() {
     return -1;
   }
 
-  status = init_controls();
-  if (status) {
-    return -1;
-  }
-
-  status = init_timer_queue();
   status = init_wrapper_buffer();
   if (status) {
     return -1;

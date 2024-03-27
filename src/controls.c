@@ -35,6 +35,9 @@ int init_controls() {
 // ================================= HANDLERS ================================
 
 void keyboard_input(GLFWwindow *window) {
+  if (mode == LOADING) {
+    return;
+  }
   // Insert keyboard handlers here...
   if (keyboard_enabled) {
     input_keys(window);
@@ -315,6 +318,9 @@ void input_keys(GLFWwindow *window) {
           /* Handle I press */
           toggle_inventory();
         }
+        if (i == GLFW_KEY_C && !holding_alpha[i - GLFW_KEY_A]) {
+          toggle_st_waypoint();
+        }
       }
       holding_alpha[i - GLFW_KEY_A] = 1;
     } else if (glfwGetKey(window, i) != GLFW_PRESS) {
@@ -451,6 +457,16 @@ void input_keys(GLFWwindow *window) {
     }
   } else if (glfwGetKey(window, GLFW_KEY_SLASH) != GLFW_PRESS) {
     holding_slash = 0;
+  }
+
+  /* Tab */
+  if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS) {
+    if (mode == SPACE && !holding_tab) {
+      target_nearest_enemy();
+    }
+    holding_tab = 1;
+  } else {
+    holding_tab = 0;
   }
 }
 

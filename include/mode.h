@@ -108,5 +108,7 @@ void update_perspective();
 void reset_camera(CAM *);
 
 void enable_shooting();
+void toggle_st_waypoint();
+void reset_dmg_ui_state();
 
 void reset_inventory();

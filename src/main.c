@@ -14,10 +14,12 @@ int main() {
     return -1;
   }
 
-  int status = init_game();
+  int status = barebones_init();
   if (status) {
     return -1;
   }
+
+  loading_init();
 
   while (!glfwWindowShouldClose(window)) {
     float CUR_TIME = glfwGetTime();
@@ -28,6 +30,13 @@ int main() {
       DELTA_TIME = 0.016;
     }
 
+    if (mode == LOADING) {
+      status = query_loading_status();
+      if (status) {
+        return -1;
+      }
+    }
+
     // Insert all simulation logic here:
     // - collision detection/response
     // - pathfinding
@@ -35,6 +44,7 @@ int main() {
     // - etc...
     keyboard_input(window);
     decrement_current_timer(DELTA_TIME);
+
     enemy_behavior();
     player_ship_thrust_move();
     handle_collisions();

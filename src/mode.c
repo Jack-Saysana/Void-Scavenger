@@ -14,6 +14,8 @@
 
 int init_space_mode() {
   mode = SPACE;
+  toggle_st_waypoint();
+  reset_dmg_ui_state();
   reset_camera(&camera);
   /* Ensure coordinates are enabled */
   enable_coordinates();
@@ -156,9 +158,10 @@ void clear_space_mode() {
 int init_station_mode() {
   mode = STATION;
   reset_camera(&camera);
+  reset_dmg_ui_state();
   /* Turn off the coordinates */
   disable_coordinates();
-  
+
   /* Re-enable shooting (if not already) */
   enable_shooting();
 
@@ -530,4 +533,8 @@ ENTITY **get_dead_zones() {
     return dead_zones;
   }
   return NULL;
+}
+
+void get_sp_station_pos(vec3 dest) {
+  glm_vec3_copy(sp_station->translation, dest);
 }
