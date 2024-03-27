@@ -13,20 +13,23 @@
 
 int init_scene() {
   // Init shaders below...
-  entity_shader = init_shader_prog("./src/shaders/entity/shader.vs", NULL,
-                                   "./src/shaders/entity/shader.fs");
-  model_shader = init_shader_prog("./src/shaders/model/shader.vs", NULL,
-                                  "./src/shaders/entity/shader.fs");
-  ui_shader = init_shader_prog("./src/shaders/ui/shader.vs", NULL,
-                               "./src/shaders/ui/shader.fs");
-  basic_shader = init_shader_prog("./src/shaders/basic/shader.vs", NULL,
-                                  "./src/shaders/basic/shader.fs");
-  bone_shader = init_shader_prog("./src/shaders/bone/shader.vs", NULL,
-                                 "./src/shaders/bone/shader.fs");
-  proj_shader = init_shader_prog("./src/shaders/projectile/shader.vs", NULL,
-                                 "./src/shaders/projectile/shader.fs");
-  station_sp_shader = init_shader_prog("./src/shaders/model/shader.vs", NULL,
-                                       "./src/shaders/model/station_sp.fs");
+  entity_shader = init_shader_prog(shaders_dir "/entity/shader.vs", NULL,
+                                   shaders_dir "/entity/shader.fs");
+  model_shader = init_shader_prog(shaders_dir "/model/shader.vs", NULL,
+                                  shaders_dir "/entity/shader.fs");
+  ui_shader = init_shader_prog(shaders_dir "/ui/shader.vs", NULL,
+                               shaders_dir "/ui/shader.fs");
+  basic_shader = init_shader_prog(shaders_dir "/basic/shader.vs", NULL,
+                                  shaders_dir "/basic/shader.fs");
+  bone_shader = init_shader_prog(shaders_dir "/bone/shader.vs", NULL,
+                                 shaders_dir "/bone/shader.fs");
+  proj_shader = init_shader_prog(shaders_dir "/projectile/shader.vs", NULL,
+                                 shaders_dir "/projectile/shader.fs");
+  glow_entity_shader = init_shader_prog(shaders_dir "/entity/shader.vs", NULL,
+                                        shaders_dir "/entity/glow.fs");
+  glow_model_shader = init_shader_prog(shaders_dir "/model/shader.vs", NULL,
+                                       shaders_dir "/entity/glow.fs");
+                                            
 
   // Init models below...
   player_model = load_model(actors_dir "/player/player.obj");
@@ -163,15 +166,25 @@ void render_scene(GLFWwindow *window) {
   mat4 view = GLM_MAT4_IDENTITY_INIT;
   get_cam_matrix(&camera, view);
 
-  glUseProgram(entity_shader);
-  set_mat4("projection", persp_proj, entity_shader);
-  set_mat4("view", view, entity_shader);
-  set_vec3("camera_pos", camera.pos, entity_shader);
+  // Toggle for item rarity glowing
+  if (item_glow) {
+    populate_point_lights(glow_entity_shader);
+    populate_point_lights(glow_model_shader);
+  }
+  unsigned int model_selected_shader =
+    item_glow ? glow_model_shader : model_shader;
+  unsigned int entity_selected_shader =
+    item_glow ? glow_entity_shader : entity_shader;
 
-  glUseProgram(model_shader);
-  set_mat4("projection", persp_proj, model_shader);
-  set_mat4("view", view, model_shader);
-  set_vec3("camera_pos", camera.pos, model_shader);
+  glUseProgram(entity_selected_shader);
+  set_mat4("projection", persp_proj, entity_selected_shader);
+  set_mat4("view", view, entity_selected_shader);
+  set_vec3("camera_pos", camera.pos, entity_selected_shader);
+
+  glUseProgram(model_selected_shader);
+  set_mat4("projection", persp_proj, model_selected_shader);
+  set_mat4("view", view, model_selected_shader);
+  set_vec3("camera_pos", camera.pos, model_selected_shader);
 
   glUseProgram(basic_shader);
   set_mat4("projection", persp_proj, basic_shader);
@@ -196,9 +209,9 @@ void render_scene(GLFWwindow *window) {
   if (mode == STATION) {
     mat4 gun_mat = GLM_MAT4_IDENTITY_INIT;
     get_player_gun_mat(gun_mat);
-    glUseProgram(model_shader);
-    set_mat4("model", gun_mat, model_shader);
-    draw_model(model_shader, rifle_model);
+    glUseProgram(model_selected_shader);
+    set_mat4("model", gun_mat, model_selected_shader);
+    draw_model(model_selected_shader, rifle_model);
   }
 
   render_game_entity(render_sphere);
@@ -235,6 +248,10 @@ void query_render_dist() {
 }
 
 void render_game_entity(ENTITY *ent) {
+  unsigned int model_selected_shader =
+    item_glow ? glow_model_shader : model_shader;
+  unsigned int entity_selected_shader =
+    item_glow ? glow_entity_shader : entity_shader;
   SOBJ *wrapper = object_wrappers + (size_t) ent->data;
   if (wrapper->type == PROJ_OBJ) {
     if (projectiles[(size_t) wrapper->data].collision) {
@@ -250,37 +267,20 @@ void render_game_entity(ENTITY *ent) {
     }
   } else if (wrapper->type == ENEMY_OBJ) {
     ST_ENEMY *enemy = st_enemies + (size_t) wrapper->data;
-    glUseProgram(model_shader);
+    glUseProgram(model_selected_shader);
     mat4 model = GLM_MAT4_IDENTITY_INIT;
     if (enemy->max_health > 100.0) {
       get_bone_equip_mat(ent, 14, model);
-      set_mat4("model", model, model_shader);
-      draw_model(model_shader, shotgun_model);
+      set_mat4("model", model, model_selected_shader);
+      draw_model(model_selected_shader, shotgun_model);
     } else {
       get_bone_equip_mat(ent, 15, model);
-      set_mat4("model", model, model_shader);
-      draw_model(model_shader, rifle_model);
+      set_mat4("model", model, model_selected_shader);
+      draw_model(model_selected_shader, rifle_model);
     }
-    draw_entity(entity_shader, ent);
-  } else if (wrapper->type == ITEM_OBJ) {
-    /* TODO: Update to new shader */
-    ST_ITEM *part = items + (size_t) wrapper->data;
-    glUseProgram(model_shader);
-    mat4 model = GLM_MAT4_IDENTITY_INIT;
-    glm_translate(model, ent->translation);
-    glm_quat_rotate(model, ent->rotation, model);
-    glm_scale(model, ent->scale);
-    set_mat4("model", model, model_shader);
-    if (part->type == PART_WEAPON_BALLISTIC ||
-        part->type == PART_WEAPON_LASER ||
-        part->type == PART_WEAPON_PLASMA) {
-      draw_model(model_shader, station_ship_parts[TYPE_WEAPON]); 
-    } else {
-      draw_model(model_shader, station_ship_parts[part->type]); 
-    }
-
+    draw_entity(entity_selected_shader, ent);
   } else {
-    draw_entity(entity_shader, ent);
+    draw_entity(entity_selected_shader, ent);
   }
   if (hit_boxes) {
     glUseProgram(basic_shader);
@@ -307,11 +307,13 @@ void render_dead_zones() {
 }
 
 void render_oct_tree(SIMULATION *sim) {
-  glUseProgram(model_shader);
+  unsigned int model_selected_shader =
+    item_glow ? glow_model_shader : model_shader;
+  glUseProgram(model_selected_shader);
   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-  set_vec3("col", (vec3) { 1.0, 1.0, 0.0 }, model_shader);
+  set_vec3("col", (vec3) { 1.0, 1.0, 0.0 }, model_selected_shader);
   draw_oct_tree(cube_model, sim->oct_tree, (vec3) { 0.0, 0.0, 0.0 },
-                sim->oct_tree->max_extent, model_shader, 0, 1);
+                sim->oct_tree->max_extent, model_selected_shader, 0, 1);
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 

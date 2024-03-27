@@ -62,3 +62,7 @@ float space_size = 0.0;
 
 int keyboard_enabled = 1;
 time_t start_time;
+
+unsigned int num_pt_lights = 0;
+
+unsigned int item_glow = 1;

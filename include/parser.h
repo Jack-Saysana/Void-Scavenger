@@ -34,6 +34,8 @@
 #define SHIELD               ("shield")
 #define HEALTH               ("health")
 #define GAMEOVER             ("gameover")
+#define GLOW                 ("glow")
+#define ITEM                 ("item")
 
 #define MAX_TOKS (10)
 
@@ -73,3 +75,4 @@ void set_arena(float);
 void set_player_health(float, int);
 void set_player_shield(float, int);
 void game_over();
+void toggle_item_glow();

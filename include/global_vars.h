@@ -104,4 +104,8 @@ extern int keyboard_enabled;
 // Time
 extern time_t start_time;
 
+// Point lights
+extern unsigned int num_pt_lights;
+extern unsigned int item_glow;
+
 #endif

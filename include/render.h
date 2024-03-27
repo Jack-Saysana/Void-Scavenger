@@ -6,6 +6,7 @@
 #include <structs/item_str.h>
 #include <const.h>
 #include <global_vars.h>
+#include <string.h>
 
 // ================================= GLOBALS =================================
 
@@ -16,7 +17,8 @@ static unsigned int ui_shader = 0;
 static unsigned int basic_shader = 0;
 static unsigned int bone_shader = 0;
 static unsigned int proj_shader = 0;
-static unsigned int station_sp_shader = 0;
+static unsigned int glow_entity_shader = 0;
+static unsigned int glow_model_shader = 0;
 
 // Models
 static MODEL *player_model = NULL;
@@ -82,6 +84,8 @@ static int render_bounds = 0;
 #define actors_dir "./assets/actors"
 #define setp_dir "./assets/set_pieces"
 #define st_ship_parts_dir "./assets/station_ship_parts"
+#define shaders_dir "./src/shaders"
+
 
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
@@ -97,3 +101,4 @@ void get_cam_matrix(CAM *, mat4);
 void player_ship_thrust_move();
 ENTITY **get_dead_zones();
 void get_player_gun_mat(mat4);
+void populate_point_lights(unsigned int);

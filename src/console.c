@@ -107,3 +107,7 @@ void set_player_shield(float shield, int mode) {
     st_player.cur_shield = shield;
   }
 }
+
+void toggle_item_glow() {
+  item_glow = !item_glow;
+}
