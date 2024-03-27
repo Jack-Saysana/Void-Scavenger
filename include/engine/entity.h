@@ -8,6 +8,7 @@ MODEL_DATA *load_model_data(char *path);
 MODEL *gen_model(MODEL_DATA *md);
 MODEL *load_model(char *path);
 ENTITY *init_entity(MODEL *model);
+int gen_cubemap(char **paths, unsigned int *dest);
 void draw_entity(unsigned int shader, ENTITY *entity);
 void draw_skeleton(unsigned int shader, ENTITY *entity);
 void draw_colliders(unsigned int shader, ENTITY *entity, MODEL *sphere);

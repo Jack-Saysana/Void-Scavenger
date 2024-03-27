@@ -102,6 +102,8 @@ size_t restore_item(size_t inv_slot_num) {
     }
   } else if (slot->type == I_SLOT_THRUSTER) {
     part->type = PART_THRUSTER;
+  } else if (slot->type == I_SLOT_WING) {
+    part->type = PART_WING;
   }
 
   part->ent = init_item_ent(part->type);
