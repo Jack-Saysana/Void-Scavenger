@@ -20,6 +20,8 @@ SIMULATION *render_sim = NULL;
 SIMULATION *event_sim = NULL;
 
 PLAYER st_player;
+// Player inventory size
+size_t i_size = 9;
 SHIP player_ship;
 
 SOBJ *object_wrappers = NULL;

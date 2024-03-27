@@ -256,8 +256,20 @@ void input_keys(GLFWwindow *window) {
         }
         if (i == GLFW_KEY_E && get_terminal_ui_state() &&
                    !holding_alpha[i - GLFW_KEY_A]) {
+          /* Handle using terminal in space mode */
           set_gamemode_space();
           st_player.total_levels_completed++;
+        }
+        if (i == GLFW_KEY_E && get_item_prompt_state() &&
+            !holding_alpha[i - GLFW_KEY_A]) {
+          /* Handle picking up an item */
+          pickup_item();
+        }
+        if (i == GLFW_KEY_Q && !holding_alpha[i - GLFW_KEY_A]) {
+          size_t to_drop = find_first_filled();
+          if (to_drop != INVALID_INDEX) {
+            drop_item(to_drop);
+          }
         }
       } else if (!console_enabled && mode == SPACE) {
         if (i == GLFW_KEY_W) {

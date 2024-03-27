@@ -162,6 +162,9 @@ int init_station_mode() {
   /* Re-enable shooting (if not already) */
   enable_shooting();
 
+  /* Clear inventory */
+  reset_inventory();
+
   // Initialize proper render distances
   RENDER_DIST = ST_BASE_RENDER_DIST;
   glm_vec3_copy((vec3) {RENDER_DIST, RENDER_DIST, RENDER_DIST },
@@ -197,6 +200,11 @@ int init_station_mode() {
   sim_add_entity(render_sim, sim_sphere, ALLOW_DEFAULT);
 
   status = init_station_obstacle_buffer();
+  if (status) {
+    return -1;
+  }
+
+  status = init_items_buffer();
   if (status) {
     return -1;
   }
@@ -250,6 +258,7 @@ void clear_station_mode() {
   free_enemy_buffer();
   free_corridor_buffer();
   free_station_obstacle_buffer();
+  free_items_buffer();
 
   // Reset wrapper buffer length
   num_wrappers = 0;
@@ -284,10 +293,15 @@ int delete_stale_objects() {
       i--;
     }
   }
-  for (size_t i = 0; i < num_items; i++) {
-    cur_wrapper = object_wrappers + items[i].wrapper_offset;
-    if (cur_wrapper->to_delete) {
-      // Delete item
+  if (mode == STATION) {
+    for (size_t i = 0; i < num_items; i++) {
+      cur_wrapper = object_wrappers + items[i].wrapper_offset;
+      if (cur_wrapper->to_delete) {
+        // Delete item
+        item_remove_sim(i);
+        delete_item(i);
+        i--;
+      }
     }
   }
   for (size_t i = 0; i < num_obstacles; i++) {

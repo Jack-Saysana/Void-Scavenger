@@ -39,17 +39,21 @@ int init_inventory() {
     0.2833, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(inventory.ui_inventory_info_title_background, "assets/ui/hud_color_bg.png");
+  set_ui_texture(inventory.ui_inventory_info_title_background,
+                 "assets/ui/hud_color_bg.png");
 
   inventory.ui_inventory_info_title_text = add_ui_comp(
     inventory.ui_inventory_info_title_background, // UI_COMP *parent
     (vec2) { 0.1, -0.1 }, // vec2 pos
     0.8, // float width
     0.8, // float height
-    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_Y
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X |
+    HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_Y
   );
-  set_ui_texture(inventory.ui_inventory_info_title_text, "assets/transparent.png");
-  set_ui_text(inventory.ui_inventory_info_title_text, "title", 1.0, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+  set_ui_texture(inventory.ui_inventory_info_title_text,
+                 "assets/transparent.png");
+  set_ui_text(inventory.ui_inventory_info_title_text,
+              "title", 1.0, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
 
   inventory.ui_inventory_info_content_background = add_ui_comp(
     inventory.ui_inventory_info_background, // UI_COMP *parent
@@ -58,17 +62,21 @@ int init_inventory() {
     0.5666, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(inventory.ui_inventory_info_content_background, "assets/ui/hud_color.png");
+  set_ui_texture(inventory.ui_inventory_info_content_background,
+                 "assets/ui/hud_color.png");
 
   inventory.ui_inventory_info_content_text = add_ui_comp(
     inventory.ui_inventory_info_content_background, // UI_COMP *parent
     (vec2) { 0.1, -0.1 }, // vec2 pos
     0.8, // float width
     0.4, // float height
-    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_Y
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X |
+    HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_Y
   );
-  set_ui_texture(inventory.ui_inventory_info_content_text, "assets/transparent.png");
-  set_ui_text(inventory.ui_inventory_info_content_text, "content", 1.0, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+  set_ui_texture(inventory.ui_inventory_info_content_text,
+                 "assets/transparent.png");
+  set_ui_text(inventory.ui_inventory_info_content_text, "content", 1.0, T_LEFT,
+              fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
 
   inventory.ui_inventory_background = add_ui_comp(
     inventory.ui_inventory_root, // UI_COMP *parent
@@ -82,14 +90,18 @@ int init_inventory() {
   for (int i = 0; i < 9; i++) {
     inventory.ui_inventory_slot_background[i] = add_ui_comp(
       inventory.ui_inventory_background, // UI_COMP *parent
-      (vec2) { 0.025 + 0.025 * (i % 3) + (i % 3) * 0.3, -(0.025 + (i / 3) * 0.325) }, // vec2 pos
+      (vec2) { 0.025 + 0.025 * (i % 3) + (i % 3) * 0.3, 
+               -(0.025 + (i / 3) * 0.325) }, // vec2 pos
       0.3, // float width
       0.3, // float height
       ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_Y | HEIGHT_UNIT_RATIO_Y
     );
-    set_ui_texture(inventory.ui_inventory_slot_background[i], "assets/ui/hud_color_bg.png");
-    // set_ui_on_hover(inventory.ui_inventory_slot_background[i], slot_on_hover, NULL);
-    // set_ui_no_hover(inventory.ui_inventory_slot_background[i], slot_on_no_hover, NULL);
+    set_ui_texture(inventory.ui_inventory_slot_background[i],
+                   "assets/ui/hud_color_bg.png");
+    // set_ui_on_hover(inventory.ui_inventory_slot_background[i],
+    //                 slot_on_hover, NULL);
+    // set_ui_no_hover(inventory.ui_inventory_slot_background[i],
+    //                 slot_on_no_hover, NULL);
 
     inventory.ui_inventory_slot_icon[i] = add_ui_comp(
       inventory.ui_inventory_slot_background[i], // UI_COMP *parent
@@ -98,7 +110,8 @@ int init_inventory() {
       0.6, // float height
       ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_Y | HEIGHT_UNIT_RATIO_Y
     );
-    set_ui_texture(inventory.ui_inventory_slot_icon[i], "assets/ui/health_icon.png");
+    set_ui_texture(inventory.ui_inventory_slot_icon[i],
+                   "assets/ui/health_icon.png");
   }
 
   // set init visibility
@@ -136,14 +149,18 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, void *unused) {
   // update when slot item on hover
   // TODO: Should be functional in sprint 2
   set_ui_texture(ui_inventory_slot, "assets/ui/test.png");
-  set_ui_text(inventory.ui_inventory_info_title_text, "title_on_hover", 0.5, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
-  set_ui_text(inventory.ui_inventory_info_content_text, "content_on_hover", 0.5, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+  set_ui_text(inventory.ui_inventory_info_title_text, "title_on_hover", 0.5, 
+              T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+  set_ui_text(inventory.ui_inventory_info_content_text, "content_on_hover", 
+              0.5, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
 }
 
 void slot_on_no_hover(UI_COMP *ui_inventory_slot, void *unused) {
   // update when slot item on hover
   // TODO: Should be functional in sprint 2
   set_ui_texture(ui_inventory_slot, "assets/ui/hud_color_bg.png");
-  set_ui_text(inventory.ui_inventory_info_title_text, "title", 1.0, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
-  set_ui_text(inventory.ui_inventory_info_content_text, "content", 1.0, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+  set_ui_text(inventory.ui_inventory_info_title_text, "title", 1.0, T_LEFT, 
+              fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+  set_ui_text(inventory.ui_inventory_info_content_text, "content", 1.0, T_LEFT,
+              fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
 }

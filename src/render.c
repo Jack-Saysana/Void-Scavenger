@@ -25,53 +25,61 @@ int init_scene() {
                                  "./src/shaders/bone/shader.fs");
   proj_shader = init_shader_prog("./src/shaders/projectile/shader.vs", NULL,
                                  "./src/shaders/projectile/shader.fs");
+  station_sp_shader = init_shader_prog("./src/shaders/model/shader.vs", NULL,
+                                       "./src/shaders/model/station_sp.fs");
 
   // Init models below...
-  player_model = load_model("./assets/actors/player/player.obj");
-  alien_models[0] = load_model("./assets/actors/alien_1/alien_1.obj");
-  alien_models[1] = load_model("./assets/actors/alien_2/alien_2.obj");
-  player_ship_model = load_model("./assets/actors/player_ship/player_ship.obj");
-  alien_ship_models[0] = load_model("./assets/actors/alien_ship_1/alien_ship_1.obj");
-  projectile_models[0] = load_model("./assets/misc/sp_projectile/sp_projectile.obj");
-  projectile_models[1] = load_model("./assets/misc/st_projectile/st_projectile.obj");
-  sphere_model = load_model("./assets/misc/sphere/sphere.obj");
-  render_sphere_model = load_model("./assets/misc/render_sphere/render_sphere.obj");
-  cube_model = load_model("./assets/misc/cube/cube.obj");
-  station_model = load_model("./assets/set_pieces/station/station.obj");
-  terminal_model = load_model("./assets/set_pieces/terminal/terminal.obj");
-  dead_zone_model = load_model("./assets/misc/dead_zone/dead_zone.obj");
-  shotgun_model = load_model("./assets/set_pieces/shotgun/shotgun.obj");
-  rifle_model = load_model("./assets/set_pieces/rifle/rifle.obj");
-  asteroid_models[0] = load_model("./assets/set_pieces/asteroid_1/asteroid_1.obj");
-  asteroid_models[1] = load_model("./assets/set_pieces/asteroid_2/asteroid_2.obj");
-  asteroid_models[2] = load_model("./assets/set_pieces/asteroid_3/asteroid_3.obj");
-  asteroid_models[3] = load_model("./assets/set_pieces/asteroid_4/asteroid_4.obj");
-  asteroid_models[4] = load_model("./assets/set_pieces/asteroid_5/asteroid_5.obj");
-  corridor_models[0] = load_model("./assets/set_pieces/1_way/1_way.obj");
-  corridor_models[1] = load_model("./assets/set_pieces/4_way/4_way_0.obj");
-  corridor_models[2] = load_model("./assets/set_pieces/corner/corner_0.obj");
-  corridor_models[3] = load_model("./assets/set_pieces/t_junct/t_junct.obj");
-  corridor_models[4] = load_model("./assets/set_pieces/corridor/corridor_0.obj");
-  station_obstacles[0] = load_model("./assets/station_obstacles/ammo_crate_0/ammo_crate_0.obj");
-  station_obstacles[1] = load_model("./assets/station_obstacles/ammo_crate_1/ammo_crate_1.obj");
-  station_obstacles[2] = load_model("./assets/station_obstacles/crate_0/crate_0.obj");
-  station_obstacles[3] = load_model("./assets/station_obstacles/crate_1/crate_1.obj");
-  station_obstacles[4] = load_model("./assets/station_obstacles/cryo_bed/cryo_bed.obj");
-  station_obstacles[5] = load_model("./assets/station_obstacles/health_crate_0/health_crate_0.obj");
-  station_obstacles[6] = load_model("./assets/station_obstacles/health_crate_1/health_crate_1.obj");
-  station_obstacles[7] = load_model("./assets/station_obstacles/medical_arms/medical_arms.obj");
-  station_obstacles[8] = load_model("./assets/station_obstacles/oxygen_tank_0/oxygen_tank_0.obj");
-  station_obstacles[9] = load_model("./assets/station_obstacles/plant_vase/plant_vase.obj");
-  station_obstacles[10] = load_model("./assets/station_obstacles/shield_crate_0/shield_crate_0.obj");
-  station_obstacles[11] = load_model("./assets/station_obstacles/shield_crate_1/shield_crate_1.obj");
-  station_obstacles[12] = load_model("./assets/station_obstacles/toilet/toilet.obj");
-  station_obstacles[13] = load_model("./assets/station_obstacles/big_bug/big_bug.obj");
-  station_obstacles[14] = load_model("./assets/station_obstacles/hose_0/hose_0.obj");
-  station_obstacles[15] = load_model("./assets/station_obstacles/hose_1/hose_1.obj");
-  station_obstacles[16] = load_model("./assets/station_obstacles/hose_2/hose_2.obj");
-  station_obstacles[17] = load_model("./assets/station_obstacles/hose_3/hose_3.obj");
-  station_obstacles[18] = load_model("./assets/station_obstacles/stool/stool.obj");
-  station_obstacles[19] = load_model("./assets/station_obstacles/table/table.obj");
+  player_model = load_model(actors_dir "/player/player.obj");
+  alien_models[0] = load_model(actors_dir "/alien_1/alien_1.obj");
+  alien_models[1] = load_model(actors_dir "/alien_2/alien_2.obj");
+  player_ship_model = load_model(actors_dir "/player_ship/player_ship.obj");
+  alien_ship_models[0] = load_model(actors_dir "/alien_ship_1/alien_ship_1.obj");
+  projectile_models[0] = load_model(misc_dir "/sp_projectile/sp_projectile.obj");
+  projectile_models[1] = load_model(misc_dir "/st_projectile/st_projectile.obj");
+  sphere_model = load_model(misc_dir "/sphere/sphere.obj");
+  render_sphere_model = load_model(misc_dir "/render_sphere/render_sphere.obj");
+  cube_model = load_model(misc_dir "/cube/cube.obj");
+  station_model = load_model(setp_dir "/station/station.obj");
+  terminal_model = load_model(setp_dir "/terminal/terminal.obj");
+  dead_zone_model = load_model(misc_dir "/dead_zone/dead_zone.obj");
+  shotgun_model = load_model(setp_dir "/shotgun/shotgun.obj");
+  rifle_model = load_model(setp_dir "/rifle/rifle.obj");
+  asteroid_models[0] = load_model(setp_dir "/asteroid_1/asteroid_1.obj");
+  asteroid_models[1] = load_model(setp_dir "/asteroid_2/asteroid_2.obj");
+  asteroid_models[2] = load_model(setp_dir "/asteroid_3/asteroid_3.obj");
+  asteroid_models[3] = load_model(setp_dir "/asteroid_4/asteroid_4.obj");
+  asteroid_models[4] = load_model(setp_dir "/asteroid_5/asteroid_5.obj");
+  corridor_models[0] = load_model(setp_dir "/1_way/1_way.obj");
+  corridor_models[1] = load_model(setp_dir "/4_way/4_way_0.obj");
+  corridor_models[2] = load_model(setp_dir "/corner/corner_0.obj");
+  corridor_models[3] = load_model(setp_dir "/t_junct/t_junct.obj");
+  corridor_models[4] = load_model(setp_dir "/corridor/corridor_0.obj");
+  station_obstacles[0] = load_model(st_obs_dir "/ammo_crate_0/ammo_crate_0.obj");
+  station_obstacles[1] = load_model(st_obs_dir "/ammo_crate_1/ammo_crate_1.obj");
+  station_obstacles[2] = load_model(st_obs_dir "/crate_0/crate_0.obj");
+  station_obstacles[3] = load_model(st_obs_dir "/crate_1/crate_1.obj");
+  station_obstacles[4] = load_model(st_obs_dir "/cryo_bed/cryo_bed.obj");
+  station_obstacles[5] = load_model(st_obs_dir "/health_crate_0/health_crate_0.obj");
+  station_obstacles[6] = load_model(st_obs_dir "/health_crate_1/health_crate_1.obj");
+  station_obstacles[7] = load_model(st_obs_dir "/medical_arms/medical_arms.obj");
+  station_obstacles[8] = load_model(st_obs_dir "/oxygen_tank_0/oxygen_tank_0.obj");
+  station_obstacles[9] = load_model(st_obs_dir "/plant_vase/plant_vase.obj");
+  station_obstacles[10] = load_model(st_obs_dir "/shield_crate_0/shield_crate_0.obj");
+  station_obstacles[11] = load_model(st_obs_dir "/shield_crate_1/shield_crate_1.obj");
+  station_obstacles[12] = load_model(st_obs_dir "/toilet/toilet.obj");
+  station_obstacles[13] = load_model(st_obs_dir "/big_bug/big_bug.obj");
+  station_obstacles[14] = load_model(st_obs_dir "/hose_0/hose_0.obj");
+  station_obstacles[15] = load_model(st_obs_dir "/hose_1/hose_1.obj");
+  station_obstacles[16] = load_model(st_obs_dir "/hose_2/hose_2.obj");
+  station_obstacles[17] = load_model(st_obs_dir "/hose_3/hose_3.obj");
+  station_obstacles[18] = load_model(st_obs_dir "/stool/stool.obj");
+  station_obstacles[19] = load_model(st_obs_dir "/table/table.obj");
+  station_ship_parts[0] = load_model(st_ship_parts_dir "/thrusters/thrusters.obj");
+  station_ship_parts[1] = load_model(st_ship_parts_dir "/hull/hull.obj");
+  station_ship_parts[2] = load_model(st_ship_parts_dir "/reactor/reactor.obj");
+  station_ship_parts[3] = load_model(st_ship_parts_dir "/shield/shield.obj");
+  station_ship_parts[4] = load_model(st_ship_parts_dir "/weapon/weapon.obj");
+  station_ship_parts[5] = load_model(st_ship_parts_dir "/wing/wing.obj");
 
   if (CHECK_ASSETS_LOADED) {
     fprintf(stderr, "Error: failed to initialize game models\n");
@@ -132,6 +140,9 @@ void cleanup_scene() {
   }
   for (int i = 0; i < NUM_STATION_OBSTACLE_TYPES; i++) {
     free_model(station_obstacles[i]);
+  }
+  for (int i = 0; i < NUM_STATION_SHIP_PART_TYPES; i++) {
+    free_model(station_ship_parts[i]);
   }
 
   free_ui();
@@ -251,6 +262,23 @@ void render_game_entity(ENTITY *ent) {
       draw_model(model_shader, rifle_model);
     }
     draw_entity(entity_shader, ent);
+  } else if (wrapper->type == ITEM_OBJ) {
+    /* TODO: Update to new shader */
+    ST_ITEM *part = items + (size_t) wrapper->data;
+    glUseProgram(model_shader);
+    mat4 model = GLM_MAT4_IDENTITY_INIT;
+    glm_translate(model, ent->translation);
+    glm_quat_rotate(model, ent->rotation, model);
+    glm_scale(model, ent->scale);
+    set_mat4("model", model, model_shader);
+    if (part->type == PART_WEAPON_BALLISTIC ||
+        part->type == PART_WEAPON_LASER ||
+        part->type == PART_WEAPON_PLASMA) {
+      draw_model(model_shader, station_ship_parts[TYPE_WEAPON]); 
+    } else {
+      draw_model(model_shader, station_ship_parts[part->type]); 
+    }
+
   } else {
     draw_entity(entity_shader, ent);
   }
@@ -346,6 +374,15 @@ ENTITY *init_station_ent() {
 
 ENTITY *init_terminal_ent() {
   return init_entity(terminal_model);
+}
+
+ENTITY *init_item_ent(PART_T type) {
+  if (type == PART_WEAPON_PLASMA || 
+      type == PART_WEAPON_BALLISTIC ||
+      type == PART_WEAPON_LASER) {
+    return init_entity(station_ship_parts[TYPE_WEAPON]);
+  }
+  return init_entity(station_ship_parts[type]);
 }
 
 void toggle_hit_boxes() {

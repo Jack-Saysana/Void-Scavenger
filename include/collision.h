@@ -34,3 +34,5 @@ void set_terminal_ui(int);
 void st_enemy_hurt_anim(void *);
 
 void game_over();
+
+void set_item_prompt(int);
