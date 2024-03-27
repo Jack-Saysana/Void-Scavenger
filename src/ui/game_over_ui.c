@@ -69,6 +69,7 @@ void set_game_over_stats() {
   if (minutes_played >= 1.0) {
     time_played = fmodf(time_played, 60.0);
   }
+  #ifdef __linux
   snprintf(game_over_stats_buffer, GAME_OVER_STATS_SIZE,
            " Levels Completed: %ld\n"
            " Distance Flown: %.1lf\n"
@@ -91,6 +92,30 @@ void set_game_over_stats() {
            minutes_played,
            time_played
            );
+  #else
+  snprintf(game_over_stats_buffer, GAME_OVER_STATS_SIZE,
+           " Levels Completed: %lld\n"
+           " Distance Flown: %.1lf\n"
+           " Distance Walked: %.1lf\n"
+           " Aliens Defeated: %lld\n"
+           " Ships Defeated: %lld\n"
+           " Damage Dealt: %.1lf\n"
+           " Damage Taken: %.1lf\n"
+           " Total Experience %.1lf\n"
+           " Time Played: %.0f hrs %.0f min %.0f sec\n",
+           st_player.total_levels_completed,
+           st_player.total_distance_flown,
+           st_player.total_distance_walked,
+           st_player.total_enemies_defeated,
+           st_player.total_ships_defeated,
+           st_player.total_damage_dealt,
+           st_player.total_damage_taken,
+           st_player.total_experience,
+           hours_played,
+           minutes_played,
+           time_played
+           ); 
+  #endif
   set_ui_text(game_over_stats, game_over_stats_buffer,
               0.10, T_LEFT, fixed_sys, GLM_VEC3_ZERO); 
 }

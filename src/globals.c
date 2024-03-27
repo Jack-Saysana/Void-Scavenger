@@ -62,3 +62,10 @@ float space_size = 0.0;
 
 int keyboard_enabled = 1;
 time_t start_time;
+
+I_SLOT equipped_hull;
+I_SLOT equipped_reactor;
+I_SLOT equipped_shield;
+I_SLOT equipped_thruster;
+I_SLOT equipped_weapon;
+I_SLOT equipped_wing;

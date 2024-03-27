@@ -251,7 +251,7 @@ void input_keys(GLFWwindow *window) {
           toggle_inventory();
         }
         if (i == GLFW_KEY_K && !holding_alpha[i - GLFW_KEY_A]) {
-          /* Handle I press */
+          /* Handle K press */
           toggle_skill_tree();
         }
         if (i == GLFW_KEY_E && get_terminal_ui_state() &&
@@ -311,6 +311,9 @@ void input_keys(GLFWwindow *window) {
         }  else if (i == GLFW_KEY_P && !holding_alpha[i - GLFW_KEY_A]) {
           /* Handle P press (Ship Parts at Space Mode) */
           toggle_ship_parts();
+        } else if (i == GLFW_KEY_I && !holding_alpha[i - GLFW_KEY_A]) {
+          /* Handle I press */
+          toggle_inventory();
         }
       }
       holding_alpha[i - GLFW_KEY_A] = 1;

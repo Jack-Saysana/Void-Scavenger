@@ -377,7 +377,7 @@ ENTITY *init_terminal_ent() {
 }
 
 ENTITY *init_item_ent(PART_T type) {
-  if (type == PART_WEAPON_PLASMA || 
+  if (type == PART_WEAPON_PLASMA ||
       type == PART_WEAPON_BALLISTIC ||
       type == PART_WEAPON_LASER) {
     return init_entity(station_ship_parts[TYPE_WEAPON]);
