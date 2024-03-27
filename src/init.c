@@ -49,8 +49,8 @@ int init_game() {
 
   init_ui_components();
 
-  status = init_space_mode();
-  // status = init_station_mode();
+  // status = init_space_mode();
+  status = init_station_mode();
   if (status) {
     return -1;
   }

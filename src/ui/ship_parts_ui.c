@@ -1,5 +1,4 @@
 #include <ui/ship_parts_ui.h>
-#include <stdio.h>
 
 /*
                                    SHIP_PARTS
@@ -264,8 +263,7 @@ int init_ship_parts() {
     (vec2) { 0.05, -0.05 }, // vec2 pos
     0.9, // float width
     0.9, // float height
-    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X |
-    HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_X
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_X
   );
   set_ui_texture(ship_parts.ui_ship_parts_info_content_text,
                  "assets/transparent.png");
@@ -273,9 +271,6 @@ int init_ship_parts() {
   snprintf(ship_parts_info_content_buffer, SHIP_PARTS_TEXT_BUFFER_SIZE, "EMPTY");
   set_ui_text(ship_parts.ui_ship_parts_info_content_text, ship_parts_info_content_buffer, 
               0.08, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
-
-  // set layer to front
-  // set_manual_layer(ship_parts.ui_ship_parts_root, 0.01);
 
   // set init visibility
   set_ui_enabled(ship_parts.ui_ship_parts_root, 0);
