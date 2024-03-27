@@ -34,6 +34,8 @@
 #define SHIELD               ("shield")
 #define HEALTH               ("health")
 #define XP                   ("xp")
+#define GAMELEVEL            ("gamelevel")
+#define ESHOOT               ("eshoot")
 
 #define MAX_TOKS (10)
 
@@ -58,6 +60,7 @@ void toggle_wire_frame();
 void toggle_render_arena();
 void toggle_render_bounds();
 void cursor_on(int);
+void eshoot_on(int);
 void set_gamemode_station();
 void set_gamemode_space();
 void quit();
@@ -73,3 +76,4 @@ void set_arena(float);
 void set_player_health(float, int);
 void set_player_shield(float, int);
 void set_player_xp(float);
+void set_gamelevel(float);

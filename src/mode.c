@@ -23,6 +23,8 @@ int init_space_mode() {
   /* Re-enable shooting (if not already) */
   enable_shooting();
 
+  /*Enemy can shoot on */
+
   // Initialize proper render distances
   RENDER_DIST = SP_BASE_RENDER_DIST;
   glm_vec3_copy((vec3) { RENDER_DIST, RENDER_DIST, RENDER_DIST },
@@ -78,11 +80,13 @@ int init_space_mode() {
     e_attack_type_range = 2;
     e_mov_type_range = 1;
   }
+  printf("\nattack: %d, mov: %d\n", e_attack_type_range, e_mov_type_range);
   int attack_types_picked[E_BASE_NUM_TYPES];
   int mov_types_picked[E_BASE_NUM_TYPES];
   for (int i = 0; i < E_BASE_NUM_TYPES; i++) {
     attack_types_picked[i] = gen_rand_int(e_attack_type_range + 1);
     mov_types_picked[i] = gen_rand_int(e_mov_type_range + 1);
+    printf("\nPicked Attack_type %d, Mov Type %d\n", attack_types_picked[i], mov_types_picked[i]);
   }
   if (num_enemies > 0) {
     for (int i = 0; i < num_enemies; i++) {

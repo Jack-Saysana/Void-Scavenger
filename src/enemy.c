@@ -202,7 +202,6 @@ size_t init_enemy_ship(int index, int mov_type) {
 
   SHIP *new_enemy = sp_enemies + num_enemies;
   memset(new_enemy, 0, sizeof(SHIP));
-
   if (index == STANDARD_BALLISTIC || index == STANDARD_LASER || index == STANDARD_PLASMA) {
     new_enemy->ent = init_alien_ship_ent(STANDARD_BALLISTIC);
   } else if (index == HEALTH_BALLISTIC || index == HEALTH_LASER) {
@@ -274,6 +273,8 @@ size_t init_enemy_ship(int index, int mov_type) {
   new_enemy->weapon.damage = S_BASE_DAMAGE;
   new_enemy->weapon.fire_rate = S_BASE_FIRERATE;
   new_enemy->weapon.max_power_draw = S_BASE_PWR_DRAW;
+  new_enemy->weapon.proj_speed = S_BASE_PROJ_SPEED;
+  new_enemy->weapon.range = S_BASE_RANGE;
   new_enemy->wing.max_ang_vel = S_BASE_ANG_VEL;
   new_enemy->wing.max_ang_accel = S_BASE_ANG_ACCEL;
   new_enemy->thruster.max_power_draw = S_BASE_PWR_DRAW;
@@ -281,6 +282,7 @@ size_t init_enemy_ship(int index, int mov_type) {
   new_enemy->cur_health = new_enemy->hull.max_health;
   new_enemy->cur_shield = new_enemy->shield.max_shield;
   new_enemy->invuln = 0;
+  new_enemy->e_can_shoot = 1;
 
   num_enemies++;
   if (num_enemies == enemy_buff_len) {
@@ -501,6 +503,36 @@ void sp_enemy_pathfind(size_t index) {
     }
   }
   glm_vec3_scale_as(forward, enemy->cur_speed, enemy->ent->velocity);
+  if (ESHOOT_ON && enemy->e_can_shoot) {
+    /* fire rate timer */
+        enemy->e_can_shoot = 0;
+        add_timer(1, (void *) &enemy->e_can_shoot, 1, NULL);
+        /* get ship vectors */
+        vec3 ship_forward;
+        glm_quat_rotatev(enemy->ent->rotation, (vec3){-1.0, 0.0, 0.0}, ship_forward);
+        glm_normalize(ship_forward);
+        vec3 ship_side;
+        glm_quat_rotatev(enemy->ent->rotation, (vec3){0.0, 0.0, 1.0}, ship_side);
+        glm_normalize(ship_side);
+        vec3 ship_up;
+        glm_quat_rotatev(enemy->ent->rotation, (vec3){0.0, 1.0, 0.0}, ship_up);
+        glm_normalize(ship_up);
+        /* get left gun offset pos */
+        vec3 gun_pos = GLM_VEC3_ZERO_INIT;
+        glm_vec3_scale_as(ship_forward, 12.0, gun_pos);
+        glm_vec3_add(enemy->ent->translation, gun_pos, gun_pos);
+        /* spawn projectile*/
+        size_t proj_index = init_projectile(gun_pos,
+                                            ship_forward,
+                                            enemy->weapon.proj_speed +
+                                            enemy->cur_speed,
+                                            SRC_ENEMY,
+                                            enemy->weapon.type,
+                                            enemy->weapon.damage,
+                                            enemy->weapon.range,
+                                            0);
+        projectile_insert_sim(proj_index);
+  }
 }
 
 void st_enemy_pathfind(size_t index) {

@@ -30,6 +30,14 @@ void cursor_on(int on) {
   }
 }
 
+void eshoot_on(int on) {
+  if (on) {
+    ESHOOT_ON = 1;
+  } else {
+    ESHOOT_ON = 0;
+  }
+}
+
 void set_gamemode_station() {
   if (mode == STATION) {
     return;
@@ -110,4 +118,13 @@ void set_player_shield(float shield, int mode) {
 
 void set_player_xp(float xp) {
   st_player.cur_experience = xp;
+}
+
+void set_gamelevel(float gamelevel) {
+  st_player.total_levels_completed = gamelevel;
+  if (mode == SPACE) {
+    reset_space();
+  } else {
+    reset_station();
+  }
 }

@@ -62,20 +62,24 @@ void load_sp_assets() {
 }
 void init_sp_assets() {
   init_model(&sp_mods.player_ship_model);
-  init_model(&sp_mods.alien_ship_models[0]);
   init_model(&sp_mods.proj_model);
   init_model(&sp_mods.station_model);
   for (size_t i = 0; i < NUM_ASTEROID_TYPES; i++) {
     init_model(&sp_mods.asteroid_models[i]);
   }
+  for (size_t i = 0; i < NUM_ALIEN_SHIP_TYPES; i++) {
+    init_model(&sp_mods.alien_ship_models[i]);
+  }
 }
 void free_sp_assets() {
   free_model(sp_mods.player_ship_model.model);
-  free_model(sp_mods.alien_ship_models[0].model);
   free_model(sp_mods.proj_model.model);
   free_model(sp_mods.station_model.model);
   for (size_t i = 0; i < NUM_ASTEROID_TYPES; i++) {
     free_model(sp_mods.asteroid_models[i].model);
+  }
+  for (size_t i = 0; i < NUM_ALIEN_SHIP_TYPES; i++) {
+    free_model(sp_mods.alien_ship_models[i].model);
   }
 }
 
