@@ -38,10 +38,14 @@ void init_ui_components() {
     printf("Could not initialize skill tree!\n");
     exit(1);
   }
-  
+
   coordinates_ui_initialize();
   fps_ui_initialize();
   init_terminal_ui();
+  init_target_ui();
+  init_radar_ui();
+  init_waypoint_ui();
+  init_damage_ui();
   game_over_ui_initialize();
   init_item_prompt_ui();
 }
@@ -51,6 +55,11 @@ void init_ui_components() {
   updates are called from.
 */
 void update_ui_components() {
+  update_loading_ui();
+  if (mode == LOADING) {
+    return;
+  }
+
   if (coordinates_enabled) {
     update_coordinates();
   }
@@ -62,4 +71,8 @@ void update_ui_components() {
   update_inventory();
   update_ship_parts();
   update_skill_tree();
+  update_target_ui();
+  update_radar_ui();
+  update_waypoint_ui();
+  update_damage_ui();
 }

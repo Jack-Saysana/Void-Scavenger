@@ -11,6 +11,7 @@ void sp_enemy_pathfind(size_t);
 void st_enemy_pathfind(size_t);
 void st_enemy_walk_cycle(void *);
 void st_enemy_hurt_anim(void *);
+void sp_enemy_shield_dmg(void *);
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 
@@ -23,3 +24,6 @@ ENTITY *init_alien_ship_ent(size_t);
 void update_timer_memory(void *, void *);
 int add_timer(float, void *, int, void *);
 void update_timer_args(void *, void *, void *);
+
+size_t get_target_ship_index();
+void set_target_ship_index(size_t);

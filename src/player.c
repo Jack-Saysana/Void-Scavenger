@@ -8,6 +8,7 @@
 */
 
 // =============================== STATION MODE ==============================
+
 // Initialize player struct at beginning of game
 int init_player() {
   memset(&st_player, 0, sizeof(PLAYER));
@@ -250,7 +251,7 @@ void player_ship_thrust_move() {
 void get_player_coordinates(vec3 coords) {
   if (mode == SPACE) {
     glm_vec3_copy(player_ship.ent->translation, coords);
-  } else {
+  } else if (mode == STATION) {
     glm_vec3_copy(st_player.ent->translation, coords);
   }
 }
@@ -274,4 +275,18 @@ void get_player_gun_mat(mat4 dest) {
   glm_quat_rotate(dest, st_player.ent->rotation, dest);
   glm_scale(dest, st_player.ent->scale);
   glm_mat4_mul(dest, to_player_space, dest);
+}
+
+// ================================= ANIMATION ===============================
+
+void sp_player_shield_dmg(void *args) {
+  if (player_ship.render_shield < 1.0) {
+    player_ship.render_shield += 0.05;
+    if (player_ship.render_shield > 1.0) {
+      player_ship.render_shield = 1.0;
+    }
+    add_timer(0.03, sp_player_shield_dmg, -1000, NULL);
+  } else {
+    player_ship.render_shield = 0.0;
+  }
 }
