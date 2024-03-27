@@ -34,7 +34,9 @@ void handle_collisions() {
   size_t num_c_col = get_sim_collisions(combat_sim, &combat_collisions,
                                         sim_sphere->translation,
                                         SIM_DIST, 0);
+  prepare_object_movement();
   handle_combat_collisions(combat_collisions, num_c_col);
+  update_object_movement();
 
   COLLISION *event_collisions = NULL;
   size_t num_e_col = get_sim_collisions(event_sim, &event_collisions,

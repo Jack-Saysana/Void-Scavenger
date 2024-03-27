@@ -27,10 +27,14 @@
 // Enemy Constants
 #define NUM_ALIEN_TYPES (2)
 #define NUM_ALIEN_SHIP_TYPES (2)
-#define E_ANIM_HURT (0)
-#define E_ANIM_SHOOTING (1)
-#define E_ANIM_STANDING (2)
-#define E_ANIM_WALK (3)
+#define E_ANIM_HURT_MELEE (0)
+#define E_ANIM_HURT_RANGED (1)
+#define E_ANIM_SHOOTING (2)
+#define E_ANIM_STANDING_MELEE (3)
+#define E_ANIM_STANDING_RANGED (4)
+#define E_ANIM_SWINGING (5)
+#define E_ANIM_WALK_MELEE (6)
+#define E_ANIM_WALK_RANGED (7)
 
 #define BRUTE (0)
 #define NORMAL (1)

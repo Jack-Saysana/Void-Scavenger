@@ -219,7 +219,7 @@ void st_enemy_pathfind(size_t index) {
   } else {
     if (clear_shot) {
       glm_vec3_copy(to_player, target_cd_dir);
-      if (player_dist < 1.0) {
+      if (player_dist < 2.0) {
         target_cd_speed = 0.0;
       } else {
         target_cd_speed = 2.0;

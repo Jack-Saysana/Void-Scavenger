@@ -57,6 +57,7 @@ typedef struct st_models {
   LOADED_MODEL terminal_model;
   LOADED_MODEL rifle_model;
   LOADED_MODEL shotgun_model;
+  LOADED_MODEL sword_model;
 } ST_MODELS;
 ST_MODELS st_mods;
 

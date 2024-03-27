@@ -220,11 +220,19 @@ void render_game_entity(ENTITY *ent) {
     if (enemy->max_health > 100.0) {
       get_bone_equip_mat(ent, 14, model);
       set_mat4("model", model, model_shader);
-      draw_model(model_shader, st_mods.shotgun_model.model);
+      if (enemy->weapon_type == RANGED) {
+        draw_model(model_shader, st_mods.shotgun_model.model);
+      } else {
+        draw_model(model_shader, st_mods.sword_model.model);
+      }
     } else {
       get_bone_equip_mat(ent, 15, model);
       set_mat4("model", model, model_shader);
-      draw_model(model_shader, st_mods.rifle_model.model);
+      if (enemy->weapon_type == RANGED) {
+        draw_model(model_shader, st_mods.rifle_model.model);
+      } else {
+        draw_model(model_shader, st_mods.sword_model.model);
+      }
     }
     draw_entity(entity_shader, ent);
   } else {

@@ -365,8 +365,14 @@ void st_enemy_walk_cycle(void *args) {
   if (enemy->invuln) {
     return;
   }
-  size_t duration = enemy->ent->model->animations[E_ANIM_WALK].duration;
-  animate(enemy->ent, E_ANIM_WALK, enemy->cur_frame);
+  size_t duration = 0;
+  if (enemy->weapon_type == RANGED) {
+    duration = enemy->ent->model->animations[E_ANIM_WALK_RANGED].duration;
+    animate(enemy->ent, E_ANIM_WALK_RANGED, enemy->cur_frame);
+  } else {
+    duration = enemy->ent->model->animations[E_ANIM_WALK_MELEE].duration;
+    animate(enemy->ent, E_ANIM_WALK_MELEE, enemy->cur_frame);
+  }
   enemy->cur_frame = (enemy->cur_frame + 1) % duration;
 
   add_timer(0.016, st_enemy_walk_cycle, -1000, args);
@@ -379,8 +385,14 @@ void st_enemy_hurt_anim(void *args) {
   }
 
   ST_ENEMY *enemy = st_enemies + index;
-  size_t duration = enemy->ent->model->animations[E_ANIM_HURT].duration;
-  animate(enemy->ent, E_ANIM_HURT, enemy->cur_frame);
+  size_t duration = 0;
+  if (enemy->weapon_type == RANGED) {
+    duration = enemy->ent->model->animations[E_ANIM_HURT_RANGED].duration;
+    animate(enemy->ent, E_ANIM_HURT_RANGED, enemy->cur_frame);
+  } else {
+    duration = enemy->ent->model->animations[E_ANIM_HURT_MELEE].duration;
+    animate(enemy->ent, E_ANIM_HURT_MELEE, enemy->cur_frame);
+  }
 
   if (enemy->cur_frame < duration) {
     enemy->cur_frame++;
