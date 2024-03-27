@@ -3,6 +3,7 @@
 #include <global_vars.h>
 #include <engine/engine.h>
 #include <structs/camera_str.h>
+#include <structs/item_str.h>
 #include <const.h>
 #include <global_vars.h>
 
@@ -15,6 +16,7 @@ static unsigned int ui_shader = 0;
 static unsigned int basic_shader = 0;
 static unsigned int bone_shader = 0;
 static unsigned int proj_shader = 0;
+static unsigned int station_sp_shader = 0;
 
 // Models
 static MODEL *player_model = NULL;
@@ -39,6 +41,10 @@ static MODEL *station_obstacles[NUM_STATION_OBSTACLE_TYPES] = {
   NULL, NULL, NULL, NULL, NULL,
   NULL, NULL, NULL, NULL, NULL,
   NULL, NULL, NULL, NULL, NULL,
+};
+
+static MODEL *station_ship_parts[NUM_STATION_SHIP_PART_TYPES] = {
+  NULL, NULL, NULL, NULL, NULL, NULL
 };
 
 // Common matrices
@@ -66,8 +72,16 @@ static int render_bounds = 0;
 !station_obstacles[9] || !station_obstacles[10] || !station_obstacles[11] || \
 !station_obstacles[12] || !station_obstacles[13] || !station_obstacles[14] || \
 !station_obstacles[15] || !station_obstacles[16] || !station_obstacles[17] || \
-!station_obstacles[18] || !station_obstacles[19] \
+!station_obstacles[18] || !station_obstacles[19] || \
+!station_ship_parts[0] || !station_ship_parts[1] || !station_ship_parts[2] || \
+!station_ship_parts[3] || !station_ship_parts[4] || !station_ship_parts[5] \
 )
+
+#define st_obs_dir "./assets/station_obstacles"
+#define misc_dir "./assets/misc"
+#define actors_dir "./assets/actors"
+#define setp_dir "./assets/set_pieces"
+#define st_ship_parts_dir "./assets/station_ship_parts"
 
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
