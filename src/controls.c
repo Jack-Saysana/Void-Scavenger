@@ -124,8 +124,8 @@ void mouse_button_callback(GLFWwindow *window, int button, int action,
                                             10.0 + st_player.speed,
                                             SRC_PLAYER,
                                             player_ship.weapon.type,
-                                            player_ship.weapon.damage,
-                                            player_ship.weapon.range,
+                                            st_player.damage,
+                                            100.0,
                                             1);
         projectile_insert_sim(proj_index);
       }
