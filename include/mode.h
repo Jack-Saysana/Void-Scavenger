@@ -86,6 +86,8 @@ void create_station_corridors();
 
 /* Generation of asteroid positioning, speed, dir, etc... */
 void gen_rand_vec3(vec3 *, float);
+void gen_rand_vec3_plus_minus(vec3 *, float);
+void gen_rand_vec4_plus_minus(vec3 *, float);
 void gen_rand_vec4(vec4 *, float);
 float gen_rand_float(float);
 void seed_random();
