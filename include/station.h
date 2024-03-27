@@ -67,6 +67,8 @@ void spawn_small_station_obstacle(vec3);
 void spawn_large_station_obstacle(vec3);
 void gen_terminal_location(int, int, vec3, vec3, versor);
 size_t gen_cd_obj(int **, ivec2, vec3, int *, int *);
+void object_random_offset(vec3);
+void spawn_ship_part(vec3);
 
 /* ======================== EXTERNALLY DEFINED FUNCTIONS ================== */
 int double_buffer(void **, size_t *, size_t);
@@ -87,3 +89,6 @@ size_t init_station_obstacle(int, vec3, vec3, versor, float);
 
 void spawn_st_enemy(vec3, int);
 void spawn_st_terminal(vec3, versor);
+
+size_t init_item(int, int, vec3, vec3, versor, float);
+int item_insert_sim(size_t);

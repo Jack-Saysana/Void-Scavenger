@@ -3,6 +3,7 @@
 #include <const.h>
 #include <global_vars.h>
 
+
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
 void handle_physics_collisions(COLLISION *, size_t);
@@ -36,3 +37,6 @@ void st_enemy_hurt_anim(void *);
 void sp_enemy_shield_dmg(void *);
 void sp_player_shield_dmg(void *);
 void player_health_dmg();
+
+void game_over();
+void set_item_prompt(int);
