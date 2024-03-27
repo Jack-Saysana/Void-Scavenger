@@ -29,6 +29,7 @@ void slot_off_hover_wrapper(UI_COMP *ui_comp, void *arg);
 void slot_off_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot);
 void slot_on_click(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot);
 void update_slot(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot);
+void switch_slot(I_SLOT *slot_a, I_SLOT *slot_b);
 
 /* ================= EXTERNALLY DEFINED FUNCTIONS ================ */
 

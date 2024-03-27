@@ -14,33 +14,6 @@ mode inventory.
     otherwise unsuccessful
 */
 
-const char *item_slot_id_str[] =
-{
-  [I_SLOT_REACTOR] = "REACTOR",
-  [I_SLOT_HULL] = "HULL",
-  [I_SLOT_SHIELD]  = "SHIELD",
-  [I_SLOT_WEAPON]  = "WEAPON",
-  [I_SLOT_WING] = "WING",
-  [I_SLOT_THRUSTER] = "THRUSTER",
-  [I_SLOT_EMPTY]  = "EMPTY"
-};
-
-const char *item_slot_weapon_type_str[] =
-{
-  [W_BALLISTIC] = "WEAPON BALLISTIC",
-  [W_LASER] = "WEAPON LASER",
-  [W_PLASMA]  = "WEAPON PLASMA",
-};
-
-const char *rarity_str[] =
-{
-  [GOLD_RARITY] = "GOLD",
-  [PURPLE_RARITY] = "PURPLE",
-  [GREEN_RARITY]  = "GREEN",
-  [BLUE_RARITY]  = "BLUE",
-  [WHITE_RARITY] = "WHITE",
-};
-
 int init_inventory() {
   inventory.ui_inventory_root = add_ui_comp(
     UI_ROOT_COMP, // UI_COMP *parent
@@ -133,7 +106,6 @@ int init_inventory() {
                    "assets/ui/hud_color_bg.png");
     set_ui_on_hover(inventory.ui_inventory_slot_background[i],
                     slot_on_hover_wrapper, (void *)(st_player.inventory + i));
-    
     set_ui_no_hover(inventory.ui_inventory_slot_background[i],
                     slot_off_hover_wrapper, (void *)(st_player.inventory + i));
 
@@ -160,14 +132,8 @@ int init_inventory() {
   Update inventory UI per frame, call by general_ui.c update_ui_components()
 */
 void update_inventory() {
-  // check current game mode
-  if (mode == SPACE) {
-    // set visibility
-  } else if (mode == STATION) {
-    // update inventory slots
-    for (int i = 0; i < 9; i++) {
-      update_slot(inventory.ui_inventory_slot_icon[i], st_player.inventory + i);
-    }
+  for (int i = 0; i < 9; i++) {
+    update_slot(inventory.ui_inventory_slot_icon[i], st_player.inventory + i);
   }
 }
 
@@ -189,6 +155,33 @@ void slot_on_hover_wrapper(UI_COMP *ui_comp, void *arg) {
 }
 
 void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
+  const char *item_slot_id_str[] =
+  {
+    [I_SLOT_REACTOR] = "REACTOR",
+    [I_SLOT_HULL] = "HULL",
+    [I_SLOT_SHIELD]  = "SHIELD",
+    [I_SLOT_WEAPON]  = "WEAPON",
+    [I_SLOT_WING] = "WING",
+    [I_SLOT_THRUSTER] = "THRUSTER",
+    [I_SLOT_EMPTY]  = "EMPTY"
+  };
+
+  const char *item_slot_weapon_type_str[] =
+  {
+    [W_BALLISTIC] = "WEAPON BALLISTIC",
+    [W_LASER] = "WEAPON LASER",
+    [W_PLASMA]  = "WEAPON PLASMA",
+  };
+
+  const char *rarity_str[] =
+  {
+    [GOLD_RARITY] = "GOLD",
+    [PURPLE_RARITY] = "PURPLE",
+    [GREEN_RARITY]  = "GREEN",
+    [BLUE_RARITY]  = "BLUE",
+    [WHITE_RARITY] = "WHITE",
+  };
+
   // update when slot item on hover
   set_ui_texture(ui_inventory_slot, "assets/ui/test.png");
   if (inventory_slot->type == I_SLOT_EMPTY) {
@@ -264,9 +257,37 @@ void slot_off_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
 
 void slot_on_click(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
   if (mode == SPACE) {
-    // set visibility
+    // space mode switch ship parts when click
+    switch (inventory_slot->type) {
+      case I_SLOT_REACTOR:
+        switch_slot(&equipped_reactor, inventory_slot);
+        player_ship.reactor = equipped_reactor.data.reactor;
+        break;
+      case I_SLOT_HULL:
+        switch_slot(&equipped_hull, inventory_slot);
+        player_ship.hull = equipped_hull.data.hull;
+        break;
+      case I_SLOT_SHIELD:
+        switch_slot(&equipped_shield, inventory_slot);
+        player_ship.shield = equipped_shield.data.shield;
+        break;
+      case I_SLOT_WEAPON:
+        switch_slot(&equipped_weapon, inventory_slot);
+        player_ship.weapon = equipped_weapon.data.weapon;
+        break;
+      case I_SLOT_WING:
+        switch_slot(&equipped_wing, inventory_slot);
+        player_ship.wing = equipped_wing.data.wing;
+        break;
+      case I_SLOT_THRUSTER:
+        switch_slot(&equipped_thruster, inventory_slot);
+        player_ship.thruster = equipped_thruster.data.thruster;
+        break;
+      case DEFAULT:
+        break;
+    }
   } else if (mode == STATION) {
-    // update inventory slots
+    // station mode drop item when click
     for (int i = 0; i < 9 ; i++) {
       if (inventory_slot == st_player.inventory + i) {
         drop_item(i);
@@ -280,6 +301,24 @@ void slot_on_click(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
     set_ui_text(inventory.ui_inventory_info_content_text, inventory_info_content_buffer, 
                 0.08, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
   }
+}
+
+void switch_slot(I_SLOT *slot_a, I_SLOT *slot_b) {
+  I_SLOT temp_slot;
+  temp_slot.type = slot_b->type;
+  temp_slot.rarity = slot_b->rarity;
+  temp_slot.weapon_type = slot_b->weapon_type;
+  temp_slot.data = slot_b->data;
+
+  slot_b->type = slot_a->type;
+  slot_b->rarity = slot_a->rarity;
+  slot_b->weapon_type = slot_a->weapon_type;
+  slot_b->data = slot_a->data;
+
+  slot_a->type = temp_slot.type;
+  slot_a->rarity = temp_slot.rarity;
+  slot_a->weapon_type = temp_slot.weapon_type;
+  slot_a->data = temp_slot.data;
 }
 
 void update_slot(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
