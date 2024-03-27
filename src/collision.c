@@ -15,7 +15,26 @@ void handle_collisions() {
   // Update simulations
   update_query_spheres();
   prepare_object_movement();
+
+  // Get current position of player
+  vec3 player_position;
+  if (mode == SPACE) {
+    glm_vec3_copy(player_ship.ent->translation, player_position);
+  } else {
+    glm_vec3_copy(st_player.ent->translation, player_position);
+  }
+
   integrate_sim(physics_sim, sim_sphere->translation, SIM_DIST);
+  
+  // Take new position and find distance between
+  if (mode == SPACE) {
+    st_player.total_distance_flown += glm_vec3_distance(player_position,
+                                        player_ship.ent->translation);
+  } else {
+    st_player.total_distance_walked += glm_vec3_distance(player_position,
+                                              st_player.ent->translation);
+  }
+
   integrate_projectiles();
   update_object_movement();
 
@@ -163,6 +182,7 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
         target_wrapper->type == PLAYER_SHIP_OBJ)) {
       if (mode == STATION || proj->type == BALLISTIC) {
         decrement_player_shield(proj->damage, 0.1);
+        st_player.total_damage_taken += proj->damage;
       } else { 
         float shield_dmg = 0;
         float health_dmg = 0;
@@ -175,10 +195,13 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
         }
         if (player_ship.cur_shield >= shield_dmg) {
           decrement_player_shield(shield_dmg, 0.1);
+          st_player.total_damage_taken += shield_dmg;
         } else if (player_ship.cur_shield > 0) {
           decrement_player_shield(player_ship.cur_shield, 0.1);
+          st_player.total_damage_taken += player_ship.cur_shield;
         } else {
           decrement_player_shield(health_dmg, 0.1);
+          st_player.total_damage_taken += health_dmg;
         }
       }
     } else if (proj->source == SRC_PLAYER &&
@@ -186,9 +209,11 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
                 target_wrapper->type == ENEMY_SHIP_OBJ)) {
       if (mode == STATION) {
         decrement_enemy_shield((size_t) target_wrapper->data, proj->damage, 0.1);
+        st_player.total_damage_dealt += proj->damage;
         if (mode == STATION && st_enemies[(size_t)target_wrapper->data].cur_health <= 0.0 && 
             st_enemies[(size_t)target_wrapper->data].dropped_xp == 0) {
           /*Enemey killed by player */
+          st_player.total_enemies_defeated++;
           st_enemies[(size_t)target_wrapper->data].dropped_xp = 1;
           float xp = st_enemies[(size_t)target_wrapper->data].amount_xp + E_LEVEL_SCALE * st_player.total_levels_completed;
           xp +=  gen_rand_float_plus_minus(xp/E_XP_RANGE);
@@ -204,6 +229,7 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
       } else {
         if (proj->type == BALLISTIC) {
           decrement_enemy_shield((size_t) target_wrapper->data, proj->damage, 0.1);
+          st_player.total_damage_dealt += proj->damage;
         } else {
           float shield_dmg = 0;
           float health_dmg = 0;
@@ -216,11 +242,17 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
           }
           if (sp_enemies[(size_t)target_wrapper->data].cur_shield >= shield_dmg) {
             decrement_enemy_shield((size_t) target_wrapper->data, shield_dmg, 0.1);
-          } else if (sp_enemies[(size_t)target_wrapper->data].cur_shield > 0) {
+            st_player.total_damage_dealt += shield_dmg;
+          } else if (sp_enemies[(size_t)target_wrapper->data].cur_shield > 0.0) {
             decrement_enemy_shield((size_t) target_wrapper->data, 
                                    sp_enemies[(size_t)target_wrapper->data].cur_shield, 0.1);
+            st_player.total_damage_dealt += sp_enemies[(size_t)target_wrapper->data].cur_shield;
           } else {
             decrement_enemy_shield((size_t) target_wrapper->data, health_dmg, 0.1);
+            st_player.total_damage_dealt += health_dmg;
+          }
+          if (sp_enemies[(size_t)target_wrapper->data].cur_health <= 0.0 ) {
+            st_player.total_ships_defeated++;  
           }
         }
       }
@@ -232,6 +264,7 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
 
 void handle_event_collisions(COLLISION *cols, size_t num_cols) {
   set_terminal_ui(0);
+  set_item_prompt(0);
   int player_out_of_bounds = 0;
 
   SOBJ *target_wrapper = NULL;
@@ -260,6 +293,13 @@ void handle_event_collisions(COLLISION *cols, size_t num_cols) {
     if ((a_wrapper->type == TERMINAL_OBJ && b_wrapper->type == PLAYER_OBJ) ||
         (a_wrapper->type == PLAYER_OBJ && b_wrapper->type == TERMINAL_OBJ)) {
       set_terminal_ui(1);
+      continue;
+    }
+
+    // Display station part pickup prompt if player close to part
+    if ((a_wrapper->type == PLAYER_OBJ && b_wrapper->type == ITEM_OBJ) ||
+        (a_wrapper->type == ITEM_OBJ && b_wrapper->type == PLAYER_OBJ)) {
+      set_item_prompt(1);
       continue;
     }
 
@@ -356,7 +396,8 @@ void decrement_player_health(float damage, float timing) {
     player_ship.cur_health -= damage;
     if (player_ship.cur_health <= 0.0) {
       player_ship.cur_health = 0.0;
-      fprintf(stderr, "END GAME\n");
+      /* End game */
+      game_over();
     } else {
       player_ship.invuln = 1;
       add_timer(timing, &player_ship.invuln, 0, NULL);
@@ -365,7 +406,8 @@ void decrement_player_health(float damage, float timing) {
     st_player.cur_health -= damage;
     if (st_player.cur_health <= 0.0) {
       st_player.cur_health = 0.0;
-      fprintf(stderr, "END GAME\n");
+      /* End game */
+      game_over();
     } else {
       st_player.invuln = 1;
       add_timer(timing, &st_player.invuln, 0, NULL);

@@ -36,6 +36,7 @@
 #define XP                   ("xp")
 #define GAMELEVEL            ("gamelevel")
 #define ESHOOT               ("eshoot")
+#define GAMEOVER             ("gameover")
 
 #define MAX_TOKS (10)
 
@@ -77,3 +78,4 @@ void set_player_health(float, int);
 void set_player_shield(float, int);
 void set_player_xp(float);
 void set_gamelevel(float);
+void game_over();

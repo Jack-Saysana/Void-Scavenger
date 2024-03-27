@@ -34,3 +34,5 @@ void update_radar_ui();
 void update_waypoint_ui();
 void update_damage_ui();
 void update_loading_ui();
+void game_over_ui_initialize();
+void init_item_prompt_ui();

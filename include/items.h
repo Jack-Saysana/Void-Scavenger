@@ -1,21 +1,27 @@
 #include <stdio.h>
+#include <stddef.h>
 #include <string.h>
-#include <cglm/cglm.h>
 #include <engine/engine.h>
 #include <const.h>
 #include <global_vars.h>
+#include <structs/item_str.h>
+
+#define BLUE_DIFF   (1.05)
+#define GREEN_DIFF  (1.15)
+#define PURPLE_DIFF (1.25)
+#define GOLD_DIFF   (1.5)
+
+extern size_t i_size;
 
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
-void sp_player_shield_dmg(void *);
-void reset_inventory();
+void set_enhancements(ST_ITEM *, int, int);
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
-
+int double_buffer(void **, size_t *, size_t);
 size_t init_wrapper(SOBJ_T, ENTITY *, void *);
 void delete_wrapper(size_t);
 
-ENTITY *init_player_ent();
-ENTITY *init_player_ship_ent();
+ENTITY *init_item_ent(PART_T);
 
-int add_timer(float, void *, int, void *);
+float gen_rand_float(float);

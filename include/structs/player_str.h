@@ -21,13 +21,13 @@ typedef struct skill_node {
 } SKILL;
 
 typedef enum item_slot_id {
+  I_SLOT_EMPTY,
   I_SLOT_REACTOR,
   I_SLOT_HULL,
   I_SLOT_SHIELD,
   I_SLOT_WEAPON,
   I_SLOT_WING,
-  I_SLOT_THRUSTER,
-  I_SLOT_EMPTY
+  I_SLOT_THRUSTER
 } I_SLOT_ID;
 
 typedef struct inv_slot {
@@ -40,6 +40,8 @@ typedef struct inv_slot {
     S_THRUSTER thruster;
   } data;
   I_SLOT_ID type;
+  unsigned int weapon_type;
+  int rarity;
 } I_SLOT;
 
 typedef struct player {
@@ -48,6 +50,7 @@ typedef struct player {
   size_t total_enemies_defeated;
   size_t total_ships_defeated;
   double total_distance_flown;
+  double total_distance_walked;
   double total_damage_dealt;
   double total_damage_taken;
   double total_experience;

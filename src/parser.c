@@ -284,6 +284,10 @@ void console_dispatcher() {
       /* BEGIN: quit */
       quit();
       /* END: quit */
+    } else if (strncmp(command[0].tok, GAMEOVER, sizeof(GAMEOVER)) == 0) {
+      /* BEGIN: gameover */
+      game_over();
+      /* END: gameover */
     } else if (strncmp(command[0].tok, SET_SIM_DIST,
                        sizeof(SET_SIM_DIST)) == 0) {
       /* BEGIN: ssd */

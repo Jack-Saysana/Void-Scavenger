@@ -28,7 +28,13 @@ typedef struct ship_parts {
 
   UI_COMP *ui_thruster_background;
   UI_COMP *ui_thruster_icon;
-  
+
+  UI_COMP *ui_ship_parts_info_background;
+  UI_COMP *ui_ship_parts_info_title_background;
+  UI_COMP *ui_ship_parts_info_title_text;
+  UI_COMP *ui_ship_parts_info_content_background;
+  UI_COMP *ui_ship_parts_info_content_text;
+
 } SHIP_PARTS;
 
 #endif
