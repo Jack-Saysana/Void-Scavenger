@@ -123,6 +123,7 @@ void st_enemy_pathfind(size_t index) {
   vec3 enemy_pos_2d = { enemy->ent->translation[X], 0.0,
                         enemy->ent->translation[Z] };
 
+  // Get vector to steer away from other enemies
   vec3 nearby_enemies = GLM_VEC3_ZERO_INIT;
   float nearby_enemies_speed = 0.0;
   glm_vec3_normalize_to(enemy->nearby_enemies, nearby_enemies);
@@ -142,48 +143,91 @@ void st_enemy_pathfind(size_t index) {
     return;
   }
 
+  // Overall target direction to be calculated
   vec3 target_dir = GLM_VEC3_ZERO_INIT;
   float target_speed = 0.0;
 
+  // Direction toward targeted corridor
   vec3 target_cd_dir = GLM_VEC3_ZERO_INIT;
   float target_cd_speed = 0.0;
 
+  // Search for player's corridor (if within range)
   size_t player_cd = INVALID_INDEX;
   size_t to_player_cd = INVALID_INDEX;
   search_st_player(enemy, enemy->cur_corridor, &player_cd, &to_player_cd);
 
+  vec3 to_player = GLM_VEC3_ZERO_INIT;
+  glm_vec3_sub(st_player.ent->translation, enemy->ent->translation, to_player);
+  float player_dist = glm_vec3_norm(to_player);
+
   // Determine course of action based on proximity and line of sight to player
   int clear_shot = 0;
-  fprintf(stderr, "Current frame:\n");
-  if (player_cd != INVALID_INDEX) {
-    fprintf(stderr, "  Found player\n");
-    // Get clear shot to player
-    clear_shot = check_clear_shot(enemy->cur_corridor, player_cd);
-    if (!clear_shot) {
-      fprintf(stderr, "  No clear shot\n");
-      // Pathfind to to_player_cd
-      enemy->target_corridor = to_player_cd;
+  if (enemy->weapon_type == RANGED) {
+    if (player_cd != INVALID_INDEX) {
+      // Get clear shot to player in a corridor with a valid range
+      clear_shot = check_clear_shot(enemy->cur_corridor, player_cd);
+      if (!clear_shot || player_dist > ST_ENEMY_RANGE_MAX) {
+        float test_dist = glm_vec3_distance(cd_obs[to_player_cd].ent->translation,
+                                            cd_obs[player_cd].ent->translation);
+        if (test_dist < ST_ENEMY_RANGE_MIN + 4.0 &&
+            check_clear_shot(to_player_cd, player_cd)) {
+          enemy->target_corridor = enemy->cur_corridor;
+        } else {
+          enemy->target_corridor = to_player_cd;
+        }
+      } else if (player_dist < ST_ENEMY_RANGE_MIN) {
+        // Find corridor out of range or out of line of sight
+        if (player_cd == enemy->cur_corridor) {
+          enemy->target_corridor = search_patrol_cd(enemy->cur_corridor,
+                                                    forward);
+        } else {
+          enemy->target_corridor = search_evasion_cd(enemy->cur_corridor,
+                                                     player_cd);
+        }
+        if (enemy->target_corridor == INVALID_INDEX) {
+          enemy->target_corridor = enemy->cur_corridor;
+        }
+      } else {
+        enemy->target_corridor = enemy->cur_corridor;
+      }
     } else {
-      fprintf(stderr, "  Clear shot found\n");
-      enemy->target_corridor = enemy->cur_corridor;
+      // Patrol
+      enemy->target_corridor = search_patrol_cd(enemy->cur_corridor, forward);
     }
   } else {
-    fprintf(stderr, "  Patrolling\n");
-    // Patrol
-    enemy->target_corridor = search_patrol_cd(enemy->cur_corridor, forward);
+    if (player_cd != INVALID_INDEX) {
+      clear_shot = check_clear_shot(enemy->cur_corridor, player_cd);
+      enemy->target_corridor = to_player_cd;
+    } else {
+      // Patrol
+      enemy->target_corridor = search_patrol_cd(enemy->cur_corridor, forward);
+    }
   }
 
   // Calculate target speed and direction based on course of action
   CORRIDOR *cd = cd_obs + enemy->target_corridor;
   vec3 cd_pos_2d = { cd->ent->translation[X], 0.0, cd->ent->translation[Z] };
   float to_cd_center = glm_vec3_distance(enemy_pos_2d, cd_pos_2d);
-  if (to_cd_center > 1.0 || !clear_shot) {
-    glm_vec3_sub(cd_pos_2d, enemy_pos_2d, target_cd_dir);
-    target_cd_speed = 1.0;
-  } else if (clear_shot) {
-    glm_vec3_sub(st_player.ent->translation, enemy->ent->translation,
-                 target_cd_dir);
-    target_cd_speed = 0.0;
+  if (enemy->weapon_type == RANGED) {
+    if (to_cd_center > 1.0) {
+      glm_vec3_sub(cd_pos_2d, enemy_pos_2d, target_cd_dir);
+      target_cd_speed = 2.0;
+    } else {
+      glm_vec3_copy(to_player, target_cd_dir);
+      target_cd_speed = 0.0;
+    }
+  } else {
+    if (clear_shot) {
+      glm_vec3_copy(to_player, target_cd_dir);
+      if (player_dist < 1.0) {
+        target_cd_speed = 0.0;
+      } else {
+        target_cd_speed = 2.0;
+      }
+    } else {
+      glm_vec3_sub(cd_pos_2d, enemy_pos_2d, target_cd_dir);
+      target_cd_speed = 2.0;
+    }
   }
 
   glm_vec3_add(nearby_enemies, target_cd_dir, target_dir);
@@ -205,9 +249,9 @@ void st_enemy_pathfind(size_t index) {
     glm_vec3_cross(forward, target_dir, test_dir);
     glm_vec3_normalize(test_dir);
     if (glm_vec3_dot(test_dir, (vec3) { 0.0, 1.0, 0.0 }) > 0.0) {
-      glm_vec3_copy((vec3) { 0.0, 3.0, 0.0 }, enemy->ent->ang_velocity);
+      glm_vec3_copy((vec3) { 0.0, 5.0, 0.0 }, enemy->ent->ang_velocity);
     } else {
-      glm_vec3_copy((vec3) { 0.0, -3.0, 0.0 }, enemy->ent->ang_velocity);
+      glm_vec3_copy((vec3) { 0.0, -5.0, 0.0 }, enemy->ent->ang_velocity);
     }
   } else {
     glm_vec3_zero(enemy->ent->ang_velocity);
@@ -269,7 +313,7 @@ void search_st_player(ST_ENEMY *enemy, size_t first_cd, size_t *player_cd,
     front = (front + 1) % queue_size;
 
     // Check if player in corridor
-    // (i.e player is <= 2.5 meters from center of corridor)
+    // (i.e player is <= 4.0 meters from center of corridor)
     cur_dist = glm_vec3_distance2(st_player_pos,
                                   cd_obs[cur_cd].ent->translation);
     if (cur_dist <= 4.0 * 4.0) {
@@ -340,6 +384,52 @@ size_t search_patrol_cd(size_t enemy_cd, vec3 enemy_dir) {
   }
 
   return best_cd;
+}
+
+size_t search_evasion_cd(size_t enemy_cd, size_t player_cd) {
+  vec3 to_player = GLM_VEC3_ZERO_INIT;
+  glm_vec3_sub(cd_obs[player_cd].ent->translation,
+               cd_obs[enemy_cd].ent->translation, to_player);
+  // Evasion cd is the neighbor index (0 - 3) of the enemy_cd which the enemy
+  // is attempting to move away from
+  int evasion_cd = 0;
+  if (to_player[X] < 0.0) {
+    evasion_cd = 1;
+  } else if (to_player[Z] > 0.0) {
+    evasion_cd = 2;
+  } else if (to_player[Z] < 0.0) {
+    evasion_cd = 3;
+  }
+
+  float enemy_dist = glm_vec3_distance(cd_obs[enemy_cd].ent->translation,
+                                       cd_obs[player_cd].ent->translation);
+
+  size_t ret = INVALID_INDEX;
+  float cur_dist = 0.0;
+  size_t cur_neighbor = 0;
+  for (int i = 0; i < 4; i++) {
+    cur_neighbor = cd_obs[enemy_cd].neighbors[i];
+    if (i == evasion_cd || cur_neighbor == INVALID_INDEX) {
+      continue;
+    }
+    cur_dist = glm_vec3_distance(cd_obs[cur_neighbor].ent->translation,
+                                 cd_obs[player_cd].ent->translation);
+    if (cur_dist < enemy_dist) {
+      continue;
+    }
+
+    if ((i == 0 && evasion_cd == 1) || (i == 1 && evasion_cd == 0) ||
+        (i == 2 && evasion_cd == 3) || (i == 3 && evasion_cd == 2)) {
+      // Prioritize the neighbor across from evasion_cd
+      ret = cd_obs[enemy_cd].neighbors[i];
+      break;
+    } else {
+      // If a less-than-ideal neighbor is valid, consider it
+      ret = cd_obs[enemy_cd].neighbors[i];
+    }
+  }
+
+  return ret;
 }
 
 int check_clear_shot(size_t enemy_cd, size_t player_cd) {

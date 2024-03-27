@@ -110,6 +110,8 @@
 
 // Pathfinding consts
 #define ST_ENEMY_SEARCH_DEPTH (4)
+#define ST_ENEMY_RANGE_MIN (10.0)
+#define ST_ENEMY_RANGE_MAX (15.0)
 
 // Misc
 #define X (0)

@@ -14,6 +14,7 @@ typedef struct search_frame {
 
 void search_st_player(ST_ENEMY *, size_t, size_t *, size_t *);
 size_t search_patrol_cd(size_t, vec3);
+size_t search_evasion_cd(size_t, size_t);
 int check_clear_shot(size_t, size_t);
 int double_search_queue(SEARCH_FRAME **, size_t *, size_t *, size_t *);
 

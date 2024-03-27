@@ -78,12 +78,15 @@ size_t init_enemy(size_t index) {
     new_enemy->cur_health = E_BASE_HEALTH_BRUTE;
     new_enemy->cur_speed = E_BASE_SPEED_BRUTE;
     new_enemy->fire_rate = E_BASE_FIRERATE_BRUTE;
-    new_enemy->weapon_type = RANGED;
   } else {
     new_enemy->max_health = E_BASE_HEALTH_NORMAL;
     new_enemy->cur_health = E_BASE_HEALTH_NORMAL;
     new_enemy->cur_speed = E_BASE_SPEED_NORMAL;
     new_enemy->fire_rate = E_BASE_FIRERATE_NORMAL;
+  }
+  if (gen_rand_int(2)) {
+    new_enemy->weapon_type = MELEE;
+  } else {
     new_enemy->weapon_type = RANGED;
   }
   new_enemy->invuln = 0;

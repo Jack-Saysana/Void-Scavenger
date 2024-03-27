@@ -28,3 +28,5 @@ void set_target_ship_index(size_t);
 
 void sp_enemy_pathfind(size_t);
 void st_enemy_pathfind(size_t);
+
+int gen_rand_int(int);
