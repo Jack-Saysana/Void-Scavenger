@@ -50,6 +50,7 @@ extern SIMULATION *render_sim;
 extern SIMULATION *event_sim;
 
 extern PLAYER st_player;
+extern size_t i_size;
 extern SHIP player_ship;
 
 // Buffer of wrapper structs
@@ -99,5 +100,19 @@ extern SKILL_TREE skill_tree;
 
 // Arena globals
 extern float space_size;
+
+// Keyboard flags
+extern int keyboard_enabled;
+
+// Time
+extern time_t start_time;
+
+// Equipped Parts
+extern I_SLOT equipped_hull;
+extern I_SLOT equipped_reactor;
+extern I_SLOT equipped_shield;
+extern I_SLOT equipped_thruster;
+extern I_SLOT equipped_weapon;
+extern I_SLOT equipped_wing;
 
 #endif

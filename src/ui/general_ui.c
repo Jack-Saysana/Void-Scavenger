@@ -52,6 +52,8 @@ void init_ui_components() {
   init_waypoint_ui();
   init_damage_ui();
   init_main_menu_ui();
+  game_over_ui_initialize();
+  init_item_prompt_ui();
 }
 
 /*

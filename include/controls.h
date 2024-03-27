@@ -70,5 +70,7 @@ void set_gamemode_space();
 void target_nearest_enemy();
 void toggle_st_waypoint();
 
-void prepare_object_movement();
-void update_object_movement();
+int get_item_prompt_state();
+void pickup_item();
+void drop_item(size_t);
+size_t find_first_filled();

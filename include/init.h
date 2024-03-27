@@ -1,5 +1,6 @@
 #include <global_vars.h>
 #include <const.h>
+#include <time.h>
 
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
@@ -18,6 +19,7 @@ void init_ui_components();
 int init_timer_queue();
 void free_timer_queue();
 void clear_models();
+int init_station_ship_parts_buffer();
 
 void cleanup_gl();
 void cleanup_scene();
@@ -30,3 +32,5 @@ void free_enemy_ship_buffer();
 void free_space_obstacle_buffer();
 void free_station_obstacle_buffer();
 void free_corridor_buffer();
+void free_timer_queue();
+void free_station_ship_parts_buffer();

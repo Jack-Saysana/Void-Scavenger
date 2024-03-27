@@ -36,6 +36,7 @@ int barebones_init() {
 int init_game() {
   // Init required globals
   space_size = BASE_SPACE_SIZE;
+  time(&start_time);
 
   // Add init functions below...
   int status = 0;

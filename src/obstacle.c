@@ -274,6 +274,7 @@ void sim_refresh_sp_obstacle(size_t index) {
     cur_col = obs->ent->model->colliders + i;
     if (cur_col->category == DEFAULT) {
       refresh_collider(physics_sim, obs->ent, i);
+      refresh_collider(combat_sim, obs->ent, i);
       refresh_collider(render_sim, obs->ent, i);
       refresh_collider(event_sim, obs->ent, i);
     }
@@ -287,6 +288,7 @@ void sim_refresh_st_obstacle(size_t index) {
     cur_col = obs->ent->model->colliders + i;
     if (cur_col->category == DEFAULT) {
       refresh_collider(physics_sim, obs->ent, i);
+      refresh_collider(combat_sim, obs->ent, i);
       refresh_collider(render_sim, obs->ent, i);
     }
   }
