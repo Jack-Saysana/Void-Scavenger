@@ -74,7 +74,7 @@ int init_skill_tree() {
     0.80, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(skill_tree.ui_skill_tree_page_background, "assets/ui/skill/survival_background.png");
+  set_ui_texture(skill_tree.ui_skill_tree_page_background, "assets/ui/hud_color.png");
 
   /*
   ================
@@ -88,7 +88,7 @@ int init_skill_tree() {
     0.16, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(skill_tree.ui_skill_tree_survival_background, "assets/ui/skill/survival_background.png");
+  set_ui_texture(skill_tree.ui_skill_tree_survival_background, "assets/ui/hud_color.png");
   set_ui_on_click(skill_tree.ui_skill_tree_survival_background, switch_survival_tab, NULL);
 
   skill_tree.ui_skill_tree_survival_text = add_ui_comp(
@@ -113,7 +113,7 @@ int init_skill_tree() {
     0.16, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(skill_tree.ui_skill_tree_combat_background, "assets/ui/skill/combat_background.png");
+  set_ui_texture(skill_tree.ui_skill_tree_combat_background, "assets/ui/hud_color_bg.png");
   set_ui_on_click(skill_tree.ui_skill_tree_combat_background, switch_combat_tab, NULL);
 
   skill_tree.ui_skill_tree_combat_text = add_ui_comp(
@@ -138,7 +138,7 @@ int init_skill_tree() {
     0.16, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(skill_tree.ui_skill_tree_exploration_background, "assets/ui/skill/exploration_background.png");
+  set_ui_texture(skill_tree.ui_skill_tree_exploration_background, "assets/ui/hud_color_bg.png");
   set_ui_on_click(skill_tree.ui_skill_tree_exploration_background, switch_exploration_tab, NULL);
 
   skill_tree.ui_skill_tree_exploration_text = add_ui_comp(
@@ -636,7 +636,9 @@ void switch_exploration_tab(UI_COMP *ui_tab_comp, void *unused) {
 void update_skill_tabs() {
   switch (skill_tree.current_page) {
     case T_SURVIVAL:
-      set_ui_texture(skill_tree.ui_skill_tree_page_background, "assets/ui/skill/survival_background.png");
+      set_ui_texture(skill_tree.ui_skill_tree_survival_background, "assets/ui/hud_color.png");
+      set_ui_texture(skill_tree.ui_skill_tree_combat_background, "assets/ui/hud_color_bg.png");
+      set_ui_texture(skill_tree.ui_skill_tree_exploration_background, "assets/ui/hud_color_bg.png");
       // Lv1
       if (skill_tree.skill_survival_lv1.unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_1_enable_icon, "assets/ui/skill/lv1_enable_survival.png");
       else set_ui_texture(skill_tree.ui_skill_tree_lv_1_enable_icon, "assets/ui/skill/lv1_disable_survival.png");
@@ -678,7 +680,9 @@ void update_skill_tabs() {
       set_ui_on_click(skill_tree.ui_skill_tree_lv_4_enable_background, (void *) skill_on_click, &skill_tree.skill_survival_lv4);
       break;
     case T_COMBAT:
-      set_ui_texture(skill_tree.ui_skill_tree_page_background, "assets/ui/skill/combat_background.png");
+      set_ui_texture(skill_tree.ui_skill_tree_survival_background, "assets/ui/hud_color_bg.png");
+      set_ui_texture(skill_tree.ui_skill_tree_combat_background, "assets/ui/hud_color.png");
+      set_ui_texture(skill_tree.ui_skill_tree_exploration_background, "assets/ui/hud_color_bg.png");
       // Lv1
       if (skill_tree.skill_combat_lv1.unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_1_enable_icon, "assets/ui/skill/lv1_enable_combat.png");
       else set_ui_texture(skill_tree.ui_skill_tree_lv_1_enable_icon, "assets/ui/skill/lv1_disable_combat.png");
@@ -720,7 +724,9 @@ void update_skill_tabs() {
       set_ui_on_click(skill_tree.ui_skill_tree_lv_4_enable_background, (void *) skill_on_click, &skill_tree.skill_combat_lv4);
       break;
     case T_EXPLORATION:
-      set_ui_texture(skill_tree.ui_skill_tree_page_background, "assets/ui/skill/exploration_background.png");
+      set_ui_texture(skill_tree.ui_skill_tree_survival_background, "assets/ui/hud_color_bg.png");
+      set_ui_texture(skill_tree.ui_skill_tree_combat_background, "assets/ui/hud_color_bg.png");
+      set_ui_texture(skill_tree.ui_skill_tree_exploration_background, "assets/ui/hud_color.png");
       // Lv1
       if (skill_tree.skill_exploration_lv1.unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_1_enable_icon, "assets/ui/skill/lv1_enable_exploration.png");
       else set_ui_texture(skill_tree.ui_skill_tree_lv_1_enable_icon, "assets/ui/skill/lv1_disable_exploration.png");
