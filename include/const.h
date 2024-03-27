@@ -83,7 +83,7 @@
 #define BASE_NUM_ENEMIES (5)
 
 // Asteroid constants
-#define NUM_ASTEROIDS (10)
+#define NUM_ASTEROIDS (30)
 #define NUM_ASTEROID_TYPES (5)
 #define TYPE_ASTEROID (0)
 

@@ -799,11 +799,13 @@ void skill_on_click(UI_COMP *ui_comp, SKILL *skill_slot) {
     if (skill_tree.skill_points > 0 && (skill_slot->parent_skill == NULL || skill_slot->parent_skill->unlocked)) {
       skill_tree.skill_points -= 1;
       skill_slot->unlocked = 1;
-      // call callback function
+      // TODO: awake callback function
       printf("%s UNLOCKED\n", skill_slot->skill_name);
     } else if (skill_tree.skill_points == 0) {
+      // TODO: add popup prompt
       printf("DO NOT HAVE ENOUGH SKILL POINTS\n");
     } else if (!skill_slot->parent_skill->unlocked) {
+      // TODO: add popup prompt
       printf("DO NOT UNLOCK PREREQUISITE SKILL\n");
     }
   }
