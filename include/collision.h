@@ -40,3 +40,6 @@ void player_health_dmg();
 
 void game_over();
 void set_item_prompt(int);
+
+void ship_shield_recharge_delay(void *);
+void update_timer_args(void *, void *, void *);
