@@ -1,5 +1,5 @@
 PROJ_NAME = VS
-CC = gcc
+CC = gcc 
 BUILD_DIR = ./bin
 SRC_DIR = ./src
 FILES = $(wildcard ./src/*.c)
@@ -28,6 +28,9 @@ endif
 
 .PHONY: clean run debug test main
 
+threads:
+	@$(MAKE) -j all
+
 all: ./bin/src $(BUILD_DIR)/$(PROJ_NAME)
 
 $(BUILD_DIR)/$(PROJ_NAME): $(SRC_OBJS)
@@ -50,7 +53,7 @@ clean:
 	@mkdir ./bin/
 	@cp ./lib/glfw3.dll ./bin/glfw3.dll
 
-run: all
+run: threads
 	@./bin/$(PROJ_NAME)
 
 debug:
