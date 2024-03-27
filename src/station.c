@@ -298,20 +298,20 @@ void free_maze(int **maze) {
 
 /*
   Rarity Table:
-    Gold   (5%)
-    Purple (10%)
-    Green  (20%)
-    Blue   (30%)
-    White  (35%)
+    Gold   (3%)
+    Purple (7%)
+    Green  (15%)
+    Blue   (25%)
+    White  (50%)
 */
 int ship_parts_rng() {
   int part_spawn_chance[RARITY_LEVELS] = {
-    65, 35, 15, 5, 0 
+    50, 25, 10, 3, 0 
   };
   int rand = gen_rand_int(100);
   for (int i = 0; i < RARITY_LEVELS && rand > -1; i++) {
     if (rand > part_spawn_chance[i]) {
-      return i;
+      return (RARITY_LEVELS - 1) - i;
     } 
   }
   return WHITE_RARITY;
