@@ -38,6 +38,19 @@ void eshoot_on(int on) {
   }
 }
 
+void set_gun(S_WEAPON_T type) {
+  if (type == BALLISTIC) {
+    player_ship.weapon.type = BALLISTIC;
+    player_ship.weapon.fire_rate = S_BASE_FIRERATE;
+  } else if (type == LASER) {
+    player_ship.weapon.type = LASER;
+    player_ship.weapon.fire_rate = S_BASE_FIRERATE_LASER;
+  } else {
+    player_ship.weapon.type = PLASMA;
+    player_ship.weapon.fire_rate = S_BASE_FIRERATE;
+  }
+}
+
 void set_gamemode_station() {
   if (mode == STATION) {
     return;

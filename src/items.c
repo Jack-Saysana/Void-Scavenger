@@ -326,7 +326,7 @@ void set_enhancements(ST_ITEM *part, int type, int rarity) {
       /* TODO: Fill in with laser specific changes */
       part->enhancements.weapon.type = LASER;
       part->enhancements.weapon.damage = S_BASE_DAMAGE;
-      part->enhancements.weapon.fire_rate = S_BASE_FIRERATE;
+      part->enhancements.weapon.fire_rate = S_BASE_FIRERATE_LASER;
       part->enhancements.weapon.max_power_draw = S_BASE_PWR_DRAW;
       part->enhancements.weapon.proj_speed = S_BASE_PROJ_SPEED;
       part->enhancements.weapon.range = S_BASE_RANGE;

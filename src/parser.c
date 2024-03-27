@@ -115,6 +115,27 @@ void console_dispatcher() {
             command_not_found();
           }
           /* END: set arena */
+        } else  if (strncmp(command[1].tok, GUN, sizeof(GUN)) == 0) {
+          /* BEGIN: set gun */
+            if (command[2].kind == IDENTIFIER &&
+                strncmp(command[2].tok, BALLISTIC_CMD, sizeof(BALLISTIC_CMD)) == 0) {
+              /* BEGIN: set gun ballistic */
+              set_gun(BALLISTIC);
+              /* END: set gun ballistic */
+            } else if (command[2].kind == IDENTIFIER &&
+                       strncmp(command[2].tok, LASER_CMD, sizeof(LASER_CMD)) == 0) {
+              /* BEGIN: set gun laser */
+              set_gun(LASER);
+              /* END: set gun laser */
+            } else if (command[2].kind == IDENTIFIER &&
+                       strncmp(command[2].tok, PLASMA_CMD, sizeof(PLASMA_CMD)) == 0) {
+              /* BEGIN: set gun plasma */
+              set_gun(PLASMA);
+              /* END: set gun plasma */
+            } else {
+              command_not_found();
+            }
+          /* END: set gun */
         } else if (strncmp(command[1].tok, PLAYER, sizeof(PLAYER)) == 0) {
           /* BEGIN: set player */
           if (command[2].kind == IDENTIFIER) {
