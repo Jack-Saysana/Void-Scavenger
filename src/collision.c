@@ -11,7 +11,26 @@ void handle_collisions() {
   // Update simulations
   update_query_spheres();
   prepare_object_movement();
+
+  // Get current position of player
+  vec3 player_position;
+  if (mode == SPACE) {
+    glm_vec3_copy(player_ship.ent->translation, player_position);
+  } else {
+    glm_vec3_copy(st_player.ent->translation, player_position);
+  }
+
   integrate_sim(physics_sim, sim_sphere->translation, SIM_DIST);
+  
+  // Take new position and find distance between
+  if (mode == SPACE) {
+    st_player.total_distance_flown += glm_vec3_distance(player_position,
+                                        player_ship.ent->translation);
+  } else {
+    st_player.total_distance_walked += glm_vec3_distance(player_position,
+                                              st_player.ent->translation);
+  }
+
   integrate_projectiles();
   update_object_movement();
 
@@ -104,10 +123,24 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
 
     if (proj->source == SRC_ENEMY && (target_wrapper->type == PLAYER_OBJ ||
         target_wrapper->type == PLAYER_SHIP_OBJ)) {
+      st_player.total_damage_taken += proj->damage;
       decrement_player_health(proj->damage, 0.1);
     } else if (proj->source == SRC_PLAYER &&
                (target_wrapper->type == ENEMY_OBJ ||
                 target_wrapper->type == ENEMY_SHIP_OBJ)) {
+      st_player.total_damage_dealt += proj->damage;
+      if (mode == SPACE) {
+        if (sp_enemies[(size_t) target_wrapper->data].cur_health - proj->damage
+            <= 0.0) {
+          st_player.total_ships_defeated++;
+        }
+      } else {
+        if (st_enemies[(size_t) target_wrapper->data].cur_health - proj->damage
+            <= 0.0) {
+          st_player.total_enemies_defeated++;
+        }
+
+      }
       decrement_enemy_health((size_t) target_wrapper->data, proj->damage, 0.1);
     }
 
@@ -117,6 +150,7 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
 
 void handle_event_collisions(COLLISION *cols, size_t num_cols) {
   set_terminal_ui(0);
+  set_item_prompt(0);
   int player_out_of_bounds = 0;
 
   SOBJ *target_wrapper = NULL;
@@ -145,6 +179,13 @@ void handle_event_collisions(COLLISION *cols, size_t num_cols) {
     if ((a_wrapper->type == TERMINAL_OBJ && b_wrapper->type == PLAYER_OBJ) ||
         (a_wrapper->type == PLAYER_OBJ && b_wrapper->type == TERMINAL_OBJ)) {
       set_terminal_ui(1);
+      continue;
+    }
+
+    // Display station part pickup prompt if player close to part
+    if ((a_wrapper->type == PLAYER_OBJ && b_wrapper->type == ITEM_OBJ) ||
+        (a_wrapper->type == ITEM_OBJ && b_wrapper->type == PLAYER_OBJ)) {
+      set_item_prompt(1);
       continue;
     }
 
@@ -205,7 +246,8 @@ void decrement_player_health(float damage, float timing) {
     player_ship.cur_health -= damage;
     if (player_ship.cur_health <= 0.0) {
       player_ship.cur_health = 0.0;
-      fprintf(stderr, "END GAME\n");
+      /* End game */
+      game_over();
     } else {
       player_ship.invuln = 1;
       add_timer(timing, &player_ship.invuln, 0, NULL);
@@ -214,7 +256,8 @@ void decrement_player_health(float damage, float timing) {
     st_player.cur_health -= damage;
     if (st_player.cur_health <= 0.0) {
       st_player.cur_health = 0.0;
-      fprintf(stderr, "END GAME\n");
+      /* End game */
+      game_over();
     } else {
       st_player.invuln = 1;
       add_timer(timing, &st_player.invuln, 0, NULL);

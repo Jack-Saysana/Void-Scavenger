@@ -3,6 +3,7 @@
 #include <const.h>
 #include <global_vars.h>
 
+
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
 void handle_physics_collisions(COLLISION *, size_t);
@@ -31,3 +32,7 @@ void stop_coords_warning();
 void set_gamemode_station();
 void set_terminal_ui(int);
 void st_enemy_hurt_anim(void *);
+
+void game_over();
+
+void set_item_prompt(int);

@@ -36,7 +36,9 @@ int init_controls() {
 
 void keyboard_input(GLFWwindow *window) {
   // Insert keyboard handlers here...
-  input_keys(window);
+  if (keyboard_enabled) {
+    input_keys(window);
+  }
 }
 
 void fb_size_callback(GLFWwindow *window, int res_x, int res_y) {
@@ -249,12 +251,25 @@ void input_keys(GLFWwindow *window) {
           toggle_inventory();
         }
         if (i == GLFW_KEY_K && !holding_alpha[i - GLFW_KEY_A]) {
-          /* Handle I press */
+          /* Handle K press */
           toggle_skill_tree();
         }
         if (i == GLFW_KEY_E && get_terminal_ui_state() &&
                    !holding_alpha[i - GLFW_KEY_A]) {
+          /* Handle using terminal in space mode */
           set_gamemode_space();
+          st_player.total_levels_completed++;
+        }
+        if (i == GLFW_KEY_E && get_item_prompt_state() &&
+            !holding_alpha[i - GLFW_KEY_A]) {
+          /* Handle picking up an item */
+          pickup_item();
+        }
+        if (i == GLFW_KEY_Q && !holding_alpha[i - GLFW_KEY_A]) {
+          size_t to_drop = find_first_filled();
+          if (to_drop != INVALID_INDEX) {
+            drop_item(to_drop);
+          }
         }
       } else if (!console_enabled && mode == SPACE) {
         if (i == GLFW_KEY_W) {
@@ -296,6 +311,9 @@ void input_keys(GLFWwindow *window) {
         }  else if (i == GLFW_KEY_P && !holding_alpha[i - GLFW_KEY_A]) {
           /* Handle P press (Ship Parts at Space Mode) */
           toggle_ship_parts();
+        } else if (i == GLFW_KEY_I && !holding_alpha[i - GLFW_KEY_A]) {
+          /* Handle I press */
+          toggle_inventory();
         }
       }
       holding_alpha[i - GLFW_KEY_A] = 1;
@@ -464,4 +482,8 @@ void update_cursor_enabledness() {
 
 void enable_shooting() {
   can_shoot = 1;
+}
+
+void set_keyboard_enabledness(int set) {
+  keyboard_enabled = set;
 }

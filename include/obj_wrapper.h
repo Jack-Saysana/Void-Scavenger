@@ -16,3 +16,4 @@ void sim_refresh_st_obstacle(size_t);
 void sim_refresh_sp_obstacle(size_t);
 void sim_refresh_proj(size_t);
 void sim_refresh_corridor(size_t);
+void sim_refresh_item(size_t);
