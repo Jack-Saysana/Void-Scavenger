@@ -6,6 +6,7 @@
 #include <float.h>
 #include <global_vars.h>
 #include <structs/ship_str.h>
+#include <const.h>
 
 /* DEFINES */
 /* Command identifiers and arguments */
@@ -41,10 +42,20 @@
 #define GAMEOVER             ("gameover")
 #define GLOW                 ("glow")
 #define ITEM                 ("item")
-
+#define WHITE_CMD            ("white")
+#define BLUE_CMD             ("blue")
+#define GREEN_CMD            ("green")
+#define PURPLE_CMD           ("purple")
+#define GOLD_CMD             ("gold")
 #define BALLISTIC_CMD        ("ballistic")
 #define LASER_CMD            ("laser")
 #define PLASMA_CMD           ("plasma")
+#define HULL_CMD             ("hull")
+#define SHIELD_CMD           ("sheild")
+#define REACTOR_CMD          ("reactor")
+#define WING_CMD             ("wing")
+#define THRUSTER_CMD         ("thruster")
+
 #define MAX_TOKS (10)
 
 /* GLOBALS */
@@ -88,3 +99,4 @@ void set_gamelevel(float);
 void game_over();
 void toggle_item_glow();
 void set_gun(S_WEAPON_T);
+void spawn_ship_part_cmd(vec3, int, int);
