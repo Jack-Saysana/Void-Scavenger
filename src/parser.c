@@ -351,6 +351,16 @@ void console_dispatcher() {
       /* BEGIN: fps */
       fps_toggle();
       /* END: fps */
+    } else if (strncmp(command[0].tok, ITEM, sizeof(ITEM)) == 0) {
+      /* BEGIN: item */
+      if (strncmp(command[1].tok, GLOW, sizeof(GLOW)) == 0) {
+        /* BEGIN: item glow */
+        toggle_item_glow();
+        /* END: item glow */
+      } else {
+        command_not_found();
+      }
+      /* END: item */
     } else {
       /* NON-RECOGNIZED IDENTIFIER */
       command_not_found();

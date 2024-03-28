@@ -39,6 +39,9 @@
 #define ESHOOT               ("eshoot")
 #define GUN                  ("gun")
 #define GAMEOVER             ("gameover")
+#define GLOW                 ("glow")
+#define ITEM                 ("item")
+
 #define BALLISTIC_CMD        ("ballistic")
 #define LASER_CMD            ("laser")
 #define PLASMA_CMD           ("plasma")
@@ -83,4 +86,5 @@ void set_player_shield(float, int);
 void set_player_xp(float);
 void set_gamelevel(float);
 void game_over();
+void toggle_item_glow();
 void set_gun(S_WEAPON_T);

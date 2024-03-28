@@ -64,6 +64,9 @@ int ESHOOT_ON = 0;
 int keyboard_enabled = 1;
 time_t start_time;
 
+unsigned int num_pt_lights = 0;
+
+unsigned int item_glow = 0;
 I_SLOT equipped_hull;
 I_SLOT equipped_reactor;
 I_SLOT equipped_shield;

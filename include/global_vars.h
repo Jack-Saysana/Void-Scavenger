@@ -107,6 +107,10 @@ extern int keyboard_enabled;
 // Time
 extern time_t start_time;
 
+// Point lights
+extern unsigned int num_pt_lights;
+extern unsigned int item_glow;
+
 // Equipped Parts
 extern I_SLOT equipped_hull;
 extern I_SLOT equipped_reactor;

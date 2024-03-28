@@ -30,6 +30,7 @@
 #define actors_dir "./assets/actors"
 #define setp_dir "./assets/set_pieces"
 #define st_ship_parts_dir "./assets/station_ship_parts"
+#define shaders_dir "./src/shaders"
 
 void load_common_assets() {
   c_mods.sphere_model = read_model(misc_dir"/sphere/sphere.obj");

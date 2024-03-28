@@ -9,6 +9,7 @@
 #include <structs/item_str.h>
 #include <const.h>
 #include <global_vars.h>
+#include <string.h>
 
 // Local structs
 typedef struct loaded_model {
@@ -27,7 +28,8 @@ static unsigned int basic_shader = 0;
 static unsigned int collider_shader = 0;
 static unsigned int bone_shader = 0;
 static unsigned int proj_shader = 0;
-static unsigned int station_sp_shader = 0;
+static unsigned int glow_entity_shader = 0;
+static unsigned int glow_model_shader = 0;
 
 // Common models
 typedef struct common_models {
@@ -101,5 +103,6 @@ void get_cam_matrix(CAM *, mat4);
 void player_ship_thrust_move();
 ENTITY **get_dead_zones();
 void get_player_gun_mat(mat4);
+void populate_point_lights(unsigned int);
 void update_radar_fb();
 void update_main_menu_fb();

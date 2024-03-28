@@ -129,6 +129,9 @@ void set_player_shield(float shield, int mode) {
   }
 }
 
+void toggle_item_glow() {
+  item_glow = !item_glow;
+}
 void set_player_xp(float xp) {
   st_player.cur_experience = xp;
 }
