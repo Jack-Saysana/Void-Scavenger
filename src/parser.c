@@ -275,7 +275,45 @@ void console_dispatcher() {
       /* END: give */
     } else if (strncmp(command[0].tok, SPAWN, sizeof(SPAWN)) == 0) {
       /* BEGIN: spawn */
-      command_not_found();
+        int type = -1;
+        int rarity = -1;
+      if (strncmp(command[1].tok, BALLISTIC_CMD, sizeof(BALLISTIC_CMD)) == 0) {
+        type = TYPE_WEAPON_BALLISTIC;
+      } else if (strncmp(command[1].tok, LASER_CMD, sizeof(LASER_CMD)) == 0) {
+        type = TYPE_WEAPON_LASER;
+      } else if (strncmp(command[1].tok, PLASMA_CMD, sizeof(PLASMA_CMD)) == 0) {
+        type = TYPE_WEAPON_PLASMA;
+      } else if (strncmp(command[1].tok, HULL_CMD, sizeof(HULL_CMD)) == 0) {
+        type = TYPE_HULL;
+      } else if (strncmp(command[1].tok, SHIELD_CMD, sizeof(SHIELD_CMD)) == 0) {
+        type = TYPE_SHIELD;
+      } else if (strncmp(command[1].tok, REACTOR_CMD, sizeof(REACTOR_CMD)) == 0) {
+        type = TYPE_REACTOR;
+      } else if (strncmp(command[1].tok, WING_CMD, sizeof(WING_CMD)) == 0) {
+        type = TYPE_WING;
+      } else if (strncmp(command[1].tok, THRUSTER_CMD, sizeof(THRUSTER_CMD)) == 0) {
+        type = TYPE_THRUSTER;
+      } else {
+        command_not_found();
+      }
+      if (strncmp(command[2].tok, WHITE_CMD, sizeof(WHITE_CMD)) == 0) {
+        rarity = WHITE_RARITY;
+      } else if (strncmp(command[2].tok, BLUE_CMD, sizeof(BLUE_CMD)) == 0) {
+        rarity = BLUE_RARITY;
+      } else if (strncmp(command[2].tok, GREEN_CMD, sizeof(GREEN_CMD)) == 0) {
+        rarity = GREEN_RARITY;
+      } else if (strncmp(command[2].tok, PURPLE_CMD, sizeof(PURPLE_CMD)) == 0) {
+        rarity = PURPLE_RARITY;
+      } else if (strncmp(command[2].tok, GOLD_CMD, sizeof(GOLD_CMD)) == 0) {
+        rarity = GOLD_RARITY;
+      } else {
+        command_not_found();
+      }
+      if (type == -1 || rarity == -1) {
+        command_not_found();
+      } else {
+        spawn_ship_part_cmd(st_player.ent->translation, type, rarity);
+      }
       /* END: spawn  */
     } else if (strncmp(command[0].tok, COORDS, sizeof(COORDS)) == 0) {
       /* BEGIN: coords */

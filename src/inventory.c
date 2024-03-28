@@ -3,12 +3,11 @@
 void pickup_item() {
   I_SLOT *slot = inv_first_avail();
   if (!slot) {
-    // TODO: add popup prompt
     printf("INVENTORY IS FULL\n");
     return;
   }
 
-  /* Finds the part which is closet to the player */
+  /* Finds the part which is closest to the player */
   COLLISION *col = NULL;
   size_t buff_size = sim_get_nearby(physics_sim, &col,
                      st_player.ent->translation, 5.0);
@@ -48,8 +47,12 @@ void pickup_item() {
       break;
     case PART_WEAPON_BALLISTIC:
       slot->weapon_type = W_BALLISTIC;
+      slot->type = I_SLOT_WEAPON;
+      break;
     case PART_WEAPON_LASER:
       slot->weapon_type = LASER;
+      slot->type = I_SLOT_WEAPON;
+      break;
     case PART_WEAPON_PLASMA:
       slot->weapon_type = PLASMA;
       slot->type = I_SLOT_WEAPON;
