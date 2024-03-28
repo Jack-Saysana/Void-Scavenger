@@ -27,3 +27,7 @@ void update_timer_args(void *, void *, void *);
 
 size_t get_target_ship_index();
 void set_target_ship_index(size_t);
+
+size_t init_projectile(vec3, vec3, float, PROJ_SOURCE, S_WEAPON_T, float,
+                       float, size_t);
+int projectile_insert_sim(size_t);

@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <float.h>
+#include <const.h>
 
 /* DEFINES */
 #define MAX_TOKENS (10)

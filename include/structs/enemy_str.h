@@ -31,6 +31,8 @@ typedef struct station_enemy {
   float fire_rate;
   E_WEAP_T weapon_type;
   int invuln;
+  int dropped_xp;
+  float amount_xp;
 
   // Animation data
   unsigned int cur_frame;

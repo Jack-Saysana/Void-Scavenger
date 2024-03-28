@@ -180,25 +180,99 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
 
     if (proj->source == SRC_ENEMY && (target_wrapper->type == PLAYER_OBJ ||
         target_wrapper->type == PLAYER_SHIP_OBJ)) {
-      decrement_player_shield(proj->damage, 0.1);
-      st_player.total_damage_taken += proj->damage;
+      if (mode == STATION || proj->type == BALLISTIC) {
+        decrement_player_shield(proj->damage, 0.1);
+        st_player.total_damage_taken += proj->damage;
+      } else { 
+        float shield_dmg = 0;
+        float health_dmg = 0;
+        if (proj->type == LASER) {
+          shield_dmg = proj->damage + (proj->damage/2);
+          health_dmg = proj->damage - (proj->damage/2);
+        } else if (proj->type == PLASMA) {
+          shield_dmg = proj->damage - (proj->damage/2);
+          health_dmg = proj->damage + (proj->damage/2);
+        }
+        if (player_ship.cur_shield >= shield_dmg) {
+          decrement_player_shield(shield_dmg, 0.1);
+          st_player.total_damage_taken += shield_dmg;
+        } else if (player_ship.cur_shield > 0) {
+          decrement_player_shield(player_ship.cur_shield, 0.1);
+          st_player.total_damage_taken += player_ship.cur_shield;
+        } else {
+          decrement_player_shield(health_dmg, 0.1);
+          st_player.total_damage_taken += health_dmg;
+        }
+      }
     } else if (proj->source == SRC_PLAYER &&
                (target_wrapper->type == ENEMY_OBJ ||
                 target_wrapper->type == ENEMY_SHIP_OBJ)) {
-      decrement_enemy_shield((size_t) target_wrapper->data, proj->damage, 0.1);
-      st_player.total_damage_dealt += proj->damage;
-      if (mode == SPACE) {
-        if (sp_enemies[(size_t) target_wrapper->data].cur_health - proj->damage
-            <= 0.0) {
-          st_player.total_ships_defeated++;
+      if (mode == STATION) {
+        if (st_enemies[(size_t)target_wrapper->data].cur_health > 0.0) {
+          st_player.total_damage_dealt += proj->damage;
+        }
+        decrement_enemy_shield((size_t) target_wrapper->data, proj->damage, 0.1);
+        if (mode == STATION && st_enemies[(size_t)target_wrapper->data].cur_health <= 0.0 && 
+            st_enemies[(size_t)target_wrapper->data].dropped_xp == 0) {
+          /*Enemey killed by player */
+          st_player.total_enemies_defeated++;
+          st_enemies[(size_t)target_wrapper->data].dropped_xp = 1;
+          float xp = st_enemies[(size_t)target_wrapper->data].amount_xp + E_LEVEL_SCALE * st_player.total_levels_completed;
+          xp +=  gen_rand_float_plus_minus(xp/E_XP_RANGE);
+          st_player.cur_experience += (int)xp;
+          st_player.total_experience += (int) xp;
+          if (st_player.cur_experience >= st_player.max_experience) {
+            st_player.cur_experience -= st_player.max_experience;
+            st_player.cur_level++;
+            st_player.max_experience += P_LEVEL_SCALE*st_player.cur_level;
+            st_player.skill_points++;
+          }
         }
       } else {
-        if (st_enemies[(size_t) target_wrapper->data].cur_health - proj->damage
-            <= 0.0) {
-          st_player.total_enemies_defeated++;
+        if (proj->type == BALLISTIC) {
+          if (sp_enemies[(size_t)target_wrapper->data].cur_health > 0.0 && 
+              !sp_enemies[(size_t)target_wrapper->data].invuln) {
+            st_player.total_damage_dealt += proj->damage;
+          }
+          decrement_enemy_shield((size_t) target_wrapper->data, proj->damage, 0.1);
+        } else {
+          float shield_dmg = 0;
+          float health_dmg = 0;
+          if (proj->type == LASER) {
+            shield_dmg = proj->damage + (proj->damage/2);
+            health_dmg = proj->damage - (proj->damage/2);
+          } else if (proj->type == PLASMA) {
+            shield_dmg = proj->damage - (proj->damage/2);
+            health_dmg = proj->damage + (proj->damage/2);
+          }
+          if (sp_enemies[(size_t)target_wrapper->data].cur_shield >= shield_dmg) {
+            if (!sp_enemies[(size_t)target_wrapper->data].invuln) {
+              st_player.total_damage_dealt += shield_dmg;
+            }
+            decrement_enemy_shield((size_t) target_wrapper->data, shield_dmg, 0.1);
+          } else if (sp_enemies[(size_t)target_wrapper->data].cur_shield > 0.0) {
+            if (!sp_enemies[(size_t)target_wrapper->data].invuln) {
+              st_player.total_damage_dealt += sp_enemies[(size_t)target_wrapper->data].cur_shield;
+            }
+            decrement_enemy_shield((size_t) target_wrapper->data, 
+                                   sp_enemies[(size_t)target_wrapper->data].cur_shield, 0.1);
+          } else {
+            if (sp_enemies[(size_t)target_wrapper->data].cur_health > 0.0 && 
+              !sp_enemies[(size_t)target_wrapper->data].invuln) {
+              if (health_dmg < sp_enemies[(size_t)target_wrapper->data].cur_health) {
+                st_player.total_damage_dealt += health_dmg;
+              } else {
+                st_player.total_damage_dealt += sp_enemies[(size_t)target_wrapper->data].cur_health;
+              }
+            }
+            decrement_enemy_shield((size_t) target_wrapper->data, health_dmg, 0.1);
+          }
+        }
+        if (sp_enemies[(size_t)target_wrapper->data].cur_health <= 0.0 &&
+            !sp_enemies[(size_t)target_wrapper->data].invuln) {
+            st_player.total_ships_defeated++;
         }
       }
-      decrement_enemy_health((size_t) target_wrapper->data, proj->damage, 0.1);
     }
 
     start_proj_collision_anim((size_t) proj_wrapper->data);
@@ -311,7 +385,6 @@ void decrement_player_shield(float damage, float timing) {
     }
     if (player_ship.cur_health <= 0.0) {
       player_ship.cur_health = 0.0;
-      fprintf(stderr, "END GAME\n");
     } else {
       player_ship.invuln = 1;
       add_timer(timing, &player_ship.invuln, 0, NULL);
@@ -325,7 +398,6 @@ void decrement_player_shield(float damage, float timing) {
     }
     if (st_player.cur_health <= 0.0) {
       st_player.cur_health = 0.0;
-      fprintf(stderr, "END GAME\n");
     } else {
       st_player.invuln = 1;
       add_timer(timing, &st_player.invuln, 0, NULL);

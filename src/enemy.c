@@ -78,15 +78,18 @@ size_t init_enemy(size_t index) {
     new_enemy->cur_speed = E_BASE_SPEED_BRUTE;
     new_enemy->fire_rate = E_BASE_FIRERATE_BRUTE;
     new_enemy->weapon_type = RANGED;
+    new_enemy->amount_xp = E_BRUTE_XP;
   } else {
     new_enemy->max_health = E_BASE_HEALTH_NORMAL;
     new_enemy->cur_health = E_BASE_HEALTH_NORMAL;
     new_enemy->cur_speed = E_BASE_SPEED_NORMAL;
     new_enemy->fire_rate = E_BASE_FIRERATE_NORMAL;
     new_enemy->weapon_type = RANGED;
+    new_enemy->amount_xp = E_BASE_XP;
   }
   new_enemy->invuln = 0;
   new_enemy->cur_frame = INVALID_FRAME;
+  new_enemy->dropped_xp = 0;
 
   num_enemies++;
   if (num_enemies == enemy_buff_len) {
@@ -187,20 +190,25 @@ void spawn_st_enemy(vec3 pos, int type) {
 
 // =============================== SPACE MODE ================================
 
-size_t init_enemy_ship(int index) {
+size_t init_enemy_ship(int index, int mov_type) {
   if (sp_enemies == NULL) {
     fprintf(stderr, "Error: inserting into deallocated enemy buffer\n");
     return INVALID_INDEX;
   }
-  if (index >= NUM_ALIEN_SHIP_TYPES) {
+  if (index >= NUM_ALIEN_ATTACK_TYPES || mov_type >= NUM_ALIEN_MOV_TYPES) {
     fprintf(stderr, "error: invalid enemy type\n");
     return INVALID_INDEX;
   }
 
   SHIP *new_enemy = sp_enemies + num_enemies;
   memset(new_enemy, 0, sizeof(SHIP));
-
-  new_enemy->ent = init_alien_ship_ent(index);
+  if (index == STANDARD_BALLISTIC || index == STANDARD_LASER || index == STANDARD_PLASMA) {
+    new_enemy->ent = init_alien_ship_ent(STANDARD_BALLISTIC);
+  } else if (index == HEALTH_BALLISTIC || index == HEALTH_LASER) {
+    new_enemy->ent = init_alien_ship_ent(HEALTH_BALLISTIC);
+  } else {
+    new_enemy->ent = init_alien_ship_ent(SHIELD_BALLISTIC);
+  }
   if (new_enemy->ent == NULL) {
     fprintf(stderr, "Error: Unable to allocate enemy entity\n");
     return INVALID_INDEX;;
@@ -214,25 +222,67 @@ size_t init_enemy_ship(int index) {
     return -1;
   }
 
+  if (index == STANDARD_BALLISTIC) {
+    new_enemy->weapon.type = BALLISTIC;
+    new_enemy->hull.max_health = S_BASE_HEALTH;
+    new_enemy->shield.max_shield = S_BASE_SHIELD;
+  } else if (index == HEALTH_BALLISTIC) {
+    new_enemy->weapon.type = BALLISTIC;
+    new_enemy->hull.max_health = S_E_HEALTH_TYPE_BASE_HEALTH;
+    new_enemy->shield.max_shield = S_E_HEALTH_TYPE_BASE_SHIELD;
+  } else if (index == SHIELD_BALLISTIC) {
+    new_enemy->weapon.type = BALLISTIC;
+    new_enemy->hull.max_health = S_E_SHIELD_TYPE_BASE_HEALTH;
+    new_enemy->shield.max_shield = S_E_SHIELD_TYPE_BASE_SHIELD;
+  } else if (index == STANDARD_PLASMA) {
+    new_enemy->weapon.type = PLASMA;
+    new_enemy->hull.max_health = S_BASE_HEALTH;
+    new_enemy->shield.max_shield = S_BASE_SHIELD;
+  } else if (index == STANDARD_LASER) {
+    new_enemy->weapon.type = LASER;
+    new_enemy->hull.max_health = S_BASE_HEALTH;
+    new_enemy->shield.max_shield = S_BASE_SHIELD;
+  } else if (index == HEALTH_LASER) {
+    new_enemy->weapon.type = LASER;
+    new_enemy->hull.max_health = S_E_HEALTH_TYPE_BASE_HEALTH;
+    new_enemy->shield.max_shield = S_E_HEALTH_TYPE_BASE_SHIELD;
+  } else if (index == SHIELD_PLASMA) {
+    new_enemy->weapon.type = PLASMA;
+    new_enemy->hull.max_health = S_E_SHIELD_TYPE_BASE_HEALTH;
+    new_enemy->shield.max_shield = S_E_SHIELD_TYPE_BASE_SHIELD;
+  }
+
+  if (mov_type == E_LOW_SPEED) {
+    new_enemy->thruster.max_vel = S_BASE_VEL;
+    new_enemy->thruster.max_accel = S_BASE_ACCEL;
+  } else if (mov_type == E_MID_SPEED) {
+    new_enemy->thruster.max_vel = S_E_MID_SPEED_BASE_VEL;
+    new_enemy->thruster.max_accel = S_E_MID_SPEED_BASE_ACCEL;
+  } else if (mov_type == E_HIGH_SPEED) {
+    new_enemy->thruster.max_vel = S_E_HIGH_SPEED_BASE_VEL;
+    new_enemy->thruster.max_accel = S_E_HIGH_SPEED_BASE_ACCEL;
+  } else if (mov_type == E_ULTRA_SPEED) {
+    new_enemy->thruster.max_vel = S_E_ULTRA_SPEED_BASE_VEL;
+    new_enemy->thruster.max_accel = S_E_ULTRA_SPEED_BASE_ACCEL;
+  }
+
   new_enemy->reactor.max_output = S_BASE_PWR_OUTPUT;
-  new_enemy->hull.max_health = S_BASE_HEALTH;
-  new_enemy->shield.max_shield = S_BASE_SHIELD;
   new_enemy->shield.recharge_rate = S_BASE_SHIELD_RECHARGE;
   new_enemy->shield.recharge_delay = S_BASE_SHIELD_DELAY;
   new_enemy->shield.power_draw = S_BASE_PWR_DRAW;
-  new_enemy->weapon.type = BALLISTIC;
   new_enemy->weapon.damage = S_BASE_DAMAGE;
   new_enemy->weapon.fire_rate = S_BASE_FIRERATE;
   new_enemy->weapon.max_power_draw = S_BASE_PWR_DRAW;
+  new_enemy->weapon.proj_speed = S_BASE_PROJ_SPEED;
+  new_enemy->weapon.range = S_BASE_RANGE;
   new_enemy->wing.max_ang_vel = S_BASE_ANG_VEL;
   new_enemy->wing.max_ang_accel = S_BASE_ANG_ACCEL;
-  new_enemy->thruster.max_vel = S_BASE_VEL;
-  new_enemy->thruster.max_accel = S_BASE_ACCEL;
   new_enemy->thruster.max_power_draw = S_BASE_PWR_DRAW;
 
   new_enemy->cur_health = new_enemy->hull.max_health;
   new_enemy->cur_shield = new_enemy->shield.max_shield;
   new_enemy->invuln = 0;
+  new_enemy->e_can_shoot = 1;
 
   num_enemies++;
   if (num_enemies == enemy_buff_len) {
@@ -330,8 +380,8 @@ void sim_refresh_sp_enemy(size_t index) {
   }
 }
 
-void spawn_sp_enemy(vec3 pos, versor rot, int type) {
-  size_t index = init_enemy_ship(type);
+void spawn_sp_enemy(vec3 pos, versor rot, int type, int mov_type) {
+  size_t index = init_enemy_ship(type, mov_type);
   glm_vec3_copy(pos, sp_enemies[index].ent->translation);
   glm_quat_copy(rot, sp_enemies[index].ent->rotation);
   sp_enemy_insert_sim(index);
@@ -453,6 +503,36 @@ void sp_enemy_pathfind(size_t index) {
     }
   }
   glm_vec3_scale_as(forward, enemy->cur_speed, enemy->ent->velocity);
+  if (ESHOOT_ON && enemy->e_can_shoot) {
+    /* fire rate timer */
+        enemy->e_can_shoot = 0;
+        add_timer(1, (void *) &enemy->e_can_shoot, 1, NULL);
+        /* get ship vectors */
+        vec3 ship_forward;
+        glm_quat_rotatev(enemy->ent->rotation, (vec3){-1.0, 0.0, 0.0}, ship_forward);
+        glm_normalize(ship_forward);
+        vec3 ship_side;
+        glm_quat_rotatev(enemy->ent->rotation, (vec3){0.0, 0.0, 1.0}, ship_side);
+        glm_normalize(ship_side);
+        vec3 ship_up;
+        glm_quat_rotatev(enemy->ent->rotation, (vec3){0.0, 1.0, 0.0}, ship_up);
+        glm_normalize(ship_up);
+        /* get left gun offset pos */
+        vec3 gun_pos = GLM_VEC3_ZERO_INIT;
+        glm_vec3_scale_as(ship_forward, 12.0, gun_pos);
+        glm_vec3_add(enemy->ent->translation, gun_pos, gun_pos);
+        /* spawn projectile*/
+        size_t proj_index = init_projectile(gun_pos,
+                                            ship_forward,
+                                            enemy->weapon.proj_speed +
+                                            enemy->cur_speed,
+                                            SRC_ENEMY,
+                                            enemy->weapon.type,
+                                            enemy->weapon.damage,
+                                            enemy->weapon.range,
+                                            0);
+        projectile_insert_sim(proj_index);
+  }
 }
 
 void st_enemy_pathfind(size_t index) {

@@ -56,6 +56,8 @@ void free_common_assets() {
 void load_sp_assets() {
   sp_mods.player_ship_model = read_model(actors_dir"/player_ship/player_ship.obj");
   sp_mods.alien_ship_models[0] = read_model(actors_dir"/alien_ship_1/alien_ship_1.obj");
+  sp_mods.alien_ship_models[1] = read_model(actors_dir"/alien_ship_2/alien_ship_2.obj");
+  sp_mods.alien_ship_models[2] = read_model(actors_dir"/alien_ship_3/alien_ship_3.obj");
   sp_mods.proj_model = read_model(misc_dir"/sp_projectile/sp_projectile.obj");
   sp_mods.station_model = read_model(setp_dir"/station/station.obj");
   sp_mods.asteroid_models[0] = read_model(setp_dir"/asteroid_1/asteroid_1.obj");
@@ -66,20 +68,24 @@ void load_sp_assets() {
 }
 void init_sp_assets() {
   init_model(&sp_mods.player_ship_model);
-  init_model(&sp_mods.alien_ship_models[0]);
   init_model(&sp_mods.proj_model);
   init_model(&sp_mods.station_model);
   for (size_t i = 0; i < NUM_ASTEROID_TYPES; i++) {
     init_model(&sp_mods.asteroid_models[i]);
   }
+  for (size_t i = 0; i < NUM_ALIEN_SHIP_TYPES; i++) {
+    init_model(&sp_mods.alien_ship_models[i]);
+  }
 }
 void free_sp_assets() {
   free_model(sp_mods.player_ship_model.model);
-  free_model(sp_mods.alien_ship_models[0].model);
   free_model(sp_mods.proj_model.model);
   free_model(sp_mods.station_model.model);
   for (size_t i = 0; i < NUM_ASTEROID_TYPES; i++) {
     free_model(sp_mods.asteroid_models[i].model);
+  }
+  for (size_t i = 0; i < NUM_ALIEN_SHIP_TYPES; i++) {
+    free_model(sp_mods.alien_ship_models[i].model);
   }
 }
 
