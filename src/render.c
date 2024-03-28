@@ -120,15 +120,15 @@ void render_scene(GLFWwindow *window) {
     glm_mat4_copy(view, skybox_view);
     glm_vec3_zero(skybox_view[3]);
 
-  // Toggle for item rarity glowing
-  if (item_glow) {
-    populate_point_lights(glow_entity_shader);
-    populate_point_lights(glow_model_shader);
-  }
-  unsigned int model_selected_shader =
-    item_glow ? glow_model_shader : model_shader;
-  unsigned int entity_selected_shader =
-    item_glow ? glow_entity_shader : entity_shader;
+    // Toggle for item rarity glowing
+    if (item_glow) {
+      populate_point_lights(glow_entity_shader);
+      populate_point_lights(glow_model_shader);
+    }
+    unsigned int model_selected_shader =
+      item_glow ? glow_model_shader : model_shader;
+    unsigned int entity_selected_shader =
+      item_glow ? glow_entity_shader : entity_shader;
 
     glUseProgram(cubemap_shader);
     set_mat4("projection", persp_proj, cubemap_shader);
