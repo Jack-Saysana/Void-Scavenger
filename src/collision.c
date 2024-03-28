@@ -208,7 +208,7 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
           xp +=  gen_rand_float_plus_minus(xp/E_XP_RANGE);
           st_player.cur_experience += (int)xp;
           st_player.total_experience += (int) xp;
-          if (st_player.cur_experience >= st_player.max_experience) {
+          while (st_player.cur_experience >= st_player.max_experience) {
             st_player.cur_experience -= st_player.max_experience;
             st_player.cur_level++;
             st_player.max_experience += P_LEVEL_SCALE*st_player.cur_level;
