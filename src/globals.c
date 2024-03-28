@@ -60,6 +60,7 @@ float REAL_DELTA = 0.0;
 
 float space_size = 0.0;
 
+int ESHOOT_ON = 0;
 int keyboard_enabled = 1;
 time_t start_time;
 

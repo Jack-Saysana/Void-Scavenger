@@ -160,8 +160,8 @@ void mouse_button_callback(GLFWwindow *window, int button, int action,
         glm_quat_rotatev(player_ship.ent->rotation, (vec3){0.0, 1.0, 0.0}, ship_up);
         glm_normalize(ship_up);
         /* rotate left gun to converage */
-        glm_vec3_rotate(ship_forward, glm_rad(-5.0), ship_side);
-        glm_vec3_rotate(ship_forward, glm_rad(-0.625), ship_up);
+        glm_vec3_rotate(ship_forward, glm_rad(-1.5), ship_side);
+        glm_vec3_rotate(ship_forward, glm_rad(-0.3125), ship_up);
         /* get left gun offset pos */
         vec3 gun_pos = GLM_VEC3_ZERO_INIT;
         glm_vec3_scale_as(ship_forward, 7.0, gun_pos);
@@ -184,7 +184,7 @@ void mouse_button_callback(GLFWwindow *window, int button, int action,
         glm_vec3_add(player_ship.ent->translation, gun_pos, gun_pos);
         glm_vec3_add(gun_pos, ship_side, gun_pos);
         /* rotate right gun to converage */
-        glm_vec3_rotate(ship_forward, glm_rad(1.25), ship_up);
+        glm_vec3_rotate(ship_forward, glm_rad(0.625), ship_up);
         /* spawn right projectile*/
         proj_index = init_projectile(gun_pos,
                                      ship_forward,

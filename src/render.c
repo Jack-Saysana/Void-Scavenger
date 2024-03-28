@@ -82,6 +82,7 @@ int init_scene() {
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  ESHOOT_ON = 0;
 
   glm_vec3_copy((vec3) {0.0, 0.0, 0.0}, camera.pos);
   camera.pitch = 0.0;
@@ -204,8 +205,15 @@ void query_render_dist() {
 void render_game_entity(ENTITY *ent) {
   SOBJ *wrapper = object_wrappers + (size_t) ent->data;
   if (wrapper->type == PROJ_OBJ) {
+    glUseProgram(proj_shader);
+    if (projectiles[(size_t) wrapper->data].type == BALLISTIC) {
+      set_vec3("col",(vec3){0.98, 0.98, 0.02}, proj_shader);
+    } else if ( projectiles[(size_t) wrapper->data].type == PLASMA) {
+      set_vec3("col",(vec3){0.0, 0.0, 1.0}, proj_shader);
+    } else if ( projectiles[(size_t) wrapper->data].type == LASER) {
+      set_vec3("col",(vec3){1.0, 0.0, 0.0}, proj_shader);
+    }
     if (projectiles[(size_t) wrapper->data].collision) {
-      glUseProgram(proj_shader);
       mat4 model = GLM_MAT4_IDENTITY_INIT;
       glm_translate(model, ent->translation);
       glm_quat_rotate(model, ent->rotation, model);

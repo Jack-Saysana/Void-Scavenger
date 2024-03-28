@@ -30,6 +30,8 @@ int init_player() {
 
   st_player.max_health = P_BASE_HEALTH;
   st_player.cur_health = P_BASE_HEALTH;
+  st_player.cur_level = 0;
+  st_player.skill_points = 0;
   st_player.max_shield = P_BASE_SHIELD;
   st_player.speed = P_BASE_SPEED;
   st_player.fire_rate = P_BASE_FIRERATE;
@@ -76,6 +78,8 @@ void reset_player() {
   player_ship.reactor.max_output = S_BASE_PWR_OUTPUT;
   player_ship.hull.max_health = S_BASE_HEALTH;
   player_ship.shield.max_shield = S_BASE_SHIELD;
+  player_ship.cur_health = S_BASE_HEALTH;
+  player_ship.cur_shield = S_BASE_SHIELD;
   player_ship.shield.recharge_rate = S_BASE_SHIELD_RECHARGE;
   player_ship.shield.recharge_delay = S_BASE_SHIELD_DELAY;
   player_ship.shield.power_draw = S_BASE_PWR_DRAW;

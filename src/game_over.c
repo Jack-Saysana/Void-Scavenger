@@ -17,8 +17,9 @@ void reset_game() {
   set_game_over_screen(OFF);
   cursor_on(OFF);
   set_keyboard_enabledness(ON);
+  free_timer_queue();
   if (mode == STATION) {
-    clear_station_mode();    
+    clear_station_mode();
   } else {
     clear_space_mode();
   }

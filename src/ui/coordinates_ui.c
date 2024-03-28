@@ -5,9 +5,9 @@ void coordinates_ui_initialize() {
   /* Set the coords color to white by default */
   glm_vec3_copy((vec3) VEC3_WHITE, coords_color);
 
-  coordinates = add_ui_comp(UI_ROOT_COMP, (vec2) { 0.999, 0.0 }, 1.0, 24.0,
+  coordinates = add_ui_comp(UI_ROOT_COMP, (vec2) { 0.995, 0.0}, 0.25, 0.025,
                              ABSOLUTE_POS | POS_UNIT_RATIO |
-                             WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_PIXEL |
+                             WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
                              LINE_UNIT_RATIO_Y);
   set_ui_pivot(coordinates, PIVOT_TOP_RIGHT);
   coordinates_enabled = 0;
@@ -28,6 +28,9 @@ void update_coordinates() {
   get_player_coordinates(c);
   snprintf(coords, COORDS_SIZE, "X:%.1f Y:%.1f Z:%.1f", c[0], c[1], c[2]);
   set_ui_text(coordinates, coords, 0.65, T_RIGHT, fixed_sys, coords_color);
+  if (!is_coords_colors_switching) {
+    glm_vec3_copy((vec3) VEC3_WHITE, coords_color);
+  }
 }
 
 void set_coords_warning() {

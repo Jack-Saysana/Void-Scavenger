@@ -10,7 +10,7 @@
 #define WHITE (1)
 #define RED   (2)
 #define WARNING_TIME (0.15)
-#define WARNING_THRESHOLD (50.0)
+#define WARNING_THRESHOLD (30.0)
 
 // Static variables
 static float SEARCH_RADIUS = 100.0;

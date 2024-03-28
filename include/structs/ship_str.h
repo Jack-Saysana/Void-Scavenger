@@ -69,6 +69,7 @@ typedef struct ship_t {
   int invuln;
   int recharging_shield;
 
+  int e_can_shoot;
   // Float denoting the current opacity of the ship's shield
   float render_shield;
 } SHIP;

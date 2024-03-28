@@ -18,3 +18,4 @@ void clear_space_mode();
 void init_space_mode();
 void clear_station_mode();
 void reset_player();
+void free_timer_queue();

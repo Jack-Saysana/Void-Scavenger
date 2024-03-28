@@ -464,6 +464,8 @@ void create_station_corridors() {
         // Try to spawn player in new corridor
         if (spawn_player) {
           glm_vec3_copy(position, st_player.ent->translation);
+          st_player.ent->translation[Y] += 1.0;
+          st_player.ent->velocity[Y] += 0.1;
           spawn_player = 0;
         }
 
