@@ -251,6 +251,9 @@ void player_ship_thrust_move() {
     glm_normalize(ship_forward);
     glm_vec3_scale(ship_forward, player_ship.cur_speed, ship_forward);
     glm_vec3_copy(ship_forward, player_ship.ent->velocity);
+    /* Slow down rotation speed each frame */
+    glm_vec3_scale(player_ship.ent->ang_velocity, 0.99,
+                  player_ship.ent->ang_velocity);
   }
 }
 

@@ -7,6 +7,9 @@
 #define OFF (0)
 #define ON  (1)
 
+// Static variables
+static int is_game_over = 0;
+
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================

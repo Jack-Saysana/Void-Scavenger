@@ -47,6 +47,9 @@
 #define GREEN_CMD            ("green")
 #define PURPLE_CMD           ("purple")
 #define GOLD_CMD             ("gold")
+#define SKILL                ("skill")
+#define POINTS               ("points")
+
 #define BALLISTIC_CMD        ("ballistic")
 #define LASER_CMD            ("laser")
 #define PLASMA_CMD           ("plasma")
