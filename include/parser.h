@@ -41,6 +41,8 @@
 #define GAMEOVER             ("gameover")
 #define GLOW                 ("glow")
 #define ITEM                 ("item")
+#define SKILL                ("skill")
+#define POINTS               ("points")
 
 #define BALLISTIC_CMD        ("ballistic")
 #define LASER_CMD            ("laser")

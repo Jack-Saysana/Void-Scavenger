@@ -246,7 +246,23 @@ void console_dispatcher() {
             return;
           }
           /*END: set gamelevel*/
-        }  else {
+        } else if (strncmp(command[1].tok, SKILL, sizeof(SKILL)) == 0) {
+          /* BEGIN: set skill */
+          if (strncmp(command[2].tok, POINTS, sizeof(POINTS)) == 0) {
+            /* BEGIN: set skill points */
+            if (command[3].kind == NUMBER) {
+              /* BEGIN: set skill points # */
+              st_player.skill_points = atoi(command[3].tok);
+              /* END: set skill points # */
+            } else {
+              command_not_found();
+            }
+            /* END: set skill points */
+          } else {
+            command_not_found();
+          }
+          /* END: set skill */
+        } else {
           command_not_found();
         }
       } else {

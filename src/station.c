@@ -476,8 +476,28 @@ void create_station_corridors() {
           continue;
         }
 
+
+        vec3 enemy_pos = GLM_VEC3_ZERO_INIT;
+        glm_vec3_copy(position, enemy_pos);
+        position[Y] = 3.0;
+        // Chance for an enemy to spawn in any given corridor
+        if (gen_rand_int(100) <= enemy_spawn_chance) {
+          if (gen_rand_int(100) <= enemy_variation) {
+            spawn_st_enemy(position, BRUTE);
+          } else {
+            spawn_st_enemy(position, NORMAL);
+          }
+          continue;
+        }
+
+        if (gen_rand_int(100) <= sp_spawn_chance) {
+          spawn_ship_part(position);
+        }
+
+
         /* Chance for there to spawn elements in any given corridor */
         if (gen_rand_int(100) <= item_spawn_chance) {
+          position[Y] = 3.0;
           /* Chances of getting a big or small obstacle */
           if (gen_rand_int(100) <= 30) {
             /* Large obstacle */
@@ -491,22 +511,6 @@ void create_station_corridors() {
               spawn_small_station_obstacle(position);
             }
           }
-        }
-
-        vec3 enemy_pos = GLM_VEC3_ZERO_INIT;
-        glm_vec3_copy(position, enemy_pos);
-        position[Y] = 4.0;
-        // Chance for an enemy to spawn in any given corridor
-        if (gen_rand_int(100) <= enemy_spawn_chance) {
-          if (gen_rand_int(100) <= enemy_variation) {
-            spawn_st_enemy(position, BRUTE);
-          } else {
-            spawn_st_enemy(position, NORMAL);
-          }
-        }
-
-        if (gen_rand_int(100) <= sp_spawn_chance) {
-          spawn_ship_part(position);
         }
 
         if (backup_room_t == -1) {
@@ -551,6 +555,7 @@ void spawn_ship_part(vec3 position) {
   vec3 offset = GLM_VEC3_ZERO_INIT;
   glm_vec3_copy(position, offset);
   object_random_offset(offset);
+  offset[Y] = 2.0;
 
   vec3 scale = GLM_VEC3_ZERO_INIT;
   versor q;
@@ -564,7 +569,7 @@ void spawn_ship_part(vec3 position) {
   }
 
   size_t index = init_item(type, rarity, offset, scale, q,
-                           2.0 * (gen_rand_float(3.0) + 1.0));
+                           10.0 * (gen_rand_float(3.0) + 1.0));
   
   if (index == INVALID_INDEX) {
     fprintf(stderr, "Failed to init an item!\n");
@@ -595,6 +600,7 @@ void spawn_small_station_obstacle(vec3 position) {
   vec3 offset = GLM_VEC3_ZERO_INIT;
   glm_vec3_copy(position, offset);
   object_random_offset(offset);
+  offset[Y] = 2.0;
 
   vec3 scale = GLM_VEC3_ZERO_INIT;
   versor q;
@@ -602,7 +608,7 @@ void spawn_small_station_obstacle(vec3 position) {
   CREATE_QUATERNION(gen_rand_float(360.0), q)
   glm_vec3_copy((vec3) { 1.0, 1.0, 1.0 }, scale);
   size_t index = init_station_obstacle(obstacle_type, offset, scale, q,
-                                2.0 * (gen_rand_float(3.0) + 1.0));
+                                10.0 * (gen_rand_float(3.0) + 1.0));
   station_obstacle_insert_sim(index);
 }
 
@@ -620,6 +626,7 @@ void spawn_large_station_obstacle(vec3 position) {
     TYPE_STOOL,
     TYPE_TABLE
   };
+  position[Y] = 2.0;
 
   int obstacle_type = large_obstacles[gen_rand_int(STATION_LARGE_OBJS)];
   vec3 scale = GLM_VEC3_ZERO_INIT;
@@ -629,7 +636,7 @@ void spawn_large_station_obstacle(vec3 position) {
   glm_vec3_copy((vec3) { 1.0, 1.0, 1.0 }, scale);
   size_t index = init_station_obstacle(obstacle_type, position,
                                 scale, q,
-                                2.0 * (gen_rand_float(3.0) + 1.0));
+                                20.0 * (gen_rand_float(3.0) + 1.0));
   station_obstacle_insert_sim(index);
 }
 
