@@ -21,3 +21,5 @@ void handle_collisions();
 void enemy_behavior();
 int delete_stale_objects();
 void refresh_objects();
+void loading_init();
+void recharge_player_shield();

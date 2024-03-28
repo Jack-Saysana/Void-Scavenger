@@ -30,6 +30,27 @@ void cursor_on(int on) {
   }
 }
 
+void eshoot_on(int on) {
+  if (on) {
+    ESHOOT_ON = 1;
+  } else {
+    ESHOOT_ON = 0;
+  }
+}
+
+void set_gun(S_WEAPON_T type) {
+  if (type == BALLISTIC) {
+    player_ship.weapon.type = BALLISTIC;
+    player_ship.weapon.fire_rate = S_BASE_FIRERATE;
+  } else if (type == LASER) {
+    player_ship.weapon.type = LASER;
+    player_ship.weapon.fire_rate = S_BASE_FIRERATE_LASER;
+  } else {
+    player_ship.weapon.type = PLASMA;
+    player_ship.weapon.fire_rate = S_BASE_FIRERATE;
+  }
+}
+
 void set_gamemode_station() {
   if (mode == STATION) {
     return;
@@ -105,5 +126,21 @@ void set_player_shield(float shield, int mode) {
     player_ship.cur_shield = shield;
   } else {
     st_player.cur_shield = shield;
+  }
+}
+
+void toggle_item_glow() {
+  item_glow = !item_glow;
+}
+void set_player_xp(float xp) {
+  st_player.cur_experience = xp;
+}
+
+void set_gamelevel(float gamelevel) {
+  st_player.total_levels_completed = gamelevel;
+  if (mode == SPACE) {
+    reset_space();
+  } else {
+    reset_station();
   }
 }

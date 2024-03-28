@@ -46,7 +46,7 @@ void sp_enemy_remove_sim(size_t);
 void delete_projectile(size_t);
 void projectile_remove_sim(size_t);
 
-void spawn_sp_enemy(vec3, versor, int);
+void spawn_sp_enemy(vec3, versor, int, int);
 void delete_space_obstacle(size_t);
 void space_obstacle_remove_sim(size_t);
 

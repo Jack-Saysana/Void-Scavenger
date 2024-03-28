@@ -40,9 +40,9 @@ void main() {
 
   vec3 result = calc_dir_light(dir_light);
 
-  //for (uint i = 0; i < num_pt_lights; i++) {
-  //  result += calc_point_light(light[i]);
-  //}
+  for (uint i = 0; i < num_pt_lights; i++) {
+    result += calc_point_light(light[i]);
+  }
 
   frag_col = vec4(result, 1.0);
 }

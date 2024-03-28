@@ -58,6 +58,8 @@ typedef struct player {
   // Game stats
   size_t cur_experience;
   size_t max_experience;
+  int cur_level;
+  int skill_points;
   float cur_health;
   float max_health;
   float cur_shield;

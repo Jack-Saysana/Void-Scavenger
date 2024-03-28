@@ -38,5 +38,9 @@ void sp_enemy_shield_dmg(void *);
 void sp_player_shield_dmg(void *);
 void player_health_dmg();
 
+float gen_rand_float_plus_minus(float);
 void game_over();
 void set_item_prompt(int);
+
+void ship_shield_recharge_delay(void *);
+void update_timer_args(void *, void *, void *);

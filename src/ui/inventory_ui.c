@@ -269,6 +269,13 @@ void slot_on_click(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
       case I_SLOT_SHIELD:
         switch_slot(&equipped_shield, inventory_slot);
         player_ship.shield = equipped_shield.data.shield;
+        player_ship.cur_shield = fmin(player_ship.shield.max_shield,
+                                      player_ship.cur_shield);
+        player_ship.recharging_shield = 0;
+        update_timer_args(ship_shield_recharge_delay, &player_ship,
+                          (void *) INVALID_INDEX);
+        add_timer(player_ship.shield.recharge_delay,
+                  ship_shield_recharge_delay, -1000, &player_ship);
         break;
       case I_SLOT_WEAPON:
         switch_slot(&equipped_weapon, inventory_slot);

@@ -30,6 +30,7 @@
 #define actors_dir "./assets/actors"
 #define setp_dir "./assets/set_pieces"
 #define st_ship_parts_dir "./assets/station_ship_parts"
+#define shaders_dir "./src/shaders"
 
 void load_common_assets() {
   c_mods.sphere_model = read_model(misc_dir"/sphere/sphere.obj");
@@ -56,6 +57,8 @@ void free_common_assets() {
 void load_sp_assets() {
   sp_mods.player_ship_model = read_model(actors_dir"/player_ship/player_ship.obj");
   sp_mods.alien_ship_models[0] = read_model(actors_dir"/alien_ship_1/alien_ship_1.obj");
+  sp_mods.alien_ship_models[1] = read_model(actors_dir"/alien_ship_2/alien_ship_2.obj");
+  sp_mods.alien_ship_models[2] = read_model(actors_dir"/alien_ship_3/alien_ship_3.obj");
   sp_mods.proj_model = read_model(misc_dir"/sp_projectile/sp_projectile.obj");
   sp_mods.station_model = read_model(setp_dir"/station/station.obj");
   sp_mods.asteroid_models[0] = read_model(setp_dir"/asteroid_1/asteroid_1.obj");
@@ -66,20 +69,24 @@ void load_sp_assets() {
 }
 void init_sp_assets() {
   init_model(&sp_mods.player_ship_model);
-  init_model(&sp_mods.alien_ship_models[0]);
   init_model(&sp_mods.proj_model);
   init_model(&sp_mods.station_model);
   for (size_t i = 0; i < NUM_ASTEROID_TYPES; i++) {
     init_model(&sp_mods.asteroid_models[i]);
   }
+  for (size_t i = 0; i < NUM_ALIEN_SHIP_TYPES; i++) {
+    init_model(&sp_mods.alien_ship_models[i]);
+  }
 }
 void free_sp_assets() {
   free_model(sp_mods.player_ship_model.model);
-  free_model(sp_mods.alien_ship_models[0].model);
   free_model(sp_mods.proj_model.model);
   free_model(sp_mods.station_model.model);
   for (size_t i = 0; i < NUM_ASTEROID_TYPES; i++) {
     free_model(sp_mods.asteroid_models[i].model);
+  }
+  for (size_t i = 0; i < NUM_ALIEN_SHIP_TYPES; i++) {
+    free_model(sp_mods.alien_ship_models[i].model);
   }
 }
 
@@ -91,6 +98,7 @@ void load_st_assets() {
   st_mods.terminal_model = read_model(setp_dir"/terminal/terminal.obj");
   st_mods.shotgun_model = read_model(setp_dir"/shotgun/shotgun.obj");
   st_mods.rifle_model = read_model(setp_dir"/rifle/rifle.obj");
+  st_mods.sword_model = read_model(setp_dir"/sword/sword.obj");
   st_mods.corridor_models[0] = read_model(setp_dir"/1_way/1_way.obj");
   st_mods.corridor_models[1] = read_model(setp_dir"/4_way/4_way_0.obj");
   st_mods.corridor_models[2] = read_model(setp_dir"/corner/corner_0.obj");
@@ -131,6 +139,7 @@ void init_st_assets() {
   init_model(&st_mods.terminal_model);
   init_model(&st_mods.shotgun_model);
   init_model(&st_mods.rifle_model);
+  init_model(&st_mods.sword_model);
   for (size_t i = 0; i < NUM_CORRIDOR_TYPES; i++) {
     init_model(&st_mods.corridor_models[i]);
   }
@@ -149,6 +158,7 @@ void free_st_assets() {
   free_model(st_mods.terminal_model.model);
   free_model(st_mods.shotgun_model.model);
   free_model(st_mods.rifle_model.model);
+  free_model(st_mods.sword_model.model);
   for (size_t i = 0; i < NUM_CORRIDOR_TYPES; i++) {
     free_model(st_mods.corridor_models[i].model);
   }

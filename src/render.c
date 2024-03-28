@@ -14,24 +14,45 @@
 // Functions used for loading/initializing assets
 #include <load_assets.h>
 
+void clear_models() {
+  memset(&c_mods, 0, sizeof(COMMON_MODELS));
+  memset(&sp_mods, 0, sizeof(SP_MODELS));
+  memset(&st_mods, 0, sizeof(ST_MODELS));
+}
+
 int init_scene() {
   // Init shaders below...
-  entity_shader = init_shader_prog("./src/shaders/entity/shader.vs", NULL,
-                                   "./src/shaders/entity/shader.fs");
-  model_shader = init_shader_prog("./src/shaders/model/shader.vs", NULL,
-                                  "./src/shaders/entity/shader.fs");
-  ui_shader = init_shader_prog("./src/shaders/ui/shader.vs", NULL,
-                               "./src/shaders/ui/shader.fs");
-  basic_shader = init_shader_prog("./src/shaders/model/shader.vs", NULL,
-                                  "./src/shaders/basic/shader.fs");
-  collider_shader = init_shader_prog("./src/shaders/basic/shader.vs", NULL,
-                                     "./src/shaders/basic/shader.fs");
-  bone_shader = init_shader_prog("./src/shaders/bone/shader.vs", NULL,
-                                 "./src/shaders/bone/shader.fs");
-  proj_shader = init_shader_prog("./src/shaders/projectile/shader.vs", NULL,
-                                 "./src/shaders/projectile/shader.fs");
-  station_sp_shader = init_shader_prog("./src/shaders/model/shader.vs", NULL,
-                                       "./src/shaders/model/station_sp.fs");
+  cubemap_shader = init_shader_prog(shaders_dir "/cubemap/shader.vs", NULL,
+                                    shaders_dir "/cubemap/shader.fs");
+  entity_shader = init_shader_prog(shaders_dir "/entity/shader.vs", NULL,
+                                   shaders_dir "/entity/shader.fs");
+  model_shader = init_shader_prog(shaders_dir "/model/shader.vs", NULL,
+                                  shaders_dir "/entity/shader.fs");
+  ui_shader = init_shader_prog(shaders_dir "/ui/shader.vs", NULL,
+                               shaders_dir "/ui/shader.fs");
+  basic_shader = init_shader_prog(shaders_dir "/model/shader.vs", NULL,
+                                  shaders_dir "/basic/shader.fs");
+  collider_shader = init_shader_prog(shaders_dir "/basic/shader.vs", NULL,
+                                     shaders_dir "/basic/shader.fs");
+  bone_shader = init_shader_prog(shaders_dir "/bone/shader.vs", NULL,
+                                 shaders_dir "/bone/shader.fs");
+  proj_shader = init_shader_prog(shaders_dir "/projectile/shader.vs", NULL,
+                                 shaders_dir "/projectile/shader.fs");
+  glow_entity_shader = init_shader_prog(shaders_dir "/entity/shader.vs", NULL,
+                                        shaders_dir "/entity/glow.fs");
+  glow_model_shader = init_shader_prog(shaders_dir "/model/shader.vs", NULL,
+                                       shaders_dir "/entity/glow.fs");
+
+  // Init cubemaps below...
+  char *sb_paths[] = {
+    "./assets/textures/skybox_right.png",
+    "./assets/textures/skybox_left.png",
+    "./assets/textures/skybox_up.png",
+    "./assets/textures/skybox_down.png",
+    "./assets/textures/skybox_front.png",
+    "./assets/textures/skybox_back.png"
+  };
+  gen_cubemap(sb_paths, &skybox);
 
   // Init models below...
   init_common_assets();
@@ -63,7 +84,7 @@ int init_scene() {
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  CURSOR_ENABLED = 0;
+  ESHOOT_ON = 0;
 
   glm_vec3_copy((vec3) {0.0, 0.0, 0.0}, camera.pos);
   camera.pitch = 0.0;
@@ -92,19 +113,37 @@ void render_scene(GLFWwindow *window) {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // Render to main scene
-  if (mode != LOADING) {
+  if (mode == SPACE || mode == STATION) {
     mat4 view = GLM_MAT4_IDENTITY_INIT;
     get_cam_matrix(&camera, view);
+    mat4 skybox_view = GLM_MAT4_IDENTITY_INIT;
+    glm_mat4_copy(view, skybox_view);
+    glm_vec3_zero(skybox_view[3]);
 
-    glUseProgram(entity_shader);
-    set_mat4("projection", persp_proj, entity_shader);
-    set_mat4("view", view, entity_shader);
-    set_vec3("camera_pos", camera.pos, entity_shader);
+    // Toggle for item rarity glowing
+    if (item_glow) {
+      populate_point_lights(glow_entity_shader);
+      populate_point_lights(glow_model_shader);
+    }
+    unsigned int model_selected_shader =
+      item_glow ? glow_model_shader : model_shader;
+    unsigned int entity_selected_shader =
+      item_glow ? glow_entity_shader : entity_shader;
 
-    glUseProgram(model_shader);
-    set_mat4("projection", persp_proj, model_shader);
-    set_mat4("view", view, model_shader);
-    set_vec3("camera_pos", camera.pos, model_shader);
+    glUseProgram(cubemap_shader);
+    set_mat4("projection", persp_proj, cubemap_shader);
+    set_mat4("view", skybox_view, cubemap_shader);
+    set_vec3("camera_pos", camera.pos, cubemap_shader);
+
+    glUseProgram(entity_selected_shader);
+    set_mat4("projection", persp_proj, entity_selected_shader);
+    set_mat4("view", view, entity_selected_shader);
+    set_vec3("camera_pos", camera.pos, entity_selected_shader);
+
+    glUseProgram(model_selected_shader);
+    set_mat4("projection", persp_proj, model_selected_shader);
+    set_mat4("view", view, model_selected_shader);
+    set_vec3("camera_pos", camera.pos, model_selected_shader);
 
     glUseProgram(basic_shader);
     set_mat4("projection", persp_proj, basic_shader);
@@ -124,6 +163,9 @@ void render_scene(GLFWwindow *window) {
       glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 
+    if (mode == SPACE) {
+      render_skybox();
+    }
     if (render_arena) {
       render_oct_tree(physics_sim);
     }
@@ -133,9 +175,9 @@ void render_scene(GLFWwindow *window) {
     if (mode == STATION) {
       mat4 gun_mat = GLM_MAT4_IDENTITY_INIT;
       get_player_gun_mat(gun_mat);
-      glUseProgram(model_shader);
-      set_mat4("model", gun_mat, model_shader);
-      draw_model(model_shader, st_mods.rifle_model.model);
+      glUseProgram(model_selected_shader);
+      set_mat4("model", gun_mat, model_selected_shader);
+      draw_model(model_selected_shader, st_mods.rifle_model.model);
     }
 
     render_game_entity(render_sphere);
@@ -173,10 +215,21 @@ void query_render_dist() {
 }
 
 void render_game_entity(ENTITY *ent) {
+  unsigned int model_selected_shader =
+    item_glow ? glow_model_shader : model_shader;
+  unsigned int entity_selected_shader =
+    item_glow ? glow_entity_shader : entity_shader;
   SOBJ *wrapper = object_wrappers + (size_t) ent->data;
   if (wrapper->type == PROJ_OBJ) {
+    glUseProgram(proj_shader);
+    if (projectiles[(size_t) wrapper->data].type == BALLISTIC) {
+      set_vec3("col",(vec3){0.98, 0.98, 0.02}, proj_shader);
+    } else if ( projectiles[(size_t) wrapper->data].type == PLASMA) {
+      set_vec3("col",(vec3){0.0, 0.0, 1.0}, proj_shader);
+    } else if ( projectiles[(size_t) wrapper->data].type == LASER) {
+      set_vec3("col",(vec3){1.0, 0.0, 0.0}, proj_shader);
+    }
     if (projectiles[(size_t) wrapper->data].collision) {
-      glUseProgram(proj_shader);
       mat4 model = GLM_MAT4_IDENTITY_INIT;
       glm_translate(model, ent->translation);
       glm_quat_rotate(model, ent->rotation, model);
@@ -188,36 +241,46 @@ void render_game_entity(ENTITY *ent) {
     }
   } else if (wrapper->type == ENEMY_OBJ) {
     ST_ENEMY *enemy = st_enemies + (size_t) wrapper->data;
-    glUseProgram(model_shader);
+    glUseProgram(model_selected_shader);
     mat4 model = GLM_MAT4_IDENTITY_INIT;
     if (enemy->max_health > 100.0) {
       get_bone_equip_mat(ent, 14, model);
-      set_mat4("model", model, model_shader);
-      draw_model(model_shader, st_mods.shotgun_model.model);
+      set_mat4("model", model, model_selected_shader);
+      if (enemy->weapon_type == RANGED) {
+        draw_model(model_selected_shader, st_mods.shotgun_model.model);
+      } else {
+        draw_model(model_selected_shader, st_mods.sword_model.model);
+      }
     } else {
       get_bone_equip_mat(ent, 15, model);
-      set_mat4("model", model, model_shader);
-      draw_model(model_shader, st_mods.rifle_model.model);
+      set_mat4("model", model, model_selected_shader);
+      if (enemy->weapon_type == RANGED) {
+        draw_model(model_selected_shader, st_mods.rifle_model.model);
+      } else {
+        draw_model(model_selected_shader, st_mods.sword_model.model);
+      }
     }
-    draw_entity(entity_shader, ent);
+    draw_entity(entity_selected_shader, ent);
   } else if (wrapper->type == ITEM_OBJ) {
     /* TODO: Update to new shader */
     ST_ITEM *part = items + (size_t) wrapper->data;
-    glUseProgram(model_shader);
+    glUseProgram(model_selected_shader);
     mat4 model = GLM_MAT4_IDENTITY_INIT;
     glm_translate(model, ent->translation);
     glm_quat_rotate(model, ent->rotation, model);
     glm_scale(model, ent->scale);
-    set_mat4("model", model, model_shader);
+    set_mat4("model", model, model_selected_shader);
     if (part->type == PART_WEAPON_BALLISTIC ||
         part->type == PART_WEAPON_LASER ||
         part->type == PART_WEAPON_PLASMA) {
-      draw_model(model_shader, st_mods.station_ship_parts[TYPE_WEAPON].model);
+      draw_model(model_selected_shader,
+                 st_mods.station_ship_parts[TYPE_WEAPON].model);
     } else {
-      draw_model(model_shader, st_mods.station_ship_parts[part->type].model);
+      draw_model(model_selected_shader,
+                 st_mods.station_ship_parts[part->type].model);
     }
   } else {
-    draw_entity(entity_shader, ent);
+    draw_entity(entity_selected_shader, ent);
   }
   if (wrapper->type == ENEMY_SHIP_OBJ) {
     SHIP *enemy = sp_enemies + (size_t) wrapper->data;
@@ -236,6 +299,17 @@ void render_game_entity(ENTITY *ent) {
     draw_colliders(collider_shader, ent, c_mods.sphere_model.model);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   }
+}
+
+void render_skybox() {
+  glDepthMask(GL_FALSE);
+  glUseProgram(cubemap_shader);
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_CUBE_MAP, skybox);
+  set_mat4("model", GLM_MAT4_IDENTITY, cubemap_shader);
+  set_int("cube_map", 0, cubemap_shader);
+  draw_model(cubemap_shader, c_mods.cube_model.model);
+  glDepthMask(GL_TRUE);
 }
 
 void render_shield(ENTITY *ent, float shield_state) {
@@ -361,6 +435,15 @@ ENTITY *init_terminal_ent() {
   return init_entity(st_mods.terminal_model.model);
 }
 
+ENTITY *init_item_ent(PART_T type) {
+  if (type == PART_WEAPON_PLASMA ||
+      type == PART_WEAPON_BALLISTIC ||
+      type == PART_WEAPON_LASER) {
+    return init_entity(st_mods.station_ship_parts[TYPE_WEAPON].model);
+  }
+  return init_entity(st_mods.station_ship_parts[type].model);
+}
+
 MODEL *get_sphere_model() {
   return c_mods.sphere_model.model;
 }
@@ -369,17 +452,20 @@ MODEL *get_tri_prism_model() {
   return c_mods.tri_prism_model.model;
 }
 
+MODEL *get_player_ship_model() {
+  return sp_mods.player_ship_model.model;
+}
+
 unsigned int get_basic_shader() {
   return basic_shader;
 }
 
-ENTITY *init_item_ent(PART_T type) {
-  if (type == PART_WEAPON_PLASMA ||
-      type == PART_WEAPON_BALLISTIC ||
-      type == PART_WEAPON_LASER) {
-    return init_entity(st_mods.station_ship_parts[TYPE_WEAPON].model);
-  }
-  return init_entity(st_mods.station_ship_parts[type].model);
+unsigned int get_model_shader() {
+  return model_shader;
+}
+
+unsigned int get_cubemap_shader() {
+  return cubemap_shader;
 }
 
 void toggle_hit_boxes() {
@@ -402,6 +488,7 @@ void update_perspective() {
   glm_perspective(glm_rad(45.0), RES_X / RES_Y, 0.1f, RENDER_DIST, persp_proj);
 
   update_radar_fb();
+  update_main_menu_fb();
 }
 
 void to_screen_space(vec4 pos, vec4 dest) {

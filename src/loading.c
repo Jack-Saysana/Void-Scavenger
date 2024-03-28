@@ -8,7 +8,6 @@
 */
 
 void loading_init() {
-  init_loading_ui();
   reset_load_state();
   pthread_create(&loading_thread, NULL, load_assets, NULL);
 }
@@ -21,7 +20,7 @@ int query_loading_status() {
       return -1;
     }
 
-    mode = SPACE;
+    mode = MAIN_MENU;
     status = init_game();
     if (status) {
       return -1;

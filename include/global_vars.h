@@ -24,7 +24,8 @@ extern F_GLYPH *fixed_sys;
 typedef enum game_mode {
   STATION,
   SPACE,
-  LOADING
+  LOADING,
+  MAIN_MENU
 } GAME_MODE;
 extern GAME_MODE mode;
 
@@ -105,6 +106,12 @@ extern int keyboard_enabled;
 
 // Time
 extern time_t start_time;
+
+// Point lights
+extern unsigned int num_pt_lights;
+extern unsigned int item_glow;
+
+extern int ESHOOT_ON;
 
 // Equipped Parts
 extern I_SLOT equipped_hull;

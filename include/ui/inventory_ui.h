@@ -33,3 +33,6 @@ void switch_slot(I_SLOT *slot_a, I_SLOT *slot_b);
 
 /* ================= EXTERNALLY DEFINED FUNCTIONS ================ */
 
+void ship_shield_recharge_delay(void *);
+void update_timer_args(void *, void *, void *);
+int add_timer(float, void *, int, void *);

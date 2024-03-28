@@ -1,5 +1,16 @@
 #include <ui/general_ui.h>
 
+void barebones_ui_init() {
+  if (import_font("assets/font/fixed_sys.bin",
+                  "assets/font/fixed_sys.png",
+                  &fixed_sys) == -1) {
+    printf("Could not load fixed_sys!\n");
+    exit(1);
+  }
+
+  init_loading_ui();
+}
+
 /*
   Calls all the initialization functions for
   the individual ui components. Called in main
@@ -7,12 +18,6 @@
 */
 void init_ui_components() {
   /* Add ui components initialization functions below... */
-  if (import_font("assets/font/fixed_sys.bin",
-                  "assets/font/fixed_sys.png",
-                  &fixed_sys) == -1) {
-    printf("Could not load fixed_sys!\n");
-    exit(1);
-  }
   console_ui_initialize();
 
   // Initialize stats
@@ -46,6 +51,7 @@ void init_ui_components() {
   init_radar_ui();
   init_waypoint_ui();
   init_damage_ui();
+  init_main_menu_ui();
   game_over_ui_initialize();
   init_item_prompt_ui();
 }
@@ -75,4 +81,5 @@ void update_ui_components() {
   update_radar_ui();
   update_waypoint_ui();
   update_damage_ui();
+  update_main_menu_ui();
 }

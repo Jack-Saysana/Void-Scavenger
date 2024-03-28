@@ -19,3 +19,4 @@ ENTITY *init_player_ent();
 ENTITY *init_player_ship_ent();
 
 int add_timer(float, void *, int, void *);
+void recharge_ship_shield(SHIP *);

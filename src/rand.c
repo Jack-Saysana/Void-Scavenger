@@ -64,3 +64,9 @@ float gen_rand_float(float bounds) {
 int gen_rand_int(int bounds) {
   return rand() % bounds;
 }
+
+float gen_rand_float_plus_minus(float bounds) {
+  float temp = gen_rand_float(bounds);
+  temp -= bounds / 2.0;
+  return temp;
+}
