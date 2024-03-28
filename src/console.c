@@ -89,11 +89,13 @@ void set_render_dist(float dist) {
 }
 
 void reset_station() {
+  free_timer_queue();
   clear_station_mode();
   init_station_mode();
 }
 
 void reset_space() {
+  free_timer_queue();
   clear_space_mode();
   init_space_mode();
 }
