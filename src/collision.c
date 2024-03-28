@@ -377,7 +377,8 @@ void decrement_player_shield(float damage, float timing) {
       sp_player_shield_dmg(NULL);
     }
     player_ship.recharging_shield = 0;
-    update_timer_args(ship_shield_recharge_delay, &player_ship, NULL);
+    update_timer_args(ship_shield_recharge_delay, &player_ship,
+                      (void *) INVALID_INDEX);
     add_timer(player_ship.shield.recharge_delay, ship_shield_recharge_delay,
               -1000, &player_ship);
 
@@ -479,6 +480,11 @@ void decrement_enemy_health(size_t index, float damage, float timing) {
         object_wrappers[(size_t) enemy->wrapper_offset].to_delete = 1;
       } else {
         enemy->invuln = 1;
+        enemy->recharging_shield = 0;
+        update_timer_args(ship_shield_recharge_delay, (void *) index,
+                          (void *) INVALID_INDEX);
+        add_timer(enemy->shield.recharge_delay, ship_shield_recharge_delay,
+                  -1000, (void *) index);
         add_timer(timing, &enemy->invuln, 0, NULL);
       }
     }
