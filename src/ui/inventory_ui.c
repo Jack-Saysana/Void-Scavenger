@@ -215,25 +215,25 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
         break;
       case I_SLOT_SHIELD:
         snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE,
-                  "[MAX SHIELD = %.2f] [RECHARGE RATE = %.2f] [RECHARGE DELAY = %.2f] [POWER DRAW = %.2f]", 
+                  "[MAX SHIELD = %.2f]\n[RECHARGE RATE = %.2f]\n[RECHARGE DELAY = %.2f]\n[POWER DRAW = %.2f]", 
                   inventory_slot->data.shield.max_shield, inventory_slot->data.shield.recharge_rate, 
                   inventory_slot->data.shield.recharge_delay, inventory_slot->data.shield.power_draw);
         break;
       case I_SLOT_WEAPON:
         snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE,
-                  "[DAMAGE = %.2f] [FIRE RATE = %.2f] [MAX POWER DRAW = %.2f] [PROJCTION SPEED = %.2f] [RANGE = %.2f]", 
+                  "[DAMAGE = %.2f]\n[FIRE RATE = %.2f]\n[MAX POWER DRAW = %.2f]\n[PROJCTION SPEED = %.2f]\n[RANGE = %.2f]", 
                   inventory_slot->data.weapon.damage, inventory_slot->data.weapon.fire_rate, 
                   inventory_slot->data.weapon.max_power_draw, inventory_slot->data.weapon.proj_speed, 
                   inventory_slot->data.weapon.range);
         break;
       case I_SLOT_WING:
         snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE, 
-                 "[MAX ANGULAR ACCELERATION = %.2f] [MAX ANGULAR VELOCITY = %.2f]", 
+                 "[MAX ANG ACCEL = %.2f]\n[MAX ANG VEL = %.2f]", 
                  inventory_slot->data.wing.max_ang_accel, inventory_slot->data.wing.max_ang_vel);
         break;
       case I_SLOT_THRUSTER:
         snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE, 
-                 "[MAX ACCELERATION = %.2f] [MAX POWER DRAW = %.2f] [MAX VELOCITY = %.2f]", 
+                 "[MAX ACCELERATION = %.2f]\n[MAX POWER DRAW = %.2f]\n[MAX VELOCITY = %.2f]", 
                  inventory_slot->data.thruster.max_accel, inventory_slot->data.thruster.max_power_draw, inventory_slot->data.thruster.max_vel);
         break;
       default:

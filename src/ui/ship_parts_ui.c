@@ -542,25 +542,25 @@ void ship_parts_on_hover(UI_COMP *ui_ship_parts, I_SLOT *equipped_ship_parts) {
       break;
     case I_SLOT_SHIELD:
       snprintf(ship_parts_info_content_buffer, SHIP_PARTS_TEXT_BUFFER_SIZE,
-                "[MAX SHIELD = %.2f] [RECHARGE RATE = %.2f] [RECHARGE DELAY = %.2f] [POWER DRAW = %.2f]", 
+                "[MAX SHIELD = %.2f]\n[RECHARGE RATE = %.2f]\n[RECHARGE DELAY = %.2f]\n[POWER DRAW = %.2f]", 
                 equipped_ship_parts->data.shield.max_shield, equipped_ship_parts->data.shield.recharge_rate, 
                 equipped_ship_parts->data.shield.recharge_delay, equipped_ship_parts->data.shield.power_draw);
       break;
     case I_SLOT_WEAPON:
       snprintf(ship_parts_info_content_buffer, SHIP_PARTS_TEXT_BUFFER_SIZE,
-                "[DAMAGE = %.2f] [FIRE RATE = %.2f] [MAX POWER DRAW = %.2f] [PROJCTION SPEED = %.2f] [RANGE = %.2f]", 
+                "[DAMAGE = %.2f]\n[FIRE RATE = %.2f]\n[MAX POWER DRAW = %.2f]\n[PROJCTION SPEED = %.2f]\n[RANGE = %.2f]", 
                 equipped_ship_parts->data.weapon.damage, equipped_ship_parts->data.weapon.fire_rate, 
                 equipped_ship_parts->data.weapon.max_power_draw, equipped_ship_parts->data.weapon.proj_speed, 
                 equipped_ship_parts->data.weapon.range);
       break;
     case I_SLOT_WING:
       snprintf(ship_parts_info_content_buffer, SHIP_PARTS_TEXT_BUFFER_SIZE,
-                "[MAX ANGULAR ACCELERATION = %.2f] [MAX ANGULAR VELOCITY = %.2f]", 
+                "[MAX ANG ACCEL = %.2f]\n[MAX ANG VEL = %.2f]", 
                 equipped_ship_parts->data.wing.max_ang_accel, equipped_ship_parts->data.wing.max_ang_vel);
       break;
     case I_SLOT_THRUSTER:
       snprintf(ship_parts_info_content_buffer, SHIP_PARTS_TEXT_BUFFER_SIZE,
-                "[MAX ACCELERATION = %.2f] [MAX POWER DRAW = %.2f] [MAX VELOCITY = %.2f]", 
+                "[MAX ACCELERATION = %.2f]\n[MAX POWER DRAW = %.2f]\n[MAX VELOCITY = %.2f]", 
                 equipped_ship_parts->data.thruster.max_accel, equipped_ship_parts->data.thruster.max_power_draw, equipped_ship_parts->data.thruster.max_vel);
       break;
     case DEFAULT:
