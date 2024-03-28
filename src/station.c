@@ -582,6 +582,40 @@ void spawn_ship_part(vec3 position) {
   }
 }
 
+void spawn_ship_part_cmd(vec3 position, int type, int rarity) {
+  if (mode != STATION) {
+    fprintf(stderr, "Can't Spawn items in space!\n");
+    return;
+  }
+  
+  vec3 offset = GLM_VEC3_ZERO_INIT;
+  glm_vec3_copy(position, offset);
+  object_random_offset(offset);
+
+  vec3 scale = GLM_VEC3_ZERO_INIT;
+  versor q;
+  /* Randomly rotate the obstacle around the y axis */
+  CREATE_QUATERNION(gen_rand_float(360.0), q)
+  glm_vec3_copy((vec3) { 1.0, 1.0, 1.0 }, scale);
+  if (rarity == RARITY_ERR) {
+    fprintf(stderr, "Ship part RNG failed!\n");
+    return;
+  }
+
+  size_t index = init_item(type, rarity, offset, scale, q,
+                           2.0 * (gen_rand_float(3.0) + 1.0));
+  
+  if (index == INVALID_INDEX) {
+    fprintf(stderr, "Failed to init an item!\n");
+    return;
+  }
+
+  if (item_insert_sim(index) == -1) {
+    fprintf(stderr, "Failed to insert item into simulation!\n");
+    exit(1);
+  }
+}
+
 void spawn_small_station_obstacle(vec3 position) {
   int small_obstacles[STATION_SMALL_OBJS] = {
     TYPE_AMMO_CRATE_0,
