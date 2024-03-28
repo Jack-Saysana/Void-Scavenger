@@ -2,7 +2,7 @@
 
 /*
                                    SHIP_PARTS
-Implements the functionality for defining UI components for player's space 
+Implements the functionality for defining UI components for player's space
 mode ship parts.
 */
 
@@ -33,7 +33,7 @@ int init_ship_parts() {
   equipped_shield.data.shield.power_draw = 25;
   equipped_shield.data.shield.recharge_delay = 2;
   equipped_shield.data.shield.recharge_rate = 5;
-  
+
   equipped_thruster.type = I_SLOT_THRUSTER;
   equipped_thruster.rarity = WHITE_RARITY;
   equipped_thruster.weapon_type = NOT_WEAPON;
@@ -280,7 +280,7 @@ int init_ship_parts() {
 
   // set init visibility
   set_ui_enabled(ship_parts.ui_ship_parts_root, 0);
-  
+
   return 0;
 }
 
@@ -604,10 +604,14 @@ void update_ship_stats() {
                     (void *) INVALID_INDEX);
   add_timer(player_ship.shield.recharge_delay,
             ship_shield_recharge_delay, -1000, &player_ship);
-  
+
   player_ship.weapon = equipped_weapon.data.weapon;
 
   player_ship.wing = equipped_wing.data.wing;
 
   player_ship.thruster = equipped_thruster.data.thruster;
+  player_ship.cur_speed = fmin(player_ship.thruster.max_vel,
+                               player_ship.cur_speed);
+  glm_vec3_scale_as(player_ship.ent->velocity, player_ship.cur_speed,
+                    player_ship.ent->velocity);
 }
