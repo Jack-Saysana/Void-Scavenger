@@ -32,6 +32,7 @@ void switch_survival_tab(UI_COMP *ui_tab_comp, void *unused);
 void switch_combat_tab(UI_COMP *ui_tab_comp, void *unused);
 void switch_exploration_tab(UI_COMP *ui_tab_comp, void *unused);
 void update_skill_tabs();
+void enable_skill(SKILL *skill_slot);
 
 /* ================= EXTERNALLY DEFINED FUNCTIONS ================ */
 

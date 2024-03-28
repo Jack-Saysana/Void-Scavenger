@@ -7,20 +7,34 @@
 
 #define SKILL_TREE_TEXT_BUFFER_SIZE (128)
 
-typedef enum skill_type {
+typedef enum enum_skill_type {
   T_EMPTY_SKILL,
   T_SURVIVAL,
   T_COMBAT,
   T_EXPLORATION
 } T_SKILL;
 
-typedef struct skill {
+typedef enum enum_skill_ID {
+  ID_NOT_SKILL,
+  ID_SURVIVAL_LV1_SKILL_1,
+  ID_SURVIVAL_LV1_SKILL_2,
+  ID_SURVIVAL_LV2_SKILL_1,
+  ID_COMBAT_LV1_SKILL_1,
+  ID_COMBAT_LV1_SKILL_2,
+  ID_COMBAT_LV2_SKILL_1,
+  ID_EXPLORATION_LV1_SKILL_1,
+  ID_EXPLORATION_LV1_SKILL_2,
+  ID_EXPLORATION_LV2_SKILL_1
+} ID_SKILL;
+
+typedef struct st_skill {
   T_SKILL skill_type;
-  struct skill *parent_skill;
-  int unlocked;
+  struct st_skill *parent_skill;
+  int is_unlocked;
   int skill_level;
   char skill_name[SKILL_TREE_TEXT_BUFFER_SIZE];
   char skill_content[SKILL_TREE_TEXT_BUFFER_SIZE];
+  ID_SKILL skill_id;
 } SKILL;
 
 typedef struct skill_tree {
@@ -110,8 +124,6 @@ typedef struct skill_tree {
   // UI_COMP *ui_skill_tree_lv_4_skill_1_icon;
 
   T_SKILL current_page;
-
-  int skill_points;
 } SKILL_TREE;
 
 #endif

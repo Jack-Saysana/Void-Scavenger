@@ -121,4 +121,8 @@ extern I_SLOT equipped_thruster;
 extern I_SLOT equipped_weapon;
 extern I_SLOT equipped_wing;
 
+// Parts Spawn Chance
+
+extern int part_spawn_chance[];
+
 #endif

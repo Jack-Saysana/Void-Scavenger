@@ -3,6 +3,8 @@
 void pickup_item() {
   I_SLOT *slot = inv_first_avail();
   if (!slot) {
+    // TODO: add popup prompt
+    printf("INVENTORY IS FULL\n");
     return;
   }
 
