@@ -9,6 +9,8 @@ extern float RES_Y;
 extern vec2 MOUSE_POS;
 // Whether or not the mouse cursor is enabled
 extern int CURSOR_ENABLED;
+//wheteher or not enemey auto shooting is on
+extern int ESHOOT_ON;
 
 // Time passed since last frame
 extern float DELTA_TIME;

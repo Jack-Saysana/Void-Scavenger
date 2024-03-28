@@ -8,6 +8,7 @@
 */
 
 // =============================== STATION MODE ==============================
+
 // Initialize player struct at beginning of game
 int init_player() {
   memset(&st_player, 0, sizeof(PLAYER));
@@ -25,9 +26,12 @@ int init_player() {
   }
   st_player.ent->type |= T_DRIVING;
   st_player.ent->inv_mass = 1.0;
+  st_player.wrapper_offset = INVALID_INDEX;
 
   st_player.max_health = P_BASE_HEALTH;
   st_player.cur_health = P_BASE_HEALTH;
+  st_player.cur_level = 0;
+  st_player.skill_points = 0;
   st_player.max_shield = P_BASE_SHIELD;
   st_player.speed = P_BASE_SPEED;
   st_player.fire_rate = P_BASE_FIRERATE;
@@ -74,6 +78,8 @@ void reset_player() {
   player_ship.reactor.max_output = S_BASE_PWR_OUTPUT;
   player_ship.hull.max_health = S_BASE_HEALTH;
   player_ship.shield.max_shield = S_BASE_SHIELD;
+  player_ship.cur_health = S_BASE_HEALTH;
+  player_ship.cur_shield = S_BASE_SHIELD;
   player_ship.shield.recharge_rate = S_BASE_SHIELD_RECHARGE;
   player_ship.shield.recharge_delay = S_BASE_SHIELD_DELAY;
   player_ship.shield.power_draw = S_BASE_PWR_DRAW;
@@ -176,10 +182,12 @@ int init_player_ship() {
   }
   player_ship.ent->type |= T_DRIVING;
   player_ship.ent->inv_mass = 1.0;
+  player_ship.wrapper_offset = INVALID_INDEX;
 
   player_ship.cur_health = player_ship.hull.max_health;
   player_ship.cur_shield = player_ship.shield.max_shield;
   player_ship.invuln = 0;
+  player_ship.recharging_shield = 0;
 
   return 0;
 }
@@ -247,10 +255,18 @@ void player_ship_thrust_move() {
 
 // =============================== HELPERS ================================
 
+void recharge_player_shield() {
+  if (mode == SPACE) {
+    recharge_ship_shield(&player_ship);
+  } else if (mode == STATION) {
+
+  }
+}
+
 void get_player_coordinates(vec3 coords) {
   if (mode == SPACE) {
     glm_vec3_copy(player_ship.ent->translation, coords);
-  } else {
+  } else if (mode == STATION) {
     glm_vec3_copy(st_player.ent->translation, coords);
   }
 }
@@ -275,3 +291,19 @@ void get_player_gun_mat(mat4 dest) {
   glm_scale(dest, st_player.ent->scale);
   glm_mat4_mul(dest, to_player_space, dest);
 }
+
+// ================================= ANIMATION ===============================
+
+void sp_player_shield_dmg(void *args) {
+  if (player_ship.render_shield < 1.0) {
+    player_ship.render_shield += 0.05;
+    if (player_ship.render_shield > 1.0) {
+      player_ship.render_shield = 1.0;
+    }
+    add_timer(0.03, sp_player_shield_dmg, -1000, NULL);
+  } else {
+    player_ship.render_shield = 0.0;
+  }
+}
+
+// =================================== MISC ==================================

@@ -88,21 +88,23 @@ void corridor_remove_sim(size_t index) {
   sim_remove_entity(render_sim, cd_obs[index].ent);
   sim_remove_entity(combat_sim, cd_obs[index].ent);
   sim_remove_entity(physics_sim, cd_obs[index].ent);
+  sim_remove_entity(event_sim, cd_obs[index].ent);
 }
 
 int corridor_insert_sim(size_t index) {
-  if (sim_add_entity(physics_sim, cd_obs[index].ent,
-                              ALLOW_HURT_BOXES)) {
+  if (sim_add_entity(physics_sim, cd_obs[index].ent, ALLOW_HURT_BOXES)) {
     return -1;
   }
 
-  if (sim_add_entity(combat_sim, cd_obs[index].ent,
-                              ALLOW_HURT_BOXES)) {
+  if (sim_add_entity(combat_sim, cd_obs[index].ent, ALLOW_HURT_BOXES)) {
     return -1;
   }
 
-  if (sim_add_entity(render_sim, cd_obs[index].ent,
-                              ALLOW_DEFAULT)) {
+  if (sim_add_entity(render_sim, cd_obs[index].ent, ALLOW_DEFAULT)) {
+    return -1;
+  }
+
+  if (sim_add_entity(event_sim, cd_obs[index].ent, ALLOW_DEFAULT)) {
     return -1;
   }
   return 0;
@@ -462,6 +464,8 @@ void create_station_corridors() {
         // Try to spawn player in new corridor
         if (spawn_player) {
           glm_vec3_copy(position, st_player.ent->translation);
+          st_player.ent->translation[Y] += 1.0;
+          st_player.ent->velocity[Y] += 0.1;
           spawn_player = 0;
         }
 
@@ -717,7 +721,7 @@ size_t gen_cd_obj(int **maze, ivec2 coords, vec3 pos_dest, int *type_dest,
     type = TYPE_CORNER;
     rotation = 90;
   } else {
-    fprintf(stderr, "Could not find a matching corridor layout for (%d, %d)!\n",
+    fprintf(stderr, "Could not find a matching corridor layout for (%d, %d)\n",
             coords[X], coords[Y]);
     return INVALID_INDEX;
   }

@@ -14,12 +14,16 @@
 
 int init_space_mode() {
   mode = SPACE;
+  toggle_st_waypoint();
+  reset_dmg_ui_state();
   reset_camera(&camera);
   /* Ensure coordinates are enabled */
   enable_coordinates();
 
   /* Re-enable shooting (if not already) */
   enable_shooting();
+
+  /*Enemy can shoot on */
 
   // Initialize proper render distances
   RENDER_DIST = SP_BASE_RENDER_DIST;
@@ -63,7 +67,26 @@ int init_space_mode() {
   srand(glfwGetTime());
   vec3 pos = GLM_VEC3_ZERO_INIT;
   versor rot = GLM_QUAT_IDENTITY_INIT;
-  int num_enemies = BASE_NUM_ENEMIES + (rand() % 5) - 2;
+  int num_enemies = BASE_NUM_ENEMIES + (rand() % 5) - 2; //TODO update amount of enemeies based on level
+  int e_attack_type_range = 0;
+  int e_mov_type_range = 0;
+  if (st_player.total_levels_completed > E_TYPE_UPDATE_2) {
+    e_attack_type_range = 6;
+    e_mov_type_range = 3;
+  } else if (st_player.total_levels_completed > E_TYPE_UPDATE_1) {
+    e_attack_type_range = 4;
+    e_mov_type_range = 2;
+  } else if (st_player.total_levels_completed > E_TYPE_UPDATE_0) {
+    e_attack_type_range = 2;
+    e_mov_type_range = 1;
+  }
+  int attack_types_picked[E_BASE_NUM_TYPES];
+  int mov_types_picked[E_BASE_NUM_TYPES];
+  for (int i = 0; i < E_BASE_NUM_TYPES; i++) {
+    attack_types_picked[i] = gen_rand_int(e_attack_type_range + 1);
+    mov_types_picked[i] = gen_rand_int(e_mov_type_range + 1);
+    printf("\nPicked Attack_type %d, Mov Type %d\n", attack_types_picked[i], mov_types_picked[i]);
+  }
   if (num_enemies > 0) {
     for (int i = 0; i < num_enemies; i++) {
       gen_rand_vec3(&pos, 2.0 * space_size);
@@ -73,7 +96,9 @@ int init_space_mode() {
 
       gen_rand_vec4(&rot, 1.0);
       glm_quat_normalize(rot);
-      spawn_sp_enemy(pos, rot, 0);
+      int attack_picker = gen_rand_int(E_BASE_NUM_TYPES);
+      int mov_picker = gen_rand_int(E_BASE_NUM_TYPES);
+      spawn_sp_enemy(pos, rot, attack_types_picked[attack_picker], mov_types_picked[mov_picker]);
     }
   }
 
@@ -101,9 +126,9 @@ void spawn_asteroids() {
   vec3 scale = GLM_VEC3_ZERO_INIT;
   float mass = 0.0;
   for (int i = 0; i < NUM_ASTEROIDS; i++) {
-    gen_rand_vec3(&pos, 10.0);
-    gen_rand_vec3(&vel, 3.0);
-    gen_rand_vec3(&ang_vel, 1.5);
+    gen_rand_vec3_plus_minus(&pos, space_size);
+    gen_rand_vec3_plus_minus(&vel, 5.0);
+    gen_rand_vec3_plus_minus(&ang_vel, 1.5);
     gen_rand_vec3(&scale, 3.0);
     float scale_fac = gen_rand_float(3.0) + 0.1;
     mass = 2.0 * scale_fac;
@@ -156,14 +181,15 @@ void clear_space_mode() {
 int init_station_mode() {
   mode = STATION;
   reset_camera(&camera);
+  reset_dmg_ui_state();
   /* Turn off the coordinates */
   disable_coordinates();
-  
+
   /* Re-enable shooting (if not already) */
   enable_shooting();
 
   /* Clear inventory */
-  reset_inventory();
+  // reset_inventory();
 
   // Initialize proper render distances
   RENDER_DIST = ST_BASE_RENDER_DIST;
@@ -530,4 +556,8 @@ ENTITY **get_dead_zones() {
     return dead_zones;
   }
   return NULL;
+}
+
+void get_sp_station_pos(vec3 dest) {
+  glm_vec3_copy(sp_station->translation, dest);
 }

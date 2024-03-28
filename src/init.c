@@ -8,8 +8,32 @@
 
 */
 
-int init_game() {
+int barebones_init() {
+  int status = init_ui("assets/misc/quad/quad.obj", "src/shaders/ui/shader.vs",
+                       "src/shaders/ui/shader.fs",
+                       "src/shaders/font/shader.vs",
+                       "src/shaders/font/shader.fs");
+  if (status) {
+    return -1;
+  }
 
+  status = init_controls();
+  if (status) {
+    return -1;
+  }
+
+  status = init_timer_queue();
+  if (status) {
+    return -1;
+  }
+
+  barebones_ui_init();
+  clear_models();
+
+  return 0;
+}
+
+int init_game() {
   // Init required globals
   space_size = BASE_SPACE_SIZE;
   time(&start_time);
@@ -21,12 +45,6 @@ int init_game() {
     return -1;
   }
 
-  status = init_controls();
-  if (status) {
-    return -1;
-  }
-
-  status = init_timer_queue();
   status = init_wrapper_buffer();
   if (status) {
     return -1;
@@ -49,12 +67,6 @@ int init_game() {
 
   init_ui_components();
 
-  //status = init_space_mode();
-  status = init_station_mode();
-  if (status) {
-    return -1;
-  }
-
   return 0;
 }
 
@@ -64,6 +76,11 @@ void cleanup_game() {
   free_player_ship();
   free_projectile_buffer();
   free_wrapper_buffer();
+  free_enemy_buffer();
+  free_enemy_ship_buffer();
+  free_space_obstacle_buffer();
+  free_station_obstacle_buffer();
+  free_corridor_buffer();
   // Add cleanup functions above...
   free_timer_queue();
   cleanup_gl();

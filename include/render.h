@@ -1,3 +1,6 @@
+#include <pthread.h>
+#include <math.h>
+#include <string.h>
 #include <glad/glad.h>
 #include <cglm/cglm.h>
 #include <global_vars.h>
@@ -8,46 +11,69 @@
 #include <global_vars.h>
 #include <string.h>
 
+// Local structs
+typedef struct loaded_model {
+  MODEL_DATA *md;
+  MODEL *model;
+} LOADED_MODEL;
+
 // ================================= GLOBALS =================================
 
 // Shaders
+static unsigned int cubemap_shader = 0;
 static unsigned int entity_shader = 0;
 static unsigned int model_shader = 0;
 static unsigned int ui_shader = 0;
 static unsigned int basic_shader = 0;
+static unsigned int collider_shader = 0;
 static unsigned int bone_shader = 0;
 static unsigned int proj_shader = 0;
 static unsigned int glow_entity_shader = 0;
 static unsigned int glow_model_shader = 0;
 
-// Models
-static MODEL *player_model = NULL;
-static MODEL *alien_models[NUM_ALIEN_TYPES] = { NULL, NULL };
-static MODEL *player_ship_model = NULL;
-static MODEL *alien_ship_models[NUM_ALIEN_SHIP_TYPES] = { NULL, NULL };
-static MODEL *projectile_models[NUM_PROJ_TYPES] = { NULL, NULL };
-static MODEL *sphere_model = NULL;
-static MODEL *render_sphere_model = NULL;
-static MODEL *cube_model = NULL;
-static MODEL *asteroid_models[NUM_ASTEROID_TYPES] = { NULL, NULL, NULL, NULL,
-                                                      NULL };
-static MODEL *corridor_models[NUM_CORRIDOR_TYPES] = { NULL, NULL, NULL, NULL,
-                                                      NULL };
-static MODEL *station_model = NULL;
-static MODEL *terminal_model = NULL;
-static MODEL *dead_zone_model = NULL;
-static MODEL *rifle_model = NULL;
-static MODEL *shotgun_model = NULL;
-static MODEL *station_obstacles[NUM_STATION_OBSTACLE_TYPES] = {
-  NULL, NULL, NULL, NULL, NULL,
-  NULL, NULL, NULL, NULL, NULL,
-  NULL, NULL, NULL, NULL, NULL,
-  NULL, NULL, NULL, NULL, NULL,
-};
+// Common models
+typedef struct common_models {
+  LOADED_MODEL sphere_model;
+  LOADED_MODEL render_sphere_model;
+  LOADED_MODEL cube_model;
+  LOADED_MODEL tri_prism_model;
+  LOADED_MODEL dead_zone_model;
+} COMMON_MODELS;
+COMMON_MODELS c_mods;
 
-static MODEL *station_ship_parts[NUM_STATION_SHIP_PART_TYPES] = {
-  NULL, NULL, NULL, NULL, NULL, NULL
-};
+// Space mode models
+typedef struct sp_models {
+  LOADED_MODEL asteroid_models[NUM_ASTEROID_TYPES];
+  LOADED_MODEL player_ship_model;
+  LOADED_MODEL alien_ship_models[NUM_ALIEN_SHIP_TYPES];
+  LOADED_MODEL proj_model;
+  LOADED_MODEL station_model;
+} SP_MODELS;
+SP_MODELS sp_mods;
+
+// Station mode models
+typedef struct st_models {
+  LOADED_MODEL station_obstacles[NUM_STATION_OBSTACLE_TYPES];
+  LOADED_MODEL station_ship_parts[NUM_STATION_SHIP_PART_TYPES];
+  LOADED_MODEL corridor_models[NUM_CORRIDOR_TYPES];
+  LOADED_MODEL alien_models[NUM_ALIEN_TYPES];
+  LOADED_MODEL player_model;
+  LOADED_MODEL proj_model;
+  LOADED_MODEL terminal_model;
+  LOADED_MODEL rifle_model;
+  LOADED_MODEL shotgun_model;
+  LOADED_MODEL sword_model;
+} ST_MODELS;
+ST_MODELS st_mods;
+
+// Cubemaps
+unsigned int skybox;
+
+// Model loading state info
+pthread_mutex_t load_state_lock;
+int finished_loading = 0;
+int load_error = 0;
+size_t num_loaded = 0;
 
 // Common matrices
 static mat4 ortho_proj = GLM_MAT4_IDENTITY_INIT;
@@ -59,41 +85,17 @@ static int wire_frame = 0;
 static int render_arena = 0;
 static int render_bounds = 0;
 
-#define CHECK_ASSETS_LOADED (\
-!player_model || !alien_models[0] || !alien_models[1] || !player_ship_model || \
-!alien_ship_models[0] || !projectile_models[0] || !projectile_models[1] || \
-!sphere_model || !render_sphere_model || !cube_model || !station_model ||\
-!terminal_model || !rifle_model || !shotgun_model || \
-!asteroid_models[0] || !asteroid_models[1] || !asteroid_models[2] || \
-!asteroid_models[3] || !asteroid_models[4] || !corridor_models[0] || \
-!corridor_models[1] || !corridor_models[2] || !corridor_models[3] || \
-!corridor_models[4] || !dead_zone_model || \
-!station_obstacles[0] || !station_obstacles[1] || !station_obstacles[2] || \
-!station_obstacles[3] || !station_obstacles[4] || !station_obstacles[5] || \
-!station_obstacles[6] || !station_obstacles[7] || !station_obstacles[8] || \
-!station_obstacles[9] || !station_obstacles[10] || !station_obstacles[11] || \
-!station_obstacles[12] || !station_obstacles[13] || !station_obstacles[14] || \
-!station_obstacles[15] || !station_obstacles[16] || !station_obstacles[17] || \
-!station_obstacles[18] || !station_obstacles[19] || \
-!station_ship_parts[0] || !station_ship_parts[1] || !station_ship_parts[2] || \
-!station_ship_parts[3] || !station_ship_parts[4] || !station_ship_parts[5] \
-)
-
-#define st_obs_dir "./assets/station_obstacles"
-#define misc_dir "./assets/misc"
-#define actors_dir "./assets/actors"
-#define setp_dir "./assets/set_pieces"
-#define st_ship_parts_dir "./assets/station_ship_parts"
-#define shaders_dir "./src/shaders"
-
-
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
+LOADED_MODEL read_model(char *);
+void init_model(LOADED_MODEL *);
 void query_render_dist();
 void render_game_entity(ENTITY *);
 void render_oct_tree(SIMULATION *);
 void render_dead_zones();
 void get_bone_equip_mat(ENTITY *, size_t, mat4);
+void render_skybox();
+void render_shield(ENTITY *, float);
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 
@@ -102,3 +104,5 @@ void player_ship_thrust_move();
 ENTITY **get_dead_zones();
 void get_player_gun_mat(mat4);
 void populate_point_lights(unsigned int);
+void update_radar_fb();
+void update_main_menu_fb();

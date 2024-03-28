@@ -39,6 +39,7 @@ void console_ui_initialize() {
   set_ui_enabled(console_cursor, 1);
   set_ui_texture(console_cursor, "assets/transparent.png");
   cons_cursor_enabled = 1;
+  set_ui_texture(console_cursor, "assets/transparent.png");
 }
 
 int is_console_enabled() {

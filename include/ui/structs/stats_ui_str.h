@@ -33,6 +33,9 @@ typedef struct stats {
   UI_COMP *ui_thruster_border;
   UI_COMP *ui_thruster_bar;
 
+  UI_COMP *ui_level;
+  UI_COMP *ui_xp;
+
 } STATS;
 
 #endif

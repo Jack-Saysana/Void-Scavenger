@@ -13,7 +13,6 @@
 #define NO_ELEMENTS   (-2)
 #define MIN_FRONTIER  (8)
 
-
 /*
     Helper macros to convert from linear to 2D array
 */

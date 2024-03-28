@@ -46,7 +46,7 @@ void sp_enemy_remove_sim(size_t);
 void delete_projectile(size_t);
 void projectile_remove_sim(size_t);
 
-void spawn_sp_enemy(vec3, versor, int);
+void spawn_sp_enemy(vec3, versor, int, int);
 void delete_space_obstacle(size_t);
 void space_obstacle_remove_sim(size_t);
 
@@ -86,6 +86,8 @@ void create_station_corridors();
 
 /* Generation of asteroid positioning, speed, dir, etc... */
 void gen_rand_vec3(vec3 *, float);
+void gen_rand_vec3_plus_minus(vec3 *, float);
+void gen_rand_vec4_plus_minus(vec3 *, float);
 void gen_rand_vec4(vec4 *, float);
 float gen_rand_float(float);
 void seed_random();
@@ -106,5 +108,7 @@ void update_perspective();
 void reset_camera(CAM *);
 
 void enable_shooting();
+void toggle_st_waypoint();
+void reset_dmg_ui_state();
 
 void reset_inventory();

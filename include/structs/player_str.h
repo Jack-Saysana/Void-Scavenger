@@ -21,13 +21,13 @@ typedef struct skill_node {
 } SKILL;
 
 typedef enum item_slot_id {
+  I_SLOT_EMPTY,
   I_SLOT_REACTOR,
   I_SLOT_HULL,
   I_SLOT_SHIELD,
   I_SLOT_WEAPON,
   I_SLOT_WING,
-  I_SLOT_THRUSTER,
-  I_SLOT_EMPTY
+  I_SLOT_THRUSTER
 } I_SLOT_ID;
 
 typedef struct inv_slot {
@@ -68,6 +68,8 @@ typedef struct player {
   // Game stats
   size_t cur_experience;
   size_t max_experience;
+  int cur_level;
+  int skill_points;
   float cur_health;
   float max_health;
   float cur_shield;

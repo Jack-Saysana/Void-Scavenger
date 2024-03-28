@@ -19,9 +19,9 @@ void free_items_buffer() {
   items = NULL;
 }
 
-// ================== INDIVIDUAL INITIALIZATION AND CLEANUP ================== 
+// ================== INDIVIDUAL INITIALIZATION AND CLEANUP ==================
 
-size_t init_item(int type, int rarity, vec3 pos, vec3 scale, 
+size_t init_item(int type, int rarity, vec3 pos, vec3 scale,
                               versor rotation, float mass) {
   if (items == NULL) {
     fprintf(stderr, "Error: Inserting into a deallocated item buffer\n");
@@ -102,6 +102,8 @@ size_t restore_item(size_t inv_slot_num) {
     }
   } else if (slot->type == I_SLOT_THRUSTER) {
     part->type = PART_THRUSTER;
+  } else if (slot->type == I_SLOT_WING) {
+    part->type = PART_WING;
   }
 
   part->ent = init_item_ent(part->type);
@@ -118,7 +120,7 @@ size_t restore_item(size_t inv_slot_num) {
   /* Copy over part data */
   memcpy(&part->enhancements, &slot->data, sizeof(slot->data));
   part->rarity = slot->rarity;
-  
+
   glm_vec3_copy((vec3) { 0.0, 0.0, 0.0 }, part->ent->ang_velocity);
   glm_vec3_copy((vec3) { 0.0, 0.01, 0.0 }, part->ent->velocity);
   part->ent->rotation[0] = 0.0;
@@ -324,7 +326,7 @@ void set_enhancements(ST_ITEM *part, int type, int rarity) {
       /* TODO: Fill in with laser specific changes */
       part->enhancements.weapon.type = LASER;
       part->enhancements.weapon.damage = S_BASE_DAMAGE;
-      part->enhancements.weapon.fire_rate = S_BASE_FIRERATE;
+      part->enhancements.weapon.fire_rate = S_BASE_FIRERATE_LASER;
       part->enhancements.weapon.max_power_draw = S_BASE_PWR_DRAW;
       part->enhancements.weapon.proj_speed = S_BASE_PROJ_SPEED;
       part->enhancements.weapon.range = S_BASE_RANGE;

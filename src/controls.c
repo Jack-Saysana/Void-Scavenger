@@ -35,6 +35,9 @@ int init_controls() {
 // ================================= HANDLERS ================================
 
 void keyboard_input(GLFWwindow *window) {
+  if (mode != SPACE && mode != STATION) {
+    return;
+  }
   // Insert keyboard handlers here...
   if (keyboard_enabled) {
     input_keys(window);
@@ -77,17 +80,29 @@ void mouse_pos_callback(GLFWwindow *window, double x_pos, double y_pos) {
     glm_mat4_quat(rotation, rot_quat);
     glm_quat_mul(rot_quat, st_player.ent->rotation, st_player.ent->rotation);
   } else if (!CURSOR_ENABLED && mode == SPACE) {
-    /* rotates the ships pitch and yaw*/
-    mat4 rotation = GLM_MAT4_IDENTITY_INIT;
-    vec3 ship_up;
-    vec3 ship_side;
-    glm_quat_rotatev(player_ship.ent->rotation, (vec3){0.0, 1.0, 0.0}, ship_up);
-    glm_quat_rotatev(player_ship.ent->rotation, (vec3){0.0, 0.0, 1.0}, ship_side);
-    glm_rotate(rotation, glm_rad(5.0 * -mouse_dif[1] * DELTA_TIME), ship_side);
-    glm_rotate(rotation, glm_rad(5.0 * -mouse_dif[0] * DELTA_TIME), ship_up);
-    versor rot_quat = GLM_QUAT_IDENTITY_INIT;
-    glm_mat4_quat(rotation, rot_quat);
-    glm_quat_mul(rot_quat, player_ship.ent->rotation, player_ship.ent->rotation);
+    mat3 ship_to_world = GLM_MAT3_IDENTITY_INIT;
+    glm_quat_rotatev(player_ship.ent->rotation, (vec3) { 0.0, 0.0, -1.0 },
+                     ship_to_world[X]);
+    glm_quat_rotatev(player_ship.ent->rotation, (vec3) { 0.0, 1.0, 0.0 },
+                     ship_to_world[Y]);
+    glm_quat_rotatev(player_ship.ent->rotation, (vec3) { 1.0, 0.0, 0.0 },
+                     ship_to_world[Z]);
+
+    float x_mul = -fmin(1.0, fmax(-1.0, mouse_dif[0]));
+    float y_mul = fmin(1.0, fmax(-1.0, mouse_dif[1]));
+
+    vec3 rot_vec = { player_ship.wing.max_ang_accel * y_mul * DELTA_TIME,
+                     player_ship.wing.max_ang_accel * x_mul * DELTA_TIME,
+                     0.0 };
+    glm_mat3_mulv(ship_to_world, rot_vec, rot_vec);
+    glm_vec3_add(rot_vec, player_ship.ent->ang_velocity,
+                 player_ship.ent->ang_velocity);
+    if (glm_vec3_norm(player_ship.ent->ang_velocity) >
+        player_ship.wing.max_ang_vel) {
+      glm_vec3_scale_as(player_ship.ent->ang_velocity,
+                        player_ship.wing.max_ang_vel,
+                        player_ship.ent->ang_velocity);
+    }
   }
   prev_mouse_pos[0] = x_pos;
   prev_mouse_pos[1] = y_pos;
@@ -145,8 +160,8 @@ void mouse_button_callback(GLFWwindow *window, int button, int action,
         glm_quat_rotatev(player_ship.ent->rotation, (vec3){0.0, 1.0, 0.0}, ship_up);
         glm_normalize(ship_up);
         /* rotate left gun to converage */
-        glm_vec3_rotate(ship_forward, glm_rad(-5.0), ship_side);
-        glm_vec3_rotate(ship_forward, glm_rad(-0.625), ship_up);
+        glm_vec3_rotate(ship_forward, glm_rad(-1.5), ship_side);
+        glm_vec3_rotate(ship_forward, glm_rad(-0.3125), ship_up);
         /* get left gun offset pos */
         vec3 gun_pos = GLM_VEC3_ZERO_INIT;
         glm_vec3_scale_as(ship_forward, 7.0, gun_pos);
@@ -169,7 +184,7 @@ void mouse_button_callback(GLFWwindow *window, int button, int action,
         glm_vec3_add(player_ship.ent->translation, gun_pos, gun_pos);
         glm_vec3_add(gun_pos, ship_side, gun_pos);
         /* rotate right gun to converage */
-        glm_vec3_rotate(ship_forward, glm_rad(1.25), ship_up);
+        glm_vec3_rotate(ship_forward, glm_rad(0.625), ship_up);
         /* spawn right projectile*/
         proj_index = init_projectile(gun_pos,
                                      ship_forward,
@@ -251,7 +266,7 @@ void input_keys(GLFWwindow *window) {
           toggle_inventory();
         }
         if (i == GLFW_KEY_K && !holding_alpha[i - GLFW_KEY_A]) {
-          /* Handle I press */
+          /* Handle K press */
           toggle_skill_tree();
         }
         if (i == GLFW_KEY_E && get_terminal_ui_state() &&
@@ -311,6 +326,12 @@ void input_keys(GLFWwindow *window) {
         }  else if (i == GLFW_KEY_P && !holding_alpha[i - GLFW_KEY_A]) {
           /* Handle P press (Ship Parts at Space Mode) */
           toggle_ship_parts();
+        } else if (i == GLFW_KEY_I && !holding_alpha[i - GLFW_KEY_A]) {
+          /* Handle I press */
+          toggle_inventory();
+        }
+        if (i == GLFW_KEY_C && !holding_alpha[i - GLFW_KEY_A]) {
+          toggle_st_waypoint();
         }
       }
       holding_alpha[i - GLFW_KEY_A] = 1;
@@ -448,6 +469,16 @@ void input_keys(GLFWwindow *window) {
     }
   } else if (glfwGetKey(window, GLFW_KEY_SLASH) != GLFW_PRESS) {
     holding_slash = 0;
+  }
+
+  /* Tab */
+  if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS) {
+    if (mode == SPACE && !holding_tab) {
+      target_nearest_enemy();
+    }
+    holding_tab = 1;
+  } else {
+    holding_tab = 0;
   }
 }
 
