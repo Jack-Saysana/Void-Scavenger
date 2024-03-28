@@ -466,7 +466,7 @@ void init_skills() {
   skill_tree.skill_survival_lv1.parent_skill = NULL;
   skill_tree.skill_survival_lv1.is_unlocked = 0;
   snprintf(skill_tree.skill_survival_lv1.skill_name, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE SURVIVAL LV1");
-  snprintf(skill_tree.skill_survival_lv1.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE SURVIVAL LV1 SKILLS");
+  snprintf(skill_tree.skill_survival_lv1.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE SURVIVAL LV1\nSKILLS");
   skill_tree.skill_survival_lv1.skill_level = 1;
   skill_tree.skill_survival_lv1.skill_type = T_SURVIVAL;
   skill_tree.skill_survival_lv1.skill_id = ID_NOT_SKILL;
@@ -490,7 +490,7 @@ void init_skills() {
   skill_tree.skill_survival_lv2.parent_skill = &skill_tree.skill_survival_lv1;
   skill_tree.skill_survival_lv2.is_unlocked = 0;
   snprintf(skill_tree.skill_survival_lv2.skill_name, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE SURVIVAL LV2");
-  snprintf(skill_tree.skill_survival_lv2.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE SURVIVAL LV2 SKILLS");
+  snprintf(skill_tree.skill_survival_lv2.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE SURVIVAL LV2\nSKILLS");
   skill_tree.skill_survival_lv2.skill_level = 2;
   skill_tree.skill_survival_lv2.skill_type = T_SURVIVAL;
   skill_tree.skill_survival_lv2.skill_id = ID_NOT_SKILL;
@@ -506,7 +506,7 @@ void init_skills() {
   skill_tree.skill_survival_lv3.parent_skill = &skill_tree.skill_survival_lv2;
   skill_tree.skill_survival_lv3.is_unlocked = 0;
   snprintf(skill_tree.skill_survival_lv3.skill_name, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE SURVIVAL LV3");
-  snprintf(skill_tree.skill_survival_lv3.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE SURVIVAL LV3 SKILLS");
+  snprintf(skill_tree.skill_survival_lv3.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE SURVIVAL LV3\nSKILLS");
   skill_tree.skill_survival_lv3.skill_level = 3;
   skill_tree.skill_survival_lv3.skill_type = T_SURVIVAL;
   skill_tree.skill_survival_lv3.skill_id = ID_NOT_SKILL;
@@ -514,7 +514,7 @@ void init_skills() {
   skill_tree.skill_survival_lv4.parent_skill = &skill_tree.skill_survival_lv3;
   skill_tree.skill_survival_lv4.is_unlocked = 0;
   snprintf(skill_tree.skill_survival_lv4.skill_name, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE SURVIVAL LV4");
-  snprintf(skill_tree.skill_survival_lv4.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE SURVIVAL LV4 SKILLS");
+  snprintf(skill_tree.skill_survival_lv4.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE SURVIVAL LV4\nSKILLS");
   skill_tree.skill_survival_lv4.skill_level = 4;
   skill_tree.skill_survival_lv4.skill_type = T_SURVIVAL;
   skill_tree.skill_survival_lv4.skill_id = ID_NOT_SKILL;
@@ -527,7 +527,7 @@ void init_skills() {
   skill_tree.skill_combat_lv1.parent_skill = NULL;
   skill_tree.skill_combat_lv1.is_unlocked = 0;
   snprintf(skill_tree.skill_combat_lv1.skill_name, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE COMBAT LV1");
-  snprintf(skill_tree.skill_combat_lv1.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE COMBAT LV1 SKILLS");
+  snprintf(skill_tree.skill_combat_lv1.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE COMBAT LV1\nSKILLS");
   skill_tree.skill_combat_lv1.skill_level = 1;
   skill_tree.skill_combat_lv1.skill_type = T_COMBAT;
   skill_tree.skill_combat_lv1.skill_id = ID_NOT_SKILL;
@@ -535,7 +535,7 @@ void init_skills() {
   skill_tree.skill_combat_lv1_skill_1.parent_skill = &skill_tree.skill_combat_lv1;
   skill_tree.skill_combat_lv1_skill_1.is_unlocked = 0;
   snprintf(skill_tree.skill_combat_lv1_skill_1.skill_name, SKILL_TREE_TEXT_BUFFER_SIZE, ".45 MAGNUM BULLET");
-  snprintf(skill_tree.skill_combat_lv1_skill_1.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ADD 20 ATTACK DAMAGE");
+  snprintf(skill_tree.skill_combat_lv1_skill_1.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ADD 20%% ATTACK DAMAGE");
   skill_tree.skill_combat_lv1_skill_1.skill_level = 1;
   skill_tree.skill_combat_lv1_skill_1.skill_type = T_COMBAT;
   skill_tree.skill_combat_lv1_skill_1.skill_id = ID_COMBAT_LV1_SKILL_1;
@@ -551,7 +551,7 @@ void init_skills() {
   skill_tree.skill_combat_lv2.parent_skill = &skill_tree.skill_combat_lv1;
   skill_tree.skill_combat_lv2.is_unlocked = 0;
   snprintf(skill_tree.skill_combat_lv2.skill_name, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE COMBAT LV2");
-  snprintf(skill_tree.skill_combat_lv2.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE COMBAT LV2 SKILLS");
+  snprintf(skill_tree.skill_combat_lv2.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE COMBAT LV2\nSKILLS");
   skill_tree.skill_combat_lv2.skill_level = 2;
   skill_tree.skill_combat_lv2.skill_type = T_COMBAT;
   skill_tree.skill_combat_lv2.skill_id = ID_NOT_SKILL;
@@ -559,7 +559,7 @@ void init_skills() {
   skill_tree.skill_combat_lv2_skill_1.parent_skill = &skill_tree.skill_combat_lv2;
   skill_tree.skill_combat_lv2_skill_1.is_unlocked = 0;
   snprintf(skill_tree.skill_combat_lv2_skill_1.skill_name, SKILL_TREE_TEXT_BUFFER_SIZE, "MAGNUM VOLLEYFIRE");
-  snprintf(skill_tree.skill_combat_lv2_skill_1.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ADD 20 ATTACK DAMAGE AND INCREASE 20%% FIRE RATE");
+  snprintf(skill_tree.skill_combat_lv2_skill_1.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ADD 20%% ATTACK DAMAGE\nAND INCREASE 20%% FIRE RATE");
   skill_tree.skill_combat_lv2_skill_1.skill_level = 2;
   skill_tree.skill_combat_lv2_skill_1.skill_type = T_COMBAT;
   skill_tree.skill_combat_lv2_skill_1.skill_id = ID_COMBAT_LV2_SKILL_1;
@@ -567,7 +567,7 @@ void init_skills() {
   skill_tree.skill_combat_lv3.parent_skill = &skill_tree.skill_combat_lv2;
   skill_tree.skill_combat_lv3.is_unlocked = 0;
   snprintf(skill_tree.skill_combat_lv3.skill_name, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE COMBAT LV3");
-  snprintf(skill_tree.skill_combat_lv3.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE COMBAT LV3 SKILLS");
+  snprintf(skill_tree.skill_combat_lv3.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE COMBAT LV3\nSKILLS");
   skill_tree.skill_combat_lv3.skill_level = 3;
   skill_tree.skill_combat_lv3.skill_type = T_COMBAT;
   skill_tree.skill_combat_lv3.skill_id = ID_NOT_SKILL;
@@ -575,7 +575,7 @@ void init_skills() {
   skill_tree.skill_combat_lv4.parent_skill = &skill_tree.skill_combat_lv3;
   skill_tree.skill_combat_lv4.is_unlocked = 0;
   snprintf(skill_tree.skill_combat_lv4.skill_name, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE COMBAT LV4");
-  snprintf(skill_tree.skill_combat_lv4.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE COMBAT LV4 SKILLS");
+  snprintf(skill_tree.skill_combat_lv4.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE COMBAT LV4\nSKILLS");
   skill_tree.skill_combat_lv4.skill_level = 4;
   skill_tree.skill_combat_lv4.skill_type = T_COMBAT;
   skill_tree.skill_combat_lv4.skill_id = ID_NOT_SKILL;
@@ -588,7 +588,7 @@ void init_skills() {
   skill_tree.skill_exploration_lv1.parent_skill = NULL;
   skill_tree.skill_exploration_lv1.is_unlocked = 0;
   snprintf(skill_tree.skill_exploration_lv1.skill_name, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE EXPLORATION LV1");
-  snprintf(skill_tree.skill_exploration_lv1.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE EXPLORATION LV1 SKILLS");
+  snprintf(skill_tree.skill_exploration_lv1.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE EXPLORATION LV1\nSKILLS");
   skill_tree.skill_exploration_lv1.skill_level = 1;
   skill_tree.skill_exploration_lv1.skill_type = T_EXPLORATION;
   skill_tree.skill_exploration_lv1.skill_id = ID_NOT_SKILL;
@@ -596,7 +596,7 @@ void init_skills() {
   skill_tree.skill_exploration_lv1_skill_1.parent_skill = &skill_tree.skill_exploration_lv1;
   skill_tree.skill_exploration_lv1_skill_1.is_unlocked = 0;
   snprintf(skill_tree.skill_exploration_lv1_skill_1.skill_name, SKILL_TREE_TEXT_BUFFER_SIZE, "EXOSKELETON LEG");
-  snprintf(skill_tree.skill_exploration_lv1_skill_1.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ADD 2 SPEED");
+  snprintf(skill_tree.skill_exploration_lv1_skill_1.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ADD 20%% SPEED");
   skill_tree.skill_exploration_lv1_skill_1.skill_level = 1;
   skill_tree.skill_exploration_lv1_skill_1.skill_type = T_EXPLORATION;
   skill_tree.skill_exploration_lv1_skill_1.skill_id = ID_EXPLORATION_LV1_SKILL_1;
@@ -604,7 +604,7 @@ void init_skills() {
   skill_tree.skill_exploration_lv1_skill_2.parent_skill = &skill_tree.skill_exploration_lv1;
   skill_tree.skill_exploration_lv1_skill_2.is_unlocked = 0;
   snprintf(skill_tree.skill_exploration_lv1_skill_2.skill_name, SKILL_TREE_TEXT_BUFFER_SIZE, "FORTUNE");
-  snprintf(skill_tree.skill_exploration_lv1_skill_2.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "EASIER TO FIND REARE ITEMS");
+  snprintf(skill_tree.skill_exploration_lv1_skill_2.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "EASIER TO FIND RARER ITEMS (2%%)");
   skill_tree.skill_exploration_lv1_skill_2.skill_level = 1;
   skill_tree.skill_exploration_lv1_skill_2.skill_type = T_EXPLORATION;
   skill_tree.skill_exploration_lv1_skill_2.skill_id = ID_EXPLORATION_LV1_SKILL_2;
@@ -612,7 +612,7 @@ void init_skills() {
   skill_tree.skill_exploration_lv2.parent_skill = &skill_tree.skill_exploration_lv1;
   skill_tree.skill_exploration_lv2.is_unlocked = 0;
   snprintf(skill_tree.skill_exploration_lv2.skill_name, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE EXPLORATION LV2");
-  snprintf(skill_tree.skill_exploration_lv2.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE EXPLORATION LV2 SKILLS");
+  snprintf(skill_tree.skill_exploration_lv2.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE EXPLORATION LV2\nSKILLS");
   skill_tree.skill_exploration_lv2.skill_level = 2;
   skill_tree.skill_exploration_lv2.skill_type = T_EXPLORATION;
   skill_tree.skill_exploration_lv2.skill_id = ID_NOT_SKILL;
@@ -620,7 +620,7 @@ void init_skills() {
   skill_tree.skill_exploration_lv2_skill_1.parent_skill = &skill_tree.skill_exploration_lv2;
   skill_tree.skill_exploration_lv2_skill_1.is_unlocked = 0;
   snprintf(skill_tree.skill_exploration_lv2_skill_1.skill_name, SKILL_TREE_TEXT_BUFFER_SIZE, "TREASURE HUNTER");
-  snprintf(skill_tree.skill_exploration_lv2_skill_1.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ADD 2 SPEED AND EASIER TO FIND REARE ITEMS");
+  snprintf(skill_tree.skill_exploration_lv2_skill_1.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ADD 20%% SPEED AND FIND\nRARER ITEMS EASIER (2%%)");
   skill_tree.skill_exploration_lv2_skill_1.skill_level = 2;
   skill_tree.skill_exploration_lv2_skill_1.skill_type = T_EXPLORATION;
   skill_tree.skill_exploration_lv2_skill_1.skill_id = ID_EXPLORATION_LV2_SKILL_1;
@@ -628,7 +628,7 @@ void init_skills() {
   skill_tree.skill_exploration_lv3.parent_skill = &skill_tree.skill_exploration_lv2;
   skill_tree.skill_exploration_lv3.is_unlocked = 0;
   snprintf(skill_tree.skill_exploration_lv3.skill_name, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE EXPLORATION LV3");
-  snprintf(skill_tree.skill_exploration_lv3.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE EXPLORATION LV3 SKILLS");
+  snprintf(skill_tree.skill_exploration_lv3.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE EXPLORATION LV3\nSKILLS");
   skill_tree.skill_exploration_lv3.skill_level = 3;
   skill_tree.skill_exploration_lv3.skill_type = T_EXPLORATION;
   skill_tree.skill_exploration_lv3.skill_id = ID_NOT_SKILL;
@@ -636,7 +636,7 @@ void init_skills() {
   skill_tree.skill_exploration_lv4.parent_skill = &skill_tree.skill_exploration_lv3;
   skill_tree.skill_exploration_lv4.is_unlocked = 0;
   snprintf(skill_tree.skill_exploration_lv4.skill_name, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE EXPLORATION LV4");
-  snprintf(skill_tree.skill_exploration_lv4.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE EXPLORATION LV4 SKILLS");
+  snprintf(skill_tree.skill_exploration_lv4.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ENABLE EXPLORATION LV4\nSKILLS");
   skill_tree.skill_exploration_lv4.skill_level = 4;
   skill_tree.skill_exploration_lv4.skill_type = T_EXPLORATION;
   skill_tree.skill_exploration_lv4.skill_id = ID_NOT_SKILL;
