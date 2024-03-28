@@ -30,6 +30,7 @@ size_t init_item(int type, int rarity, vec3 pos, vec3 scale,
 
   ST_ITEM *part = items + num_items;
   part->type = type;
+  
   part->ent = init_item_ent(part->type);
   if (part->ent == NULL) {
     fprintf(stderr, "Error: Unable to allocate item entity\n");
