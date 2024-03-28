@@ -3,10 +3,6 @@
 
 #include "./entity_str.h"
 
-typedef struct material {
-  uint64_t name;
-  char *mat_paths[NUM_PROPS];
-} MATERIAL;
 
 typedef struct vbo {
   float vertex[3];
@@ -25,7 +21,7 @@ typedef struct model_data {
   int *bone_collider_links;
   COLLIDER *colliders;
   int *collider_bone_links;
-  MATERIAL *obj_mat;
+  char *mat_paths[NUM_PROPS];
   VBO *vertices;
   int *indices;
   size_t num_animations;

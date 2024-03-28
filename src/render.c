@@ -30,6 +30,8 @@ int init_scene() {
                                  "./src/shaders/bone/shader.fs");
   proj_shader = init_shader_prog("./src/shaders/projectile/shader.vs", NULL,
                                  "./src/shaders/projectile/shader.fs");
+  station_sp_shader = init_shader_prog("./src/shaders/model/shader.vs", NULL,
+                                       "./src/shaders/model/station_sp.fs");
 
   // Init models below...
   init_common_assets();
@@ -62,6 +64,7 @@ int init_scene() {
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   CURSOR_ENABLED = 0;
+  ESHOOT_ON = 0;
 
   glm_vec3_copy((vec3) {0.0, 0.0, 0.0}, camera.pos);
   camera.pitch = 0.0;
@@ -173,8 +176,15 @@ void query_render_dist() {
 void render_game_entity(ENTITY *ent) {
   SOBJ *wrapper = object_wrappers + (size_t) ent->data;
   if (wrapper->type == PROJ_OBJ) {
+    glUseProgram(proj_shader);
+    if (projectiles[(size_t) wrapper->data].type == BALLISTIC) {
+      set_vec3("col",(vec3){0.98, 0.98, 0.02}, proj_shader);
+    } else if ( projectiles[(size_t) wrapper->data].type == PLASMA) {
+      set_vec3("col",(vec3){0.0, 0.0, 1.0}, proj_shader);
+    } else if ( projectiles[(size_t) wrapper->data].type == LASER) {
+      set_vec3("col",(vec3){1.0, 0.0, 0.0}, proj_shader);
+    }
     if (projectiles[(size_t) wrapper->data].collision) {
-      glUseProgram(proj_shader);
       mat4 model = GLM_MAT4_IDENTITY_INIT;
       glm_translate(model, ent->translation);
       glm_quat_rotate(model, ent->rotation, model);
@@ -198,6 +208,22 @@ void render_game_entity(ENTITY *ent) {
       draw_model(model_shader, st_mods.rifle_model.model);
     }
     draw_entity(entity_shader, ent);
+  } else if (wrapper->type == ITEM_OBJ) {
+    /* TODO: Update to new shader */
+    ST_ITEM *part = items + (size_t) wrapper->data;
+    glUseProgram(model_shader);
+    mat4 model = GLM_MAT4_IDENTITY_INIT;
+    glm_translate(model, ent->translation);
+    glm_quat_rotate(model, ent->rotation, model);
+    glm_scale(model, ent->scale);
+    set_mat4("model", model, model_shader);
+    if (part->type == PART_WEAPON_BALLISTIC ||
+        part->type == PART_WEAPON_LASER ||
+        part->type == PART_WEAPON_PLASMA) {
+      draw_model(model_shader, st_mods.station_ship_parts[TYPE_WEAPON].model);
+    } else {
+      draw_model(model_shader, st_mods.station_ship_parts[part->type].model);
+    }
   } else {
     draw_entity(entity_shader, ent);
   }
@@ -353,6 +379,15 @@ MODEL *get_tri_prism_model() {
 
 unsigned int get_basic_shader() {
   return basic_shader;
+}
+
+ENTITY *init_item_ent(PART_T type) {
+  if (type == PART_WEAPON_PLASMA ||
+      type == PART_WEAPON_BALLISTIC ||
+      type == PART_WEAPON_LASER) {
+    return init_entity(st_mods.station_ship_parts[TYPE_WEAPON].model);
+  }
+  return init_entity(st_mods.station_ship_parts[type].model);
 }
 
 void toggle_hit_boxes() {

@@ -39,7 +39,9 @@ void keyboard_input(GLFWwindow *window) {
     return;
   }
   // Insert keyboard handlers here...
-  input_keys(window);
+  if (keyboard_enabled) {
+    input_keys(window);
+  }
 }
 
 void fb_size_callback(GLFWwindow *window, int res_x, int res_y) {
@@ -146,8 +148,8 @@ void mouse_button_callback(GLFWwindow *window, int button, int action,
         glm_quat_rotatev(player_ship.ent->rotation, (vec3){0.0, 1.0, 0.0}, ship_up);
         glm_normalize(ship_up);
         /* rotate left gun to converage */
-        glm_vec3_rotate(ship_forward, glm_rad(-5.0), ship_side);
-        glm_vec3_rotate(ship_forward, glm_rad(-0.625), ship_up);
+        glm_vec3_rotate(ship_forward, glm_rad(-1.5), ship_side);
+        glm_vec3_rotate(ship_forward, glm_rad(-0.3125), ship_up);
         /* get left gun offset pos */
         vec3 gun_pos = GLM_VEC3_ZERO_INIT;
         glm_vec3_scale_as(ship_forward, 7.0, gun_pos);
@@ -170,7 +172,7 @@ void mouse_button_callback(GLFWwindow *window, int button, int action,
         glm_vec3_add(player_ship.ent->translation, gun_pos, gun_pos);
         glm_vec3_add(gun_pos, ship_side, gun_pos);
         /* rotate right gun to converage */
-        glm_vec3_rotate(ship_forward, glm_rad(1.25), ship_up);
+        glm_vec3_rotate(ship_forward, glm_rad(0.625), ship_up);
         /* spawn right projectile*/
         proj_index = init_projectile(gun_pos,
                                      ship_forward,
@@ -252,13 +254,25 @@ void input_keys(GLFWwindow *window) {
           toggle_inventory();
         }
         if (i == GLFW_KEY_K && !holding_alpha[i - GLFW_KEY_A]) {
-          /* Handle I press */
+          /* Handle K press */
           toggle_skill_tree();
         }
         if (i == GLFW_KEY_E && get_terminal_ui_state() &&
                    !holding_alpha[i - GLFW_KEY_A]) {
+          /* Handle using terminal in space mode */
           set_gamemode_space();
           st_player.total_levels_completed++;
+        }
+        if (i == GLFW_KEY_E && get_item_prompt_state() &&
+            !holding_alpha[i - GLFW_KEY_A]) {
+          /* Handle picking up an item */
+          pickup_item();
+        }
+        if (i == GLFW_KEY_Q && !holding_alpha[i - GLFW_KEY_A]) {
+          size_t to_drop = find_first_filled();
+          if (to_drop != INVALID_INDEX) {
+            drop_item(to_drop);
+          }
         }
       } else if (!console_enabled && mode == SPACE) {
         if (i == GLFW_KEY_W) {
@@ -300,6 +314,9 @@ void input_keys(GLFWwindow *window) {
         }  else if (i == GLFW_KEY_P && !holding_alpha[i - GLFW_KEY_A]) {
           /* Handle P press (Ship Parts at Space Mode) */
           toggle_ship_parts();
+        } else if (i == GLFW_KEY_I && !holding_alpha[i - GLFW_KEY_A]) {
+          /* Handle I press */
+          toggle_inventory();
         }
         if (i == GLFW_KEY_C && !holding_alpha[i - GLFW_KEY_A]) {
           toggle_st_waypoint();
@@ -481,4 +498,8 @@ void update_cursor_enabledness() {
 
 void enable_shooting() {
   can_shoot = 1;
+}
+
+void set_keyboard_enabledness(int set) {
+  keyboard_enabled = set;
 }

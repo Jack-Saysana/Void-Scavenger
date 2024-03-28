@@ -5,6 +5,7 @@
 #include <global_vars.h>
 #include <engine/engine.h>
 #include <structs/camera_str.h>
+#include <structs/item_str.h>
 #include <const.h>
 #include <global_vars.h>
 
@@ -17,13 +18,14 @@ typedef struct loaded_model {
 // ================================= GLOBALS =================================
 
 // Shaders
-unsigned int entity_shader;
-unsigned int model_shader;
-unsigned int ui_shader;
-unsigned int basic_shader;
-unsigned int collider_shader;
-unsigned int bone_shader;
-unsigned int proj_shader;
+static unsigned int entity_shader = 0;
+static unsigned int model_shader = 0;
+static unsigned int ui_shader = 0;
+static unsigned int basic_shader = 0;
+static unsigned int collider_shader = 0;
+static unsigned int bone_shader = 0;
+static unsigned int proj_shader = 0;
+static unsigned int station_sp_shader = 0;
 
 // Common models
 typedef struct common_models {
@@ -48,6 +50,7 @@ SP_MODELS sp_mods;
 // Station mode models
 typedef struct st_models {
   LOADED_MODEL station_obstacles[NUM_STATION_OBSTACLE_TYPES];
+  LOADED_MODEL station_ship_parts[NUM_STATION_SHIP_PART_TYPES];
   LOADED_MODEL corridor_models[NUM_CORRIDOR_TYPES];
   LOADED_MODEL alien_models[NUM_ALIEN_TYPES];
   LOADED_MODEL player_model;

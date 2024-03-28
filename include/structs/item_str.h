@@ -10,12 +10,14 @@
 */
 
 typedef enum part_type {
-  PART_REACTOR,
-  PART_HULL,
-  PART_SHIELD,
-  PART_WEAPON,
-  PART_WING,
-  PART_THRUSTER
+  PART_REACTOR           = 2,
+  PART_HULL              = 1,
+  PART_SHIELD            = 3,
+  PART_WEAPON_BALLISTIC  = 6,
+  PART_WEAPON_LASER      = 7,
+  PART_WEAPON_PLASMA     = 8,
+  PART_WING              = 5,
+  PART_THRUSTER          = 0,
 } PART_T;
 
 typedef struct item_ent {
@@ -31,8 +33,9 @@ typedef struct item_ent {
     S_WEAPON weapon;
     S_WING wing;
     S_THRUSTER thruster;
-  } data;
+  } enhancements;
   PART_T type;
+  int rarity;
 } ST_ITEM;
 
 #endif

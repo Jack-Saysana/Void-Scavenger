@@ -5,6 +5,7 @@
 #include <structs/parser_str.h>
 #include <float.h>
 #include <global_vars.h>
+#include <structs/ship_str.h>
 
 /* DEFINES */
 /* Command identifiers and arguments */
@@ -34,7 +35,13 @@
 #define SHIELD               ("shield")
 #define HEALTH               ("health")
 #define XP                   ("xp")
-
+#define GAMELEVEL            ("gamelevel")
+#define ESHOOT               ("eshoot")
+#define GUN                  ("gun")
+#define GAMEOVER             ("gameover")
+#define BALLISTIC_CMD        ("ballistic")
+#define LASER_CMD            ("laser")
+#define PLASMA_CMD           ("plasma")
 #define MAX_TOKS (10)
 
 /* GLOBALS */
@@ -58,6 +65,7 @@ void toggle_wire_frame();
 void toggle_render_arena();
 void toggle_render_bounds();
 void cursor_on(int);
+void eshoot_on(int);
 void set_gamemode_station();
 void set_gamemode_space();
 void quit();
@@ -73,3 +81,6 @@ void set_arena(float);
 void set_player_health(float, int);
 void set_player_shield(float, int);
 void set_player_xp(float);
+void set_gamelevel(float);
+void game_over();
+void set_gun(S_WEAPON_T);

@@ -3,6 +3,7 @@
 #include <const.h>
 #include <global_vars.h>
 
+
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
 void handle_physics_collisions(COLLISION *, size_t);
@@ -38,3 +39,5 @@ void sp_player_shield_dmg(void *);
 void player_health_dmg();
 
 float gen_rand_float_plus_minus(float);
+void game_over();
+void set_item_prompt(int);

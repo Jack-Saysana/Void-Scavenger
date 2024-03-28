@@ -23,6 +23,8 @@ int init_space_mode() {
   /* Re-enable shooting (if not already) */
   enable_shooting();
 
+  /*Enemy can shoot on */
+
   // Initialize proper render distances
   RENDER_DIST = SP_BASE_RENDER_DIST;
   glm_vec3_copy((vec3) { RENDER_DIST, RENDER_DIST, RENDER_DIST },
@@ -65,7 +67,26 @@ int init_space_mode() {
   srand(glfwGetTime());
   vec3 pos = GLM_VEC3_ZERO_INIT;
   versor rot = GLM_QUAT_IDENTITY_INIT;
-  int num_enemies = BASE_NUM_ENEMIES + (rand() % 5) - 2;
+  int num_enemies = BASE_NUM_ENEMIES + (rand() % 5) - 2; //TODO update amount of enemeies based on level
+  int e_attack_type_range = 0;
+  int e_mov_type_range = 0;
+  if (st_player.total_levels_completed > E_TYPE_UPDATE_2) {
+    e_attack_type_range = 6;
+    e_mov_type_range = 3;
+  } else if (st_player.total_levels_completed > E_TYPE_UPDATE_1) {
+    e_attack_type_range = 4;
+    e_mov_type_range = 2;
+  } else if (st_player.total_levels_completed > E_TYPE_UPDATE_0) {
+    e_attack_type_range = 2;
+    e_mov_type_range = 1;
+  }
+  int attack_types_picked[E_BASE_NUM_TYPES];
+  int mov_types_picked[E_BASE_NUM_TYPES];
+  for (int i = 0; i < E_BASE_NUM_TYPES; i++) {
+    attack_types_picked[i] = gen_rand_int(e_attack_type_range + 1);
+    mov_types_picked[i] = gen_rand_int(e_mov_type_range + 1);
+    printf("\nPicked Attack_type %d, Mov Type %d\n", attack_types_picked[i], mov_types_picked[i]);
+  }
   if (num_enemies > 0) {
     for (int i = 0; i < num_enemies; i++) {
       gen_rand_vec3(&pos, 2.0 * space_size);
@@ -75,7 +96,9 @@ int init_space_mode() {
 
       gen_rand_vec4(&rot, 1.0);
       glm_quat_normalize(rot);
-      spawn_sp_enemy(pos, rot, 0);
+      int attack_picker = gen_rand_int(E_BASE_NUM_TYPES);
+      int mov_picker = gen_rand_int(E_BASE_NUM_TYPES);
+      spawn_sp_enemy(pos, rot, attack_types_picked[attack_picker], mov_types_picked[mov_picker]);
     }
   }
 
@@ -165,6 +188,9 @@ int init_station_mode() {
   /* Re-enable shooting (if not already) */
   enable_shooting();
 
+  /* Clear inventory */
+  // reset_inventory();
+
   // Initialize proper render distances
   RENDER_DIST = ST_BASE_RENDER_DIST;
   glm_vec3_copy((vec3) {RENDER_DIST, RENDER_DIST, RENDER_DIST },
@@ -200,6 +226,11 @@ int init_station_mode() {
   sim_add_entity(render_sim, sim_sphere, ALLOW_DEFAULT);
 
   status = init_station_obstacle_buffer();
+  if (status) {
+    return -1;
+  }
+
+  status = init_items_buffer();
   if (status) {
     return -1;
   }
@@ -253,6 +284,7 @@ void clear_station_mode() {
   free_enemy_buffer();
   free_corridor_buffer();
   free_station_obstacle_buffer();
+  free_items_buffer();
 
   // Reset wrapper buffer length
   num_wrappers = 0;
@@ -287,10 +319,15 @@ int delete_stale_objects() {
       i--;
     }
   }
-  for (size_t i = 0; i < num_items; i++) {
-    cur_wrapper = object_wrappers + items[i].wrapper_offset;
-    if (cur_wrapper->to_delete) {
-      // Delete item
+  if (mode == STATION) {
+    for (size_t i = 0; i < num_items; i++) {
+      cur_wrapper = object_wrappers + items[i].wrapper_offset;
+      if (cur_wrapper->to_delete) {
+        // Delete item
+        item_remove_sim(i);
+        delete_item(i);
+        i--;
+      }
     }
   }
   for (size_t i = 0; i < num_obstacles; i++) {

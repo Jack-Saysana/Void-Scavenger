@@ -63,6 +63,22 @@ void console_dispatcher() {
               command_not_found();
             }
           /* END: set cursor */
+        } else  if (strncmp(command[1].tok, ESHOOT, sizeof(ESHOOT)) == 0) {
+          /* BEGIN: set eshoot */
+            if (command[2].kind == IDENTIFIER &&
+                strncmp(command[2].tok, ON, sizeof(ON)) == 0) {
+              /* BEGIN: set eshoot on */
+              eshoot_on(1);
+              /* END: set eshoot on */
+            } else if (command[2].kind == IDENTIFIER &&
+                       strncmp(command[2].tok, OFF, sizeof(OFF)) == 0) {
+              /* BEGIN: set eshoot off */
+              eshoot_on(0);
+              /* END: set eshoot off */
+            } else {
+              command_not_found();
+            }
+          /* END: set eshoot */
         } else if (strncmp(command[1].tok, GAMEMODE, sizeof(GAMEMODE)) == 0) {
           /* BEGIN: set gamemode */
           if (command[2].kind == IDENTIFIER) {
@@ -99,6 +115,27 @@ void console_dispatcher() {
             command_not_found();
           }
           /* END: set arena */
+        } else  if (strncmp(command[1].tok, GUN, sizeof(GUN)) == 0) {
+          /* BEGIN: set gun */
+            if (command[2].kind == IDENTIFIER &&
+                strncmp(command[2].tok, BALLISTIC_CMD, sizeof(BALLISTIC_CMD)) == 0) {
+              /* BEGIN: set gun ballistic */
+              set_gun(BALLISTIC);
+              /* END: set gun ballistic */
+            } else if (command[2].kind == IDENTIFIER &&
+                       strncmp(command[2].tok, LASER_CMD, sizeof(LASER_CMD)) == 0) {
+              /* BEGIN: set gun laser */
+              set_gun(LASER);
+              /* END: set gun laser */
+            } else if (command[2].kind == IDENTIFIER &&
+                       strncmp(command[2].tok, PLASMA_CMD, sizeof(PLASMA_CMD)) == 0) {
+              /* BEGIN: set gun plasma */
+              set_gun(PLASMA);
+              /* END: set gun plasma */
+            } else {
+              command_not_found();
+            }
+          /* END: set gun */
         } else if (strncmp(command[1].tok, PLAYER, sizeof(PLAYER)) == 0) {
           /* BEGIN: set player */
           if (command[2].kind == IDENTIFIER) {
@@ -198,6 +235,17 @@ void console_dispatcher() {
             command_not_found();
           }
           /* END: set player */
+        } else if (strncmp(command[1].tok, GAMELEVEL, sizeof(GAMELEVEL)) == 0) {
+          /* BEGIN: set gamelevel */
+          if (command[2].kind == NUMBER) {
+            float input = create_float(2);
+            if (input == FLT_MAX) {
+              command_not_found();
+            }
+            set_gamelevel(input);
+            return;
+          }
+          /*END: set gamelevel*/
         }  else {
           command_not_found();
         }
@@ -257,6 +305,10 @@ void console_dispatcher() {
       /* BEGIN: quit */
       quit();
       /* END: quit */
+    } else if (strncmp(command[0].tok, GAMEOVER, sizeof(GAMEOVER)) == 0) {
+      /* BEGIN: gameover */
+      game_over();
+      /* END: gameover */
     } else if (strncmp(command[0].tok, SET_SIM_DIST,
                        sizeof(SET_SIM_DIST)) == 0) {
       /* BEGIN: ssd */

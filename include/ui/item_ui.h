@@ -2,9 +2,9 @@
 #include <engine/engine.h>
 #include <global_vars.h>
 
-static char *term_msg = "Greetings, Solider.\nPress 'e' to enter your ship";
-static UI_COMP *terminal_ui = NULL;
-static int terminal_enabled = 0;
+static char *item_msg = "Press 'e'\nto pickup";
+static UI_COMP *item_ui = NULL;
+static int item_prompt_enabled = 0;
 
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
