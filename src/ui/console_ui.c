@@ -12,7 +12,7 @@ void console_ui_initialize() {
   set_ui_texture(console_root, "assets/transparent.png");
 
   /* Actual console itself */
-  console = add_ui_comp(console_root, (vec2) { 0.0 , 0.0 }, 0.5, 0.05,
+  console = add_ui_comp(console_root, (vec2) { 0.0 , 0.0 }, 0.5, 0.025,
                         RELATIVE_POS | POS_UNIT_RATIO |
                         WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
                         LINE_UNIT_RATIO_Y);
@@ -22,7 +22,7 @@ void console_ui_initialize() {
 
 
   /* Console error component - is only shown when error occurs */
-  console_error = add_ui_comp(console_root, (vec2) { 0.0, -0.05 }, 0.500001, 0.05,
+  console_error = add_ui_comp(console_root, (vec2) { 0.0, -0.025 }, 0.500001, 0.025,
                             RELATIVE_POS | POS_UNIT_RATIO |
                             WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
                             LINE_UNIT_RATIO_Y);
@@ -31,7 +31,7 @@ void console_ui_initialize() {
   set_ui_texture(console_error, "assets/transparent.png");
 
   /* Console cursor - tracks how many characters have been typed */
-  console_cursor = add_ui_comp(console_root, (vec2) { 0.0, 0.0 }, 0.5, 0.05,
+  console_cursor = add_ui_comp(console_root, (vec2) { 0.0, 0.0 }, 0.5, 0.025,
                         ABSOLUTE_POS | POS_UNIT_RATIO |
                         WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
                         LINE_UNIT_RATIO_Y);

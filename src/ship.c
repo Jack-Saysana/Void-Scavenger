@@ -26,7 +26,7 @@ void recharge_ship_shield(SHIP *ship) {
 }
 
 void ship_shield_recharge_delay(void *args) {
-  if (!args || (size_t) args == INVALID_INDEX) {
+  if (args == ((void *) INVALID_INDEX)) {
     return;
   }
 

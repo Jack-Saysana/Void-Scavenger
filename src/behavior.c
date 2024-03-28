@@ -41,9 +41,12 @@ void sp_enemy_pathfind(size_t index) {
   } else if (e_pos[Z] <= turning_rad - space_size) {
     target_dir[Z] = (turning_rad - space_size) - e_pos[Z];
   }
+  glm_vec3_normalize(target_dir);
+  glm_vec3_normalize(forward);
+  float alignment = glm_vec3_dot(target_dir, forward);
   // Slow down ship as it approaches a collision
   float speed_modifier = glm_vec3_norm(target_dir);
-  if (speed_modifier) {
+  if (speed_modifier && alignment < 0.99) {
     speed_modifier = 5.0 / fabs(speed_modifier);
     if (speed_modifier < 1.0) {
       target_speed *= speed_modifier;
@@ -51,7 +54,6 @@ void sp_enemy_pathfind(size_t index) {
   }
   glm_vec3_normalize(target_dir);
 
-  float alignment = glm_vec3_dot(target_dir, forward);
   vec3 rot_vec = GLM_VEC3_ZERO_INIT;
   if ((target_dir[X] || target_dir[Y] || target_dir[Z]) &&
        alignment < 0.9) {

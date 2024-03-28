@@ -273,7 +273,8 @@ void slot_on_click(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
         player_ship.cur_shield = fmin(player_ship.shield.max_shield,
                                       player_ship.cur_shield);
         player_ship.recharging_shield = 0;
-        update_timer_args(ship_shield_recharge_delay, &player_ship, NULL);
+        update_timer_args(ship_shield_recharge_delay, &player_ship,
+                          (void *) INVALID_INDEX);
         add_timer(player_ship.shield.recharge_delay,
                   ship_shield_recharge_delay, -1000, &player_ship);
         break;
