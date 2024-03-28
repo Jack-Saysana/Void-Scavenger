@@ -14,7 +14,7 @@ skill tree.
     otherwise unsuccessful
 */
 int init_skill_tree() {
-  init_skills(); st_player.skill_points = 100;
+  init_skills();
   skill_tree.current_page = T_SURVIVAL;
 
   skill_tree.ui_skill_tree_root = add_ui_comp(

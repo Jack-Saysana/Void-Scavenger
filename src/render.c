@@ -52,7 +52,34 @@ int init_scene() {
     "./assets/textures/skybox_front.png",
     "./assets/textures/skybox_back.png"
   };
+  char *sb_paths_01[] = {
+    "./assets/textures/PolygonSciFiSpace_Skybox_01_Left.png",
+    "./assets/textures/PolygonSciFiSpace_Skybox_01_Right.png",
+    "./assets/textures/PolygonSciFiSpace_Skybox_01_Down.png",
+    "./assets/textures/PolygonSciFiSpace_Skybox_01_Up.png",
+    "./assets/textures/PolygonSciFiSpace_Skybox_01_Front.png",
+    "./assets/textures/PolygonSciFiSpace_Skybox_01_Back.png"
+  };
+  char *sb_paths_02[] = {
+    "./assets/textures/PolygonSciFiSpace_Skybox_02_Left.png",
+    "./assets/textures/PolygonSciFiSpace_Skybox_02_Right.png",
+    "./assets/textures/PolygonSciFiSpace_Skybox_02_Down.png",
+    "./assets/textures/PolygonSciFiSpace_Skybox_02_Up.png",
+    "./assets/textures/PolygonSciFiSpace_Skybox_02_Front.png",
+    "./assets/textures/PolygonSciFiSpace_Skybox_02_Back.png"
+  };
+  char *sb_paths_03[] = {
+    "./assets/textures/PolygonSciFiSpace_Skybox_03_Left.png",
+    "./assets/textures/PolygonSciFiSpace_Skybox_03_Right.png",
+    "./assets/textures/PolygonSciFiSpace_Skybox_03_Down.png",
+    "./assets/textures/PolygonSciFiSpace_Skybox_03_Up.png",
+    "./assets/textures/PolygonSciFiSpace_Skybox_03_Front.png",
+    "./assets/textures/PolygonSciFiSpace_Skybox_03_Back.png"
+  };
   gen_cubemap(sb_paths, &skybox);
+  gen_cubemap(sb_paths_03, &skybox);
+  gen_cubemap(sb_paths_02, &skybox);
+  gen_cubemap(sb_paths_01, &skybox);
 
   // Init models below...
   init_common_assets();
