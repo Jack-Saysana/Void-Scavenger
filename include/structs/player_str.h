@@ -11,15 +11,6 @@
 
 */
 
-// Represents a skill in the player's skill tree
-typedef struct skill_node {
-  struct skill_node *children;
-  size_t num_children;
-  size_t exp_req;
-  int id;
-  int unlocked;
-} SKILL;
-
 typedef enum item_slot_id {
   I_SLOT_EMPTY,
   I_SLOT_REACTOR,
@@ -55,8 +46,7 @@ typedef struct player {
   double total_damage_taken;
   double total_experience;
 
-  // Skills and inv
-  SKILL *skills;
+  // inv
   I_SLOT *inventory;
   size_t i_size;
 
@@ -76,6 +66,7 @@ typedef struct player {
   float max_shield;
   float speed;
   float fire_rate;
+  float damage;
   int invuln;
 } PLAYER;
 

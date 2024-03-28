@@ -7,6 +7,7 @@
 #define P_BASE_SPEED (10.0)
 #define P_BASE_FIRERATE (0.1)
 #define P_BASE_MAX_EXP (100.0)
+#define P_BASE_DAMAGE (100.0)
 #define P_LEVEL_SCALE (50.0)
 
 // Ship constants
@@ -120,8 +121,8 @@
 #define SPACE_DEPTH (8)
 #define STATION_SIZE (80.0)
 #define STATION_DEPTH (6)
-#define ST_BASE_RENDER_DIST (14.0)
-#define ST_BASE_SIM_DIST (16.0)
+#define ST_BASE_RENDER_DIST (40.0)
+#define ST_BASE_SIM_DIST (32.0)
 #define SP_BASE_RENDER_DIST (500.0)
 #define SP_BASE_SIM_DIST (256.0)
 #define BASE_NUM_ENEMIES (5)

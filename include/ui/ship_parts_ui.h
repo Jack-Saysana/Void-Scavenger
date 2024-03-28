@@ -32,7 +32,14 @@ void ship_parts_on_hover_wrapper(UI_COMP *ui_ship_parts, void *arg);
 void ship_parts_on_hover(UI_COMP *ui_ship_parts, I_SLOT *equipped_ship_parts);
 void ship_parts_off_hover_wrapper(UI_COMP *ui_ship_parts, void *arg);
 void ship_parts_off_hover(UI_COMP *ui_ship_parts, I_SLOT *equipped_ship_parts);
+void ship_parts_on_click(UI_COMP *ui_ship_parts, I_SLOT *equipped_ship_parts);
+void update_ship_stats();
 
 /* ================= EXTERNALLY DEFINED FUNCTIONS ================ */
+void switch_slot(I_SLOT *slot_a, I_SLOT *slot_b);
+I_SLOT *inv_first_avail();
+void ship_shield_recharge_delay(void *);
+void update_timer_args(void *, void *, void *);
+int add_timer(float, void *, int, void *);
 
 #endif

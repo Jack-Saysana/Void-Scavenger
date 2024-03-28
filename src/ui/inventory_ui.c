@@ -24,7 +24,7 @@ int init_inventory() {
   );
   set_ui_texture(inventory.ui_inventory_root, "assets/transparent.png");
 
-    inventory.ui_inventory_info_background = add_ui_comp(
+  inventory.ui_inventory_info_background = add_ui_comp(
     inventory.ui_inventory_root, // UI_COMP *parent
     (vec2) { 0.15, -0.15 }, // vec2 pos
     0.24, // float width
@@ -237,7 +237,6 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
                  inventory_slot->data.thruster.max_accel, inventory_slot->data.thruster.max_power_draw, inventory_slot->data.thruster.max_vel);
         break;
       default:
-        set_ui_texture(ui_inventory_slot, "assets/transparent.png");
         break;
     }
     set_ui_text(inventory.ui_inventory_info_content_text, inventory_info_content_buffer, 0.08, 

@@ -428,7 +428,11 @@ void populate_point_lights(unsigned int shader) {
     char col_buff[64];
     char pos_buff[64];
     char a_consts_buff[3][64];
+    #ifdef __linux__
     sprintf(struct_buff, "light[%ld].", i);
+    #else
+    sprintf(struct_buff, "light[%lld].", i);
+    #endif
 
     strncpy(col_buff, struct_buff, sizeof(col_buff));
     strncpy(pos_buff, struct_buff, sizeof(pos_buff));

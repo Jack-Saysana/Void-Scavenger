@@ -307,9 +307,6 @@ void free_maze(int **maze) {
     White  (50%)
 */
 int ship_parts_rng() {
-  int part_spawn_chance[RARITY_LEVELS] = {
-    50, 25, 10, 3, 0 
-  };
   int rand = gen_rand_int(100);
   for (int i = 0; i < RARITY_LEVELS && rand > -1; i++) {
     if (rand > part_spawn_chance[i]) {

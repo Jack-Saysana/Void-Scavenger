@@ -35,6 +35,7 @@ int init_player() {
   st_player.max_shield = P_BASE_SHIELD;
   st_player.speed = P_BASE_SPEED;
   st_player.fire_rate = P_BASE_FIRERATE;
+  st_player.damage = P_BASE_DAMAGE;
   st_player.max_experience = P_BASE_MAX_EXP;
   st_player.invuln = 0;
 

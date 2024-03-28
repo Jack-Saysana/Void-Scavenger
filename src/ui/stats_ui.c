@@ -206,7 +206,7 @@ int init_stats() {
   stats.ui_level = add_ui_comp(
     stats.ui_stats_root, //UI_comp *parnet
     (vec2) {0.99, -0.97}, //vec2 pos
-    0.1, //float width
+    0.2, //float width
     0.05, //float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_Y
   );
@@ -216,7 +216,7 @@ int init_stats() {
   stats.ui_xp = add_ui_comp(
     stats.ui_stats_root, //UI_comp *parnet
     (vec2) {0.99, -0.99}, //vec2 pos
-    0.05, //float width
+    0.2, //float width
     0.025, //float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_Y
   );
@@ -237,7 +237,6 @@ void update_stats() {
                          calc_power_usage(&player_ship)) /
                          player_ship.reactor.max_output;
     // update stats
-    // TODO: Should be functional in sprint 2
     set_ui_height(stats.ui_shield_bar,
                   player_ship.cur_shield / player_ship.shield.max_shield);
     set_ui_height(stats.ui_health_bar,
@@ -247,9 +246,7 @@ void update_stats() {
                   player_ship.cur_speed / player_ship.thruster.max_vel);
   } else if (mode == STATION) {
     switch_station_hud();
-
     // update stats
-    // TODO: Should be functional in sprint 2
     set_ui_width(stats.ui_shield_bar,
                  st_player.cur_shield / st_player.max_shield);
     set_ui_width(stats.ui_health_bar,
