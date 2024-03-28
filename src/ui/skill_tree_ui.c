@@ -543,7 +543,7 @@ void init_skills() {
   skill_tree.skill_combat_lv1_skill_2.parent_skill = &skill_tree.skill_combat_lv1;
   skill_tree.skill_combat_lv1_skill_2.is_unlocked = 0;
   snprintf(skill_tree.skill_combat_lv1_skill_2.skill_name, SKILL_TREE_TEXT_BUFFER_SIZE, "POWERED TRIGGER");
-  snprintf(skill_tree.skill_combat_lv1_skill_2.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ADD 0.05 FIRE RATE");
+  snprintf(skill_tree.skill_combat_lv1_skill_2.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "INCREASE 20%% FIRE RATE");
   skill_tree.skill_combat_lv1_skill_2.skill_level = 1;
   skill_tree.skill_combat_lv1_skill_2.skill_type = T_COMBAT;
   skill_tree.skill_combat_lv1_skill_2.skill_id = ID_COMBAT_LV1_SKILL_2;
@@ -559,7 +559,7 @@ void init_skills() {
   skill_tree.skill_combat_lv2_skill_1.parent_skill = &skill_tree.skill_combat_lv2;
   skill_tree.skill_combat_lv2_skill_1.is_unlocked = 0;
   snprintf(skill_tree.skill_combat_lv2_skill_1.skill_name, SKILL_TREE_TEXT_BUFFER_SIZE, "MAGNUM VOLLEYFIRE");
-  snprintf(skill_tree.skill_combat_lv2_skill_1.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ADD 20 ATTACK DAMAGE AND 0.05 FIRE RATE");
+  snprintf(skill_tree.skill_combat_lv2_skill_1.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ADD 20 ATTACK DAMAGE AND INCREASE 20%% FIRE RATE");
   skill_tree.skill_combat_lv2_skill_1.skill_level = 2;
   skill_tree.skill_combat_lv2_skill_1.skill_type = T_COMBAT;
   skill_tree.skill_combat_lv2_skill_1.skill_id = ID_COMBAT_LV2_SKILL_1;
@@ -856,11 +856,11 @@ void enable_skill(SKILL *skill_slot) {
       st_player.damage += 20;
       break;
     case ID_COMBAT_LV1_SKILL_2:
-      st_player.fire_rate += 0.05;
+      st_player.fire_rate -= 0.02;
       break;
     case ID_COMBAT_LV2_SKILL_1:
       st_player.damage += 20;
-      st_player.fire_rate += 0.05;
+      st_player.fire_rate -= 0.02;
       break;
     //Exploration Skills
     case ID_EXPLORATION_LV1_SKILL_1:

@@ -46,6 +46,7 @@ void input_keys(GLFWwindow *);
 void advance_cursor();
 void retreat_cursor();
 void update_cursor_enabledness();
+void set_can_shoot(int is_can_shoot);
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 void tokenize(char *, unsigned int);

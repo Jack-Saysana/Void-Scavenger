@@ -280,6 +280,7 @@ void slot_on_click(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
       case I_SLOT_WEAPON:
         switch_slot(&equipped_weapon, inventory_slot);
         player_ship.weapon = equipped_weapon.data.weapon;
+        set_can_shoot(1);
         break;
       case I_SLOT_WING:
         switch_slot(&equipped_wing, inventory_slot);
