@@ -1,11 +1,11 @@
 #include <ui/fps_ui.h>
 
 void fps_ui_initialize() {
-  fps = add_ui_comp(UI_ROOT_COMP, (vec2) { 0.5 , -0.025 }, 0.5, 0.05,
+  fps = add_ui_comp(UI_ROOT_COMP, (vec2) { 0.5 , 0.0 }, 0.5, 0.025,
                         RELATIVE_POS | POS_UNIT_RATIO |
                         WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
                         LINE_UNIT_RATIO_Y);
-  set_ui_pivot(fps, PIVOT_CENTER);
+  set_ui_pivot(fps,  PIVOT_TOP);
   memset(fps_buffer, '\0', FPS_BUFFER_SIZE);
   set_ui_texture(fps, "assets/transparent.png");
   set_ui_enabled(fps, (fps_enabled = 0));
