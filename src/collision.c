@@ -25,7 +25,7 @@ void handle_collisions() {
   }
 
   integrate_sim(physics_sim, sim_sphere->translation, SIM_DIST);
-  
+
   // Take new position and find distance between
   if (mode == SPACE) {
     st_player.total_distance_flown += glm_vec3_distance(player_position,
@@ -302,6 +302,11 @@ void decrement_player_shield(float damage, float timing) {
     if (player_ship.cur_shield && damage) {
       sp_player_shield_dmg(NULL);
     }
+    player_ship.recharging_shield = 0;
+    update_timer_args(ship_shield_recharge_delay, &player_ship, NULL);
+    add_timer(player_ship.shield.recharge_delay, ship_shield_recharge_delay,
+              -1000, &player_ship);
+
     player_ship.cur_shield -= damage;
     if (player_ship.cur_shield <= 0.0) {
       player_health_dmg();
@@ -364,6 +369,12 @@ void decrement_enemy_shield(size_t index, float damage, float timing) {
       if (enemy->cur_shield && damage) {
         sp_enemy_shield_dmg((void *) index);
       }
+      enemy->recharging_shield = 0;
+      update_timer_args(ship_shield_recharge_delay, (void *) index,
+                        (void *) INVALID_INDEX);
+      add_timer(enemy->shield.recharge_delay, ship_shield_recharge_delay,
+                -1000, (void *) index);
+
       enemy->cur_shield -= damage;
       if (enemy->cur_shield <= 0.0) {
         enemy->cur_health += enemy->cur_shield;

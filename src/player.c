@@ -183,6 +183,7 @@ int init_player_ship() {
   player_ship.cur_health = player_ship.hull.max_health;
   player_ship.cur_shield = player_ship.shield.max_shield;
   player_ship.invuln = 0;
+  player_ship.recharging_shield = 0;
 
   return 0;
 }
@@ -250,6 +251,14 @@ void player_ship_thrust_move() {
 
 // =============================== HELPERS ================================
 
+void recharge_player_shield() {
+  if (mode == SPACE) {
+    recharge_ship_shield(&player_ship);
+  } else if (mode == STATION) {
+
+  }
+}
+
 void get_player_coordinates(vec3 coords) {
   if (mode == SPACE) {
     glm_vec3_copy(player_ship.ent->translation, coords);
@@ -292,3 +301,5 @@ void sp_player_shield_dmg(void *args) {
     player_ship.render_shield = 0.0;
   }
 }
+
+// =================================== MISC ==================================

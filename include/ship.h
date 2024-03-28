@@ -1,8 +1,7 @@
 #include <engine/engine.h>
-#include <structs/ship_str.h>
+#include <global_vars.h>
 
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
-
 
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================

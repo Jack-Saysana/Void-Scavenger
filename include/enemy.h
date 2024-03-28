@@ -30,3 +30,5 @@ void sp_enemy_pathfind(size_t);
 void st_enemy_pathfind(size_t);
 
 int gen_rand_int(int);
+void ship_shield_recharge_delay(void *);
+void recharge_ship_shield(SHIP *);

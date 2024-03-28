@@ -236,6 +236,7 @@ size_t init_enemy_ship(int index) {
 
   new_enemy->cur_health = new_enemy->hull.max_health;
   new_enemy->cur_shield = new_enemy->shield.max_shield;
+  new_enemy->recharging_shield = 0;
   new_enemy->invuln = 0;
 
   num_enemies++;
@@ -264,6 +265,8 @@ void delete_enemy_ship(size_t index) {
   update_timer_memory(&sp_enemies[index].invuln, NULL);
   update_timer_args(sp_enemy_shield_dmg, (void *) index,
                     (void *) INVALID_INDEX);
+  update_timer_args(ship_shield_recharge_delay, (void *) index,
+                    (void *) INVALID_INDEX);
   free_entity(sp_enemies[index].ent);
   delete_wrapper(sp_enemies[index].wrapper_offset);
 
@@ -276,6 +279,8 @@ void delete_enemy_ship(size_t index) {
   update_timer_memory(&sp_enemies[num_enemies].invuln,
                       &sp_enemies[index].invuln);
   update_timer_args(sp_enemy_shield_dmg, (void *) num_enemies,
+                    (void *) index);
+  update_timer_args(ship_shield_recharge_delay, (void *) num_enemies,
                     (void *) index);
   SOBJ *wrapper = object_wrappers + sp_enemies[index].wrapper_offset;
   wrapper->data = (void *) index;
@@ -344,13 +349,31 @@ void spawn_sp_enemy(vec3 pos, versor rot, int type) {
 // ================================ BEHAVIOR =================================
 
 void enemy_behavior() {
-  for (size_t i = 0; i < num_enemies; i++) {
-    if (mode == SPACE) {
-      sp_enemy_pathfind(i);
-    } else if (mode == STATION) {
-      st_enemy_pathfind(i);
+  if (mode != SPACE && mode != STATION) {
+    return;
+  }
+
+  COLLISION *sim_enemies = NULL;
+  size_t sim_num = 0;
+  if (mode == SPACE) {
+    sim_num = sim_get_nearby(render_sim, &sim_enemies,
+                             player_ship.ent->translation, SIM_DIST);
+  } else if (mode == STATION) {
+    sim_num = sim_get_nearby(render_sim, &sim_enemies,
+                             st_player.ent->translation, SIM_DIST);
+  }
+
+  SOBJ *wrapper = NULL;
+  for (size_t i = 0; i < sim_num; i++) {
+    wrapper = object_wrappers + (size_t) sim_enemies[i].b_ent->data;
+    if (mode == SPACE && wrapper->type == ENEMY_SHIP_OBJ) {
+      recharge_ship_shield(sp_enemies + (size_t) wrapper->data);
+      sp_enemy_pathfind((size_t) wrapper->data);
+    } else if (mode == STATION && wrapper->type == ENEMY_OBJ) {
+      st_enemy_pathfind((size_t) wrapper->data);
     }
   }
+  free(sim_enemies);
 }
 
 // ================================= ANIMATION ===============================
