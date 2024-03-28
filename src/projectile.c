@@ -23,6 +23,7 @@ int init_projectile_buffer() {
 
 void free_projectile_buffer() {
   free(projectiles);
+  projectiles = NULL;
 }
 
 // ================== INDIVIDUAL INITIALIZATION AND CLEANUP ==================

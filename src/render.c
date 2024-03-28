@@ -14,8 +14,16 @@
 // Functions used for loading/initializing assets
 #include <load_assets.h>
 
+void clear_models() {
+  memset(&c_mods, 0, sizeof(COMMON_MODELS));
+  memset(&sp_mods, 0, sizeof(SP_MODELS));
+  memset(&st_mods, 0, sizeof(ST_MODELS));
+}
+
 int init_scene() {
   // Init shaders below...
+  cubemap_shader = init_shader_prog("./src/shaders/cubemap/shader.vs", NULL,
+                                    "./src/shaders/cubemap/shader.fs");
   entity_shader = init_shader_prog("./src/shaders/entity/shader.vs", NULL,
                                    "./src/shaders/entity/shader.fs");
   model_shader = init_shader_prog("./src/shaders/model/shader.vs", NULL,
@@ -32,6 +40,17 @@ int init_scene() {
                                  "./src/shaders/projectile/shader.fs");
   station_sp_shader = init_shader_prog("./src/shaders/model/shader.vs", NULL,
                                        "./src/shaders/model/station_sp.fs");
+
+  // Init cubemaps below...
+  char *sb_paths[] = {
+    "./assets/textures/skybox_right.png",
+    "./assets/textures/skybox_left.png",
+    "./assets/textures/skybox_up.png",
+    "./assets/textures/skybox_down.png",
+    "./assets/textures/skybox_front.png",
+    "./assets/textures/skybox_back.png"
+  };
+  gen_cubemap(sb_paths, &skybox);
 
   // Init models below...
   init_common_assets();
@@ -63,7 +82,6 @@ int init_scene() {
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  CURSOR_ENABLED = 0;
   ESHOOT_ON = 0;
 
   glm_vec3_copy((vec3) {0.0, 0.0, 0.0}, camera.pos);
@@ -93,9 +111,17 @@ void render_scene(GLFWwindow *window) {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // Render to main scene
-  if (mode != LOADING) {
+  if (mode == SPACE || mode == STATION) {
     mat4 view = GLM_MAT4_IDENTITY_INIT;
     get_cam_matrix(&camera, view);
+    mat4 skybox_view = GLM_MAT4_IDENTITY_INIT;
+    glm_mat4_copy(view, skybox_view);
+    glm_vec3_zero(skybox_view[3]);
+
+    glUseProgram(cubemap_shader);
+    set_mat4("projection", persp_proj, cubemap_shader);
+    set_mat4("view", skybox_view, cubemap_shader);
+    set_vec3("camera_pos", camera.pos, cubemap_shader);
 
     glUseProgram(entity_shader);
     set_mat4("projection", persp_proj, entity_shader);
@@ -125,6 +151,9 @@ void render_scene(GLFWwindow *window) {
       glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 
+    if (mode == SPACE) {
+      render_skybox();
+    }
     if (render_arena) {
       render_oct_tree(physics_sim);
     }
@@ -201,11 +230,19 @@ void render_game_entity(ENTITY *ent) {
     if (enemy->max_health > 100.0) {
       get_bone_equip_mat(ent, 14, model);
       set_mat4("model", model, model_shader);
-      draw_model(model_shader, st_mods.shotgun_model.model);
+      if (enemy->weapon_type == RANGED) {
+        draw_model(model_shader, st_mods.shotgun_model.model);
+      } else {
+        draw_model(model_shader, st_mods.sword_model.model);
+      }
     } else {
       get_bone_equip_mat(ent, 15, model);
       set_mat4("model", model, model_shader);
-      draw_model(model_shader, st_mods.rifle_model.model);
+      if (enemy->weapon_type == RANGED) {
+        draw_model(model_shader, st_mods.rifle_model.model);
+      } else {
+        draw_model(model_shader, st_mods.sword_model.model);
+      }
     }
     draw_entity(entity_shader, ent);
   } else if (wrapper->type == ITEM_OBJ) {
@@ -244,6 +281,17 @@ void render_game_entity(ENTITY *ent) {
     draw_colliders(collider_shader, ent, c_mods.sphere_model.model);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   }
+}
+
+void render_skybox() {
+  glDepthMask(GL_FALSE);
+  glUseProgram(cubemap_shader);
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_CUBE_MAP, skybox);
+  set_mat4("model", GLM_MAT4_IDENTITY, cubemap_shader);
+  set_int("cube_map", 0, cubemap_shader);
+  draw_model(cubemap_shader, c_mods.cube_model.model);
+  glDepthMask(GL_TRUE);
 }
 
 void render_shield(ENTITY *ent, float shield_state) {
@@ -369,6 +417,15 @@ ENTITY *init_terminal_ent() {
   return init_entity(st_mods.terminal_model.model);
 }
 
+ENTITY *init_item_ent(PART_T type) {
+  if (type == PART_WEAPON_PLASMA ||
+      type == PART_WEAPON_BALLISTIC ||
+      type == PART_WEAPON_LASER) {
+    return init_entity(st_mods.station_ship_parts[TYPE_WEAPON].model);
+  }
+  return init_entity(st_mods.station_ship_parts[type].model);
+}
+
 MODEL *get_sphere_model() {
   return c_mods.sphere_model.model;
 }
@@ -377,17 +434,20 @@ MODEL *get_tri_prism_model() {
   return c_mods.tri_prism_model.model;
 }
 
+MODEL *get_player_ship_model() {
+  return sp_mods.player_ship_model.model;
+}
+
 unsigned int get_basic_shader() {
   return basic_shader;
 }
 
-ENTITY *init_item_ent(PART_T type) {
-  if (type == PART_WEAPON_PLASMA ||
-      type == PART_WEAPON_BALLISTIC ||
-      type == PART_WEAPON_LASER) {
-    return init_entity(st_mods.station_ship_parts[TYPE_WEAPON].model);
-  }
-  return init_entity(st_mods.station_ship_parts[type].model);
+unsigned int get_model_shader() {
+  return model_shader;
+}
+
+unsigned int get_cubemap_shader() {
+  return cubemap_shader;
 }
 
 void toggle_hit_boxes() {
@@ -410,6 +470,7 @@ void update_perspective() {
   glm_perspective(glm_rad(45.0), RES_X / RES_Y, 0.1f, RENDER_DIST, persp_proj);
 
   update_radar_fb();
+  update_main_menu_fb();
 }
 
 void to_screen_space(vec4 pos, vec4 dest) {

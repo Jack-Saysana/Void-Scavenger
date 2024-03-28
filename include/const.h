@@ -64,10 +64,14 @@
 #define NUM_ALIEN_SHIP_TYPES (3)
 #define NUM_ALIEN_ATTACK_TYPES (7)
 #define NUM_ALIEN_MOV_TYPES (4)
-#define E_ANIM_HURT (0)
-#define E_ANIM_SHOOTING (1)
-#define E_ANIM_STANDING (2)
-#define E_ANIM_WALK (3)
+#define E_ANIM_HURT_MELEE (0)
+#define E_ANIM_HURT_RANGED (1)
+#define E_ANIM_SHOOTING (2)
+#define E_ANIM_STANDING_MELEE (3)
+#define E_ANIM_STANDING_RANGED (4)
+#define E_ANIM_SWINGING (5)
+#define E_ANIM_WALK_MELEE (6)
+#define E_ANIM_WALK_RANGED (7)
 
 #define BRUTE (0)
 #define NORMAL (1)
@@ -170,6 +174,11 @@
 
 // Targeting System consts
 #define MAX_TARGET_DIST (100.0)
+
+// Pathfinding consts
+#define ST_ENEMY_SEARCH_DEPTH (4)
+#define ST_ENEMY_RANGE_MIN (10.0)
+#define ST_ENEMY_RANGE_MAX (15.0)
 
 // Misc
 #define X (0)

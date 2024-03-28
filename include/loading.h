@@ -15,4 +15,3 @@ void reset_load_state();
 int get_finished_loading();
 void *load_assets(void *);
 int init_game();
-void init_loading_ui();

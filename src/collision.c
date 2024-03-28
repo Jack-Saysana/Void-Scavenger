@@ -25,7 +25,7 @@ void handle_collisions() {
   }
 
   integrate_sim(physics_sim, sim_sphere->translation, SIM_DIST);
-  
+
   // Take new position and find distance between
   if (mode == SPACE) {
     st_player.total_distance_flown += glm_vec3_distance(player_position,
@@ -53,7 +53,9 @@ void handle_collisions() {
   size_t num_c_col = get_sim_collisions(combat_sim, &combat_collisions,
                                         sim_sphere->translation,
                                         SIM_DIST, 0);
+  prepare_object_movement();
   handle_combat_collisions(combat_collisions, num_c_col);
+  update_object_movement();
 
   COLLISION *event_collisions = NULL;
   size_t num_e_col = get_sim_collisions(event_sim, &event_collisions,
@@ -72,7 +74,6 @@ void handle_physics_collisions(COLLISION *cols, size_t num_cols) {
 
   SOBJ *a_wrapper = NULL;
   SOBJ *b_wrapper = NULL;
-  ST_ENEMY *cur_enemy = NULL;
 
   vec3 rel_vel = GLM_VEC3_ZERO_INIT;
   float damage = 0.0;
@@ -93,20 +94,6 @@ void handle_physics_collisions(COLLISION *cols, size_t num_cols) {
 
     a_wrapper->to_refresh = 1;
     b_wrapper->to_refresh = 1;
-
-    cur_enemy = NULL;
-    if (a_wrapper->type == ENEMY_OBJ && b_wrapper->type == CORRIDOR_OBJ) {
-      cur_enemy = st_enemies + (size_t) a_wrapper->data;
-      if (cur_enemy->target_corridor == INVALID_INDEX) {
-        cur_enemy->target_corridor = (size_t) b_wrapper->data;
-      }
-    } else if (a_wrapper->type == CORRIDOR_OBJ &&
-               b_wrapper->type == ENEMY_OBJ) {
-      cur_enemy = st_enemies + (size_t) b_wrapper->data;
-      if (cur_enemy->target_corridor == INVALID_INDEX) {
-        cur_enemy->target_corridor = (size_t) a_wrapper->data;
-      }
-    }
 
     // Ship-on-ship
     if (a_wrapper->type == PLAYER_SHIP_OBJ &&
@@ -288,10 +275,22 @@ void handle_event_collisions(COLLISION *cols, size_t num_cols) {
 
   SOBJ *a_wrapper = NULL;
   SOBJ *b_wrapper = NULL;
+  ST_ENEMY *cur_enemy = NULL;
   vec3 temp = GLM_VEC3_ZERO_INIT;
   for (size_t i = 0; i < num_cols; i++) {
     a_wrapper = object_wrappers + (size_t) cols[i].a_ent->data;
     b_wrapper = object_wrappers + (size_t) cols[i].b_ent->data;
+
+    // Update target corridor of enemies
+    cur_enemy = NULL;
+    if (a_wrapper->type == ENEMY_OBJ && b_wrapper->type == CORRIDOR_OBJ) {
+      cur_enemy = st_enemies + (size_t) a_wrapper->data;
+      cur_enemy->cur_corridor = (size_t) b_wrapper->data;
+    } else if (a_wrapper->type == CORRIDOR_OBJ &&
+               b_wrapper->type == ENEMY_OBJ) {
+      cur_enemy = st_enemies + (size_t) b_wrapper->data;
+      cur_enemy->cur_corridor = (size_t) a_wrapper->data;
+    }
 
     // Direct enemies away from one another
     if (a_wrapper->type == ENEMY_OBJ && b_wrapper->type == ENEMY_OBJ) {
@@ -377,6 +376,11 @@ void decrement_player_shield(float damage, float timing) {
     if (player_ship.cur_shield && damage) {
       sp_player_shield_dmg(NULL);
     }
+    player_ship.recharging_shield = 0;
+    update_timer_args(ship_shield_recharge_delay, &player_ship, NULL);
+    add_timer(player_ship.shield.recharge_delay, ship_shield_recharge_delay,
+              -1000, &player_ship);
+
     player_ship.cur_shield -= damage;
     if (player_ship.cur_shield <= 0.0) {
       player_health_dmg();
@@ -437,6 +441,12 @@ void decrement_enemy_shield(size_t index, float damage, float timing) {
       if (enemy->cur_shield && damage) {
         sp_enemy_shield_dmg((void *) index);
       }
+      enemy->recharging_shield = 0;
+      update_timer_args(ship_shield_recharge_delay, (void *) index,
+                        (void *) INVALID_INDEX);
+      add_timer(enemy->shield.recharge_delay, ship_shield_recharge_delay,
+                -1000, (void *) index);
+
       enemy->cur_shield -= damage;
       if (enemy->cur_shield <= 0.0) {
         enemy->cur_health += enemy->cur_shield;

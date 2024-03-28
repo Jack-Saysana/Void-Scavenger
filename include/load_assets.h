@@ -97,6 +97,7 @@ void load_st_assets() {
   st_mods.terminal_model = read_model(setp_dir"/terminal/terminal.obj");
   st_mods.shotgun_model = read_model(setp_dir"/shotgun/shotgun.obj");
   st_mods.rifle_model = read_model(setp_dir"/rifle/rifle.obj");
+  st_mods.sword_model = read_model(setp_dir"/sword/sword.obj");
   st_mods.corridor_models[0] = read_model(setp_dir"/1_way/1_way.obj");
   st_mods.corridor_models[1] = read_model(setp_dir"/4_way/4_way_0.obj");
   st_mods.corridor_models[2] = read_model(setp_dir"/corner/corner_0.obj");
@@ -137,6 +138,7 @@ void init_st_assets() {
   init_model(&st_mods.terminal_model);
   init_model(&st_mods.shotgun_model);
   init_model(&st_mods.rifle_model);
+  init_model(&st_mods.sword_model);
   for (size_t i = 0; i < NUM_CORRIDOR_TYPES; i++) {
     init_model(&st_mods.corridor_models[i]);
   }
@@ -155,6 +157,7 @@ void free_st_assets() {
   free_model(st_mods.terminal_model.model);
   free_model(st_mods.shotgun_model.model);
   free_model(st_mods.rifle_model.model);
+  free_model(st_mods.sword_model.model);
   for (size_t i = 0; i < NUM_CORRIDOR_TYPES; i++) {
     free_model(st_mods.corridor_models[i].model);
   }

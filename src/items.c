@@ -19,9 +19,9 @@ void free_items_buffer() {
   items = NULL;
 }
 
-// ================== INDIVIDUAL INITIALIZATION AND CLEANUP ================== 
+// ================== INDIVIDUAL INITIALIZATION AND CLEANUP ==================
 
-size_t init_item(int type, int rarity, vec3 pos, vec3 scale, 
+size_t init_item(int type, int rarity, vec3 pos, vec3 scale,
                               versor rotation, float mass) {
   if (items == NULL) {
     fprintf(stderr, "Error: Inserting into a deallocated item buffer\n");
@@ -120,7 +120,7 @@ size_t restore_item(size_t inv_slot_num) {
   /* Copy over part data */
   memcpy(&part->enhancements, &slot->data, sizeof(slot->data));
   part->rarity = slot->rarity;
-  
+
   glm_vec3_copy((vec3) { 0.0, 0.0, 0.0 }, part->ent->ang_velocity);
   glm_vec3_copy((vec3) { 0.0, 0.01, 0.0 }, part->ent->velocity);
   part->ent->rotation[0] = 0.0;

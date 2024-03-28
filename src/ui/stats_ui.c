@@ -253,6 +253,8 @@ void update_stats() {
     set_ui_text(stats.ui_level, level_buffer, 1.0, T_RIGHT, fixed_sys, (vec3) {0.0, 221.0, 255.0});
     snprintf(xp_buffer, LEVEL_BUFFER_SIZE, "%d/%d", (int)st_player.cur_experience, (int)st_player.max_experience); 
     set_ui_text(stats.ui_xp, xp_buffer, 1.0, T_RIGHT, fixed_sys, (vec3) {0.0, 221.0, 255.0});
+  } else {
+    set_ui_enabled(stats.ui_stats_root, 0);
   }
 }
 
@@ -261,6 +263,7 @@ void update_stats() {
 */
 void switch_space_hud() {
   // set visibility
+  set_ui_enabled(stats.ui_stats_root, 1);
   set_ui_enabled(stats.ui_shield_root, 1);
   set_ui_enabled(stats.ui_health_root, 1);
   set_ui_enabled(stats.ui_energy_root, 1);
@@ -316,6 +319,7 @@ void switch_space_hud() {
 */
 void switch_station_hud() {
   // set visibility
+  set_ui_enabled(stats.ui_stats_root, 1);
   set_ui_enabled(stats.ui_shield_root, 1);
   set_ui_enabled(stats.ui_health_root, 1);
   set_ui_enabled(stats.ui_energy_root, 0);
