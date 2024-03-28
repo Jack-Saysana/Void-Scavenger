@@ -2,7 +2,7 @@
 
 void game_over_ui_initialize() {
   /* Root component - all children for game over screen are parented by */
-  game_over_root = add_ui_comp(UI_ROOT_COMP, (vec2) { 0.5, -0.5 }, 0.45, 
+  game_over_root = add_ui_comp(UI_ROOT_COMP, (vec2) { 0.5, -0.5 }, 0.45,
                                0.45 * INVERSE_GOLDEN_RATIO,
                                RELATIVE_POS | POS_UNIT_RATIO |
                                WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_X |
@@ -11,7 +11,7 @@ void game_over_ui_initialize() {
   set_ui_pivot(game_over_root, PIVOT_CENTER);
   set_ui_texture(game_over_root, "assets/ui/hud_color_bg.png");
 
-  game_over_stats = add_ui_comp(game_over_root, (vec2) { 0.5, -0.45 }, 0.55, 
+  game_over_stats = add_ui_comp(game_over_root, (vec2) { 0.5, -0.45 }, 0.55,
                                  0.55 * INVERSE_GOLDEN_RATIO,
                                  RELATIVE_POS | POS_UNIT_RATIO |
                                  WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_X |
@@ -41,7 +41,6 @@ void game_over_ui_initialize() {
   set_ui_texture(game_over_restart, "assets/ui/test.png");
   set_ui_enabled(game_over_restart, ON);
   set_ui_on_release(game_over_restart, reset_game, NULL);
-  
 
   game_over_quit = add_ui_comp(game_over_root, (vec2) { 0.75, -0.85 }, 0.175,
                                0.175 * INVERSE_GOLDEN_RATIO,
@@ -53,7 +52,7 @@ void game_over_ui_initialize() {
               GLM_VEC3_ZERO);
   set_ui_texture(game_over_quit, "assets/ui/test.png");
   set_ui_enabled(game_over_quit, ON);
-  set_ui_on_release(game_over_quit, quit, NULL); 
+  set_ui_on_release(game_over_quit, quit, NULL);
 }
 
 void set_game_over_screen(int set) {
@@ -114,8 +113,8 @@ void set_game_over_stats() {
            hours_played,
            minutes_played,
            time_played
-           ); 
+           );
   #endif
   set_ui_text(game_over_stats, game_over_stats_buffer,
-              0.10, T_LEFT, fixed_sys, GLM_VEC3_ZERO); 
+              0.10, T_LEFT, fixed_sys, GLM_VEC3_ZERO);
 }
