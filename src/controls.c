@@ -515,3 +515,7 @@ void enable_shooting() {
 void set_keyboard_enabledness(int set) {
   keyboard_enabled = set;
 }
+
+void set_can_shoot(int is_can_shoot) {
+  can_shoot = is_can_shoot;
+}
