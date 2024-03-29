@@ -60,12 +60,15 @@ vec3 calc_dir_light(DIR_LIGHT light) {
   float spec = pow(max(dot(normalize(normal), halfway), 0), 32);
 
   float str = ambient + diffuse + spec;
-  if (str < 0.5) {
+  if (str < 0.25) {
+    str = 0.25;
+  } else if (str < 0.5) {
     str = 0.5;
+  } else if (str < 0.75) {
+    str = 0.75;
   } else {
     str = 1.0;
   }
-
   vec3 model_col = str * light.col;
 
   return model_col * col;
@@ -77,7 +80,7 @@ vec3 calc_point_light(PT_LIGHT light) {
     col = vec3(1.0, 1.0, 1.0);
   }
 
-  float ambient = 0.05;
+  float ambient = 0.00;
 
   vec3 light_dir = normalize(vec3(frag_pos) - light.pos);
   float diffuse = max(dot(normalize(normal), light_dir), 0);
@@ -86,10 +89,12 @@ vec3 calc_point_light(PT_LIGHT light) {
   vec3 halfway = normalize(normalize(light_dir) + view_dir);
   float spec = pow(max(dot(normalize(normal), halfway), 0), 2);
   float distance = length(light.pos - vec3(frag_pos));
-  float attenuation = 1.0 / (light.a_consts[0] + light.a_consts[1] * distance + 
-              light.a_consts[2] * (distance * distance));
+  float attenuation = 1.0 / (2.0 + (0.0004 * distance * distance
+        * distance * distance * distance * distance
+        * distance * distance * distance * distance));
 
   float str = (ambient + diffuse + spec) * attenuation;
+  /*
   if (str < 0.25) {
     str = 0.0;
   } else if (str < 0.5) {
@@ -99,7 +104,7 @@ vec3 calc_point_light(PT_LIGHT light) {
   } else {
     str = 1.0;
   }
-
+  */
   vec3 model_col = str * light.col;
 
   return model_col * col;

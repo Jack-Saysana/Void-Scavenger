@@ -428,7 +428,7 @@ void populate_point_lights(unsigned int shader) {
     char struct_buff[32];
     char col_buff[64];
     char pos_buff[64];
-    char a_consts_buff[3][64];
+    //char a_consts_buff[3][64];
     #ifdef __linux__
     sprintf(struct_buff, "light[%ld].", i);
     #else
@@ -437,15 +437,15 @@ void populate_point_lights(unsigned int shader) {
 
     strncpy(col_buff, struct_buff, sizeof(col_buff));
     strncpy(pos_buff, struct_buff, sizeof(pos_buff));
-    strncpy(a_consts_buff[0], struct_buff, sizeof(a_consts_buff[0]));
-    strncpy(a_consts_buff[1], struct_buff, sizeof(a_consts_buff[1]));
-    strncpy(a_consts_buff[2], struct_buff, sizeof(a_consts_buff[2]));
+    //strncpy(a_consts_buff[0], struct_buff, sizeof(a_consts_buff[0]));
+    //strncpy(a_consts_buff[1], struct_buff, sizeof(a_consts_buff[1]));
+    //strncpy(a_consts_buff[2], struct_buff, sizeof(a_consts_buff[2]));
 
     strncat(col_buff, "col", sizeof(col_buff) - 1);
     strncat(pos_buff, "pos", sizeof(pos_buff) - 1);
-    strncat(a_consts_buff[0], "a_consts[0]", sizeof(a_consts_buff[0]) - 1);
-    strncat(a_consts_buff[1], "a_consts[1]", sizeof(a_consts_buff[1]) - 1);
-    strncat(a_consts_buff[2], "a_consts[2]", sizeof(a_consts_buff[2]) - 1);
+    //strncat(a_consts_buff[0], "a_consts[0]", sizeof(a_consts_buff[0]) - 1);
+    //strncat(a_consts_buff[1], "a_consts[1]", sizeof(a_consts_buff[1]) - 1);
+    //strncat(a_consts_buff[2], "a_consts[2]", sizeof(a_consts_buff[2]) - 1);
 
     if (part->rarity == WHITE_RARITY) {
       set_vec3(col_buff, WHITE_COL, shader);
@@ -460,8 +460,8 @@ void populate_point_lights(unsigned int shader) {
     }
     
     set_vec3(pos_buff, part->ent->translation, shader);
-    set_float(a_consts_buff[0], ATTENUATION_STD, shader); 
-    set_float(a_consts_buff[1], ATTENUATION_LINEAR, shader); 
-    set_float(a_consts_buff[2], ATTENUATION_QUADRATIC, shader); 
+    //set_float(a_consts_buff[0], ATTENUATION_STD, shader); 
+    //set_float(a_consts_buff[1], ATTENUATION_LINEAR, shader); 
+    //set_float(a_consts_buff[2], ATTENUATION_QUADRATIC, shader); 
   }
 }

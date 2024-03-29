@@ -60,8 +60,12 @@ vec3 calc_dir_light(DIR_LIGHT light) {
   float spec = pow(max(dot(normalize(normal), halfway), 0), 32);
 
   float str = ambient + diffuse + spec;
-  if (str < 0.5) {
+  if (str < 0.25) {
+    str = 0.25;
+  } else if (str < 0.5) {
     str = 0.5;
+  } else if (str < 0.75) {
+    str = 0.75;
   } else {
     str = 1.0;
   }
