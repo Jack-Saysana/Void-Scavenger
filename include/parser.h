@@ -42,14 +42,15 @@
 #define GAMEOVER             ("gameover")
 #define GLOW                 ("glow")
 #define ITEM                 ("item")
+#define SKILL                ("skill")
+#define POINTS               ("points")
+#define GIVE                 ("give")
+
 #define WHITE_CMD            ("white")
 #define BLUE_CMD             ("blue")
 #define GREEN_CMD            ("green")
 #define PURPLE_CMD           ("purple")
 #define GOLD_CMD             ("gold")
-#define SKILL                ("skill")
-#define POINTS               ("points")
-
 #define BALLISTIC_CMD        ("ballistic")
 #define LASER_CMD            ("laser")
 #define PLASMA_CMD           ("plasma")
@@ -103,3 +104,4 @@ void game_over();
 void toggle_item_glow();
 void set_gun(S_WEAPON_T);
 void spawn_ship_part_cmd(vec3, int, int);
+void give_item(int, int);
