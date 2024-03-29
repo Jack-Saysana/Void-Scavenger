@@ -390,6 +390,7 @@ void decrement_player_shield(float damage, float timing) {
     }
     if (player_ship.cur_health <= 0.0) {
       player_ship.cur_health = 0.0;
+      game_over();
     } else {
       player_ship.invuln = 1;
       add_timer(timing, &player_ship.invuln, 0, NULL);
@@ -403,6 +404,7 @@ void decrement_player_shield(float damage, float timing) {
     }
     if (st_player.cur_health <= 0.0) {
       st_player.cur_health = 0.0;
+      game_over();
     } else {
       st_player.invuln = 1;
       add_timer(timing, &st_player.invuln, 0, NULL);
