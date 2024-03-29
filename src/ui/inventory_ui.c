@@ -56,7 +56,7 @@ int init_inventory() {
   memset(inventory_info_title_buffer, '\0', INVENTORY_TEXT_BUFFER_SIZE);
   snprintf(inventory_info_title_buffer, INVENTORY_TEXT_BUFFER_SIZE, "[RARITY] TYPE");
   set_ui_text(inventory.ui_inventory_info_title_text,
-              inventory_info_title_buffer, 0.08, T_LEFT, fixed_sys, 
+              inventory_info_title_buffer, 0.06, T_LEFT, fixed_sys, 
               (vec3) { 0.0, 0.0, 0.0 });
   
   inventory.ui_inventory_info_content_background = add_ui_comp(
@@ -239,7 +239,7 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
       default:
         break;
     }
-    set_ui_text(inventory.ui_inventory_info_content_text, inventory_info_content_buffer, 0.08, 
+    set_ui_text(inventory.ui_inventory_info_content_text, inventory_info_content_buffer, 0.06, 
                 T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
   }
 }

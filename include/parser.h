@@ -55,7 +55,7 @@
 #define LASER_CMD            ("laser")
 #define PLASMA_CMD           ("plasma")
 #define HULL_CMD             ("hull")
-#define SHIELD_CMD           ("sheild")
+#define SHIELD_CMD           ("shield")
 #define REACTOR_CMD          ("reactor")
 #define WING_CMD             ("wing")
 #define THRUSTER_CMD         ("thruster")
