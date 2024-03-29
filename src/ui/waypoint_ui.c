@@ -58,3 +58,7 @@ void update_waypoint_ui() {
 void toggle_st_waypoint() {
   station_waypoint_enabled = !station_waypoint_enabled;
 }
+
+void set_st_waypoint_enabled(int enabled) {
+  station_waypoint_enabled = enabled;
+}

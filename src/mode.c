@@ -14,7 +14,7 @@
 
 int init_space_mode() {
   mode = SPACE;
-  toggle_st_waypoint();
+  set_st_waypoint_enabled(1);
   reset_dmg_ui_state();
   reset_camera(&camera);
   /* Ensure coordinates are enabled */
@@ -181,6 +181,7 @@ void clear_space_mode() {
 int init_station_mode() {
   mode = STATION;
   reset_camera(&camera);
+  set_st_waypoint_enabled(0);
   reset_dmg_ui_state();
   /* Turn off the coordinates */
   disable_coordinates();
