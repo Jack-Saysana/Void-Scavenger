@@ -38,6 +38,52 @@ void eshoot_on(int on) {
   }
 }
 
+void give_item(int type, int rarity) {
+  /* Assumes that type and rarity are set properly in parser.c */
+
+  I_SLOT *slot = inv_first_avail();
+  if (!slot) {
+    show_error_message("Inventory Full!\n");
+    return;
+  }
+  ST_ITEM *part = (ST_ITEM *) malloc(sizeof(ST_ITEM));  
+  set_enhancements(part, type, rarity);
+  memcpy(&(slot->data), &(part->enhancements), sizeof(part->enhancements));
+  
+  slot->rarity = part->rarity;
+  slot->weapon_type = NOT_WEAPON;
+  switch (part->type) {
+    case PART_REACTOR:
+      slot->type = I_SLOT_REACTOR;
+      break;
+    case PART_HULL:
+      slot->type = I_SLOT_HULL;
+      break;
+    case PART_SHIELD:
+      slot->type = I_SLOT_SHIELD;
+      break;
+    case PART_WEAPON_BALLISTIC:
+      slot->weapon_type = W_BALLISTIC;
+      slot->type = I_SLOT_WEAPON;
+      break;
+    case PART_WEAPON_LASER:
+      slot->weapon_type = LASER;
+      slot->type = I_SLOT_WEAPON;
+      break;
+    case PART_WEAPON_PLASMA:
+      slot->weapon_type = PLASMA;
+      slot->type = I_SLOT_WEAPON;
+      break;
+    case PART_WING:
+      slot->type = I_SLOT_WING;
+      break;
+    case PART_THRUSTER:
+      slot->type = I_SLOT_THRUSTER;
+      break;
+  }
+  free(part);
+}
+
 void set_gun(S_WEAPON_T type) {
   if (type == BALLISTIC) {
     player_ship.weapon.type = BALLISTIC;

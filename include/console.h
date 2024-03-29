@@ -3,6 +3,8 @@
   Responsible for handling console prototypes and functionality
 */
 #include <global_vars.h>
+#include <structs/player_str.h>
+#include <structs/item_str.h>
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
@@ -41,3 +43,5 @@ void refresh_sim_distances();
 void enable_fps();
 void disable_fps();
 void free_timer_queue();
+I_SLOT *inv_first_avail();
+void set_enhancements(ST_ITEM *, int, int);
