@@ -29,6 +29,11 @@ int barebones_init() {
 
   barebones_ui_init();
   clear_models();
+  
+  status = init_audio();
+  if (status) {
+    return -1;
+  }
 
   return 0;
 }
@@ -72,6 +77,7 @@ int init_game() {
 
 void cleanup_game() {
   cleanup_scene();
+  exit_audio();
   free_player();
   free_player_ship();
   free_projectile_buffer();

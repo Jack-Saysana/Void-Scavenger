@@ -74,6 +74,9 @@
 #define E_ANIM_WALK_MELEE (6)
 #define E_ANIM_WALK_RANGED (7)
 
+// Audio Tracks
+#define TEST_AT (0)
+
 #define BRUTE (0)
 #define NORMAL (1)
 

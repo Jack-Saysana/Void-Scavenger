@@ -248,6 +248,7 @@ void input_keys(GLFWwindow *window) {
           glm_vec3_scale(player_left, st_player.speed, player_left);
           glm_vec3_add(player_left, st_player.ent->velocity,
                        st_player.ent->velocity);
+
         }
         if (i == GLFW_KEY_D) {
           /* Handle D press */
