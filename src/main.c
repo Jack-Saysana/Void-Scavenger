@@ -21,6 +21,9 @@ int main() {
 
   loading_init();
 
+  // Starting Tick
+  add_timer(TICK_RATE, tick, FUNCTION_PTR, NULL);
+
   while (!glfwWindowShouldClose(window)) {
     float CUR_TIME = glfwGetTime();
     DELTA_TIME = CUR_TIME - LAST_FRAME;
@@ -45,14 +48,14 @@ int main() {
     keyboard_input(window);
     decrement_current_timer(DELTA_TIME);
 
-    enemy_behavior();
-    player_ship_thrust_move();
-    recharge_player_shield();
+    //enemy_behavior();
+    //player_ship_thrust_move();
+    //recharge_player_shield();
     handle_collisions();
     refresh_objects();
     update_ui_components();
     render_scene(window);
-    delete_stale_objects();
+    //delete_stale_objects();
   }
 
   cleanup_game();
