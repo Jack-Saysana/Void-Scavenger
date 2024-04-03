@@ -377,6 +377,15 @@ void input_keys(GLFWwindow *window) {
       cons_cmd[cons_cmd_len++] = ' ';
       update_console_text(cons_cmd);
       advance_cursor();
+    } else if (!holding_space && !console_enabled && mode == STATION && 
+               (st_player.ent->velocity[Y] < 0.001 && st_player.ent->velocity[Y] > 0.0)) {
+      //Handle jump
+      vec3 player_up;
+      glm_quat_rotatev(st_player.ent->rotation, (vec3){0.0, 1.0, 0.0}, player_up);
+      glm_normalize(player_up);
+      glm_vec3_scale(player_up, st_player.jump, player_up);
+      glm_vec3_add(player_up, st_player.ent->velocity,
+                    st_player.ent->velocity);
     }
     holding_space = 1;
   } else if (glfwGetKey(window, GLFW_KEY_SPACE) != GLFW_PRESS) {
@@ -475,6 +484,8 @@ void input_keys(GLFWwindow *window) {
   if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS) {
     if (mode == SPACE && !holding_tab) {
       target_nearest_enemy();
+    } else if (mode == STATION && !holding_tab) {
+      toggle_inventory();
     }
     holding_tab = 1;
   } else {

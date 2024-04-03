@@ -9,6 +9,7 @@
 #define P_BASE_MAX_EXP (100.0)
 #define P_BASE_DAMAGE (100.0)
 #define P_LEVEL_SCALE (50.0)
+#define P_BASE_JUMP (5.0)
 
 // Ship constants
 #define S_BASE_PWR_OUTPUT (100.0)
@@ -74,9 +75,11 @@
 #define E_ANIM_WALK_MELEE (6)
 #define E_ANIM_WALK_RANGED (7)
 
+// Station Eneemy Types
 #define BRUTE (0)
 #define NORMAL (1)
 
+//Space Enemy Types
 #define STANDARD_BALLISTIC (0)
 #define HEALTH_BALLISTIC (1)
 #define SHIELD_BALLISTIC (2)
@@ -84,7 +87,6 @@
 #define STANDARD_LASER (4)
 #define HEALTH_LASER (5)
 #define SHIELD_PLASMA (6)
-
 #define E_LOW_SPEED (0)
 #define E_MID_SPEED (1)
 #define E_HIGH_SPEED (2)
@@ -126,6 +128,7 @@
 #define SP_BASE_RENDER_DIST (500.0)
 #define SP_BASE_SIM_DIST (256.0)
 #define BASE_NUM_ENEMIES (5)
+#define ST_GRAVITY (12.0)
 
 // Asteroid constants
 #define NUM_ASTEROIDS (30)

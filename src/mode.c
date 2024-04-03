@@ -202,7 +202,7 @@ int init_station_mode() {
 
   // Initialize simulations
   physics_sim = init_sim(STATION_SIZE, STATION_DEPTH);
-  sim_add_force(physics_sim, (vec3) { 0.0, -GRAVITY, 0.0 });
+  sim_add_force(physics_sim, (vec3) { 0.0, -ST_GRAVITY, 0.0 });
   combat_sim = init_sim(STATION_SIZE, STATION_DEPTH);
   render_sim = init_sim(STATION_SIZE, STATION_DEPTH);
   event_sim = init_sim(STATION_SIZE, STATION_DEPTH);
