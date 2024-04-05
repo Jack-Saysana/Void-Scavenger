@@ -1,12 +1,13 @@
 #include <tick.h>
 
 void tick() {
+  update_object_movement();
   if (mode != SPACE && mode != STATION) {
     return;
   }
 
   /* Combat and Event Collision Detection */
-  #if 1
+#if 1
   COLLISION *combat_collisions = NULL;
   size_t num_c_col = get_sim_collisions(combat_sim, &combat_collisions,
                                         sim_sphere->translation,
@@ -22,7 +23,7 @@ void tick() {
   handle_event_collisions(event_collisions, num_e_col);
 
   free(combat_collisions);
-  free(event_collisions); 
+  free(event_collisions);
 
 #endif
   enemy_behavior();
@@ -31,4 +32,5 @@ void tick() {
   delete_stale_objects();
 
   add_timer(TICK_RATE, tick, FUNCTION_PTR, NULL);
+  prepare_object_movement();
 }

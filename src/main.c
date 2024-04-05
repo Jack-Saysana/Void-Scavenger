@@ -46,12 +46,12 @@ int main() {
     // - win-condition tracking
     // - etc...
     keyboard_input(window);
+    handle_collisions();
     decrement_current_timer(DELTA_TIME);
 
     //enemy_behavior();
     //player_ship_thrust_move();
     //recharge_player_shield();
-    handle_collisions();
     refresh_objects();
     update_ui_components();
     render_scene(window);
