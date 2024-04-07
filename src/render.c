@@ -289,7 +289,7 @@ void render_game_entity(ENTITY *ent) {
     }
     draw_entity(entity_selected_shader, ent);
   } else if (wrapper->type == ITEM_OBJ) {
-    /* TODO: Update to new shader */
+    /* Renders items glowing if enabled, otherwise, normally renders them */
     ST_ITEM *part = items + (size_t) wrapper->data;
     glUseProgram(model_selected_shader);
     mat4 model = GLM_MAT4_IDENTITY_INIT;
@@ -448,6 +448,10 @@ ENTITY *init_station_obstacle_ent(size_t index) {
 
 ENTITY *init_corridor_ent(size_t index) {
   return init_entity(st_mods.corridor_models[index].model);
+}
+
+ENTITY *init_arena_ent(size_t index) {
+  return init_entity(st_mods.arena_models[index].model);
 }
 
 ENTITY *init_dead_zone_ent() {

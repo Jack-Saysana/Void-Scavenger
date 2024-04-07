@@ -84,6 +84,12 @@ int gen_rand_int(int);
 float gen_rand_float(float);
 void create_station_corridors();
 
+/* Arena functions */
+void free_arena_buffer();
+void arena_remove_sim(size_t);
+void delete_arena(size_t);
+
+
 /* Generation of asteroid positioning, speed, dir, etc... */
 void gen_rand_vec3(vec3 *, float);
 void gen_rand_vec3_plus_minus(vec3 *, float);

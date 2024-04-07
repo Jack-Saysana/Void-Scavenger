@@ -49,7 +49,7 @@ size_t init_corridor(vec3 pos, versor rotation, size_t type) {
   }
 
   for (int i = 0; i < 4; i++) {
-    corr->neighbors[i] = INVALID_INDEX;
+    corr->neighbors[i].index = INVALID_INDEX;
   }
 
   /* Initialize corridor entity data */
@@ -520,8 +520,9 @@ void create_station_corridors() {
         }
       }
       // Update the neighbor buffers of the adjacent cells
-      cd_obs[visited[cur_index]].neighbors[i] = visited[index];
-      cd_obs[visited[index]].neighbors[j] = visited[cur_index];
+      // TODO: Update for arena
+      cd_obs[visited[cur_index]].neighbors[i].index = visited[index];
+      cd_obs[visited[index]].neighbors[j].index = visited[cur_index];
     }
   }
 
@@ -784,7 +785,7 @@ size_t gen_cd_obj(int **maze, ivec2 coords, vec3 pos_dest, int *type_dest,
   size_t index = init_corridor(position, rot, type);
   corridor_insert_sim(index);
   for (int i = 0; i < 4; i++) {
-    cd_obs[index].neighbors[i] = INVALID_INDEX;
+    cd_obs[index].neighbors[i].index = INVALID_INDEX;
   }
 
   glm_vec3_copy(position, pos_dest);

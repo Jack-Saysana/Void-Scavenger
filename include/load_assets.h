@@ -104,6 +104,15 @@ void load_st_assets() {
   st_mods.corridor_models[2] = read_model(setp_dir"/corner/corner_0.obj");
   st_mods.corridor_models[3] = read_model(setp_dir"/t_junct/t_junct.obj");
   st_mods.corridor_models[4] = read_model(setp_dir"/corridor/corridor_0.obj");
+  st_mods.arena_models[0] = read_model(setp_dir
+                            "/corner_double_entrance/corner_double_entrance.obj");
+  st_mods.arena_models[1] = read_model(setp_dir
+                            "/corner_single_entrance/corner_single_entrance.obj");
+  st_mods.arena_models[2] = read_model(setp_dir"/double_corner/double_corner.obj");
+  st_mods.arena_models[3] = read_model(setp_dir"/flat_door/flat_door.obj");
+  st_mods.arena_models[4] = read_model(setp_dir"/flat_door_nest/flat_door_nest.obj");
+  st_mods.arena_models[5] = read_model(setp_dir"/flat_wall/flat_wall.obj");
+  st_mods.arena_models[6] = read_model(setp_dir"/flat_wall_nest/flat_wall_nest.obj");
   st_mods.station_obstacles[0] = read_model(st_obs_dir"/ammo_crate_0/ammo_crate_0.obj");
   st_mods.station_obstacles[1] = read_model(st_obs_dir"/ammo_crate_1/ammo_crate_1.obj");
   st_mods.station_obstacles[2] = read_model(st_obs_dir"/crate_0/crate_0.obj");
@@ -143,6 +152,9 @@ void init_st_assets() {
   for (size_t i = 0; i < NUM_CORRIDOR_TYPES; i++) {
     init_model(&st_mods.corridor_models[i]);
   }
+  for (size_t i = 0; i < NUM_ARENA_TYPES; i++) {
+    init_model(&st_mods.arena_models[i]);
+  }
   for (size_t i = 0; i < NUM_STATION_OBSTACLE_TYPES; i++) {
     init_model(&st_mods.station_obstacles[i]);
   }
@@ -161,6 +173,9 @@ void free_st_assets() {
   free_model(st_mods.sword_model.model);
   for (size_t i = 0; i < NUM_CORRIDOR_TYPES; i++) {
     free_model(st_mods.corridor_models[i].model);
+  }
+  for (size_t i = 0; i < NUM_ARENA_TYPES; i++) {
+    free_model(st_mods.arena_models[i].model);
   }
   for (size_t i = 0; i < NUM_STATION_OBSTACLE_TYPES; i++) {
     free_model(st_mods.station_obstacles[i].model);

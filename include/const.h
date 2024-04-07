@@ -144,6 +144,16 @@
 #define NEIGHBOR_POS_Z (2)
 #define NEIGHBOR_NEG_Z (3)
 
+// Arena Constants
+#define NUM_ARENA_TYPES (7)
+#define CORNER_DOUBLE_ENTRANCE (0)
+#define CORNER_SINGLE_ENTRANCE (1)
+#define DOUBLE_CORNER          (2)
+#define FLAT_DOOR              (3)
+#define FLAT_DOOR_NEST         (4)
+#define FLAT_WALL              (5)
+#define FLAT_WALL_NEST         (6)
+
 // Station obstacle constants
 #define NUM_STATION_OBSTACLE_TYPES (20)
 #define TYPE_AMMO_CRATE_0          (0)

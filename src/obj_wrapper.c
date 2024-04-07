@@ -87,9 +87,9 @@ void delete_wrapper(size_t index) {
     }
   } else if (old_wrapper->type == CORRIDOR_OBJ) {
     cd_obs[(size_t) old_wrapper->data].wrapper_offset = index;
-  } //else if (old_wrapper->type == STATION_SP_OBJ) {
-    //st_sp[(size_t) old_wrapper->data].wrapper_offset = index;
-  //}
+  } else if (old_wrapper->type == ARENA_OBJ) {
+    arena_obs[(size_t) old_wrapper->data].wrapper_offset = index;
+  }
 }
 
 void refresh_wrapper(size_t index) {
@@ -105,7 +105,6 @@ void refresh_wrapper(size_t index) {
   } else if (wrapper->type == PROJ_OBJ) {
     sim_refresh_proj((size_t) wrapper->data);
   } else if (wrapper->type == ITEM_OBJ) {
-    // Refresh item
     sim_refresh_item((size_t) wrapper->data);
   } else if (wrapper->type == OBSTACLE_OBJ) {
     if (mode == SPACE) {
@@ -115,7 +114,7 @@ void refresh_wrapper(size_t index) {
     }
   } else if (wrapper->type == CORRIDOR_OBJ) {
     sim_refresh_corridor((size_t) wrapper->data);
-  } //else if (wrapper->type == STATION_SP_OBJ) {
-    //sim_refresh_station_ship_part((size_t) wrapper->data);
-  //}
+  } else if (wrapper->type == ARENA_OBJ) {
+    sim_refresh_corridor((size_t) wrapper->data);
+  }
 }

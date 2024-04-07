@@ -292,6 +292,8 @@ void handle_event_collisions(COLLISION *cols, size_t num_cols) {
       cur_enemy->cur_corridor = (size_t) a_wrapper->data;
     }
 
+    // TODO: Update for ARENA_OBJ
+
     // Direct enemies away from one another
     if (a_wrapper->type == ENEMY_OBJ && b_wrapper->type == ENEMY_OBJ) {
       glm_vec3_sub(st_enemies[(size_t) a_wrapper->data].ent->translation,
