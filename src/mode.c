@@ -190,9 +190,6 @@ int init_station_mode() {
   /* Re-enable shooting (if not already) */
   enable_shooting();
 
-  /* Clear inventory */
-  // reset_inventory();
-
   // Initialize proper render distances
   RENDER_DIST = ST_BASE_RENDER_DIST;
   glm_vec3_copy((vec3) {RENDER_DIST, RENDER_DIST, RENDER_DIST },
@@ -241,6 +238,12 @@ int init_station_mode() {
   if (status) {
     return -1;
   }
+
+  status = init_arena_buffer();
+  if (status) {
+    return -1;
+  }
+
   create_station_corridors();
 
   // Place player entity in simulation

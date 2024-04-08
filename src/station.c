@@ -50,6 +50,7 @@ size_t init_corridor(vec3 pos, versor rotation, size_t type) {
 
   for (int i = 0; i < 4; i++) {
     corr->neighbors[i].index = INVALID_INDEX;
+    corr->neighbors[i].type = -1;
   }
 
   /* Initialize corridor entity data */
@@ -174,7 +175,7 @@ void add_element(int **list, size_t *size, int *num_elements, int to_add) {
   if (*size == *num_elements) {
     int prev_size = *size;
     if (double_buffer((void **) list, size, sizeof(int)) == -1) {
-      printf("maze.c: failed to double buffer\n");
+      printf("Error: failed to double buffer in station generation\n");
       exit(1);
     }
     set_invalid((*list) + prev_size, prev_size);
@@ -363,21 +364,21 @@ Legend:
 */
 void create_station_corridors() {
   int item_spawn_chance = 30;
-  int enemy_spawn_chance = 10;
-  int enemy_variation = 20;
+  //int enemy_spawn_chance = 10;
+  //int enemy_variation = 20;
   int sp_spawn_chance = 10;
   if (difficulty == MEDIUM) {
-    enemy_spawn_chance = 20;
-    enemy_variation = 30;
+    //enemy_spawn_chance = 20;
+    //enemy_variation = 30;
   } else if (difficulty == HARD) {
-    enemy_spawn_chance = 40;
+    //enemy_spawn_chance = 40;
     item_spawn_chance = 15;
-    enemy_variation = 50;
+    //enemy_variation = 50;
     sp_spawn_chance = 5;
   } else if (difficulty == BADASS) {
-    enemy_spawn_chance = 60;
+    //enemy_spawn_chance = 60;
     item_spawn_chance = 10;
-    enemy_variation = 70;
+    //enemy_variation = 70;
     sp_spawn_chance = 2;
   }
   int found_terminal_room = 0;
@@ -396,8 +397,11 @@ void create_station_corridors() {
   ivec2 cur_coords = { 0, 0 };
   size_t cur_index = INVALID_INDEX;
   size_t index = INVALID_INDEX;
+  int location = -1;
 
   int **maze = gen_maze();
+  add_arena(3, maze);
+
   // Create list of already created corridors
   size_t *visited = malloc(sizeof(size_t) * maze_size * maze_size);
   for (size_t i = 0; i < maze_size * maze_size; i++) {
@@ -436,9 +440,11 @@ void create_station_corridors() {
         z_off = -1;
         j = 2;
       }
-      if (maze[cur_coords[X] + x_off][cur_coords[Y] + z_off] != IN) {
+      if ((location = maze[cur_coords[X] + x_off][cur_coords[Y] + z_off])
+           == WALL) {
         continue;
       }
+
 
       index = ((cur_coords[X] + x_off) * maze_size) + cur_coords[Y] + z_off;
       if (visited[index] == INVALID_INDEX) {
@@ -446,8 +452,15 @@ void create_station_corridors() {
         // it on the stack
         glm_ivec2_copy((ivec2) { cur_coords[X] + x_off,
                                  cur_coords[Y] + z_off }, stack[stack_top]);
-        visited[index] = gen_cd_obj(maze, stack[stack_top], position,
+        if (location == IN) {
+          /* Corridor */
+          visited[index] = gen_cd_obj(maze, stack[stack_top], position,
                                     &cur_type, &cur_rot);
+        } else {
+          /* Arena */
+          visited[index] = gen_arena_obj(maze, stack[stack_top], position,
+                                         &cur_type, &cur_rot);
+        }
         stack_top++;
         if (stack_top == stack_size) {
           int status = double_buffer((void **) &stack, &stack_size,
@@ -476,7 +489,7 @@ void create_station_corridors() {
           continue;
         }
 
-
+        #if 0
         vec3 enemy_pos = GLM_VEC3_ZERO_INIT;
         glm_vec3_copy(position, enemy_pos);
         position[Y] = 3.0;
@@ -489,6 +502,7 @@ void create_station_corridors() {
           }
           continue;
         }
+        #endif
 
         if (gen_rand_int(100) <= sp_spawn_chance) {
           spawn_ship_part(position);
@@ -521,8 +535,15 @@ void create_station_corridors() {
       }
       // Update the neighbor buffers of the adjacent cells
       // TODO: Update for arena
-      cd_obs[visited[cur_index]].neighbors[i].index = visited[index];
-      cd_obs[visited[index]].neighbors[j].index = visited[cur_index];
+      if (location == IN) {
+        /* Corridor */
+        cd_obs[visited[cur_index]].neighbors[i].index = visited[index];
+        cd_obs[visited[index]].neighbors[j].index = visited[cur_index];
+      } else {
+        /* Arena */
+        arena_obs[visited[cur_index]].neighbors[i].index = visited[index];
+        arena_obs[visited[index]].neighbors[j].index = visited[cur_index];
+      }
     }
   }
 
@@ -571,7 +592,7 @@ void spawn_ship_part(vec3 position) {
 
   size_t index = init_item(type, rarity, offset, scale, q,
                            10.0 * (gen_rand_float(3.0) + 1.0));
-  
+
   if (index == INVALID_INDEX) {
     fprintf(stderr, "Failed to init an item!\n");
     return;
@@ -588,7 +609,7 @@ void spawn_ship_part_cmd(vec3 position, int type, int rarity) {
     fprintf(stderr, "Can't Spawn items in space!\n");
     return;
   }
-  
+
   vec3 offset = GLM_VEC3_ZERO_INIT;
   glm_vec3_copy(position, offset);
   object_random_offset(offset);
@@ -605,7 +626,7 @@ void spawn_ship_part_cmd(vec3 position, int type, int rarity) {
 
   size_t index = init_item(type, rarity, offset, scale, q,
                            2.0 * (gen_rand_float(3.0) + 1.0));
-  
+
   if (index == INVALID_INDEX) {
     fprintf(stderr, "Failed to init an item!\n");
     return;
@@ -697,10 +718,11 @@ void gen_terminal_location(int type, int rotation, vec3 pos, vec3 dest_pos,
   dest_pos[Y] = 2.0;
 }
 
+/*
+  Responsible for creation of a corridor object
+*/
 size_t gen_cd_obj(int **maze, ivec2 coords, vec3 pos_dest, int *type_dest,
                   int *rot_dest) {
-  /* x = movement in OpenGL X-axis along maze */
-  /* z = movement in OpenGL Z-axis along maze */
   int up = 0;
   int down = 0;
   int left = 0;
@@ -709,7 +731,7 @@ size_t gen_cd_obj(int **maze, ivec2 coords, vec3 pos_dest, int *type_dest,
   int rotation = 0;
   /* Check above, below, left, and right */
   /* Outputs of macros are stored in up, down, left, and right */
-  /* if up, down, left, or right == UP, output is 1, otherwise 0 */
+  /* if up, down, left, or right == IN, output is 1, otherwise 0 */
   CHECK_UP(maze, coords[X], coords[Y], up)
   CHECK_DOWN(maze, coords[X], coords[Y], down)
   CHECK_LEFT(maze, coords[X], coords[Y], left)
@@ -783,10 +805,290 @@ size_t gen_cd_obj(int **maze, ivec2 coords, vec3 pos_dest, int *type_dest,
                 (((float) coords[Y] - 1) * 5.0) - (2.5 * maze_size) },
                 position);
   size_t index = init_corridor(position, rot, type);
+  if (index == INVALID_INDEX) {
+    fprintf(stderr, "Error: Failed to initialize a corridor\n");
+    return INVALID_INDEX;
+  }
   corridor_insert_sim(index);
   for (int i = 0; i < 4; i++) {
     cd_obs[index].neighbors[i].index = INVALID_INDEX;
   }
+
+  /* TODO: Add neighbor types in neighbors buffer */
+
+  glm_vec3_copy(position, pos_dest);
+  *type_dest = type;
+  *rot_dest = rotation;
+  return index;
+}
+
+/*
+  Responsible for creation of an arena object
+*/
+size_t gen_arena_obj(int **maze, ivec2 coords, vec3 pos_dest, int *type_dest,
+                  int *rot_dest) {
+  int up = 0;
+  int down = 0;
+  int left = 0;
+  int right = 0;
+  int rotation = 0;
+  int type = -1;
+  /* 30% chance for spawning an enemy nest */
+  int nest_spawn_rate = 30;
+
+  /* Check what is above, below, left, and right of the current position */
+  if (S_UP(maze, coords[X], coords[Y])) {
+    right = CORRIDOR_LOCATION;
+  } else if (A_UP(maze, coords[X], coords[Y])) {
+    right = ARENA_LOCATION;
+  } else {
+    right = NONE;
+  }
+
+  if (S_DOWN(maze, coords[X], coords[Y])) {
+    left = CORRIDOR_LOCATION;
+  } else if (A_DOWN(maze, coords[X], coords[Y])) {
+    left = ARENA_LOCATION;
+  } else {
+    left = NONE;
+  }
+
+  if (S_LEFT(maze, coords[X], coords[Y])) {
+    up = CORRIDOR_LOCATION;
+  } else if (A_LEFT(maze, coords[X], coords[Y])) {
+    up = ARENA_LOCATION;
+  } else {
+    up = NONE;
+  }
+
+  if (S_RIGHT(maze, coords[X], coords[Y])) {
+    down = CORRIDOR_LOCATION;
+  } else if (A_RIGHT(maze, coords[X], coords[Y])) {
+    down = ARENA_LOCATION;
+  } else {
+    down = NONE;
+  }
+
+  /* Determine arena type */
+  if (up == ARENA_LOCATION && down == ARENA_LOCATION && 
+      left == ARENA_LOCATION && right == ARENA_LOCATION) {
+    type = MID_FLOOR;
+    rotation = 0;
+  } else if (up == CORRIDOR_LOCATION && down == ARENA_LOCATION &&
+             left == ARENA_LOCATION && right == ARENA_LOCATION) {
+    if (gen_rand_int(100) < nest_spawn_rate) {
+      type = FLAT_DOOR_NEST;
+    } else {
+      type = FLAT_DOOR;
+    }
+    rotation = 270;
+  } else if (up == ARENA_LOCATION && down == ARENA_LOCATION &&
+             left == ARENA_LOCATION && right == CORRIDOR_LOCATION) {
+    if (gen_rand_int(100) < nest_spawn_rate) {
+      type = FLAT_DOOR_NEST;
+    } else {
+      type = FLAT_DOOR;
+    }
+    rotation = 180;
+  } else if (up == ARENA_LOCATION && down == CORRIDOR_LOCATION &&
+             left == ARENA_LOCATION && right == ARENA_LOCATION) {
+    if (gen_rand_int(100) < nest_spawn_rate) {
+      type = FLAT_DOOR_NEST;
+    } else {
+      type = FLAT_DOOR;
+    }
+    rotation = 90;
+  } else if (up == ARENA_LOCATION && down == ARENA_LOCATION &&
+             left == CORRIDOR_LOCATION && right == ARENA_LOCATION) {
+    if (gen_rand_int(100) < nest_spawn_rate) {
+      type = FLAT_DOOR_NEST;
+    } else {
+      type = FLAT_DOOR;
+    }
+    rotation = 0;
+  } else if (up == NONE && down == ARENA_LOCATION &&
+             left == ARENA_LOCATION && right == ARENA_LOCATION) {
+    if (gen_rand_int(100) < nest_spawn_rate) {
+      type = FLAT_WALL_NEST;
+    } else {
+      type = FLAT_WALL;
+    }
+    rotation = 270;
+  } else if (up == ARENA_LOCATION && down == ARENA_LOCATION &&
+             left == ARENA_LOCATION && right == NONE) {
+    if (gen_rand_int(100) < nest_spawn_rate) {
+      type = FLAT_WALL_NEST;
+    } else {
+      type = FLAT_WALL;
+    }
+    rotation = 180;
+  } else if (up == ARENA_LOCATION && down == NONE &&
+             left == ARENA_LOCATION && right == ARENA_LOCATION) {
+    if (gen_rand_int(100) < nest_spawn_rate) {
+      type = FLAT_WALL_NEST;
+    } else {
+      type = FLAT_WALL;
+    }
+    rotation = 90;
+  } else if (up == ARENA_LOCATION && down == ARENA_LOCATION &&
+             left == NONE && right == ARENA_LOCATION) {
+    if (gen_rand_int(100) < nest_spawn_rate) {
+      type = FLAT_WALL_NEST;
+    } else {
+      type = FLAT_WALL; 
+    }
+    rotation = 0;
+  } else if (up == NONE && down == ARENA_LOCATION &&
+             left == ARENA_LOCATION && right == NONE) {
+    type = DOUBLE_CORNER;
+    rotation = 270;
+  } else if (up == ARENA_LOCATION && down == NONE &&
+             left == ARENA_LOCATION && right == NONE) {
+    type = DOUBLE_CORNER;
+    rotation = 180;
+  } else if (up == ARENA_LOCATION && down == NONE &&
+             left == NONE && right == ARENA_LOCATION) {
+    type = DOUBLE_CORNER;
+    rotation = 90;
+  } else if (up == NONE && down == ARENA_LOCATION &&
+             left == NONE && right == ARENA_LOCATION) {
+    type = DOUBLE_CORNER;
+    rotation = 0;
+  } else if (up == CORRIDOR_LOCATION && down == ARENA_LOCATION &&
+             left == ARENA_LOCATION && right == NONE) {
+    type = CORNER_SINGLE_ENTRANCE;
+    rotation = 270;
+  } else if (up == ARENA_LOCATION && down == NONE &&
+             left == ARENA_LOCATION && right == CORRIDOR_LOCATION) {
+    type = CORNER_SINGLE_ENTRANCE;
+    rotation = 180;
+  } else if (up == ARENA_LOCATION && down == CORRIDOR_LOCATION &&
+             left == NONE && right == ARENA_LOCATION) {
+    type = CORNER_SINGLE_ENTRANCE;
+    rotation = 90;
+  } else if (up == NONE && down == ARENA_LOCATION &&
+             left == CORRIDOR_LOCATION && right == ARENA_LOCATION) {
+    type = CORNER_SINGLE_ENTRANCE;
+    rotation = 0;
+  } else if (up == NONE && down == ARENA_LOCATION &&
+             left == ARENA_LOCATION && right == CORRIDOR_LOCATION) {
+    type = CORNER_SINGLE_ENTRANCE_ALT;
+    rotation = 270;
+  } else if (up == ARENA_LOCATION && down == CORRIDOR_LOCATION &&
+             left == ARENA_LOCATION && right == NONE) {
+    type = CORNER_SINGLE_ENTRANCE_ALT;
+    rotation = 180;
+  } else if (up == ARENA_LOCATION && down == NONE &&
+             left == CORRIDOR_LOCATION && right == ARENA_LOCATION) {
+    type = CORNER_SINGLE_ENTRANCE_ALT;
+    rotation = 90;
+  } else if (up == CORRIDOR_LOCATION && down == ARENA_LOCATION &&
+             left == NONE && right == ARENA_LOCATION) {
+    type = CORNER_SINGLE_ENTRANCE_ALT;
+    rotation = 0;
+  } else if (up == CORRIDOR_LOCATION && down == ARENA_LOCATION &&
+             left == ARENA_LOCATION && right == CORRIDOR_LOCATION) {
+    type = CORNER_DOUBLE_ENTRANCE;
+    rotation = 270;
+  } else if (up == ARENA_LOCATION && down == CORRIDOR_LOCATION &&
+             left == ARENA_LOCATION && right == CORRIDOR_LOCATION) {
+    type = CORNER_DOUBLE_ENTRANCE;
+    rotation = 180;
+  } else if (up == ARENA_LOCATION && down == CORRIDOR_LOCATION &&
+             left == CORRIDOR_LOCATION && right == ARENA_LOCATION) {
+    type = CORNER_DOUBLE_ENTRANCE;
+    rotation = 90;
+  } else if (up == CORRIDOR_LOCATION && down == ARENA_LOCATION &&
+             left == CORRIDOR_LOCATION && right == ARENA_LOCATION) {
+    type = CORNER_DOUBLE_ENTRANCE;
+    rotation = 0;
+  } else {
+    fprintf(stderr, "Error: Unable to find matching arena layout at (%d, %d)\n",
+            coords[X], coords[Y]);
+    return INVALID_INDEX;
+  }
+
+#if 0
+  fprintf(stderr, "Location (%d, %d) w/ %d degrees\n", coords[X], coords[Y], rotation);
+
+  if (up == ARENA_LOCATION) {
+    fprintf(stderr, "%10s\n", "arena");
+  } else if (up == CORRIDOR_LOCATION) {
+    fprintf(stderr, "%10s\n", "corridor");
+  } else {
+    fprintf(stderr, "%10s\n", "none");
+  }
+
+  if (left == ARENA_LOCATION && right == ARENA_LOCATION) {
+    fprintf(stderr, "%15s", "arena * arena\n");
+  } else if (left == CORRIDOR_LOCATION && right == CORRIDOR_LOCATION) {
+    fprintf(stderr, "%15s", "corridor * corridor\n");
+  } else if (left == NONE && right == NONE) {
+    fprintf(stderr, "%15s", "none * none\n");
+  } else if (left == ARENA_LOCATION && right == CORRIDOR_LOCATION) {
+    fprintf(stderr, "%15s", "arena * corridor\n");
+  } else if (left == CORRIDOR_LOCATION && right == ARENA_LOCATION) {
+    fprintf(stderr, "%15s", "corridor * arena\n");
+  } else if (left == ARENA_LOCATION && right == NONE) {
+    fprintf(stderr, "%15s", "arena * none\n");
+  } else if (left == NONE && right == ARENA_LOCATION) {
+    fprintf(stderr, "%15s", "none * arena\n");
+  } else if (left == CORRIDOR_LOCATION && right == NONE) {
+    fprintf(stderr, "%15s", "corridor * none\n");
+  } else if (left == NONE && right == CORRIDOR_LOCATION) {
+    fprintf(stderr, "%15s", "none * corridor\n");
+  }
+
+  if (down == ARENA_LOCATION) {
+    fprintf(stderr, "%10s\n", "arena");
+  } else if (down == CORRIDOR_LOCATION) {
+    fprintf(stderr, "%10s\n", "corridor");
+  } else {
+    fprintf(stderr, "%10s\n", "none");
+  }
+
+  if (type == CORNER_DOUBLE_ENTRANCE) {
+    fprintf(stderr, "Type: corner double entrance\n\n");
+  } else if (type == CORNER_SINGLE_ENTRANCE) {
+    fprintf(stderr, "Type: corner single entrance\n\n");
+  } else if (type == CORNER_SINGLE_ENTRANCE_ALT) {
+    fprintf(stderr, "Type: corner single entrance alt\n\n");
+  } else if (type == DOUBLE_CORNER) {
+    fprintf(stderr, "Type: double corner \n\n");
+  } else if (type == FLAT_DOOR) {
+    fprintf(stderr, "Type: flat door\n\n");
+  } else if (type == FLAT_DOOR_NEST) {
+    fprintf(stderr, "Type: flat door nest\n\n");
+  } else if (type == FLAT_WALL) {
+    fprintf(stderr, "Type: flat wall\n\n");
+  } else if (type == FLAT_WALL_NEST) {
+    fprintf(stderr, "Type: flat wall nest\n\n");
+  } else if (type == MID_FLOOR) {
+    fprintf(stderr, "Type: mid floor\n\n");
+  }
+#endif
+
+  versor rot;
+  CREATE_QUATERNION(glm_rad(rotation), rot)
+
+  vec3 position = GLM_VEC3_ZERO_INIT;
+  glm_vec3_copy((vec3) {
+                (((float) coords[X] - 1) * 5.0) - (2.5 * maze_size),
+                2.0,
+                (((float) coords[Y] - 1) * 5.0) - (2.5 * maze_size) },
+                position);
+
+  size_t index = init_arena(position, rot, type);
+  if (index == INVALID_INDEX) {
+    fprintf(stderr, "Error: Failed to initialize arena object\n");
+    return INVALID_INDEX;
+  }
+  arena_insert_sim(index);
+  for (int i = 0; i < 4; i++) {
+    arena_obs[index].neighbors[i].index = INVALID_INDEX;
+  }
+
+  /* TODO: Add neighbor types in neighbors buffer */
 
   glm_vec3_copy(position, pos_dest);
   *type_dest = type;
@@ -816,4 +1118,13 @@ void object_random_offset(vec3 pos) {
       break;
   }
   glm_vec3_add(pos, offset, pos);
+}
+
+void print_maze(int **maze) {
+  for (int i = 0; i < maze_size; i++) {
+    for (int j = 0; j < maze_size; j++) {
+      printf("%d ", maze[i][j]);
+    }
+    printf("\n");
+  }
 }

@@ -85,6 +85,7 @@ float gen_rand_float(float);
 void create_station_corridors();
 
 /* Arena functions */
+size_t init_arena_buffer();
 void free_arena_buffer();
 void arena_remove_sim(size_t);
 void delete_arena(size_t);

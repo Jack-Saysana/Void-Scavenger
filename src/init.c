@@ -81,6 +81,7 @@ void cleanup_game() {
   free_space_obstacle_buffer();
   free_station_obstacle_buffer();
   free_corridor_buffer();
+  free_arena_buffer();
   // Add cleanup functions above...
   free_timer_queue();
   cleanup_gl();

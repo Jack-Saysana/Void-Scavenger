@@ -48,6 +48,10 @@ size_t init_arena(vec3 pos, versor rotation, size_t type) {
     return INVALID_INDEX;
   }
 
+  for (int i = 0; i < 4; i++) {
+    arena->neighbors[i].index = INVALID_INDEX;
+    arena->neighbors[i].type = -1;
+  }
 
   /* Initialize arena entity data */
   glm_vec3_copy(pos, arena->ent->translation);
@@ -119,4 +123,13 @@ void arena_remove_sim(size_t index) {
   sim_remove_entity(combat_sim, arena_obs[index].ent);
   sim_remove_entity(physics_sim, arena_obs[index].ent);
   sim_remove_entity(event_sim, arena_obs[index].ent);
+}
+
+/* ================================= HELPERS =============================== */
+void add_arena(int size, int **maze) {
+  for (int i = 2; i < size + 2; i++) {
+    for (int j = 2; j < size + 2; j++) {
+      maze[i][j] = 9;
+    }
+  }
 }

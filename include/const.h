@@ -145,14 +145,16 @@
 #define NEIGHBOR_NEG_Z (3)
 
 // Arena Constants
-#define NUM_ARENA_TYPES (7)
-#define CORNER_DOUBLE_ENTRANCE (0)
-#define CORNER_SINGLE_ENTRANCE (1)
-#define DOUBLE_CORNER          (2)
-#define FLAT_DOOR              (3)
-#define FLAT_DOOR_NEST         (4)
-#define FLAT_WALL              (5)
-#define FLAT_WALL_NEST         (6)
+#define NUM_ARENA_TYPES (9)
+#define CORNER_DOUBLE_ENTRANCE     (0)
+#define CORNER_SINGLE_ENTRANCE     (1)
+#define CORNER_SINGLE_ENTRANCE_ALT (2)
+#define DOUBLE_CORNER              (3)
+#define FLAT_DOOR                  (4)
+#define FLAT_DOOR_NEST             (5)
+#define FLAT_WALL                  (6)
+#define FLAT_WALL_NEST             (7)
+#define MID_FLOOR                  (8)
 
 // Station obstacle constants
 #define NUM_STATION_OBSTACLE_TYPES (20)
