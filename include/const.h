@@ -64,6 +64,12 @@
 #define RARITY_ERR    (-1)
 
 // Enemy Constants
+#define MAX_SP_AGRO_RANGE (512.0)
+#define MIN_SP_FOLLOW_RANGE (100.0)
+#define SP_AVOID_BOUNDS_PRIORITY (100.0)
+#define SP_AVOID_OBSTACLE_PRIORITY (5.0)
+#define SP_CHASE_PRIORITY (1.0)
+
 #define NUM_ALIEN_TYPES (2)
 #define NUM_ALIEN_SHIP_TYPES (3)
 #define NUM_ALIEN_ATTACK_TYPES (7)
@@ -92,7 +98,6 @@
 #define E_MID_SPEED (1)
 #define E_HIGH_SPEED (2)
 #define E_ULTRA_SPEED (3)
-
 
 #define E_BASE_HEALTH_NORMAL (100.0)
 #define E_BASE_HEALTH_BRUTE (150.0)
@@ -126,8 +131,8 @@
 #define STATION_DEPTH (6)
 #define ST_BASE_RENDER_DIST (40.0)
 #define ST_BASE_SIM_DIST (32.0)
-#define SP_BASE_RENDER_DIST (500.0)
-#define SP_BASE_SIM_DIST (256.0)
+#define SP_BASE_RENDER_DIST (2000.0)
+#define SP_BASE_SIM_DIST (2000.0)
 #define BASE_NUM_ENEMIES (5)
 
 // Asteroid constants
@@ -177,7 +182,7 @@
 #define BASE_COLLISION_DAMAGE     (50.0)
 
 // Targeting System consts
-#define MAX_TARGET_DIST (100.0)
+#define MAX_TARGET_DIST (512.0)
 
 // Pathfinding consts
 #define ST_ENEMY_SEARCH_DEPTH (4)
@@ -200,5 +205,8 @@
 #define BACK (5)
 
 #define INVALID_FRAME (0xFFFFFFFF)
+
+#define POSITIVE (0)
+#define NEGATIVE (1)
 
 #endif

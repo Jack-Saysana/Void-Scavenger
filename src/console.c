@@ -102,6 +102,7 @@ void set_gamemode_station() {
     return;
   }
   free_timer_queue();
+  add_timer(TICK_RATE, tick, FUNCTION_PTR, NULL);
   clear_space_mode();
   init_station_mode();
 }
@@ -111,6 +112,7 @@ void set_gamemode_space() {
     return;
   }
   free_timer_queue();
+  add_timer(TICK_RATE, tick, FUNCTION_PTR, NULL);
   clear_station_mode();
   init_space_mode();
 }
@@ -136,12 +138,14 @@ void set_render_dist(float dist) {
 
 void reset_station() {
   free_timer_queue();
+  add_timer(TICK_RATE, tick, FUNCTION_PTR, NULL);
   clear_station_mode();
   init_station_mode();
 }
 
 void reset_space() {
   free_timer_queue();
+  add_timer(TICK_RATE, tick, FUNCTION_PTR, NULL);
   clear_space_mode();
   init_space_mode();
 }

@@ -45,3 +45,4 @@ void disable_fps();
 void free_timer_queue();
 I_SLOT *inv_first_avail();
 void set_enhancements(ST_ITEM *, int, int);
+void tick();
