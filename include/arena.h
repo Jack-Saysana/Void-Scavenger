@@ -13,3 +13,4 @@ ENTITY *init_arena_ent(size_t);
 size_t init_wrapper(SOBJ_T, ENTITY *, void *);
 void delete_wrapper(size_t);
 
+int gen_rand_int(int);

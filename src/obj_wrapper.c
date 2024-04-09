@@ -87,8 +87,6 @@ void delete_wrapper(size_t index) {
     }
   } else if (old_wrapper->type == CORRIDOR_OBJ) {
     cd_obs[(size_t) old_wrapper->data].wrapper_offset = index;
-  } else if (old_wrapper->type == ARENA_OBJ) {
-    arena_obs[(size_t) old_wrapper->data].wrapper_offset = index;
   }
 }
 
@@ -113,8 +111,6 @@ void refresh_wrapper(size_t index) {
       sim_refresh_st_obstacle((size_t) wrapper->data);
     }
   } else if (wrapper->type == CORRIDOR_OBJ) {
-    sim_refresh_corridor((size_t) wrapper->data);
-  } else if (wrapper->type == ARENA_OBJ) {
     sim_refresh_corridor((size_t) wrapper->data);
   }
 }

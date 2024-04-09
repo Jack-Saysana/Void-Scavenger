@@ -370,14 +370,14 @@ void search_st_player(ST_ENEMY *enemy, size_t first_cd, size_t *player_cd,
       continue;
     }
     for (int i = 0; i < 4; i++) {
-      cur_neighbor = cd_obs[cur_cd].neighbors[i].index;
+      cur_neighbor = cd_obs[cur_cd].neighbors[i];
       if (cur_neighbor == INVALID_INDEX || cell_data[cur_neighbor].visited) {
         continue;
       }
 
-      search_queue[rear].cd = cd_obs[cur_cd].neighbors[i].index;
+      search_queue[rear].cd = cd_obs[cur_cd].neighbors[i];
       search_queue[rear].depth = cur_depth + 1;
-      cell_data[cd_obs[cur_cd].neighbors[i].index].prev = cur_cd;
+      cell_data[cd_obs[cur_cd].neighbors[i]].prev = cur_cd;
       rear = (rear + 1) % queue_size;
       if (rear == front) {
         int status = double_search_queue(&search_queue, &front, &rear,
@@ -410,7 +410,7 @@ size_t search_patrol_cd(size_t enemy_cd, vec3 enemy_dir) {
   size_t cur_neighbor = 0;
   vec3 to_neighbor = GLM_VEC3_ZERO_INIT;
   for (int i = 0; i < 4; i++) {
-    cur_neighbor = cd_obs[enemy_cd].neighbors[i].index;
+    cur_neighbor = cd_obs[enemy_cd].neighbors[i];
     if (cur_neighbor == INVALID_INDEX) {
       continue;
     }
@@ -451,7 +451,7 @@ size_t search_evasion_cd(size_t enemy_cd, size_t player_cd) {
   float cur_dist = 0.0;
   size_t cur_neighbor = 0;
   for (int i = 0; i < 4; i++) {
-    cur_neighbor = cd_obs[enemy_cd].neighbors[i].index;
+    cur_neighbor = cd_obs[enemy_cd].neighbors[i];
     if (i == evasion_cd || cur_neighbor == INVALID_INDEX) {
       continue;
     }
@@ -464,11 +464,11 @@ size_t search_evasion_cd(size_t enemy_cd, size_t player_cd) {
     if ((i == 0 && evasion_cd == 1) || (i == 1 && evasion_cd == 0) ||
         (i == 2 && evasion_cd == 3) || (i == 3 && evasion_cd == 2)) {
       // Prioritize the neighbor across from evasion_cd
-      ret = cd_obs[enemy_cd].neighbors[i].index;
+      ret = cd_obs[enemy_cd].neighbors[i];
       break;
     } else {
       // If a less-than-ideal neighbor is valid, consider it
-      ret = cd_obs[enemy_cd].neighbors[i].index;
+      ret = cd_obs[enemy_cd].neighbors[i];
     }
   }
 
@@ -482,7 +482,7 @@ int check_clear_shot(size_t enemy_cd, size_t player_cd) {
 
   size_t cur = INVALID_INDEX;
   for (int i = 0; i < 4; i++) {
-    cur = cd_obs[enemy_cd].neighbors[i].index;
+    cur = cd_obs[enemy_cd].neighbors[i];
     if (cur == INVALID_INDEX) {
       continue;
     }
@@ -490,7 +490,7 @@ int check_clear_shot(size_t enemy_cd, size_t player_cd) {
       if (cur == player_cd) {
         return 1;
       }
-      cur = cd_obs[cur].neighbors[i].index;
+      cur = cd_obs[cur].neighbors[i];
       if (cur == INVALID_INDEX) {
         break;
       }

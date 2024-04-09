@@ -239,11 +239,6 @@ int init_station_mode() {
     return -1;
   }
 
-  status = init_arena_buffer();
-  if (status) {
-    return -1;
-  }
-
   create_station_corridors();
 
   // Place player entity in simulation
@@ -280,21 +275,16 @@ void clear_station_mode() {
   for (size_t i = 0; i < num_corridors; i++) {
     free_entity(cd_obs[i].ent);
   }
-  for (size_t i = 0; i < num_arena; i++) {
-    free_entity(arena_obs[i].ent);
-  }
   num_enemies = 0;
   num_projectiles = 0;
   num_items = 0;
   num_obstacles = 0;
   num_corridors = 0;
-  num_arena = 0;
 
   free_enemy_buffer();
   free_corridor_buffer();
   free_station_obstacle_buffer();
   free_items_buffer();
-  free_arena_buffer();
 
   // Reset wrapper buffer length
   num_wrappers = 0;
@@ -364,14 +354,6 @@ int delete_stale_objects() {
     if (cur_wrapper->to_delete) {
       corridor_remove_sim(i);
       delete_corridor(i);
-      i--;
-    }
-  }
-  for (size_t i = 0; i < num_arena; i++) {
-    cur_wrapper = object_wrappers + arena_obs[i].wrapper_offset;
-    if (cur_wrapper->to_delete) {
-      arena_remove_sim(i);
-      delete_arena(i);
       i--;
     }
   }

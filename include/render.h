@@ -57,7 +57,6 @@ typedef struct st_models {
   LOADED_MODEL station_ship_parts[NUM_STATION_SHIP_PART_TYPES];
   LOADED_MODEL corridor_models[NUM_CORRIDOR_TYPES];
   LOADED_MODEL alien_models[NUM_ALIEN_TYPES];
-  LOADED_MODEL arena_models[NUM_ARENA_TYPES];
   LOADED_MODEL player_model;
   LOADED_MODEL proj_model;
   LOADED_MODEL terminal_model;

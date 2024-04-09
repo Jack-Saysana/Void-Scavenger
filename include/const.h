@@ -133,28 +133,25 @@
 #define TYPE_ASTEROID (0)
 
 // Corridor constants
-#define NUM_CORRIDOR_TYPES (5)
+#define NUM_CORRIDOR_TYPES (14)
 #define TYPE_ONE_WAY (0)
 #define TYPE_FOUR_WAY (1)
 #define TYPE_CORNER (2)
 #define TYPE_T_JUNCT (3)
 #define TYPE_CORRIDOR (4)
+#define CORNER_DOUBLE_ENTRANCE     (5)
+#define CORNER_SINGLE_ENTRANCE     (6)
+#define CORNER_SINGLE_ENTRANCE_ALT (7)
+#define DOUBLE_CORNER              (8)
+#define FLAT_DOOR                  (9)
+#define FLAT_DOOR_NEST             (10)
+#define FLAT_WALL                  (11)
+#define FLAT_WALL_NEST             (12)
+#define MID_FLOOR                  (13)
 #define NEIGHBOR_POS_X (0)
 #define NEIGHBOR_NEG_X (1)
 #define NEIGHBOR_POS_Z (2)
 #define NEIGHBOR_NEG_Z (3)
-
-// Arena Constants
-#define NUM_ARENA_TYPES (9)
-#define CORNER_DOUBLE_ENTRANCE     (0)
-#define CORNER_SINGLE_ENTRANCE     (1)
-#define CORNER_SINGLE_ENTRANCE_ALT (2)
-#define DOUBLE_CORNER              (3)
-#define FLAT_DOOR                  (4)
-#define FLAT_DOOR_NEST             (5)
-#define FLAT_WALL                  (6)
-#define FLAT_WALL_NEST             (7)
-#define MID_FLOOR                  (8)
 
 // Station obstacle constants
 #define NUM_STATION_OBSTACLE_TYPES (20)

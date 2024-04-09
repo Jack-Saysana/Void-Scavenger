@@ -450,10 +450,6 @@ ENTITY *init_corridor_ent(size_t index) {
   return init_entity(st_mods.corridor_models[index].model);
 }
 
-ENTITY *init_arena_ent(size_t index) {
-  return init_entity(st_mods.arena_models[index].model);
-}
-
 ENTITY *init_dead_zone_ent() {
   return init_entity(c_mods.dead_zone_model.model);
 }

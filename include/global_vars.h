@@ -10,7 +10,6 @@
 #include <structs/item_str.h>
 #include <structs/obstacle_str.h>
 #include <structs/corridor_str.h>
-#include <structs/arena_str.h>
 #include <structs/obj_wrapper_str.h>
 #include <ui/structs/stats_ui_str.h>
 #include <ui/structs/inventory_ui_str.h>
@@ -86,11 +85,6 @@ extern CORRIDOR *cd_obs;
 extern size_t num_corridors;
 extern size_t corridor_buff_len;
 extern int maze_size;
-
-// Station arena
-extern ARENA *arena_obs;
-extern size_t num_arena;
-extern size_t arena_buff_len;
 
 // Simulation settings
 extern float RENDER_DIST;

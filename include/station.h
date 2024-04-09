@@ -87,10 +87,11 @@ void free_maze(int **);
 void spawn_small_station_obstacle(vec3);
 void spawn_large_station_obstacle(vec3);
 void gen_terminal_location(int, int, vec3, vec3, versor);
-size_t gen_cd_obj(int **, ivec2, vec3, int *, int *);
+size_t gen_cd_obj(int **, ivec2, vec3, int *, int *, int);
 void object_random_offset(vec3);
 void spawn_ship_part(vec3);
-size_t gen_arena_obj(int **, ivec2, vec3, int *, int *);
+void print_maze(int **);
+void add_arena(int, int **);
 
 /* ======================== EXTERNALLY DEFINED FUNCTIONS ================== */
 int double_buffer(void **, size_t *, size_t);
@@ -114,7 +115,3 @@ void spawn_st_terminal(vec3, versor);
 
 size_t init_item(int, int, vec3, vec3, versor, float);
 int item_insert_sim(size_t);
-
-void add_arena(int, int **);
-size_t init_arena(vec3, versor, int);
-void arena_insert_sim(size_t);
