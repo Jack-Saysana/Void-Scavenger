@@ -401,8 +401,12 @@ void create_station_corridors() {
   int location = -1;
 
   int **maze = gen_maze();
-  add_arena(4, maze);
-  add_arena(4, maze);
+  int arenas = 1;
+  // Ensure there is always at least one arena
+  arenas = (arenas = gen_rand_int(3)) > 0 ? arenas : 1;
+  for (int i = 0; i < arenas; i++) {
+    add_arena(MIN_ARENA_SIZE + gen_rand_int(3), maze);
+  }
 
   // Create list of already created corridors
   size_t *visited = malloc(sizeof(size_t) * maze_size * maze_size);

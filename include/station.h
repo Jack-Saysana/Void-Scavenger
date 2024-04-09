@@ -18,6 +18,7 @@
 #define CORRIDOR_LOCATION (10)
 #define ARENA_LOCATION    (11)
 #define NONE              (12)
+#define MIN_ARENA_SIZE    (2)
 
 /*
     Helper macros to convert from linear to 2D array
