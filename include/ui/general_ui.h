@@ -39,3 +39,5 @@ void update_loading_ui();
 void update_main_menu_ui();
 void game_over_ui_initialize();
 void init_item_prompt_ui();
+int init_esc();
+int init_render();
