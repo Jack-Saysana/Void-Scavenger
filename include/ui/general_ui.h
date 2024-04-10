@@ -41,3 +41,4 @@ void game_over_ui_initialize();
 void init_item_prompt_ui();
 int init_esc();
 int init_render();
+void update_render();

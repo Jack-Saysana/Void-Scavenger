@@ -94,4 +94,5 @@ void update_ui_components() {
   update_waypoint_ui();
   update_damage_ui();
   update_main_menu_ui();
+  update_render();
 }

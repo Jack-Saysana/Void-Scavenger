@@ -94,6 +94,13 @@ void toggle_esc() {
   if (ui_esc_root->enabled) {
     set_ui_enabled(ui_esc_root, 0);
     CURSOR_ENABLED = 0;
+  } else if (ui_render_root->enabled) {
+    set_ui_enabled(ui_esc_root, 0);
+    set_ui_enabled(ui_render_root, 0);
+    set_ui_enabled(inventory.ui_inventory_root, 0);
+    set_ui_enabled(skill_tree.ui_skill_tree_root, 0);
+    set_ui_enabled(ship_parts.ui_ship_parts_root, 0);
+    CURSOR_ENABLED = 0;
   } else {
     set_ui_enabled(ui_esc_root, 1);
     set_ui_enabled(inventory.ui_inventory_root, 0);
