@@ -90,6 +90,7 @@ void decrement_current_timer(float delta) {
     }
   }
   update_object_movement();
+  //update_object_movement(5);
 }
 
 /*

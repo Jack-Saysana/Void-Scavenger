@@ -13,6 +13,9 @@ void sp_enemy_pathfind(size_t index) {
   SHIP *enemy = sp_enemies + index;
   vec3 e_pos = GLM_VEC3_ZERO_INIT;
   glm_vec3_copy(enemy->ent->translation, e_pos);
+  vec3 player_forward = GLM_VEC3_ZERO_INIT;
+  glm_quat_rotatev(enemy->ent->rotation, (vec3) { -1.0, 0.0, 0.0 },
+                   player_forward);
 
   vec3 forward = { -1.0, 0.0, 0.0 };
   glm_quat_rotatev(enemy->ent->rotation, forward, forward);
@@ -22,12 +25,12 @@ void sp_enemy_pathfind(size_t index) {
   glm_vec3_cross(forward, up, side);
   glm_vec3_normalize(side);
 
-  float turning_rad = 50.0 + (enemy->thruster.max_vel /
-                              enemy->wing.max_ang_vel);
+  float stop_time = -enemy->thruster.max_vel / -enemy->thruster.max_accel;
+  float stop_dist = (enemy->thruster.max_vel * stop_time) +
+                    (0.5 * enemy->thruster.max_accel *
+                     enemy->thruster.max_accel * stop_time);
+  float turning_rad = 50.0 + stop_dist;
 
-  //fprintf(stderr, "FRAME BEGIN:\n");
-  //fprintf(stderr, "  nearby: [ %f, %f, %f ]\n", enemy->nearby_obstacles[X],
-  //        enemy->nearby_obstacles[Y], enemy->nearby_obstacles[Z]);
   vec3 target_dir = GLM_VEC3_ZERO_INIT;
   float target_speed = enemy->thruster.max_vel;
 
@@ -39,64 +42,45 @@ void sp_enemy_pathfind(size_t index) {
   glm_vec3_scale(ab_dir, SP_AVOID_BOUNDS_PRIORITY, ab_dir);
   glm_vec3_add(ab_dir, target_dir, target_dir);
 
-  /*
   // Steer ship away from nearby obstacles
   vec3 ao_dir = GLM_VEC3_ZERO_INIT;
   float ao_speed = enemy->thruster.max_vel;
-  glm_vec3_copy(enemy->nearby_obstacles, ao_dir);
-  if (ao_dir[X] || ao_dir[Y] || ao_dir[Z]) {
-    ao_speed = 0.5 * enemy->thruster.max_vel;
-  }
+  COLLISION *nearby = NULL;
+  size_t num_nearby = sim_get_nearby(render_sim, &nearby,
+                                     enemy->ent->translation, stop_dist);
+  avoid_obstacles(nearby, num_nearby, enemy, e_pos, forward, stop_dist, ao_dir,
+                  &ao_speed);
+  free(nearby);
   // Take into account priority of avoiding obstacles
   glm_vec3_scale(ao_dir, SP_AVOID_OBSTACLE_PRIORITY, ao_dir);
-  glm_vec3_zero(enemy->nearby_obstacles);
   glm_vec3_add(ao_dir, target_dir, target_dir);
-  */
 
   // Chase the player
   vec3 p_dir = GLM_VEC3_ZERO_INIT;
   float p_speed = enemy->thruster.max_vel;
-  chase_player(e_pos, forward, enemy->weapon.proj_speed + enemy->cur_speed,
-               p_dir, &p_speed);
+  chase_player(e_pos, forward, player_forward, stop_dist,
+               enemy->weapon.proj_speed + enemy->cur_speed, p_dir, &p_speed);
   // Take into account priority of chasing player
   glm_vec3_scale(p_dir, SP_CHASE_PRIORITY, p_dir);
   glm_vec3_add(p_dir, target_dir, target_dir);
 
   // Calculate overall target direction and speed
   glm_vec3_normalize(target_dir);
-  float div = 0.0;
   if (target_dir[X] || target_dir[Y] || target_dir[Z]) {
-    target_speed = 0.0;
+    target_speed = enemy->thruster.max_vel;
     if (ab_dir[X] || ab_dir[Y] || ab_dir[Z]) {
-      target_speed += ab_speed;
-      div++;
+      target_speed = fmin(target_speed, ab_speed);
     }
-    /*
     if (ao_dir[X] || ao_dir[Y] || ao_dir[Z]) {
-      target_speed += ao_speed;
-      div++;
+      target_speed = fmin(target_speed, ao_speed);
     }
-    */
     if (p_dir[X] || p_dir[Y] || p_dir[Z]) {
-      target_speed += p_speed;
-      div++;
+      target_speed = fmin(target_speed, p_speed);
     }
-    target_speed /= div;
   }
 
   float player_alignment = glm_vec3_dot(forward, p_dir);
-  //float alignment = glm_vec3_dot(forward, target_dir);
   vec3 temp = GLM_VEC3_ZERO_INIT;
-
-  /*
-  fprintf(stderr, "  ab: [ %f, %f, %f ]\n", ab_dir[X], ab_dir[Y], ab_dir[Z]);
-  fprintf(stderr, "  cp: [ %f, %f, %f ]\n", p_dir[X], p_dir[Y], p_dir[Z]);
-  fprintf(stderr, "  target: [ %f, %f, %f ]\n",
-          target_dir[X], target_dir[Y], target_dir[Z]);
-  fprintf(stderr, "  forward: [ %f, %f, %f ]\n",
-          forward[X], forward[Y], forward[Z]);
-  fprintf(stderr, "  alignment: %f\n", alignment);
-  */
 
   if (target_dir[X] || target_dir[Y] || target_dir[Z]) {
     // Goal: Steer ship using linear combination of pitch roll and yaw to
@@ -108,14 +92,11 @@ void sp_enemy_pathfind(size_t index) {
     float pitch_alignment = glm_vec3_dot(target_dir, up);
     float cur_pitch = glm_vec3_dot(side, enemy->ent->ang_velocity);
     float target_pitch = 0.0;
-    //fprintf(stderr, "  pitch_alignment: %f\n", pitch_alignment);
     if (pitch_alignment < 0.0) {
       target_pitch = -enemy->wing.max_ang_vel * fabs(pitch_alignment);
     } else if (pitch_alignment > 0.0) {
       target_pitch = enemy->wing.max_ang_vel * fabs(pitch_alignment);
     }
-    //fprintf(stderr, "  target_pitch: %f\n", target_pitch);
-    //fprintf(stderr, "  cur_pitch: %f\n", cur_pitch);
     if (cur_pitch > target_pitch) {
       glm_vec3_scale_as(side, -enemy->wing.max_ang_accel * DELTA_TIME, temp);
     } else if (cur_pitch < target_pitch) {
@@ -129,14 +110,11 @@ void sp_enemy_pathfind(size_t index) {
     float roll_alignment = glm_vec3_dot(target_dir, temp);
     float cur_roll = glm_vec3_dot(forward, enemy->ent->ang_velocity);
     float target_roll = 0.0;
-    //fprintf(stderr, "  roll_alignment: %f\n", roll_alignment);
     if (roll_alignment < 0.0) {
       target_roll = enemy->wing.max_ang_vel * fabs(roll_alignment);
     } else if (roll_alignment > 0.0) {
       target_roll = -enemy->wing.max_ang_vel * fabs(roll_alignment);
     }
-    //fprintf(stderr, "  target_roll: %f\n", target_roll);
-    //fprintf(stderr, "  cur_roll: %f\n", cur_roll);
     if (cur_roll > target_roll) {
       glm_vec3_scale_as(forward, -enemy->wing.max_ang_accel * DELTA_TIME,
                         temp);
@@ -149,14 +127,11 @@ void sp_enemy_pathfind(size_t index) {
     float yaw_alignment = glm_vec3_dot(target_dir, side);
     float cur_yaw = glm_vec3_dot(up, enemy->ent->ang_velocity);
     float target_yaw = 0.0;
-    //fprintf(stderr, "  yaw_alignment: %f\n", yaw_alignment);
     if (yaw_alignment < 0.0) {
       target_yaw =  enemy->wing.max_ang_vel * fabs(yaw_alignment);
     } else if (yaw_alignment > 0.0) {
       target_yaw =  -enemy->wing.max_ang_vel * fabs(yaw_alignment);
     }
-    //fprintf(stderr, "  target_yaw: %f\n", target_yaw);
-    //fprintf(stderr, "  cur_yaw: %f\n", cur_yaw);
     if (cur_yaw > target_yaw) {
       glm_vec3_scale_as(up, -enemy->wing.max_ang_accel * DELTA_TIME, temp);
     } else if (cur_yaw < target_yaw) {
@@ -207,28 +182,19 @@ void sp_enemy_pathfind(size_t index) {
 
 // ============================== SPACE HELPERS ==============================
 
-void chase_player(vec3 e_pos, vec3 forward, float proj_speed, vec3 target_dir,
+void chase_player(vec3 e_pos, vec3 forward, vec3 player_forward,
+                  float stop_dist, float proj_speed, vec3 target_dir,
                   float *target_speed) {
   float dist = glm_vec3_distance(player_ship.ent->translation, e_pos);
-  if (dist <= MAX_SP_AGRO_RANGE) {
-    get_shot_target(e_pos, player_ship.ent->translation,
-                    player_ship.ent->velocity, proj_speed, target_dir);
-    vec3 test = GLM_VEC3_ZERO_INIT;
-    glm_vec3_sub(player_ship.ent->translation, e_pos, test);
-    glm_vec3_normalize(test);
-    /*
-    fprintf(stderr, "  to_player: [ %f, %f, %f ]\n",
-            test[X], test[Y], test[Z]);
-    fprintf(stderr, "  interception: [ %f, %f, %f ]\n",
-            target_dir[X], target_dir[Y], target_dir[Z]);
-    fprintf(stderr, "  p_vel: [ %f, %f, %f ]\n",
-            player_ship.ent->velocity[X], player_ship.ent->velocity[Y],
-            player_ship.ent->velocity[Z]);
-    */
+  get_shot_target(e_pos, player_ship.ent->translation,
+                  player_ship.ent->velocity, proj_speed, target_dir);
+  vec3 from_player = GLM_VEC3_ZERO_INIT;
+  glm_vec3_sub(e_pos, player_ship.ent->translation, from_player);
+  glm_vec3_normalize(from_player);
 
-    if (dist <= MIN_SP_FOLLOW_RANGE) {
-      (*target_speed) = 0.0;
-    }
+  if (dist <= MIN_SP_FOLLOW_RANGE + stop_dist &&
+      glm_vec3_dot(from_player, player_forward) < 0.0) {
+    (*target_speed) = 0.0;
   }
 }
 
@@ -264,12 +230,55 @@ void avoid_bounds(vec3 e_pos, vec3 forward, float turning_rad,
   glm_vec3_normalize(target_dir);
 }
 
+void avoid_obstacles(COLLISION *nearby, size_t num_nearby, SHIP *enemy,
+                     vec3 e_pos, vec3 forward, float stop_dist,
+                     vec3 target_dir, float *target_speed) {
+  size_t obj_index = 0;
+  SOBJ *cur_obj = NULL;
+  vec3 to_obj = GLM_VEC3_ZERO_INIT;
+  float obj_dist = 0.0;
+  float obj_alignment = 0.0;
+  vec3 avoidance_dir = GLM_VEC3_ZERO_INIT;
+  float speed_modifier = 1.0;
+  for (size_t i = 0; i < num_nearby; i++) {
+    obj_index = (size_t) nearby[i].b_ent->data;
+    if (obj_index == enemy->wrapper_offset) {
+      continue;
+    }
+
+    cur_obj = object_wrappers + obj_index;
+    glm_vec3_sub(cur_obj->entity->translation, e_pos, to_obj);
+    obj_dist = glm_vec3_norm(to_obj);
+    glm_vec3_normalize(to_obj);
+    obj_alignment = glm_vec3_dot(to_obj, forward);
+
+    // Don't consider object if it is sufficiently "out of the way"
+    if (obj_alignment < SP_OBJ_AVOIDANCE_THRESHOLD) {
+      continue;
+    }
+
+    if (cur_obj->type == PLAYER_SHIP_OBJ ||
+        cur_obj->type == ENEMY_SHIP_OBJ ||
+        cur_obj->type == OBSTACLE_OBJ ||
+        cur_obj->type == STATION_OBJ) {
+      glm_vec3_cross(to_obj, forward, avoidance_dir);
+      glm_vec3_cross(avoidance_dir, forward, avoidance_dir);
+      glm_vec3_scale_as(avoidance_dir,
+                        (obj_alignment - SP_OBJ_AVOIDANCE_THRESHOLD) /
+                        (1.0 - SP_OBJ_AVOIDANCE_THRESHOLD), avoidance_dir);
+      glm_vec3_add(avoidance_dir, forward, avoidance_dir);
+      glm_vec3_normalize(avoidance_dir);
+      glm_vec3_add(avoidance_dir, target_dir, target_dir);
+
+      speed_modifier = fmin(speed_modifier, obj_dist / stop_dist);
+    }
+  }
+  glm_vec3_normalize(target_dir);
+  (*target_speed) = speed_modifier * enemy->thruster.max_vel;
+}
+
 void get_shot_target(vec3 e_pos, vec3 t_pos, vec3 t_vel, float proj_speed,
                      vec3 dest) {
-//  fprintf(stderr, "  e_pos: [ %f, %f, %f ]\n", e_pos[X], e_pos[Y], e_pos[Z]);
-//  fprintf(stderr, "  t_pos: [ %f, %f, %f ]\n", t_pos[X], t_pos[Y], t_pos[Z]);
-//  fprintf(stderr, "  t_vel: [ %f, %f, %f ]\n", t_vel[X], t_vel[Y], t_vel[Z]);
-//  fprintf(stderr, "  proj_speed: %f\n", proj_speed);
   // Calculate the interception vector for the enemy ship to shoot such that
   // it's projectile intercepts the player's current trajectory
 
@@ -277,16 +286,13 @@ void get_shot_target(vec3 e_pos, vec3 t_pos, vec3 t_vel, float proj_speed,
   glm_vec3_sub(t_pos, e_pos, q);
 
   float a = glm_vec3_dot(t_vel, t_vel) - (proj_speed * proj_speed);
-//  fprintf(stderr, "  a: %f\n", a);
   if (a == 0.0) {
     glm_vec3_sub(t_pos, e_pos, dest);
     glm_vec3_normalize(dest);
     return;
   }
   float b = 2.0 * glm_vec3_dot(t_vel, q);
-//  fprintf(stderr, "  b: %f\n", b);
   float c = glm_vec3_dot(q, q);
-//  fprintf(stderr, "  c: %f\n", c);
 
   float b2_4ac = (b * b) - (4.0 * a * c);
   if (b2_4ac < 0.0) {
@@ -299,8 +305,6 @@ void get_shot_target(vec3 e_pos, vec3 t_pos, vec3 t_vel, float proj_speed,
 
   float t1 = (-b + sqrt_b2_4ac) / a2;
   float t2 = (-b - sqrt_b2_4ac) / a2;
-//  fprintf(stderr, "  t1: %f\n", t1);
-//  fprintf(stderr, "  t2: %f\n", t2);
 
   float t = 0.0;
   if (t1 > 0.0 && t2 > 0.0) {
@@ -318,7 +322,6 @@ void get_shot_target(vec3 e_pos, vec3 t_pos, vec3 t_vel, float proj_speed,
     glm_vec3_normalize(dest);
     return;
   }
-//  fprintf(stderr, "  t: %f\n", t);
 
   vec3 d = GLM_VEC3_ZERO_INIT;
   glm_vec3_scale(t_vel, t, d);

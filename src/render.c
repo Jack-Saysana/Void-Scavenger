@@ -193,7 +193,7 @@ void render_scene(GLFWwindow *window) {
       render_skybox();
     }
     if (render_arena) {
-      render_oct_tree(physics_sim);
+      render_oct_tree(combat_sim);
     }
     if (render_bounds) {
       render_dead_zones();

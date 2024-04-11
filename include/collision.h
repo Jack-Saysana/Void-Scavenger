@@ -12,6 +12,7 @@ void handle_event_collisions(COLLISION *, size_t);
 
 void prepare_object_movement();
 void update_object_movement();
+//void update_object_movement(int);
 
 void decrement_player_shield(float, float);
 void decrement_player_health(float, float);

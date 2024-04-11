@@ -66,8 +66,9 @@
 // Enemy Constants
 #define MAX_SP_AGRO_RANGE (512.0)
 #define MIN_SP_FOLLOW_RANGE (100.0)
+#define SP_OBJ_AVOIDANCE_THRESHOLD (0.7071)
 #define SP_AVOID_BOUNDS_PRIORITY (100.0)
-#define SP_AVOID_OBSTACLE_PRIORITY (5.0)
+#define SP_AVOID_OBSTACLE_PRIORITY (2.0)
 #define SP_CHASE_PRIORITY (1.0)
 
 #define NUM_ALIEN_TYPES (2)
@@ -125,8 +126,8 @@
 #define STAT_PROJ (1)
 
 // Simulation constants
-#define BASE_SPACE_SIZE (256.0)
-#define SPACE_DEPTH (8)
+#define BASE_SPACE_SIZE (512.0)
+#define SPACE_DEPTH (9)
 #define STATION_SIZE (80.0)
 #define STATION_DEPTH (6)
 #define ST_BASE_RENDER_DIST (40.0)

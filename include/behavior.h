@@ -13,7 +13,9 @@ typedef struct search_frame {
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
 void avoid_bounds(vec3, vec3, float, vec3, float *);
-void chase_player(vec3, vec3, float, vec3, float *);
+void avoid_obstacles(COLLISION *, size_t, SHIP *, vec3, vec3, float, vec3,
+                     float *);
+void chase_player(vec3, vec3, vec3, float, float, vec3, float *);
 void get_shot_target(vec3, vec3, vec3, float, vec3);
 void search_st_player(ST_ENEMY *, size_t, size_t *, size_t *);
 size_t search_patrol_cd(size_t, vec3);

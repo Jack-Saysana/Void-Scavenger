@@ -39,3 +39,4 @@ void free_timer_queue();
 
 void prepare_object_movement();
 void update_object_movement();
+//void update_object_movement(int);

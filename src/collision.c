@@ -37,6 +37,7 @@ void handle_collisions() {
 
   integrate_projectiles();
   update_object_movement();
+  //update_object_movement(2);
 
   // Detect and respond to physics based collisions
   COLLISION *physics_collisions = NULL;
@@ -48,6 +49,7 @@ void handle_collisions() {
   prepare_object_movement();
   handle_physics_collisions(physics_collisions, num_p_col);
   update_object_movement();
+  //update_object_movement(3);
 
   #if 0
   COLLISION *combat_collisions = NULL;
@@ -173,7 +175,7 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
       if (mode == STATION || proj->type == BALLISTIC) {
         decrement_player_shield(proj->damage, 0.1);
         st_player.total_damage_taken += proj->damage;
-      } else { 
+      } else {
         float shield_dmg = 0;
         float health_dmg = 0;
         if (proj->type == LASER) {
@@ -202,12 +204,12 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
           st_player.total_damage_dealt += proj->damage;
         }
         decrement_enemy_shield((size_t) target_wrapper->data, proj->damage, 0.1);
-        if (mode == STATION && st_enemies[(size_t)target_wrapper->data].cur_health <= 0.0 && 
+        if (mode == STATION && st_enemies[(size_t)target_wrapper->data].cur_health <= 0.0 &&
             st_enemies[(size_t)target_wrapper->data].dropped_xp == 0) {
           /* Enemy killed by player */
           st_player.total_enemies_defeated++;
           st_enemies[(size_t)target_wrapper->data].dropped_xp = 1;
-          float xp = st_enemies[(size_t)target_wrapper->data].amount_xp + 
+          float xp = st_enemies[(size_t)target_wrapper->data].amount_xp +
                      E_LEVEL_SCALE * st_player.total_levels_completed;
           xp +=  gen_rand_float_plus_minus(xp/E_XP_RANGE);
           st_player.cur_experience += (int)xp;
@@ -221,11 +223,11 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
         }
       } else {
         if (proj->type == BALLISTIC) {
-          if (sp_enemies[(size_t)target_wrapper->data].cur_health > 0.0 && 
+          if (sp_enemies[(size_t)target_wrapper->data].cur_health > 0.0 &&
               !sp_enemies[(size_t)target_wrapper->data].invuln) {
             st_player.total_damage_dealt += proj->damage;
           }
-          decrement_enemy_shield((size_t) 
+          decrement_enemy_shield((size_t)
                                  target_wrapper->data, proj->damage, 0.1);
         } else {
           float shield_dmg = 0;
@@ -243,17 +245,17 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
             }
             decrement_enemy_shield((size_t)
                                     target_wrapper->data, shield_dmg, 0.1);
-          } else if (sp_enemies[(size_t) 
+          } else if (sp_enemies[(size_t)
                                 target_wrapper->data].cur_shield > 0.0) {
             if (!sp_enemies[(size_t)target_wrapper->data].invuln) {
               st_player.total_damage_dealt += sp_enemies[(size_t)
                                               target_wrapper->data].cur_shield;
             }
-            decrement_enemy_shield((size_t) target_wrapper->data, 
+            decrement_enemy_shield((size_t) target_wrapper->data,
                                    sp_enemies[(size_t)
                                    target_wrapper->data].cur_shield, 0.1);
           } else {
-            if (sp_enemies[(size_t)target_wrapper->data].cur_health > 0.0 && 
+            if (sp_enemies[(size_t)target_wrapper->data].cur_health > 0.0 &&
               !sp_enemies[(size_t)target_wrapper->data].invuln) {
               if (health_dmg < sp_enemies[(size_t)target_wrapper->data].cur_health) {
                 st_player.total_damage_dealt += health_dmg;
@@ -302,12 +304,13 @@ void handle_event_collisions(COLLISION *cols, size_t num_cols) {
       cur_enemy->cur_corridor = (size_t) a_wrapper->data;
     }
 
-    // Direct enemies away from one another
+    // Direct station enemies away from one another
     if (a_wrapper->type == ENEMY_OBJ && b_wrapper->type == ENEMY_OBJ) {
       glm_vec3_sub(st_enemies[(size_t) a_wrapper->data].ent->translation,
                    st_enemies[(size_t) b_wrapper->data].ent->translation,
                    temp);
       temp[Y] = 0.0;
+      glm_vec3_normalize(temp);
       glm_vec3_add(temp, st_enemies[(size_t) a_wrapper->data].nearby_enemies,
                    st_enemies[(size_t) a_wrapper->data].nearby_enemies);
       glm_vec3_negate(temp);
@@ -378,6 +381,15 @@ void update_object_movement() {
   update_sim_movement(event_sim);
   update_sim_movement(render_sim);
 }
+// DEBUG VERSION OF update_object_movement FOR TRACKING OCT TREE CONTENTS
+/*
+void update_object_movement(int birthmark) {
+  update_sim_movement(physics_sim, birthmark);
+  update_sim_movement(combat_sim, birthmark);
+  update_sim_movement(event_sim, birthmark);
+  update_sim_movement(render_sim, birthmark);
+}
+*/
 
 // ================================= HELPERS =================================
 
@@ -521,5 +533,6 @@ void update_query_spheres() {
     glm_vec3_copy(camera.pos, sim_sphere->translation);
   }
   update_sim_movement(render_sim);
+  //update_sim_movement(render_sim, 4);
 }
 

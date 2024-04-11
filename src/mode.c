@@ -68,6 +68,7 @@ int init_space_mode() {
   vec3 pos = GLM_VEC3_ZERO_INIT;
   versor rot = GLM_QUAT_IDENTITY_INIT;
   int num_enemies = BASE_NUM_ENEMIES + (rand() % 5) - 2; //TODO update amount of enemeies based on level
+  //int num_enemies = 0; //TODO update amount of enemeies based on level
   int e_attack_type_range = 0;
   int e_mov_type_range = 0;
   if (st_player.total_levels_completed > E_TYPE_UPDATE_2) {

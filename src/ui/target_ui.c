@@ -103,6 +103,8 @@ void target_nearest_enemy() {
     set_ui_enabled(target_ui, 0);
     set_ui_enabled(target_waypoint, 0);
   }
+
+  free(query);
 }
 
 size_t get_target_ship_index() {

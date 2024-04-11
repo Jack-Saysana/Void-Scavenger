@@ -16,7 +16,7 @@ typedef enum {
 } OCTANT;
 
 typedef struct physics_object {
-  //COLLIDER add_state;
+//  COLLIDER add_state;
   ENTITY *entity;
   size_t collider_offset;
   // Index of
@@ -25,7 +25,7 @@ typedef struct physics_object {
   size_t next_offset;
   // Index of prev PHYS_OBJ residing in the same node in data_buffer
   size_t prev_offset;
-  //int birthmark;
+//  int birthmark;
 } PHYS_OBJ;
 
 typedef struct oct_tree_node {

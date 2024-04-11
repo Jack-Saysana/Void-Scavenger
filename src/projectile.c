@@ -136,15 +136,20 @@ void integrate_projectiles() {
 
 void integrate_projectile(size_t index) {
   vec3 movement = GLM_VEC3_ZERO_INIT;
-  vec3 old_pos = GLM_VEC3_ZERO_INIT;
+  vec3 pos = GLM_VEC3_ZERO_INIT;
   PROJ *cur_proj = projectiles + index;
-  glm_vec3_copy(cur_proj->ent->translation, old_pos);
+  glm_vec3_copy(cur_proj->ent->translation, pos);
   glm_vec3_scale(cur_proj->ent->velocity, DELTA_TIME, movement);
   glm_vec3_add(movement, cur_proj->ent->translation,
                cur_proj->ent->translation);
 
-  cur_proj->range -= glm_vec3_distance(old_pos, cur_proj->ent->translation);
-  if (cur_proj->range <= 0.0) {
+  cur_proj->range -= glm_vec3_distance(pos, cur_proj->ent->translation);
+  glm_vec3_copy(cur_proj->ent->translation, pos);
+  // Delete projectile if it exausts its range or exists space bounds
+  if (cur_proj->range <= 0.0 ||
+      pos[X] < -space_size || pos[X] > space_size ||
+      pos[Y] < -space_size || pos[Y] > space_size ||
+      pos[Z] < -space_size || pos[Z] > space_size) {
     object_wrappers[cur_proj->wrapper_offset].to_delete = 1;
   }
 }

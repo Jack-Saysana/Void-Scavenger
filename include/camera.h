@@ -8,3 +8,4 @@
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 
+int holding_alpha_key(int);
