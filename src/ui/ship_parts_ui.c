@@ -19,43 +19,45 @@ int init_ship_parts() {
   equipped_hull.type = I_SLOT_HULL;
   equipped_hull.rarity = WHITE_RARITY;
   equipped_hull.weapon_type = NOT_WEAPON;
-  equipped_hull.data.hull.max_health = 100;
+  equipped_hull.data.hull.max_health = S_BASE_HEALTH;
 
   equipped_reactor.type = I_SLOT_REACTOR;
   equipped_reactor.rarity = WHITE_RARITY;
   equipped_reactor.weapon_type = NOT_WEAPON;
-  equipped_reactor.data.reactor.max_output = 100;
+  equipped_reactor.data.reactor.max_output = S_BASE_PWR_OUTPUT;
+  equipped_reactor.data.reactor.recharge_rate = S_BASE_REACTOR_RECHARGE;
 
   equipped_shield.type = I_SLOT_SHIELD;
   equipped_shield.rarity = WHITE_RARITY;
   equipped_shield.weapon_type = NOT_WEAPON;
-  equipped_shield.data.shield.max_shield = 100;
-  equipped_shield.data.shield.power_draw = 25;
-  equipped_shield.data.shield.recharge_delay = 2;
-  equipped_shield.data.shield.recharge_rate = 5;
+  equipped_shield.data.shield.max_shield = S_BASE_SHIELD;
+  equipped_shield.data.shield.power_draw = S_BASE_PWR_DRAW;
+  equipped_shield.data.shield.recharge_delay = S_BASE_SHIELD_DELAY;
+  equipped_shield.data.shield.recharge_rate = S_BASE_SHIELD_RECHARGE;
 
   equipped_thruster.type = I_SLOT_THRUSTER;
   equipped_thruster.rarity = WHITE_RARITY;
   equipped_thruster.weapon_type = NOT_WEAPON;
-  equipped_thruster.data.thruster.max_accel = 5;
-  equipped_thruster.data.thruster.max_power_draw = 25;
-  equipped_thruster.data.thruster.max_vel = 10;
+  equipped_thruster.data.thruster.max_accel = S_BASE_ACCEL;
+  equipped_thruster.data.thruster.max_power_draw = S_BASE_THRUSTER_PWR_DRAW;
+  equipped_thruster.data.thruster.max_vel = S_BASE_VEL;
 
   equipped_weapon.type = I_SLOT_WEAPON;
   equipped_weapon.rarity = WHITE_RARITY;
   equipped_weapon.weapon_type = W_BALLISTIC;
-  equipped_weapon.data.weapon.damage = 100;
-  equipped_weapon.data.weapon.fire_rate = 0.1;
-  equipped_weapon.data.weapon.max_power_draw = 25;
-  equipped_weapon.data.weapon.proj_speed = 50;
-  equipped_weapon.data.weapon.range = 100;
+  equipped_weapon.data.weapon.damage = S_BASE_DAMAGE;
+  equipped_weapon.data.weapon.fire_rate = S_BASE_FIRERATE;
+  equipped_weapon.data.weapon.max_power_draw = S_BASE_WEAPON_PWR_DRAW;
+  equipped_weapon.data.weapon.proj_speed = S_BASE_PROJ_SPEED;
+  equipped_weapon.data.weapon.range = S_BASE_RANGE;
+  equipped_weapon.data.weapon.bullet_size = S_BASE_BULLET_SIZE;
   equipped_weapon.data.weapon.type = BALLISTIC;
 
   equipped_wing.type = I_SLOT_WING;
   equipped_wing.rarity = WHITE_RARITY;
   equipped_wing.weapon_type = NOT_WEAPON;
-  equipped_wing.data.wing.max_ang_accel = 0.25;
-  equipped_wing.data.wing.max_ang_vel = 0.25;
+  equipped_wing.data.wing.max_ang_accel = S_BASE_ANG_ACCEL;
+  equipped_wing.data.wing.max_ang_vel = S_BASE_ANG_VEL;
 
   // Init UI components
   ship_parts.ui_ship_parts_root = add_ui_comp(
@@ -534,7 +536,9 @@ void ship_parts_on_hover(UI_COMP *ui_ship_parts, I_SLOT *equipped_ship_parts) {
   switch (equipped_ship_parts->type) {
     case I_SLOT_REACTOR:
       snprintf(ship_parts_info_content_buffer, SHIP_PARTS_TEXT_BUFFER_SIZE,
-                "[MAX OUTPUT = %.2f]", equipped_ship_parts->data.reactor.max_output);
+                "[MAX OUTPUT = %.2f]\n[RECHARGE RATE = %.2f]",
+                 equipped_ship_parts->data.reactor.max_output,
+                 equipped_ship_parts->data.reactor.recharge_rate);
       break;
     case I_SLOT_HULL:
       snprintf(ship_parts_info_content_buffer, SHIP_PARTS_TEXT_BUFFER_SIZE,
@@ -548,10 +552,10 @@ void ship_parts_on_hover(UI_COMP *ui_ship_parts, I_SLOT *equipped_ship_parts) {
       break;
     case I_SLOT_WEAPON:
       snprintf(ship_parts_info_content_buffer, SHIP_PARTS_TEXT_BUFFER_SIZE,
-                "[DAMAGE = %.2f]\n[FIRE RATE = %.2f]\n[MAX POWER DRAW = %.2f]\n[PROJCTION SPEED = %.2f]\n[RANGE = %.2f]", 
+                "[DAMAGE = %.2f]\n[FIRE RATE = %.2f]\n[POWER DRAW = %.2f]\n[PROJ SPEED = %.2f]\n[RANGE = %.2f]\n[PROJ SIZE = %.2f]", 
                 equipped_ship_parts->data.weapon.damage, equipped_ship_parts->data.weapon.fire_rate, 
                 equipped_ship_parts->data.weapon.max_power_draw, equipped_ship_parts->data.weapon.proj_speed, 
-                equipped_ship_parts->data.weapon.range);
+                equipped_ship_parts->data.weapon.range, equipped_ship_parts->data.weapon.bullet_size);
       break;
     case I_SLOT_WING:
       snprintf(ship_parts_info_content_buffer, SHIP_PARTS_TEXT_BUFFER_SIZE,
