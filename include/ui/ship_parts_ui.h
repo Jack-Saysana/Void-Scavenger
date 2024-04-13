@@ -14,7 +14,7 @@ Implements the functionality for defining UI components for player's space
 mode ship parts.
 */
 
-#define SHIP_PARTS_TEXT_BUFFER_SIZE (128)
+#define SHIP_PARTS_TEXT_BUFFER_SIZE (256)
 
 /* GLOBALS */
 SHIP_PARTS ship_parts;

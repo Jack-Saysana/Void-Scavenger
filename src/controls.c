@@ -138,7 +138,7 @@ void mouse_button_callback(GLFWwindow *window, int button, int action,
                                             forward,
                                             10.0 + st_player.speed,
                                             SRC_PLAYER,
-                                            player_ship.weapon.type,
+                                            BALLISTIC,
                                             st_player.damage,
                                             100.0,
                                             1);
@@ -149,53 +149,7 @@ void mouse_button_callback(GLFWwindow *window, int button, int action,
         /* fire rate timer */
         can_shoot = 0;
         add_timer(player_ship.weapon.fire_rate, (void *) &can_shoot, 1, NULL);
-        /* get ship vectors */
-        vec3 ship_forward;
-        glm_quat_rotatev(player_ship.ent->rotation, (vec3){-1.0, 0.0, 0.0}, ship_forward);
-        glm_normalize(ship_forward);
-        vec3 ship_side;
-        glm_quat_rotatev(player_ship.ent->rotation, (vec3){0.0, 0.0, 1.0}, ship_side);
-        glm_normalize(ship_side);
-        vec3 ship_up;
-        glm_quat_rotatev(player_ship.ent->rotation, (vec3){0.0, 1.0, 0.0}, ship_up);
-        glm_normalize(ship_up);
-        /* rotate left gun to converage */
-        glm_vec3_rotate(ship_forward, glm_rad(-1.5), ship_side);
-        glm_vec3_rotate(ship_forward, glm_rad(-0.3125), ship_up);
-        /* get left gun offset pos */
-        vec3 gun_pos = GLM_VEC3_ZERO_INIT;
-        glm_vec3_scale_as(ship_forward, 7.0, gun_pos);
-        glm_vec3_add(player_ship.ent->translation, gun_pos, gun_pos);
-        glm_vec3_add(gun_pos, ship_side, gun_pos);
-        /* spawn left projectile*/
-        size_t proj_index = init_projectile(gun_pos,
-                                            ship_forward,
-                                            player_ship.weapon.proj_speed +
-                                            player_ship.cur_speed,
-                                            SRC_PLAYER,
-                                            player_ship.weapon.type,
-                                            player_ship.weapon.damage,
-                                            player_ship.weapon.range,
-                                            0);
-        projectile_insert_sim(proj_index);
-        /* get right gun offset pos */
-        glm_vec3_negate(ship_side);
-        glm_vec3_scale_as(ship_forward, 7.0, gun_pos);
-        glm_vec3_add(player_ship.ent->translation, gun_pos, gun_pos);
-        glm_vec3_add(gun_pos, ship_side, gun_pos);
-        /* rotate right gun to converage */
-        glm_vec3_rotate(ship_forward, glm_rad(0.625), ship_up);
-        /* spawn right projectile*/
-        proj_index = init_projectile(gun_pos,
-                                     ship_forward,
-                                     player_ship.weapon.proj_speed +
-                                     player_ship.cur_speed,
-                                     SRC_PLAYER,
-                                     player_ship.weapon.type,
-                                     player_ship.weapon.damage,
-                                     player_ship.weapon.range,
-                                     0);
-        projectile_insert_sim(proj_index);
+        ship_shoot();
       }
     }
   }

@@ -52,6 +52,7 @@ int init_ship_parts() {
   equipped_weapon.data.weapon.range = S_BASE_RANGE;
   equipped_weapon.data.weapon.bullet_size = S_BASE_BULLET_SIZE;
   equipped_weapon.data.weapon.type = BALLISTIC;
+  equipped_weapon.data.weapon.num_barrels = S_BASE_NUM_BARRELS;
 
   equipped_wing.type = I_SLOT_WING;
   equipped_wing.rarity = WHITE_RARITY;
@@ -552,10 +553,11 @@ void ship_parts_on_hover(UI_COMP *ui_ship_parts, I_SLOT *equipped_ship_parts) {
       break;
     case I_SLOT_WEAPON:
       snprintf(ship_parts_info_content_buffer, SHIP_PARTS_TEXT_BUFFER_SIZE,
-                "[DAMAGE = %.2f]\n[FIRE RATE = %.2f]\n[POWER DRAW = %.2f]\n[PROJ SPEED = %.2f]\n[RANGE = %.2f]\n[PROJ SIZE = %.2f]", 
+                "[DAMAGE = %.2f]\n[FIRE RATE = %.2f]\n[POWER DRAW = %.2f]\n[PROJ SPEED = %.2f]\n[RANGE = %.2f]\n[PROJ SIZE = %.2f]\n[NUM BARRELS = %.d]", 
                 equipped_ship_parts->data.weapon.damage, equipped_ship_parts->data.weapon.fire_rate, 
                 equipped_ship_parts->data.weapon.max_power_draw, equipped_ship_parts->data.weapon.proj_speed, 
-                equipped_ship_parts->data.weapon.range, equipped_ship_parts->data.weapon.bullet_size);
+                equipped_ship_parts->data.weapon.range, equipped_ship_parts->data.weapon.bullet_size, 
+                equipped_ship_parts->data.weapon.num_barrels);
       break;
     case I_SLOT_WING:
       snprintf(ship_parts_info_content_buffer, SHIP_PARTS_TEXT_BUFFER_SIZE,

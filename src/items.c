@@ -306,7 +306,7 @@ void set_enhancements(ST_ITEM *part, int type, int rarity) {
       }
     } else if (type == TYPE_WEAPON_BALLISTIC || type == TYPE_WEAPON_LASER 
                || type == TYPE_WEAPON_PLASMA) {
-      modifier_pool = modifier_pool * WEAPON_NUM_STATS; //6
+      modifier_pool = modifier_pool * WEAPON_NUM_STATS; //7
       distribute_picks(WEAPON_NUM_STATS, modifier_pool, pick);
       part->enhancements.weapon.damage = WEAPON_DAMAGE_MIN
         + (pick[0] * WEAPON_DAMAGE_MODIFIER);
@@ -330,13 +330,14 @@ void set_enhancements(ST_ITEM *part, int type, int rarity) {
       part->enhancements.weapon.range = WEAPON_RANGE_MIN
         + (pick[4] * WEAPON_RANGE_MODIFIER);
       part->enhancements.weapon.bullet_size = WEAPON_BULLET_SIZE_MIN
-        + (pick[5] * WEAPON_BULLET_SIZE_MODIFER);
-      if (part->enhancements.weapon.fire_rate < WEAPON_FIRERATE_CAP) {
-        float rebate =  WEAPON_FIRERATE_CAP - 
-            part->enhancements.weapon.fire_rate;
-        part->enhancements.weapon.fire_rate = WEAPON_FIRERATE_CAP;
-        rebate = rebate / WEAPON_FIRE_RATE_MODIFIER;
-        rebate = fabs(rebate);
+        + (pick[5] * WEAPON_BULLET_SIZE_MODIFIER);
+      part->enhancements.weapon.num_barrels = WEAPON_NUM_BARRELS_MIN
+        + (pick[6] * WEAPON_NUM_BARRELS_MODIFIER);
+      if (part->enhancements.weapon.num_barrels > WEAPON_NUM_BARRELS_CAP) {
+        float rebate = (float)part->enhancements.weapon.num_barrels - 
+            WEAPON_NUM_BARRELS_CAP;
+        part->enhancements.weapon.num_barrels = (int)WEAPON_NUM_BARRELS_CAP;
+        rebate = rebate / WEAPON_NUM_BARRELS_MODIFIER;
         distribute_picks(WEAPON_NUM_STATS - 1, rebate, pick);
         part->enhancements.weapon.damage += (pick[0] * WEAPON_DAMAGE_MODIFIER);
         part->enhancements.weapon.max_power_draw += 
@@ -346,7 +347,26 @@ void set_enhancements(ST_ITEM *part, int type, int rarity) {
         part->enhancements.weapon.range += 
             (pick[3] * WEAPON_RANGE_MODIFIER);
         part->enhancements.weapon.bullet_size += 
-            (pick[4] * WEAPON_BULLET_SIZE_MODIFER);
+            (pick[4] * WEAPON_BULLET_SIZE_MODIFIER);
+        part->enhancements.weapon.fire_rate += 
+            (pick[5] * WEAPON_FIRE_RATE_MODIFIER);
+      }
+      if (part->enhancements.weapon.fire_rate < WEAPON_FIRERATE_CAP) {
+        float rebate =  WEAPON_FIRERATE_CAP - 
+            part->enhancements.weapon.fire_rate;
+        part->enhancements.weapon.fire_rate = WEAPON_FIRERATE_CAP;
+        rebate = rebate / WEAPON_FIRE_RATE_MODIFIER;
+        rebate = fabs(rebate);
+        distribute_picks(WEAPON_NUM_STATS - 2, rebate, pick);
+        part->enhancements.weapon.damage += (pick[0] * WEAPON_DAMAGE_MODIFIER);
+        part->enhancements.weapon.max_power_draw += 
+            (pick[1] * WEAPON_POWER_DRAW_MODIFIER);
+        part->enhancements.weapon.proj_speed += 
+            (pick[2] * WEAPON_PROJ_SPEED_MODIFIER);
+        part->enhancements.weapon.range += 
+            (pick[3] * WEAPON_RANGE_MODIFIER);
+        part->enhancements.weapon.bullet_size += 
+            (pick[4] * WEAPON_BULLET_SIZE_MODIFIER);
       }
       if (part->enhancements.weapon.max_power_draw < WEAPON_PWR_DRAW_CAP) {
         float rebate =  WEAPON_PWR_DRAW_CAP - 
@@ -354,7 +374,7 @@ void set_enhancements(ST_ITEM *part, int type, int rarity) {
         part->enhancements.weapon.max_power_draw = WEAPON_PWR_DRAW_CAP;
         rebate = rebate / WEAPON_POWER_DRAW_MODIFIER;
         rebate = fabs(rebate);
-        distribute_picks(WEAPON_NUM_STATS - 2, rebate, pick);
+        distribute_picks(WEAPON_NUM_STATS - 3, rebate, pick);
         part->enhancements.weapon.damage += 
             (pick[0] * WEAPON_DAMAGE_MODIFIER);
         part->enhancements.weapon.proj_speed += 
@@ -362,7 +382,7 @@ void set_enhancements(ST_ITEM *part, int type, int rarity) {
         part->enhancements.weapon.range += 
             (pick[2] * WEAPON_RANGE_MODIFIER);
         part->enhancements.weapon.bullet_size += 
-            (pick[3] * WEAPON_BULLET_SIZE_MODIFER);
+            (pick[3] * WEAPON_BULLET_SIZE_MODIFIER);
       }
     } else if (type == TYPE_WING) {
       modifier_pool = modifier_pool * WING_NUM_STATS; //2

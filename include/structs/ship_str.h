@@ -38,6 +38,7 @@ typedef struct weapon_t {
   float proj_speed;
   float range;
   float bullet_size;
+  int num_barrels;
 } S_WEAPON;
 
 typedef struct wing_t {
