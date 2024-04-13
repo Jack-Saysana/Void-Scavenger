@@ -261,12 +261,26 @@ void set_enhancements(ST_ITEM *part, int type, int rarity) {
       part->enhancements.hull.max_health = HULL_HEALTH_MIN 
         + (pick1 * HULL_HEALTH_MODIFIER);
     } else if (type == TYPE_REACTOR) {
-      modifier_pool = modifier_pool * REACTOR_NUM_STATS; //2
+      modifier_pool = modifier_pool * REACTOR_NUM_STATS; //3
       distribute_picks(REACTOR_NUM_STATS, modifier_pool, pick);
       part->enhancements.reactor.max_output = REACTOR_MAX_POWER_OUTPUT_MIN 
         + (pick[0] * REACTOR_MAX_POWER_OUTPUT_MODIFIER);
       part->enhancements.reactor.recharge_rate = REACTOR_RECHARGE_RATE_MIN
         + (pick[1] * REACTOR_RECHARGE_RATE_MODIFIER);
+      part->enhancements.reactor.stall_time = REACTOR_STALL_TIME_MIN
+        + (pick[2] * REACTOR_STALL_TIME_MODIFIER);
+      if (part->enhancements.reactor.stall_time < REACTOR_STALL_TIME_CAP) {
+        float rebate = REACTOR_STALL_TIME_CAP -  
+          part->enhancements.reactor.stall_time;
+        part->enhancements.reactor.stall_time = REACTOR_STALL_TIME_CAP;
+        rebate = rebate / REACTOR_STALL_TIME_MODIFIER;
+        rebate = fabs(rebate);
+        distribute_picks(REACTOR_NUM_STATS - 1, rebate, pick);
+        part->enhancements.reactor.max_output +=
+          (pick[0] * REACTOR_MAX_POWER_OUTPUT_MODIFIER);
+        part->enhancements.reactor.recharge_rate += 
+          (pick[1] * REACTOR_RECHARGE_RATE_MODIFIER);
+      }
     } else if (type == TYPE_SHIELD) {
       modifier_pool = modifier_pool * SHIELD_NUM_STATS; //4
       distribute_picks(SHIELD_NUM_STATS, modifier_pool, pick);

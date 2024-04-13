@@ -26,6 +26,7 @@ int init_ship_parts() {
   equipped_reactor.weapon_type = NOT_WEAPON;
   equipped_reactor.data.reactor.max_output = S_BASE_PWR_OUTPUT;
   equipped_reactor.data.reactor.recharge_rate = S_BASE_REACTOR_RECHARGE;
+  equipped_reactor.data.reactor.stall_time = S_BASE_STALL_TIME;
 
   equipped_shield.type = I_SLOT_SHIELD;
   equipped_shield.rarity = WHITE_RARITY;
@@ -537,9 +538,10 @@ void ship_parts_on_hover(UI_COMP *ui_ship_parts, I_SLOT *equipped_ship_parts) {
   switch (equipped_ship_parts->type) {
     case I_SLOT_REACTOR:
       snprintf(ship_parts_info_content_buffer, SHIP_PARTS_TEXT_BUFFER_SIZE,
-                "[MAX OUTPUT = %.2f]\n[RECHARGE RATE = %.2f]",
+                "[MAX OUTPUT = %.2f]\n[RECHARGE RATE = %.2f]\n[STALL TIME = %.2f]",
                  equipped_ship_parts->data.reactor.max_output,
-                 equipped_ship_parts->data.reactor.recharge_rate);
+                 equipped_ship_parts->data.reactor.recharge_rate, 
+                 equipped_ship_parts->data.reactor.stall_time);
       break;
     case I_SLOT_HULL:
       snprintf(ship_parts_info_content_buffer, SHIP_PARTS_TEXT_BUFFER_SIZE,

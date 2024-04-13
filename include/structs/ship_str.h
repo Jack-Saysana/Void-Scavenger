@@ -17,6 +17,7 @@ typedef enum ship_weap_type {
 typedef struct reactor_t {
   float max_output;
   float recharge_rate;
+  float stall_time;
 } S_REACTOR;
 
 typedef struct hull_t {

@@ -207,9 +207,10 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
     switch (inventory_slot->type) {
       case I_SLOT_REACTOR:
         snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE,
-                 "[MAX OUTPUT = %.2f]\n[RECHARGE RATE = %.2F]", 
+                 "[MAX OUTPUT = %.2f]\n[RECHARGE RATE = %.2F]\n[STALL TIME = %.2f]", 
                  inventory_slot->data.reactor.max_output,
-                 inventory_slot->data.reactor.recharge_rate);
+                 inventory_slot->data.reactor.recharge_rate,
+                 inventory_slot->data.reactor.stall_time);
         break;
       case I_SLOT_HULL:
         snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE,

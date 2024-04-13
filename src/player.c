@@ -79,6 +79,8 @@ void reset_player() {
   st_player.total_experience = 0.0;
 
   player_ship.reactor.max_output = S_BASE_PWR_OUTPUT;
+  player_ship.reactor.recharge_rate = S_BASE_REACTOR_RECHARGE;
+  player_ship.reactor.stall_time = S_BASE_STALL_TIME;
   player_ship.hull.max_health = S_BASE_HEALTH;
   player_ship.shield.max_shield = S_BASE_SHIELD;
   player_ship.cur_health = S_BASE_HEALTH;
@@ -89,14 +91,16 @@ void reset_player() {
   player_ship.weapon.type = BALLISTIC;
   player_ship.weapon.damage = S_BASE_DAMAGE;
   player_ship.weapon.fire_rate = S_BASE_FIRERATE;
-  player_ship.weapon.max_power_draw = S_BASE_PWR_DRAW;
+  player_ship.weapon.max_power_draw = S_BASE_WEAPON_PWR_DRAW;
   player_ship.weapon.proj_speed = S_BASE_PROJ_SPEED;
   player_ship.weapon.range = S_BASE_RANGE;
+  player_ship.weapon.bullet_size = S_BASE_BULLET_SIZE;
+  player_ship.weapon.num_barrels = S_BASE_NUM_BARRELS;
   player_ship.wing.max_ang_vel = S_BASE_ANG_VEL;
   player_ship.wing.max_ang_accel = S_BASE_ANG_ACCEL;
   player_ship.thruster.max_vel = S_BASE_VEL;
   player_ship.thruster.max_accel = S_BASE_ACCEL;
-  player_ship.thruster.max_power_draw = S_BASE_PWR_DRAW;
+  player_ship.thruster.max_power_draw = S_BASE_THRUSTER_PWR_DRAW;
 
   reset_inventory();
 }
@@ -162,6 +166,7 @@ int init_player_ship() {
 
   player_ship.reactor.max_output = S_BASE_PWR_OUTPUT;
   player_ship.reactor.recharge_rate = S_BASE_REACTOR_RECHARGE;
+  player_ship.reactor.stall_time = S_BASE_STALL_TIME;
   player_ship.hull.max_health = S_BASE_HEALTH;
   player_ship.shield.max_shield = S_BASE_SHIELD;
   player_ship.shield.recharge_rate = S_BASE_SHIELD_RECHARGE;
