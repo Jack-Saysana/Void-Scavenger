@@ -70,7 +70,7 @@ void add_timer(float time, void *mem, int set_to, void *func_args) {
   from the timer in the front of the list
 */
 void decrement_current_timer(float delta) {
-  if (!head) {
+  if (!head || (mode != SPACE && mode != STATION)) {
     return;
   }
   prepare_object_movement();

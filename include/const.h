@@ -1,6 +1,9 @@
 #ifndef __CONST_H__
 #define __CONST_H__
 
+// Tick Constants
+#define TICK_RATE (0.05)      // 1/20 sec
+
 // Player constants
 #define P_BASE_HEALTH (100.0)
 #define P_BASE_SHIELD (100.0)
@@ -189,6 +192,8 @@
 #define Y (1)
 #define Z (2)
 #define W (3)
+
+#define FUNCTION_PTR (-1000)
 
 #define TOP (0)
 #define BOTTOM (1)

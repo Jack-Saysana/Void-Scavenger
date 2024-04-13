@@ -49,6 +49,7 @@ void handle_collisions() {
   handle_physics_collisions(physics_collisions, num_p_col);
   update_object_movement();
 
+  #if 0
   COLLISION *combat_collisions = NULL;
   size_t num_c_col = get_sim_collisions(combat_sim, &combat_collisions,
                                         sim_sphere->translation,
@@ -63,9 +64,11 @@ void handle_collisions() {
                                         SIM_DIST, 0);
   handle_event_collisions(event_collisions, num_e_col);
 
-  free(physics_collisions);
   free(combat_collisions);
   free(event_collisions);
+  #endif
+
+  free(physics_collisions);
 }
 
 void handle_physics_collisions(COLLISION *cols, size_t num_cols) {
@@ -201,10 +204,11 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
         decrement_enemy_shield((size_t) target_wrapper->data, proj->damage, 0.1);
         if (mode == STATION && st_enemies[(size_t)target_wrapper->data].cur_health <= 0.0 && 
             st_enemies[(size_t)target_wrapper->data].dropped_xp == 0) {
-          /*Enemey killed by player */
+          /* Enemy killed by player */
           st_player.total_enemies_defeated++;
           st_enemies[(size_t)target_wrapper->data].dropped_xp = 1;
-          float xp = st_enemies[(size_t)target_wrapper->data].amount_xp + E_LEVEL_SCALE * st_player.total_levels_completed;
+          float xp = st_enemies[(size_t)target_wrapper->data].amount_xp + 
+                     E_LEVEL_SCALE * st_player.total_levels_completed;
           xp +=  gen_rand_float_plus_minus(xp/E_XP_RANGE);
           st_player.cur_experience += (int)xp;
           st_player.total_experience += (int) xp;
@@ -221,7 +225,8 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
               !sp_enemies[(size_t)target_wrapper->data].invuln) {
             st_player.total_damage_dealt += proj->damage;
           }
-          decrement_enemy_shield((size_t) target_wrapper->data, proj->damage, 0.1);
+          decrement_enemy_shield((size_t) 
+                                 target_wrapper->data, proj->damage, 0.1);
         } else {
           float shield_dmg = 0;
           float health_dmg = 0;
@@ -236,20 +241,25 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
             if (!sp_enemies[(size_t)target_wrapper->data].invuln) {
               st_player.total_damage_dealt += shield_dmg;
             }
-            decrement_enemy_shield((size_t) target_wrapper->data, shield_dmg, 0.1);
-          } else if (sp_enemies[(size_t)target_wrapper->data].cur_shield > 0.0) {
+            decrement_enemy_shield((size_t)
+                                    target_wrapper->data, shield_dmg, 0.1);
+          } else if (sp_enemies[(size_t) 
+                                target_wrapper->data].cur_shield > 0.0) {
             if (!sp_enemies[(size_t)target_wrapper->data].invuln) {
-              st_player.total_damage_dealt += sp_enemies[(size_t)target_wrapper->data].cur_shield;
+              st_player.total_damage_dealt += sp_enemies[(size_t)
+                                              target_wrapper->data].cur_shield;
             }
             decrement_enemy_shield((size_t) target_wrapper->data, 
-                                   sp_enemies[(size_t)target_wrapper->data].cur_shield, 0.1);
+                                   sp_enemies[(size_t)
+                                   target_wrapper->data].cur_shield, 0.1);
           } else {
             if (sp_enemies[(size_t)target_wrapper->data].cur_health > 0.0 && 
               !sp_enemies[(size_t)target_wrapper->data].invuln) {
               if (health_dmg < sp_enemies[(size_t)target_wrapper->data].cur_health) {
                 st_player.total_damage_dealt += health_dmg;
               } else {
-                st_player.total_damage_dealt += sp_enemies[(size_t)target_wrapper->data].cur_health;
+                st_player.total_damage_dealt += sp_enemies[(size_t)
+                                                target_wrapper->data].cur_health;
               }
             }
             decrement_enemy_shield((size_t) target_wrapper->data, health_dmg, 0.1);
