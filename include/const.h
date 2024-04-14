@@ -24,6 +24,7 @@
 #define S_BASE_FIRERATE (0.1)
 #define S_BASE_FIRERATE_LASER (0.3)
 #define S_BASE_PROJ_SPEED (100.0)
+#define S_E_BASE_PROJ_SPEED (300.0)
 #define S_BASE_RANGE (500.0)
 #define S_BASE_ANG_VEL (0.25)
 #define S_BASE_ANG_ACCEL (0.25)
@@ -70,6 +71,7 @@
 #define SP_AVOID_BOUNDS_PRIORITY (100.0)
 #define SP_AVOID_OBSTACLE_PRIORITY (2.0)
 #define SP_CHASE_PRIORITY (1.0)
+#define SP_SHOT_DELAY (2.5)
 
 #define NUM_ALIEN_TYPES (2)
 #define NUM_ALIEN_SHIP_TYPES (3)
@@ -209,5 +211,7 @@
 
 #define POSITIVE (0)
 #define NEGATIVE (1)
+
+#define NUM_PARTICLES (1000)
 
 #endif
