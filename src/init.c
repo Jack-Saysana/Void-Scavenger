@@ -29,7 +29,7 @@ int barebones_init() {
 
   barebones_ui_init();
   clear_models();
-  
+
   status = init_audio();
   if (status) {
     return -1;

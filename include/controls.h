@@ -77,3 +77,4 @@ void drop_item(size_t);
 size_t find_first_filled();
 
 void play_audio(int);
+void update_station_player_audio(vec3, versor);

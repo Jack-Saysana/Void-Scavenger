@@ -45,3 +45,7 @@ void disable_fps();
 void free_timer_queue();
 I_SLOT *inv_first_avail();
 void set_enhancements(ST_ITEM *, int, int);
+void pause_ship_audio();
+void reset_listener_orientation();
+void reset_listener_pos();
+void tick();

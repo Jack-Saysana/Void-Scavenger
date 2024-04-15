@@ -63,6 +63,8 @@ size_t init_enemy(size_t index) {
   }
   new_enemy->ent->type |= T_DRIVING;
   new_enemy->ent->inv_mass = 1.0;
+  new_enemy->can_speak = 0;
+  add_timer((15.0 * gold_noise()) + 15.0, &new_enemy->can_speak, 1, NULL);
 
   new_enemy->wrapper_offset = init_wrapper(ENEMY_OBJ, new_enemy->ent,
                                            (void *) num_enemies);
@@ -114,6 +116,7 @@ void delete_enemy(size_t index) {
   }
 
   update_timer_memory(&st_enemies[index].invuln, NULL);
+  update_timer_memory(&st_enemies[index].can_speak, NULL);
   update_timer_args(st_enemy_walk_cycle, (void *) index,
                     (void *) INVALID_INDEX);
   update_timer_args(st_enemy_hurt_anim, (void *) index,
@@ -129,6 +132,8 @@ void delete_enemy(size_t index) {
   st_enemies[index] = st_enemies[num_enemies];
   update_timer_memory(&st_enemies[num_enemies].invuln,
                       &st_enemies[index].invuln);
+  update_timer_memory(&st_enemies[num_enemies].can_speak,
+                      &st_enemies[index].can_speak);
   update_timer_args(st_enemy_walk_cycle, (void *) num_enemies,
                     (void *) index);
   update_timer_args(st_enemy_hurt_anim, (void *) num_enemies,
@@ -190,6 +195,22 @@ void spawn_st_enemy(vec3 pos, int type) {
   glm_vec3_copy(pos, st_enemies[index].ent->translation);
   glm_vec3_copy((vec3) { 0.0, 0.01, 0.0 }, st_enemies[index].ent->velocity);
   st_enemy_insert_sim(index);
+}
+
+void enemy_speak(size_t index) {
+  if (st_enemies[index].can_speak) {
+    if (get_enemy_type(index) == BRUTE) {
+      play_enemy_audio(st_enemies[index].ent->translation,
+                       ALIEN_BRUTE_TALKING_WAV);
+    } else {
+      play_enemy_audio(st_enemies[index].ent->translation,
+                       ALIEN_NORMAL_TALKING_WAV);
+    }
+    add_timer((15.0 * gold_noise()) + 15.0,
+              &st_enemies[index].can_speak, 1, NULL);
+    st_enemies[index].can_speak = 0;
+    return;
+  }
 }
 
 // =============================== SPACE MODE ================================
@@ -472,7 +493,13 @@ void st_enemy_hurt_anim(void *args) {
     add_timer(0.03, st_enemy_hurt_anim, -1000, args);
   } else {
     if (enemy->cur_health <= 0.0) {
-      object_wrappers[enemy->wrapper_offset].to_delete = 1;;
+      object_wrappers[enemy->wrapper_offset].to_delete = 1;
+      // Play enemy death audio
+      if (get_enemy_type(index) == BRUTE) {
+        play_audio(ALIEN_BRUTE_DEATH_WAV);
+      } else {
+        play_audio(ALIEN_NORMAL_DEATH_WAV);
+      }
     } else {
       enemy->cur_frame = INVALID_FRAME;
       enemy->invuln = 0;

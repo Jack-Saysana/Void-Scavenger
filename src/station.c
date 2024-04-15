@@ -311,7 +311,7 @@ int ship_parts_rng() {
   for (int i = 0; i < RARITY_LEVELS && rand > -1; i++) {
     if (rand > part_spawn_chance[i]) {
       return (RARITY_LEVELS - 1) - i;
-    } 
+    }
   }
   return WHITE_RARITY;
 }
@@ -476,7 +476,6 @@ void create_station_corridors() {
           continue;
         }
 
-
         vec3 enemy_pos = GLM_VEC3_ZERO_INIT;
         glm_vec3_copy(position, enemy_pos);
         position[Y] = 3.0;
@@ -551,7 +550,7 @@ void spawn_ship_part(vec3 position) {
         break;
     }
   }
-  
+
   vec3 offset = GLM_VEC3_ZERO_INIT;
   glm_vec3_copy(position, offset);
   object_random_offset(offset);
@@ -570,7 +569,7 @@ void spawn_ship_part(vec3 position) {
 
   size_t index = init_item(type, rarity, offset, scale, q,
                            10.0 * (gen_rand_float(3.0) + 1.0));
-  
+
   if (index == INVALID_INDEX) {
     fprintf(stderr, "Failed to init an item!\n");
     return;
@@ -587,7 +586,7 @@ void spawn_ship_part_cmd(vec3 position, int type, int rarity) {
     fprintf(stderr, "Can't Spawn items in space!\n");
     return;
   }
-  
+
   vec3 offset = GLM_VEC3_ZERO_INIT;
   glm_vec3_copy(position, offset);
   object_random_offset(offset);
@@ -604,7 +603,7 @@ void spawn_ship_part_cmd(vec3 position, int type, int rarity) {
 
   size_t index = init_item(type, rarity, offset, scale, q,
                            2.0 * (gen_rand_float(3.0) + 1.0));
-  
+
   if (index == INVALID_INDEX) {
     fprintf(stderr, "Failed to init an item!\n");
     return;

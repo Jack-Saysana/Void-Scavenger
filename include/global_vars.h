@@ -133,5 +133,8 @@ extern int part_spawn_chance[];
 extern TRACK *tracks;
 extern size_t tracks_buff_len;
 extern size_t num_tracks;
+extern int AUDIO_EXPLICIT;
+extern int AUDIO_DEBUG;
+extern float global_volume;
 
 #endif

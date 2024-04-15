@@ -107,3 +107,4 @@ void populate_point_lights(unsigned int);
 void update_radar_fb();
 void update_main_menu_fb();
 void add_audio(char *);
+void generate_ship_noises();

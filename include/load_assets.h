@@ -172,7 +172,26 @@ void free_st_assets() {
 }
 
 void load_audio_tracks() {
-  add_audio(audio_dir "/test.wav"); 
+  add_audio(audio_dir"/ballistic_spaceship_gun.wav");
+  add_audio(audio_dir"/laser_spaceship_gun.wav");
+  add_audio(audio_dir"/plasma_spaceship_gun.wav");
+  add_audio(audio_dir"/station_mode_weapon.wav");
+  add_audio(audio_dir"/spaceship_explosion.wav");
+  add_audio(audio_dir"/shield_station_mode_hit.wav");
+  add_audio(audio_dir"/spaceship_hull_hit.wav");
+  add_audio(audio_dir"/world_exit.wav");
+  add_audio(audio_dir"/player_death_1.wav");
+  add_audio(audio_dir"/player_death_2.wav");
+  add_audio(audio_dir"/player_hurt_1.wav");
+  add_audio(audio_dir"/player_hurt_2.wav");
+  add_audio(audio_dir"/player_hurt_3.wav");
+  add_audio(audio_dir"/player_hurt_4.wav");
+  add_audio(audio_dir"/alien_normal_talking.wav");
+  add_audio(audio_dir"/alien_normal_death.wav");
+  add_audio(audio_dir"/alien_brute_talking.wav");
+  add_audio(audio_dir"/alien_brute_death.wav");
+  add_audio(audio_dir"/StarWars60.wav");
+  generate_ship_noises();
 }
 
 void *load_assets(void *arg) {
