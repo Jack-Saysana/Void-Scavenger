@@ -85,6 +85,7 @@ void reset_player() {
   player_ship.shield.max_shield = S_BASE_SHIELD;
   player_ship.cur_health = S_BASE_HEALTH;
   player_ship.cur_shield = S_BASE_SHIELD;
+  player_ship.cur_shield = S_BASE_PWR_OUTPUT;
   player_ship.shield.recharge_rate = S_BASE_SHIELD_RECHARGE;
   player_ship.shield.recharge_delay = S_BASE_SHIELD_DELAY;
   player_ship.shield.power_draw = S_BASE_PWR_DRAW;
