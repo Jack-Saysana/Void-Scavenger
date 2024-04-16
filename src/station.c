@@ -48,7 +48,7 @@ size_t init_corridor(vec3 pos, versor rotation, size_t type) {
     return -1;
   }
 
-  for (int i = 0; i < 4; i++) {
+  for (int i = 0; i < 8; i++) {
     corr->neighbors[i]= INVALID_INDEX;
   }
 
@@ -389,7 +389,7 @@ void create_station_corridors() {
   versor term_rot = GLM_QUAT_IDENTITY_INIT;
   vec3 term_pos = GLM_VEC3_ZERO_INIT;
   int spawn_player = 1;
-  int j = 0;
+  int to_parent = 0;
   int x_off = 0;
   int z_off = 0;
   int cur_type = 0;
@@ -431,22 +431,39 @@ void create_station_corridors() {
 
     // Iterate over the children of the current cell, populating the
     // neighbors buffer
-    for (int i = 0; i < 4; i++) {
+    for (int cur_child = 0; cur_child < 8; cur_child++) {
       x_off = 0;
       z_off = 0;
-      if (i == 0) {
-        x_off = 1;
-        j = 1;
-      } else if (i == 1) {
+      if (cur_child == NEIGHBOR_TOP_LEFT) {
         x_off = -1;
-        j = 0;
-      } else if (i == 2) {
         z_off = 1;
-        j = 3;
-      } else {
+        to_parent = NEIGHBOR_BOTTOM_RIGHT;
+      } else if (cur_child == NEIGHBOR_TOP) {
+        z_off = 1;
+        to_parent = NEIGHBOR_BOTTOM;
+      } else if (cur_child == NEIGHBOR_TOP_RIGHT) {
+        x_off = 1;
+        z_off = 1;
+        to_parent = NEIGHBOR_BOTTOM_LEFT;
+      } else if (cur_child == NEIGHBOR_LEFT) {
+        x_off = -1;
+        to_parent = NEIGHBOR_RIGHT;
+      } else if (cur_child == NEIGHBOR_RIGHT) {
+        x_off = 1;
+        to_parent = NEIGHBOR_LEFT;
+      } else if (cur_child == NEIGHBOR_BOTTOM_LEFT) {
+        x_off = -1;
         z_off = -1;
-        j = 2;
+        to_parent = NEIGHBOR_TOP_RIGHT;
+      } else if (cur_child == NEIGHBOR_BOTTOM) {
+        z_off = -1;
+        to_parent = NEIGHBOR_TOP;
+      } else {
+        x_off = 1;
+        z_off = -1;
+        to_parent = NEIGHBOR_TOP_LEFT;
       }
+
       if ((location = maze[cur_coords[X] + x_off][cur_coords[Y] + z_off])
            == WALL) {
         continue;
@@ -459,11 +476,11 @@ void create_station_corridors() {
         glm_ivec2_copy((ivec2) { cur_coords[X] + x_off,
                                  cur_coords[Y] + z_off }, stack[stack_top]);
         if (location == IN) {
-          /* Trying to spawn corridor location */
+          // Trying to spawn corridor location
           visited[index] = gen_cd_obj(maze, stack[stack_top], position,
                                     &cur_type, &cur_rot, CORRIDOR_LOCATION);
         } else {
-          /* Trying to spawn arena location */
+          // Trying to spawn arena location
           visited[index] = gen_cd_obj(maze, stack[stack_top], position,
                                     &cur_type, &cur_rot, ARENA_LOCATION);
         }
@@ -512,16 +529,15 @@ void create_station_corridors() {
           spawn_ship_part(position);
         }
 
-
-        /* Chance for there to spawn elements in any given corridor */
+        // Chance for there to spawn elements in any given corridor
         if (gen_rand_int(100) <= item_spawn_chance) {
           position[Y] = 3.0;
-          /* Chances of getting a big or small obstacle */
+          // Chances of getting a big or small obstacle
           if (gen_rand_int(100) <= 30) {
-            /* Large obstacle */
+            // Large obstacle
             spawn_large_station_obstacle(position);
           } else {
-            /* Small obstacle */
+            // Small obstacle
             if (gen_rand_int(100) <= 50) {
               spawn_small_station_obstacle(position);
               spawn_small_station_obstacle(position);
@@ -537,9 +553,10 @@ void create_station_corridors() {
           glm_vec3_copy(position, backup_room_pos);
         }
       }
+
       // Update the neighbor buffers of the adjacent cells
-      cd_obs[visited[cur_index]].neighbors[i] = visited[index];
-      cd_obs[visited[index]].neighbors[j] = visited[cur_index];
+      cd_obs[visited[cur_index]].neighbors[cur_child] = visited[index];
+      cd_obs[visited[index]].neighbors[to_parent] = visited[cur_index];
     }
   }
 
@@ -811,7 +828,7 @@ size_t gen_cd_obj(int **maze, ivec2 coords, vec3 pos_dest, int *type_dest,
       return INVALID_INDEX;
     }
     corridor_insert_sim(index);
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 8; i++) {
       cd_obs[index].neighbors[i]= INVALID_INDEX;
     }
 

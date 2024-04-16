@@ -90,7 +90,6 @@
 #define E_HIGH_SPEED (2)
 #define E_ULTRA_SPEED (3)
 
-
 #define E_BASE_HEALTH_NORMAL (100.0)
 #define E_BASE_HEALTH_BRUTE (150.0)
 #define E_BASE_SPEED_NORMAL (3.0)
@@ -152,6 +151,25 @@
 #define NEIGHBOR_NEG_X (1)
 #define NEIGHBOR_POS_Z (2)
 #define NEIGHBOR_NEG_Z (3)
+
+#define NEIGHBOR_TOP_LEFT (0)
+#define NEIGHBOR_TOP (1)
+#define NEIGHBOR_TOP_RIGHT (2)
+#define NEIGHBOR_LEFT (3)
+#define NEIGHBOR_RIGHT (4)
+#define NEIGHBOR_BOTTOM_LEFT (5)
+#define NEIGHBOR_BOTTOM (6)
+#define NEIGHBOR_BOTTOM_RIGHT (7)
+
+#define SEARCHABLE_TL (0x1)
+#define SEARCHABLE_T  (0x2)
+#define SEARCHABLE_TR (0x4)
+#define SEARCHABLE_L  (0x8)
+#define SEARCHABLE_R  (0x10)
+#define SEARCHABLE_BL (0x20)
+#define SEARCHABLE_B  (0x40)
+#define SEARCHABLE_BR (0x80)
+#define SEARCHABLE_ALL (0xFF)
 
 // Station obstacle constants
 #define NUM_STATION_OBSTACLE_TYPES (20)

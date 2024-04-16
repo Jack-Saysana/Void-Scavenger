@@ -497,3 +497,4 @@ void sp_enemy_shield_dmg(void *args) {
     enemy->render_shield = 0.0;
   }
 }
+
