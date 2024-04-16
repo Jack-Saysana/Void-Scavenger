@@ -75,5 +75,8 @@ I_SLOT equipped_weapon;
 I_SLOT equipped_wing;
 
 int part_spawn_chance[RARITY_LEVELS] = {
-  50, 25, 10, 3, 0 
+  50, 25, 10, 3, 0
 };
+
+// TODO: Set to 0 for release
+int cheats = 1;

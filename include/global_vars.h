@@ -125,4 +125,7 @@ extern I_SLOT equipped_wing;
 
 extern int part_spawn_chance[];
 
+// Global Toggles
+extern int cheats;
+
 #endif
