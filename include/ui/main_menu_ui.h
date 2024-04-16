@@ -1,5 +1,6 @@
 #include <glad/glad.h>
 #include <cglm/cglm.h>
+#include <math.h>
 #include <engine/engine.h>
 #include <global_vars.h>
 

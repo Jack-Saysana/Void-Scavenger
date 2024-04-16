@@ -68,9 +68,15 @@ unsigned int render_main_menu_anim() {
   set_mat4("model", model, cubemap_shader);
   render_skybox();
 
-  glm_translate(model, (vec3) { -5.0, -2.0, -20.0 });
+  float t = glfwGetTime();
+  float cos_time = cos(t);
+  float sin_time = sin(t);
+
+  glm_translate(model, (vec3) { -5.0 + cos_time,
+                0.5 * sin(2.0 * t), -20.0 });
   glm_rotate_z(model, -glm_rad(15.0), model);
-  glm_rotate_y(model, glm_rad(120.0), model);
+  glm_rotate_y(model, glm_rad(120.0 + 3.0 * sin_time), model);
+  glm_rotate_x(model, glm_rad(5.0 * cos_time), model);
 
   glUseProgram(model_shader);
   set_mat4("projection", proj, model_shader);
