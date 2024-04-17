@@ -24,6 +24,7 @@ UI_COMP *ui_render_glowing_items_root;
 UI_COMP *ui_render_glowing_items_button;
 int render_distance_multiplier;
 static char render_distance_buffer[RENDER_BUFFER_SIZE];
+GAME_MODE last_game_mode;
 
 /* ================= INTERNALLY DEFINED FUNCTIONS ================= */
 int init_render();

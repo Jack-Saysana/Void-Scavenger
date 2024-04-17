@@ -13,6 +13,7 @@ Implements the functionality for defining UI components for render menu.
     otherwise unsuccessful
 */
 int init_render() {
+  last_game_mode = SPACE;
   render_distance_multiplier = 50;
 
   ui_render_root = add_ui_comp(
@@ -136,12 +137,16 @@ void update_render() {
   snprintf(render_distance_buffer, RENDER_BUFFER_SIZE, "%d", render_distance_multiplier);
   set_ui_text(ui_render_render_distance_value_text, render_distance_buffer, 0.42, T_CENTER, fixed_sys, GLM_VEC3_ZERO);
 
-  if (mode == SPACE) {
-    set_render_dist((SP_BASE_RENDER_DIST / 100) * render_distance_multiplier);
-    set_sim_dist((SP_BASE_SIM_DIST / 100) * render_distance_multiplier);
-  } else if (mode == STATION) {
-    set_render_dist((ST_BASE_RENDER_DIST / 100) * render_distance_multiplier);
-    set_sim_dist((ST_BASE_SIM_DIST / 100) * render_distance_multiplier);
+  
+  if (last_game_mode != mode) {
+    if (mode == SPACE) {
+      set_render_dist((SP_BASE_RENDER_DIST / 100) * render_distance_multiplier);
+      set_sim_dist((SP_BASE_SIM_DIST / 100) * render_distance_multiplier);
+    } else if (mode == STATION) {
+      set_render_dist((ST_BASE_RENDER_DIST / 100) * render_distance_multiplier);
+      set_sim_dist((ST_BASE_SIM_DIST / 100) * render_distance_multiplier);
+    }
+    last_game_mode = mode;
   }
 }
 
@@ -154,12 +159,30 @@ void render_distance_minus_on_click() {
   if (render_distance_multiplier > 5) {
     render_distance_multiplier -= 5;
   }
+
+  if (mode == SPACE) {
+    set_render_dist((SP_BASE_RENDER_DIST / 100) * render_distance_multiplier);
+    set_sim_dist((SP_BASE_SIM_DIST / 100) * render_distance_multiplier);
+  } else if (mode == STATION) {
+    set_render_dist((ST_BASE_RENDER_DIST / 100) * render_distance_multiplier);
+    set_sim_dist((ST_BASE_SIM_DIST / 100) * render_distance_multiplier);
+  }
+  last_game_mode = mode;
 }
 
 void render_distance_plus_on_click() {
   if (render_distance_multiplier < 100) {
     render_distance_multiplier += 5;
   }
+
+  if (mode == SPACE) {
+    set_render_dist((SP_BASE_RENDER_DIST / 100) * render_distance_multiplier);
+    set_sim_dist((SP_BASE_SIM_DIST / 100) * render_distance_multiplier);
+  } else if (mode == STATION) {
+    set_render_dist((ST_BASE_RENDER_DIST / 100) * render_distance_multiplier);
+    set_sim_dist((ST_BASE_SIM_DIST / 100) * render_distance_multiplier);
+  }
+  last_game_mode = mode;
 }
 
 void glowing_items_on_click() {
