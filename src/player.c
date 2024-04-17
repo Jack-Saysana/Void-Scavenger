@@ -59,6 +59,38 @@ void reset_inventory() {
   }
 }
 
+void reset_equipped_parts() {
+  equipped_hull.data.hull = S_BASE_PART_HULL;
+  equipped_hull.type = I_SLOT_HULL;
+  equipped_hull.rarity = WHITE_RARITY;
+  equipped_hull.weapon_type = NOT_WEAPON;
+
+  equipped_reactor.data.reactor = S_BASE_PART_REACTOR;
+  equipped_reactor.type = I_SLOT_REACTOR;
+  equipped_reactor.rarity = WHITE_RARITY;
+  equipped_reactor.weapon_type = NOT_WEAPON;
+
+  equipped_shield.data.shield = S_BASE_PART_SHIELD;
+  equipped_shield.type = I_SLOT_SHIELD;
+  equipped_shield.rarity = WHITE_RARITY;
+  equipped_shield.weapon_type = NOT_WEAPON;
+
+  equipped_weapon.data.weapon = S_BASE_PART_WEAPON;
+  equipped_weapon.type = I_SLOT_WEAPON;
+  equipped_weapon.rarity = WHITE_RARITY;
+  equipped_weapon.weapon_type = W_BALLISTIC;
+
+  equipped_wing.data.wing = S_BASE_PART_WING;
+  equipped_wing.type = I_SLOT_WING;
+  equipped_wing.rarity = WHITE_RARITY;
+  equipped_wing.weapon_type = NOT_WEAPON;
+
+  equipped_thruster.data.thruster = S_BASE_PART_THRUSTER;
+  equipped_thruster.type = I_SLOT_THRUSTER;
+  equipped_thruster.rarity = WHITE_RARITY;
+  equipped_thruster.weapon_type = NOT_WEAPON;
+}
+
 void reset_player() {
   st_player.max_health = P_BASE_HEALTH;
   st_player.cur_health = P_BASE_HEALTH;
@@ -78,27 +110,21 @@ void reset_player() {
   st_player.total_damage_taken = 0.0;
   st_player.total_experience = 0.0;
 
-  player_ship.reactor.max_output = S_BASE_PWR_OUTPUT;
-  player_ship.hull.max_health = S_BASE_HEALTH;
-  player_ship.shield.max_shield = S_BASE_SHIELD;
+  player_ship.hull = S_BASE_PART_HULL;
+  player_ship.reactor = S_BASE_PART_REACTOR;
+  player_ship.shield = S_BASE_PART_SHIELD;
+  player_ship.weapon = S_BASE_PART_WEAPON;
+  player_ship.wing = S_BASE_PART_WING;
+  player_ship.thruster = S_BASE_PART_THRUSTER;
+
   player_ship.cur_health = S_BASE_HEALTH;
   player_ship.cur_shield = S_BASE_SHIELD;
-  player_ship.shield.recharge_rate = S_BASE_SHIELD_RECHARGE;
-  player_ship.shield.recharge_delay = S_BASE_SHIELD_DELAY;
-  player_ship.shield.power_draw = S_BASE_PWR_DRAW;
-  player_ship.weapon.type = BALLISTIC;
-  player_ship.weapon.damage = S_BASE_DAMAGE;
-  player_ship.weapon.fire_rate = S_BASE_FIRERATE;
-  player_ship.weapon.max_power_draw = S_BASE_PWR_DRAW;
-  player_ship.weapon.proj_speed = S_BASE_PROJ_SPEED;
-  player_ship.weapon.range = S_BASE_RANGE;
-  player_ship.wing.max_ang_vel = S_BASE_ANG_VEL;
-  player_ship.wing.max_ang_accel = S_BASE_ANG_ACCEL;
-  player_ship.thruster.max_vel = S_BASE_VEL;
-  player_ship.thruster.max_accel = S_BASE_ACCEL;
-  player_ship.thruster.max_power_draw = S_BASE_PWR_DRAW;
+  player_ship.cur_power_use = 0.0;
+  player_ship.reactor_can_recharge = 1;
+  player_ship.ship_stalled = 0;
 
   reset_inventory();
+  reset_equipped_parts();
 }
 
 // De-allocate player resources at end of game
@@ -160,23 +186,13 @@ void sim_refresh_player() {
 int init_player_ship() {
   memset(&player_ship, 0, sizeof(SHIP));
 
-  player_ship.reactor.max_output = S_BASE_PWR_OUTPUT;
-  player_ship.hull.max_health = S_BASE_HEALTH;
-  player_ship.shield.max_shield = S_BASE_SHIELD;
-  player_ship.shield.recharge_rate = S_BASE_SHIELD_RECHARGE;
-  player_ship.shield.recharge_delay = S_BASE_SHIELD_DELAY;
-  player_ship.shield.power_draw = S_BASE_PWR_DRAW;
-  player_ship.weapon.type = BALLISTIC;
-  player_ship.weapon.damage = S_BASE_DAMAGE;
-  player_ship.weapon.fire_rate = S_BASE_FIRERATE;
-  player_ship.weapon.max_power_draw = S_BASE_PWR_DRAW;
-  player_ship.weapon.proj_speed = S_BASE_PROJ_SPEED;
-  player_ship.weapon.range = S_BASE_RANGE;
-  player_ship.wing.max_ang_vel = S_BASE_ANG_VEL;
-  player_ship.wing.max_ang_accel = S_BASE_ANG_ACCEL;
-  player_ship.thruster.max_vel = S_BASE_VEL;
-  player_ship.thruster.max_accel = S_BASE_ACCEL;
-  player_ship.thruster.max_power_draw = S_BASE_PWR_DRAW;
+  player_ship.hull = S_BASE_PART_HULL;
+  player_ship.reactor = S_BASE_PART_REACTOR;
+  player_ship.shield = S_BASE_PART_SHIELD;
+  player_ship.weapon = S_BASE_PART_WEAPON;
+  player_ship.wing = S_BASE_PART_WING;
+  player_ship.thruster = S_BASE_PART_THRUSTER;
+  
 
   player_ship.ent = init_player_ship_ent();
   if (player_ship.ent == NULL) {
@@ -189,8 +205,11 @@ int init_player_ship() {
 
   player_ship.cur_health = player_ship.hull.max_health;
   player_ship.cur_shield = player_ship.shield.max_shield;
+  player_ship.cur_power_use = 0.0;
   player_ship.invuln = 0;
   player_ship.recharging_shield = 0;
+  player_ship.reactor_can_recharge = 1;
+  player_ship.ship_stalled = 0;
 
   return 0;
 }
@@ -245,20 +264,6 @@ void sim_refresh_player_ship() {
   }
 }
 
-void player_ship_thrust_move() {
-  if (mode == SPACE) {
-    vec3 ship_forward;
-    glm_quat_rotatev(player_ship.ent->rotation, (vec3){-1.0, 0.0, 0.0},
-                     ship_forward);
-    glm_normalize(ship_forward);
-    glm_vec3_scale(ship_forward, player_ship.cur_speed, ship_forward);
-    glm_vec3_copy(ship_forward, player_ship.ent->velocity);
-    /* Slow down rotation speed each frame */
-    glm_vec3_scale(player_ship.ent->ang_velocity, 0.99,
-                  player_ship.ent->ang_velocity);
-  }
-}
-
 // =============================== HELPERS ================================
 
 void recharge_player_shield() {
@@ -297,6 +302,21 @@ void get_player_gun_mat(mat4 dest) {
   glm_scale(dest, st_player.ent->scale);
   glm_mat4_mul(dest, to_player_space, dest);
 }
+
+void player_ship_thrust_move() {
+  if (mode == SPACE) {
+    vec3 ship_forward;
+    glm_quat_rotatev(player_ship.ent->rotation, (vec3){-1.0, 0.0, 0.0},
+                     ship_forward);
+    glm_normalize(ship_forward);
+    glm_vec3_scale(ship_forward, player_ship.cur_speed, ship_forward);
+    glm_vec3_copy(ship_forward, player_ship.ent->velocity);
+    /* Slow down rotation speed each frame */
+    glm_vec3_scale(player_ship.ent->ang_velocity, 0.99,
+                  player_ship.ent->ang_velocity);
+  }
+}
+
 
 // ================================= ANIMATION ===============================
 

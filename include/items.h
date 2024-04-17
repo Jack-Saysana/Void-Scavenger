@@ -35,6 +35,7 @@ extern size_t i_size;
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
 void set_enhancements(ST_ITEM *, int, int);
+void distribute_picks(int, float, float *);
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 int double_buffer(void **, size_t *, size_t);

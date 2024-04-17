@@ -23,3 +23,4 @@ int delete_stale_objects();
 void refresh_objects();
 void loading_init();
 void recharge_player_shield();
+void reactor_recharge();
