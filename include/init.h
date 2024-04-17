@@ -20,6 +20,7 @@ int init_timer_queue();
 void free_timer_queue();
 void clear_models();
 int init_station_ship_parts_buffer();
+void init_opengl_options();
 int init_audio();
 void exit_audio();
 void load_audio_tracks();

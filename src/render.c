@@ -109,11 +109,6 @@ int init_scene() {
   glm_ortho(-1.0, 1.0, -1.0, 1.0, 0.0, 100.0, ortho_proj);
   glm_perspective(glm_rad(45.0), RES_X / RES_Y, 0.1f, RENDER_DIST, persp_proj);
 
-  // Initialize OpenGL options
-  glEnable(GL_DEPTH_TEST);
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
   glm_vec3_copy((vec3) {0.0, 0.0, 0.0}, camera.pos);
   camera.pitch = 0.0;
   camera.yaw = -90.0;
@@ -153,6 +148,13 @@ int init_scene() {
   glVertexAttribDivisor(1, 1);
 
   return 0;
+}
+
+void init_opengl_options() {
+  // Enable depth testing and blending
+  glEnable(GL_DEPTH_TEST);
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void cleanup_scene() {
@@ -366,10 +368,12 @@ void render_game_entity(ENTITY *ent) {
       { 2.78, 0.0, 1.2 },
       { 2.78, 0.0, -1.2 },
       { 2.78, -1.0, 0.93 },
-      { 2.78, -1.0, -0.93}
+      { 2.78, -1.0, -0.93},
+      { -0.15, -0.87, 6.34},
+      { -0.15, -0.87, -6.34}
     };
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 6; i++) {
       glm_mat4_identity(to_thruster);
       glBindVertexArray(fire_particles);
       glm_translate(to_thruster, positions[i]);
@@ -602,6 +606,10 @@ MODEL *get_player_ship_model() {
   return sp_mods.player_ship_model.model;
 }
 
+unsigned int get_fire_particles() {
+  return fire_particles;
+}
+
 unsigned int get_basic_shader() {
   return basic_shader;
 }
@@ -612,6 +620,10 @@ unsigned int get_model_shader() {
 
 unsigned int get_cubemap_shader() {
   return cubemap_shader;
+}
+
+unsigned int get_fire_shader() {
+  return fire_shader;
 }
 
 void toggle_hit_boxes() {

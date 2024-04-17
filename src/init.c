@@ -29,6 +29,7 @@ int barebones_init() {
 
   barebones_ui_init();
   clear_models();
+  init_opengl_options();
 
   status = init_audio();
   if (status) {

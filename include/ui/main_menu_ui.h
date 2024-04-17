@@ -1,6 +1,8 @@
 #include <glad/glad.h>
 #include <cglm/cglm.h>
+#include <math.h>
 #include <engine/engine.h>
+#include <const.h>
 #include <global_vars.h>
 
 // Framebuffer
@@ -30,3 +32,5 @@ void enable_coordinates();
 MODEL *get_player_ship_model();
 unsigned int get_model_shader();
 unsigned int get_cubemap_shader();
+unsigned int get_fire_shader();
+unsigned int get_fire_particles();
