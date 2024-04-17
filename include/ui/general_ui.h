@@ -44,3 +44,4 @@ int init_render();
 void update_render();
 int init_control();
 void update_control();
+void update_esc();

@@ -115,11 +115,13 @@ void update_control() {
       set_ui_text(ui_control_instruction_title_text, control_instruction_title_buffer, 1.0, T_CENTER, fixed_sys, GLM_VEC3_ZERO);
       snprintf(control_instruction_key_buffer, CONTROL_BUFFER_SIZE, "[W]ACCEL  [S]DECEL  [A]LEFT ROLL        [D]RIGHT ROLL       ");
       set_ui_text(ui_control_instruction_key_text, control_instruction_key_buffer, 1.0, T_CENTER, fixed_sys, GLM_VEC3_ZERO);
+      set_ui_texture(ui_control_instruction_image, "assets/ui/wasd_mouse.png");
     } else if (mode == STATION) {
       snprintf(control_instruction_title_buffer, CONTROL_BUFFER_SIZE, "STATION MODE");
       set_ui_text(ui_control_instruction_title_text, control_instruction_title_buffer, 1.0, T_CENTER, fixed_sys, GLM_VEC3_ZERO);
-      snprintf(control_instruction_key_buffer, CONTROL_BUFFER_SIZE, "[W]FORWARD  [S]BACK [A]LEFT     [D]RIGHT");
+      snprintf(control_instruction_key_buffer, CONTROL_BUFFER_SIZE, "[W]FORWARD  [S]BACK [A]LEFT     [D]RIGHT[SPACE] JUMP        ");
       set_ui_text(ui_control_instruction_key_text, control_instruction_key_buffer, 1.0, T_CENTER, fixed_sys, GLM_VEC3_ZERO);
+      set_ui_texture(ui_control_instruction_image, "assets/ui/wasd_mouse.png");
     }
   }
 }

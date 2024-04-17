@@ -102,4 +102,5 @@ void update_ui_components() {
   update_main_menu_ui();
   update_render();
   update_control();
+  update_esc();
 }
