@@ -105,6 +105,18 @@ void load_st_assets() {
   st_mods.corridor_models[2] = read_model(setp_dir"/corner/corner_0.obj");
   st_mods.corridor_models[3] = read_model(setp_dir"/t_junct/t_junct.obj");
   st_mods.corridor_models[4] = read_model(setp_dir"/corridor/corridor_0.obj");
+  st_mods.corridor_models[5] = read_model(setp_dir
+                            "/corner_double_entrance/corner_double_entrance.obj");
+  st_mods.corridor_models[6] = read_model(setp_dir
+                            "/corner_single_entrance/corner_single_entrance.obj");
+  st_mods.corridor_models[7] = read_model(setp_dir
+                            "/corner_single_entrance_alt/corner_single_entrance_alt.obj");
+  st_mods.corridor_models[8] = read_model(setp_dir"/double_corner/double_corner.obj");
+  st_mods.corridor_models[9] = read_model(setp_dir"/flat_door/flat_door.obj");
+  st_mods.corridor_models[10] = read_model(setp_dir"/flat_door_nest/flat_door_nest.obj");
+  st_mods.corridor_models[11] = read_model(setp_dir"/flat_wall/flat_wall.obj");
+  st_mods.corridor_models[12] = read_model(setp_dir"/flat_wall_nest/flat_wall_nest.obj");
+  st_mods.corridor_models[13] = read_model(setp_dir"/mid_floor/mid_floor.obj");
   st_mods.station_obstacles[0] = read_model(st_obs_dir"/ammo_crate_0/ammo_crate_0.obj");
   st_mods.station_obstacles[1] = read_model(st_obs_dir"/ammo_crate_1/ammo_crate_1.obj");
   st_mods.station_obstacles[2] = read_model(st_obs_dir"/crate_0/crate_0.obj");

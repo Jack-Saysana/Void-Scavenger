@@ -44,6 +44,7 @@ void set_item_prompt(int);
 
 void ship_shield_recharge_delay(void *);
 void update_timer_args(void *, void *, void *);
+void update_timer_memory(void *, void *);
 
 void play_out_of_bounds_audio();
 void pause_out_of_bounds_audio();

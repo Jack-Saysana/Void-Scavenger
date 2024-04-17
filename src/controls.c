@@ -138,7 +138,7 @@ void mouse_button_callback(GLFWwindow *window, int button, int action,
                                             forward,
                                             10.0 + st_player.speed,
                                             SRC_PLAYER,
-                                            player_ship.weapon.type,
+                                            LASER,
                                             st_player.damage,
                                             100.0,
                                             1);
@@ -211,7 +211,8 @@ void input_keys(GLFWwindow *window) {
   }
   for (int i = GLFW_KEY_A; i <= GLFW_KEY_Z; i++) {
     if (glfwGetKey(window, i) == GLFW_PRESS) {
-      if (console_enabled && cons_cmd_len < MAX_CMD_LEN - 1 && !holding_alpha[i - GLFW_KEY_A]) {
+      if (console_enabled && cons_cmd_len < MAX_CMD_LEN - 1 &&
+          !holding_alpha[i - GLFW_KEY_A]) {
         cons_cmd[cons_cmd_len++] = i + 32;
         update_console_text(cons_cmd);
         advance_cursor();

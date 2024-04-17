@@ -33,6 +33,11 @@ void handle_collisions() {
   } else {
     st_player.total_distance_walked += glm_vec3_distance(player_position,
                                               st_player.ent->translation);
+    // Reposition player if out of bounds
+    if (st_player.ent->translation[Y] < -10.0) {
+      glm_vec3_add(cd_obs[0].ent->translation, (vec3) { 0.0, 2.0, 0.0 },
+                   st_player.ent->translation);
+    }
   }
 
   integrate_projectiles();
@@ -171,7 +176,7 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
     if (proj->source == SRC_ENEMY && (target_wrapper->type == PLAYER_OBJ ||
         target_wrapper->type == PLAYER_SHIP_OBJ)) {
       if (mode == STATION || proj->type == BALLISTIC) {
-        decrement_player_shield(proj->damage, 0.1);
+        decrement_player_shield(proj->damage, 0.03);
         st_player.total_damage_taken += proj->damage;
       } else {
         float shield_dmg = 0;
@@ -201,8 +206,8 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
         if (st_enemies[(size_t)target_wrapper->data].cur_health > 0.0) {
           st_player.total_damage_dealt += proj->damage;
         }
-        decrement_enemy_shield((size_t)
-                                target_wrapper->data, proj->damage, 0.1);
+        decrement_enemy_shield((size_t) target_wrapper->data, proj->damage,
+                               0.1);
         if (mode == STATION &&
             st_enemies[(size_t)target_wrapper->data].cur_health <= 0.0 &&
             st_enemies[(size_t)target_wrapper->data].dropped_xp == 0) {
@@ -223,7 +228,7 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
         }
       } else {
         if (proj->type == BALLISTIC) {
-          if (sp_enemies[(size_t)target_wrapper->data].cur_health > 0.0 && 
+          if (sp_enemies[(size_t)target_wrapper->data].cur_health > 0.0 &&
               !sp_enemies[(size_t)target_wrapper->data].invuln) {
             st_player.total_damage_dealt += proj->damage;
           }
@@ -305,6 +310,8 @@ void handle_event_collisions(COLLISION *cols, size_t num_cols) {
       cur_enemy = st_enemies + (size_t) b_wrapper->data;
       cur_enemy->cur_corridor = (size_t) a_wrapper->data;
     }
+
+    // TODO: Update for ARENA_OBJ
 
     // Direct enemies away from one another
     if (a_wrapper->type == ENEMY_OBJ && b_wrapper->type == ENEMY_OBJ) {
@@ -417,6 +424,10 @@ void decrement_player_shield(float damage, float timing) {
     }
   } else if (mode == STATION && !st_player.invuln) {
     st_player.cur_shield -= damage;
+    update_timer_memory(&st_player.recharging_shield, NULL);
+    st_player.recharging_shield = 0;
+    add_timer(st_player.shield_recharge_delay, &st_player.recharging_shield,
+              1, NULL);
     if (st_player.cur_shield <= 0.0) {
       player_health_dmg();
       st_player.cur_health += st_player.cur_shield;
