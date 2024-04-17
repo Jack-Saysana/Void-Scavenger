@@ -107,17 +107,18 @@ int init_scene() {
   glm_ortho(-1.0, 1.0, -1.0, 1.0, 0.0, 100.0, ortho_proj);
   glm_perspective(glm_rad(45.0), RES_X / RES_Y, 0.1f, RENDER_DIST, persp_proj);
 
-  // Initialize OpenGL options
-  glEnable(GL_DEPTH_TEST);
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  ESHOOT_ON = 0;
-
   glm_vec3_copy((vec3) {0.0, 0.0, 0.0}, camera.pos);
   camera.pitch = 0.0;
   camera.yaw = -90.0;
 
   return 0;
+}
+
+void init_opengl_options() {
+  // Enable depth testing and blending
+  glEnable(GL_DEPTH_TEST);
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void cleanup_scene() {
