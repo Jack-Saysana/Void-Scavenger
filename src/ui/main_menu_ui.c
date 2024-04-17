@@ -50,6 +50,8 @@ void update_main_menu_fb() {
 unsigned int render_main_menu_anim() {
   unsigned int model_shader = get_model_shader();
   unsigned int cubemap_shader = get_cubemap_shader();
+  unsigned int fire_shader = get_fire_shader();
+  unsigned int fire_particles = get_fire_particles();
   MODEL *ship_model = get_player_ship_model();
 
   mat4 proj = GLM_MAT4_IDENTITY_INIT;
@@ -68,15 +70,51 @@ unsigned int render_main_menu_anim() {
   set_mat4("model", model, cubemap_shader);
   render_skybox();
 
-  glm_translate(model, (vec3) { -5.0, -2.0, -20.0 });
+  float t = glfwGetTime();
+  float cos_time = cos(t);
+  float sin_time = sin(t);
+
+  glm_translate(model, (vec3) { -5.0 + cos_time,
+                0.5 * sin(2.0 * t), -20.0 });
   glm_rotate_z(model, -glm_rad(15.0), model);
-  glm_rotate_y(model, glm_rad(120.0), model);
+  glm_rotate_y(model, glm_rad(120.0 + 3.0 * sin_time), model);
+  glm_rotate_x(model, glm_rad(5.0 * cos_time), model);
 
   glUseProgram(model_shader);
   set_mat4("projection", proj, model_shader);
   set_mat4("view", view, model_shader);
   set_mat4("model", model, model_shader);
   draw_model(model_shader, ship_model);
+
+  glUseProgram(fire_shader);
+  float particle_scale = 2.5;
+  set_float("particle_scale", particle_scale, fire_shader);
+  set_float("time", glfwGetTime(), fire_shader);
+
+  mat4 f_model = GLM_MAT4_IDENTITY_INIT;
+  mat4 to_thruster = GLM_MAT4_IDENTITY_INIT;
+
+  vec3 positions[] = {
+    { 2.78, 0.0, 1.2 },
+    { 2.78, 0.0, -1.2 },
+    { 2.78, -1.0, 0.93 },
+    { 2.78, -1.0, -0.93},
+    { -0.15, -0.87, 6.34},
+    { -0.15, -0.87, -6.34}
+  };
+
+  set_mat4("projection", proj, fire_shader);
+  set_mat4("view", view, fire_shader);
+  for (int i = 0; i < 6; i++) {
+    glm_mat4_identity(to_thruster);
+    glBindVertexArray(fire_particles);
+    glm_translate(to_thruster, positions[i]);
+    glm_rotate_z(to_thruster, glm_rad(-90.0), to_thruster);
+    glm_mat4_mul(model, to_thruster, f_model);
+    set_mat4("model", f_model, fire_shader);
+    glDrawArraysInstanced(GL_TRIANGLES, 0, 6, NUM_PARTICLES);
+  }
+  glBindVertexArray(0);
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
   return main_menu_ui_fb.color_texture;

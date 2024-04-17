@@ -5,6 +5,8 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <pthread.h>
+#include <global_vars.h>
 
 #define FUNC_PTR (-1000)
 
@@ -38,3 +40,4 @@ void free_timer_queue();
 
 void prepare_object_movement();
 void update_object_movement();
+//void update_object_movement(int);

@@ -36,6 +36,8 @@ int init_player() {
   st_player.speed = P_BASE_SPEED;
   st_player.jump = P_BASE_JUMP;
   st_player.fire_rate = P_BASE_FIRERATE;
+  st_player.shield_recharge_rate = P_BASE_SHIELD_RECHARGE;
+  st_player.shield_recharge_delay = P_BASE_SHIELD_DELAY;
   st_player.damage = P_BASE_DAMAGE;
   st_player.max_experience = P_BASE_MAX_EXP;
   st_player.invuln = 0;
@@ -50,6 +52,13 @@ int init_player() {
   st_player.total_experience = 0.0;
 
   return 0;
+}
+
+void reset_st_player_state() {
+  st_player.cur_health = st_player.max_health;
+  st_player.cur_shield = st_player.max_shield;
+  st_player.invuln = 0;
+  st_player.recharging_shield = 0;
 }
 
 void reset_inventory() {
@@ -249,6 +258,15 @@ void player_ship_remove_sim() {
   sim_remove_entity(physics_sim, player_ship.ent);
   sim_remove_entity(combat_sim, player_ship.ent);
   sim_remove_entity(event_sim, player_ship.ent);
+  sim_remove_entity(render_sim, player_ship.ent);
+}
+
+void reset_sp_player_state() {
+  player_ship.cur_health = player_ship.hull.max_health;
+  player_ship.cur_shield = player_ship.shield.max_shield;
+  player_ship.invuln = 0;
+  player_ship.recharging_shield = 0;
+  player_ship.render_shield = 0;
 }
 
 void sim_refresh_player_ship() {
@@ -270,7 +288,13 @@ void recharge_player_shield() {
   if (mode == SPACE) {
     recharge_ship_shield(&player_ship);
   } else if (mode == STATION) {
-
+    if (st_player.recharging_shield) {
+      st_player.cur_shield += st_player.shield_recharge_rate * DELTA_TIME;
+      if (st_player.cur_shield >= st_player.max_shield) {
+        st_player.recharging_shield = 0;
+        st_player.cur_shield = st_player.max_shield;
+      }
+    }
   }
 }
 

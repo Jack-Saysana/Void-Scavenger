@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <cglm/cglm.h>
+#include <pthread.h>
 #include <engine/engine.h>
 #include <const.h>
 #include <global_vars.h>
@@ -20,4 +21,4 @@ ENTITY *init_player_ship_ent();
 
 int add_timer(float, void *, int, void *);
 void recharge_ship_shield(SHIP *);
-
+void update_ship_noises();

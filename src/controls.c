@@ -138,7 +138,7 @@ void mouse_button_callback(GLFWwindow *window, int button, int action,
                                             forward,
                                             10.0 + st_player.speed,
                                             SRC_PLAYER,
-                                            BALLISTIC,
+                                            LASER,
                                             st_player.damage,
                                             100.0,
                                             1);
@@ -165,7 +165,8 @@ void input_keys(GLFWwindow *window) {
   }
   for (int i = GLFW_KEY_A; i <= GLFW_KEY_Z; i++) {
     if (glfwGetKey(window, i) == GLFW_PRESS) {
-      if (console_enabled && cons_cmd_len < MAX_CMD_LEN - 1 && !holding_alpha[i - GLFW_KEY_A]) {
+      if (console_enabled && cons_cmd_len < MAX_CMD_LEN - 1 &&
+          !holding_alpha[i - GLFW_KEY_A]) {
         cons_cmd[cons_cmd_len++] = i + 32;
         update_console_text(cons_cmd);
         advance_cursor();
@@ -173,7 +174,6 @@ void input_keys(GLFWwindow *window) {
         /* FPS movment */
         if (i == GLFW_KEY_W) {
           /* Handle W press */
-          //move_camera(&camera, MOVE_FORWARD);
           vec3 player_forward;
           glm_quat_rotatev(st_player.ent->rotation, (vec3){-1.0, 0.0, 0.0}, player_forward);
           glm_normalize(player_forward);
@@ -183,7 +183,6 @@ void input_keys(GLFWwindow *window) {
         }
         if (i == GLFW_KEY_S) {
           /* Handle S press */
-          // move_camera(&camera, MOVE_BACKWARD);
           vec3 player_forward;
           glm_quat_rotatev(st_player.ent->rotation, (vec3){-1.0, 0.0, 0.0}, player_forward);
           glm_normalize(player_forward);
@@ -194,7 +193,6 @@ void input_keys(GLFWwindow *window) {
         }
         if (i == GLFW_KEY_A) {
           /* Handle A press */
-          // move_camera(&camera, MOVE_LEFT);
           vec3 player_left;
           glm_quat_rotatev(st_player.ent->rotation, (vec3){0.0, 0.0, 1.0},
                             player_left);
@@ -205,7 +203,6 @@ void input_keys(GLFWwindow *window) {
         }
         if (i == GLFW_KEY_D) {
           /* Handle D press */
-          // move_camera(&camera, MOVE_RIGHT);
           vec3 player_left;
           glm_quat_rotatev(st_player.ent->rotation, (vec3){0.0, 0.0, 1.0},
                             player_left);
@@ -302,7 +299,7 @@ void input_keys(GLFWwindow *window) {
     for (int i = GLFW_KEY_0; i <= GLFW_KEY_9; i++) {
     if (glfwGetKey(window, i) == GLFW_PRESS && !holding_num[i - GLFW_KEY_0]) {
       holding_num[i - GLFW_KEY_0] = 1;
-      if (console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
+      if (cheats && console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
         cons_cmd[cons_cmd_len++] = i;
         update_console_text(cons_cmd);
         advance_cursor();
@@ -317,7 +314,7 @@ void input_keys(GLFWwindow *window) {
   if (glfwGetKey(window, GLFW_KEY_MINUS) == GLFW_PRESS &&
       !holding_shift && !holding_minus) {
     holding_minus = 1;
-    if (console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
+    if (cheats && console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
       cons_cmd[cons_cmd_len++] = '-';
       update_console_text(cons_cmd);
       advance_cursor();
@@ -331,7 +328,7 @@ void input_keys(GLFWwindow *window) {
 
   /* Space */
   if (glfwGetKey(window, GLFW_KEY_SPACE)) {
-    if (console_enabled && cons_cmd_len < MAX_CMD_LEN - 1 && !holding_space) {
+    if (cheats && console_enabled && cons_cmd_len < MAX_CMD_LEN - 1 && !holding_space) {
       cons_cmd[cons_cmd_len++] = ' ';
       update_console_text(cons_cmd);
       advance_cursor();
@@ -354,7 +351,7 @@ void input_keys(GLFWwindow *window) {
   if (glfwGetKey(window, GLFW_KEY_MINUS) == GLFW_PRESS && holding_shift &&
       !holding_underscore) {
     holding_underscore = 1;
-    if (console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
+    if (cheats && console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
       cons_cmd[cons_cmd_len++] = '_';
       update_console_text(cons_cmd);
       advance_cursor();
@@ -369,7 +366,7 @@ void input_keys(GLFWwindow *window) {
   /* Enter */
   if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS && !holding_enter) {
     holding_enter = 1;
-    if (console_enabled) {
+    if (cheats && console_enabled) {
       cons_cmd[cons_cmd_len++] = '\0';
       /* Call lexer to tokenize and parse the command */
       tokenize(cons_cmd, cons_cmd_len);
@@ -394,7 +391,7 @@ void input_keys(GLFWwindow *window) {
   /* Period / Dot */
   if (glfwGetKey(window, GLFW_KEY_PERIOD) == GLFW_PRESS && !holding_dot) {
     holding_dot = 1;
-    if (console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
+    if (cheats && console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
       cons_cmd[cons_cmd_len++] = '.';
       update_console_text(cons_cmd);
       advance_cursor();
@@ -406,7 +403,7 @@ void input_keys(GLFWwindow *window) {
   /* Backspace */
   if (glfwGetKey(window, GLFW_KEY_BACKSPACE) == GLFW_PRESS && !holding_backspace) {
     holding_backspace = 1;
-    if (console_enabled && cons_cmd_len > 0) {
+    if (cheats && console_enabled && cons_cmd_len > 0) {
       cons_cmd[--cons_cmd_len] = '\0';
       update_console_text(cons_cmd);
       retreat_cursor();
@@ -418,21 +415,23 @@ void input_keys(GLFWwindow *window) {
   /* Slash */
   if (glfwGetKey(window, GLFW_KEY_SLASH) == GLFW_PRESS && !holding_slash) {
     holding_slash = 1;
-    if (console_enabled) {
-      disable_console();
-    } else {
-      enable_console();
-      cons_cmd_len = 0;
-      cons_cursor_pos = 0;
-      for (int i = 0; i < 100; i++) {
-        cons_cmd[i] = '\0';
+    if (cheats) {
+      if (console_enabled) {
+        disable_console();
+      } else {
+        enable_console();
+        cons_cmd_len = 0;
+        cons_cursor_pos = 0;
+        for (int i = 0; i < 100; i++) {
+          cons_cmd[i] = '\0';
+        }
+        cons_cursor[0] = '_';
+        for (int i = 1; i < 101; i++) {
+          cons_cursor[i] = '\0';
+        }
+        update_console_text(cons_cmd);
+        update_console_cursor(cons_cursor);
       }
-      cons_cursor[0] = '_';
-      for (int i = 1; i < 101; i++) {
-        cons_cursor[i] = '\0';
-      }
-      update_console_text(cons_cmd);
-      update_console_cursor(cons_cursor);
     }
   } else if (glfwGetKey(window, GLFW_KEY_SLASH) != GLFW_PRESS) {
     holding_slash = 0;
@@ -487,4 +486,8 @@ void set_keyboard_enabledness(int set) {
 
 void set_can_shoot(int is_can_shoot) {
   can_shoot = is_can_shoot;
+}
+
+int holding_alpha_key(int i) {
+  return !is_console_enabled() && holding_alpha[i - GLFW_KEY_A];
 }
