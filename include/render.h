@@ -30,6 +30,7 @@ static unsigned int bone_shader = 0;
 static unsigned int proj_shader = 0;
 static unsigned int glow_entity_shader = 0;
 static unsigned int glow_model_shader = 0;
+static unsigned int fire_shader = 0;
 
 // Common models
 typedef struct common_models {
@@ -69,6 +70,9 @@ ST_MODELS st_mods;
 // Cubemaps
 unsigned int skybox;
 
+// Particle Systems
+static unsigned int fire_particles;
+
 // Model loading state info
 pthread_mutex_t load_state_lock;
 int finished_loading = 0;
@@ -106,3 +110,5 @@ void get_player_gun_mat(mat4);
 void populate_point_lights(unsigned int);
 void update_radar_fb();
 void update_main_menu_fb();
+void add_audio(char *);
+void generate_ship_noises();

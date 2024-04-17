@@ -138,7 +138,7 @@ void mouse_button_callback(GLFWwindow *window, int button, int action,
                                             forward,
                                             10.0 + st_player.speed,
                                             SRC_PLAYER,
-                                            player_ship.weapon.type,
+                                            LASER,
                                             st_player.damage,
                                             100.0,
                                             1);
@@ -211,7 +211,8 @@ void input_keys(GLFWwindow *window) {
   }
   for (int i = GLFW_KEY_A; i <= GLFW_KEY_Z; i++) {
     if (glfwGetKey(window, i) == GLFW_PRESS) {
-      if (console_enabled && cons_cmd_len < MAX_CMD_LEN - 1 && !holding_alpha[i - GLFW_KEY_A]) {
+      if (console_enabled && cons_cmd_len < MAX_CMD_LEN - 1 &&
+          !holding_alpha[i - GLFW_KEY_A]) {
         cons_cmd[cons_cmd_len++] = i + 32;
         update_console_text(cons_cmd);
         advance_cursor();
@@ -219,7 +220,6 @@ void input_keys(GLFWwindow *window) {
         /* FPS movment */
         if (i == GLFW_KEY_W) {
           /* Handle W press */
-          //move_camera(&camera, MOVE_FORWARD);
           vec3 player_forward;
           glm_quat_rotatev(st_player.ent->rotation, (vec3){-1.0, 0.0, 0.0}, player_forward);
           glm_normalize(player_forward);
@@ -229,7 +229,6 @@ void input_keys(GLFWwindow *window) {
         }
         if (i == GLFW_KEY_S) {
           /* Handle S press */
-          // move_camera(&camera, MOVE_BACKWARD);
           vec3 player_forward;
           glm_quat_rotatev(st_player.ent->rotation, (vec3){-1.0, 0.0, 0.0}, player_forward);
           glm_normalize(player_forward);
@@ -240,7 +239,6 @@ void input_keys(GLFWwindow *window) {
         }
         if (i == GLFW_KEY_A) {
           /* Handle A press */
-          // move_camera(&camera, MOVE_LEFT);
           vec3 player_left;
           glm_quat_rotatev(st_player.ent->rotation, (vec3){0.0, 0.0, 1.0},
                             player_left);
@@ -251,7 +249,6 @@ void input_keys(GLFWwindow *window) {
         }
         if (i == GLFW_KEY_D) {
           /* Handle D press */
-          // move_camera(&camera, MOVE_RIGHT);
           vec3 player_left;
           glm_quat_rotatev(st_player.ent->rotation, (vec3){0.0, 0.0, 1.0},
                             player_left);
@@ -520,4 +517,8 @@ void set_keyboard_enabledness(int set) {
 
 void set_can_shoot(int is_can_shoot) {
   can_shoot = is_can_shoot;
+}
+
+int holding_alpha_key(int i) {
+  return !is_console_enabled() && holding_alpha[i - GLFW_KEY_A];
 }

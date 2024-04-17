@@ -22,7 +22,7 @@ void init_loading_ui() {
 
   loading_bar = add_ui_comp(loading_bar_bg, (vec2) { 0.0, 0.0 }, 0.5, 1.0,
                             RELATIVE_POS | POS_UNIT_RATIO | SIZE_UNIT_RATIO);
-  set_ui_texture(loading_bar, "./assets/ui/hud_color_20.png");
+  set_ui_texture(loading_bar, "./assets/ui/hud_color.png");
 }
 
 void update_loading_ui() {

@@ -7,6 +7,8 @@
 static ENTITY *dead_zones[6] = { NULL };
 static ENTITY *sp_station = NULL;
 static ENTITY *st_terminal = NULL;
+static int attack_types_picked[E_BASE_NUM_TYPES];
+static int mov_types_picked[E_BASE_NUM_TYPES];
 
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
@@ -84,6 +86,13 @@ int gen_rand_int(int);
 float gen_rand_float(float);
 void create_station_corridors();
 
+/* Arena functions */
+size_t init_arena_buffer();
+void free_arena_buffer();
+void arena_remove_sim(size_t);
+void delete_arena(size_t);
+
+
 /* Generation of asteroid positioning, speed, dir, etc... */
 void gen_rand_vec3(vec3 *, float);
 void gen_rand_vec3_plus_minus(vec3 *, float);
@@ -112,3 +121,5 @@ void set_st_waypoint_enabled(int);
 void reset_dmg_ui_state();
 
 void reset_inventory();
+void reset_st_player_state();
+void reset_sp_player_state();

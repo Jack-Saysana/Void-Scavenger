@@ -60,7 +60,7 @@ float REAL_DELTA = 0.0;
 
 float space_size = 0.0;
 
-int ESHOOT_ON = 0;
+int ESHOOT_ON = 1;
 int keyboard_enabled = 1;
 time_t start_time;
 
@@ -80,3 +80,9 @@ int part_spawn_chance[RARITY_LEVELS] = {
 
 // TODO: Set to 0 for release
 int cheats = 1;
+TRACK *tracks = NULL;
+size_t num_tracks = 0;
+size_t tracks_buff_len = 0;
+int AUDIO_EXPLICIT = 0;
+int AUDIO_DEBUG = 0;
+float global_volume = 1.0;
