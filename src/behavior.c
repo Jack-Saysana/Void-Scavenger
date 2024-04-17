@@ -210,7 +210,11 @@ void st_enemy_pathfind(size_t index) {
 
   // Determine course of action based on proximity and line of sight to player
   int clear_shot = 0;
-  if (enemy->weapon_type == RANGED) {
+  if (enemy->ent->translation[Y] >= 5.0) {
+    // Behavior for nested enemies
+    enemy->target_corridor = enemy->cur_corridor;
+    clear_shot = 1;
+  } else if (enemy->weapon_type == RANGED) {
     if (player_cd != INVALID_INDEX) {
       //fprintf(stderr, "  Found Player\n");
       // Get clear shot to player in a corridor with a valid range
@@ -350,7 +354,7 @@ void st_enemy_pathfind(size_t index) {
     glm_vec3_add(enemy->ent->translation, proj_pos, proj_pos);
 
     size_t proj_index = init_projectile(proj_pos,
-                                        forward,
+                                        to_player,
                                         ST_E_BASE_PROJ_SPEED +
                                         enemy->cur_speed,
                                         SRC_ENEMY,

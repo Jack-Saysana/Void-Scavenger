@@ -45,7 +45,7 @@ void free_enemy_ship_buffer() {
 
 // =============================== STATION MODE ==============================
 
-size_t init_enemy(size_t index) {
+size_t init_enemy(size_t index, int weapon) {
   if (st_enemies == NULL) {
     fprintf(stderr, "Error: inserting into deallocated enemy buffer\n");
     return INVALID_INDEX;
@@ -86,10 +86,17 @@ size_t init_enemy(size_t index) {
     new_enemy->fire_rate = E_BASE_FIRERATE_NORMAL;
     new_enemy->amount_xp = E_BASE_XP;
   }
-  if (gen_rand_int(2)) {
+  if (weapon == E_RANDOM) {
+    if (gen_rand_int(2)) {
+      new_enemy->weapon_type = MELEE;
+      new_enemy->fire_rate = E_BASE_FIRERATE_MELEE;
+    } else {
+      new_enemy->weapon_type = RANGED;
+    }
+  } else if (weapon == E_MELEE) {
     new_enemy->weapon_type = MELEE;
     new_enemy->fire_rate = E_BASE_FIRERATE_MELEE;
-  } else {
+  } else if (weapon == E_RANGED) {
     new_enemy->weapon_type = RANGED;
   }
   new_enemy->invuln = 0;
@@ -198,8 +205,8 @@ void sim_refresh_st_enemy(size_t index) {
   }
 }
 
-void spawn_st_enemy(vec3 pos, int type) {
-  size_t index = init_enemy(type);
+void spawn_st_enemy(vec3 pos, int type, int weapon) {
+  size_t index = init_enemy(type, weapon);
   glm_vec3_copy(pos, st_enemies[index].ent->translation);
   glm_vec3_copy((vec3) { 0.0, 0.01, 0.0 }, st_enemies[index].ent->velocity);
   st_enemy_insert_sim(index);

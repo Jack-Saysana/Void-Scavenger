@@ -33,6 +33,11 @@ void handle_collisions() {
   } else {
     st_player.total_distance_walked += glm_vec3_distance(player_position,
                                               st_player.ent->translation);
+    // Reposition player if out of bounds
+    if (st_player.ent->translation[Y] < -10.0) {
+      glm_vec3_add(cd_obs[0].ent->translation, (vec3) { 0.0, 2.0, 0.0 },
+                   st_player.ent->translation);
+    }
   }
 
   integrate_projectiles();

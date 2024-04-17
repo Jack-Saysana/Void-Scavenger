@@ -395,10 +395,12 @@ void create_station_corridors() {
   int cur_type = 0;
   int cur_rot = 0;
   vec3 position = GLM_VEC3_ZERO_INIT;
+  vec3 nest_pos = GLM_VEC3_ZERO_INIT;
   ivec2 cur_coords = { 0, 0 };
   size_t cur_index = INVALID_INDEX;
   size_t index = INVALID_INDEX;
   int location = -1;
+  int use_nest = 0;
 
   int **maze = gen_maze();
   int arenas = 1;
@@ -419,7 +421,8 @@ void create_station_corridors() {
   // Initialize the first maze tile in the stack and mark it visited
   glm_ivec2_copy((ivec2) { 1, 1 }, stack[0]);
   visited[maze_size + 1] = gen_cd_obj(maze, stack[0], backup_room_pos,
-                                      &backup_room_t, &backup_room_rot,
+                                      nest_pos, &backup_room_t,
+                                      &backup_room_rot, &use_nest,
                                       CORRIDOR_LOCATION);
   size_t stack_top = 1;
   size_t stack_size = BUFF_STARTING_LEN;
@@ -478,11 +481,20 @@ void create_station_corridors() {
         if (location == IN) {
           // Trying to spawn corridor location
           visited[index] = gen_cd_obj(maze, stack[stack_top], position,
-                                    &cur_type, &cur_rot, CORRIDOR_LOCATION);
+                                      nest_pos, &cur_type, &cur_rot, &use_nest,
+                                      CORRIDOR_LOCATION);
         } else {
           // Trying to spawn arena location
           visited[index] = gen_cd_obj(maze, stack[stack_top], position,
-                                    &cur_type, &cur_rot, ARENA_LOCATION);
+                                      nest_pos, &cur_type, &cur_rot, &use_nest,
+                                      ARENA_LOCATION);
+          if (use_nest) {
+            if (gen_rand_int(100) <= enemy_variation) {
+              spawn_st_enemy(nest_pos, BRUTE, E_RANGED);
+            } else {
+              spawn_st_enemy(nest_pos, NORMAL, E_RANGED);
+            }
+          }
         }
         stack_top++;
         if (stack_top == stack_size) {
@@ -518,9 +530,9 @@ void create_station_corridors() {
         // Chance for an enemy to spawn in any given corridor
         if (gen_rand_int(100) <= enemy_spawn_chance) {
           if (gen_rand_int(100) <= enemy_variation) {
-            spawn_st_enemy(position, BRUTE);
+            spawn_st_enemy(position, BRUTE, E_RANDOM);
           } else {
-            spawn_st_enemy(position, NORMAL);
+            spawn_st_enemy(position, NORMAL, E_RANDOM);
           }
           continue;
         }
@@ -737,8 +749,9 @@ void gen_terminal_location(int type, int rotation, vec3 pos, vec3 dest_pos,
 /*
   Responsible for creation of a corridor and arena object
 */
-size_t gen_cd_obj(int **maze, ivec2 coords, vec3 pos_dest, int *type_dest,
-                  int *rot_dest, int cur_tile) {
+size_t gen_cd_obj(int **maze, ivec2 coords, vec3 pos_dest, vec3 nest_pos_dest,
+                  int *type_dest, int *rot_dest, int *nest_dest,
+                  int cur_tile) {
   size_t index = INVALID_INDEX;
   int up = 0;
   int down = 0;
@@ -836,6 +849,7 @@ size_t gen_cd_obj(int **maze, ivec2 coords, vec3 pos_dest, int *type_dest,
     *type_dest = type;
     *rot_dest = rotation;
   } else {
+    *nest_dest = 0;
     /* 30% chance for spawning an enemy nest */
     int nest_spawn_rate = 30;
 
@@ -881,6 +895,7 @@ size_t gen_cd_obj(int **maze, ivec2 coords, vec3 pos_dest, int *type_dest,
                left == ARENA_LOCATION && right == ARENA_LOCATION) {
       if (gen_rand_int(100) < nest_spawn_rate) {
         type = FLAT_DOOR_NEST;
+        *nest_dest = 1;
       } else {
         type = FLAT_DOOR;
       }
@@ -889,6 +904,7 @@ size_t gen_cd_obj(int **maze, ivec2 coords, vec3 pos_dest, int *type_dest,
                left == ARENA_LOCATION && right == CORRIDOR_LOCATION) {
       if (gen_rand_int(100) < nest_spawn_rate) {
         type = FLAT_DOOR_NEST;
+        *nest_dest = 1;
       } else {
         type = FLAT_DOOR;
       }
@@ -897,6 +913,7 @@ size_t gen_cd_obj(int **maze, ivec2 coords, vec3 pos_dest, int *type_dest,
                left == ARENA_LOCATION && right == ARENA_LOCATION) {
       if (gen_rand_int(100) < nest_spawn_rate) {
         type = FLAT_DOOR_NEST;
+        *nest_dest = 1;
       } else {
         type = FLAT_DOOR;
       }
@@ -905,6 +922,7 @@ size_t gen_cd_obj(int **maze, ivec2 coords, vec3 pos_dest, int *type_dest,
                left == CORRIDOR_LOCATION && right == ARENA_LOCATION) {
       if (gen_rand_int(100) < nest_spawn_rate) {
         type = FLAT_DOOR_NEST;
+        *nest_dest = 1;
       } else {
         type = FLAT_DOOR;
       }
@@ -913,6 +931,7 @@ size_t gen_cd_obj(int **maze, ivec2 coords, vec3 pos_dest, int *type_dest,
                left == ARENA_LOCATION && right == ARENA_LOCATION) {
       if (gen_rand_int(100) < nest_spawn_rate) {
         type = FLAT_WALL_NEST;
+        *nest_dest = 1;
       } else {
         type = FLAT_WALL;
       }
@@ -921,6 +940,7 @@ size_t gen_cd_obj(int **maze, ivec2 coords, vec3 pos_dest, int *type_dest,
                left == ARENA_LOCATION && right == NONE) {
       if (gen_rand_int(100) < nest_spawn_rate) {
         type = FLAT_WALL_NEST;
+        *nest_dest = 1;
       } else {
         type = FLAT_WALL;
       }
@@ -929,6 +949,7 @@ size_t gen_cd_obj(int **maze, ivec2 coords, vec3 pos_dest, int *type_dest,
                left == ARENA_LOCATION && right == ARENA_LOCATION) {
       if (gen_rand_int(100) < nest_spawn_rate) {
         type = FLAT_WALL_NEST;
+        *nest_dest = 1;
       } else {
         type = FLAT_WALL;
       }
@@ -937,6 +958,7 @@ size_t gen_cd_obj(int **maze, ivec2 coords, vec3 pos_dest, int *type_dest,
                left == NONE && right == ARENA_LOCATION) {
       if (gen_rand_int(100) < nest_spawn_rate) {
         type = FLAT_WALL_NEST;
+        *nest_dest = 1;
       } else {
         type = FLAT_WALL;
       }
@@ -1019,6 +1041,8 @@ size_t gen_cd_obj(int **maze, ivec2 coords, vec3 pos_dest, int *type_dest,
                   2.0,
                   (((float) coords[Y] - 1) * 5.0) - (2.5 * maze_size) },
                   position);
+    glm_quat_rotatev(rot, (vec3) {-1.2, 6.0, 0.0}, nest_pos_dest);
+    glm_vec3_add(position, nest_pos_dest, nest_pos_dest);
 
     index = init_corridor(position, rot, type);
     if (index == INVALID_INDEX) {

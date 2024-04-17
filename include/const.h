@@ -78,6 +78,9 @@
 #define E_ANIM_SWINGING (5)
 #define E_ANIM_WALK_MELEE (6)
 #define E_ANIM_WALK_RANGED (7)
+#define E_MELEE (0)
+#define E_RANGED (1)
+#define E_RANDOM (2)
 
 #define BRUTE (0)
 #define NORMAL (1)
@@ -101,7 +104,7 @@
 #define E_BASE_SPEED_BRUTE (1.75)
 #define E_BASE_FIRERATE_NORMAL (0.2)
 #define E_BASE_FIRERATE_BRUTE (0.5)
-#define E_BASE_FIRERATE_MELEE (1.0)
+#define E_BASE_FIRERATE_MELEE (0.5)
 #define E_BASE_XP (20.0)
 #define E_BRUTE_XP (30.0)
 #define E_LEVEL_SCALE (10.0)
