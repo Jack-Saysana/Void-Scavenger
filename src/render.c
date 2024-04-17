@@ -42,6 +42,8 @@ int init_scene() {
                                         shaders_dir "/entity/glow.fs");
   glow_model_shader = init_shader_prog(shaders_dir "/model/shader.vs", NULL,
                                        shaders_dir "/entity/glow.fs");
+  fire_shader = init_shader_prog(shaders_dir "/fire/shader.vs", NULL,
+                                 shaders_dir "/fire/shader.fs");
 
   // Init cubemaps below...
   char *sb_paths[] = {
@@ -107,17 +109,52 @@ int init_scene() {
   glm_ortho(-1.0, 1.0, -1.0, 1.0, 0.0, 100.0, ortho_proj);
   glm_perspective(glm_rad(45.0), RES_X / RES_Y, 0.1f, RENDER_DIST, persp_proj);
 
-  // Initialize OpenGL options
-  glEnable(GL_DEPTH_TEST);
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  ESHOOT_ON = 0;
-
   glm_vec3_copy((vec3) {0.0, 0.0, 0.0}, camera.pos);
   camera.pitch = 0.0;
   camera.yaw = -90.0;
 
+  // Initialize particle system for thruster fire
+  vec2 particles[NUM_PARTICLES];
+  int width = sqrt(NUM_PARTICLES);
+  for (int i = 0; i < NUM_PARTICLES; i++) {
+    glm_vec2_copy((vec2) { i % width, i / width }, particles[i]);
+  }
+  float quad_particle[] = {
+    -0.0125f,  0.0125f,
+     0.0125f, -0.0125f,
+    -0.0125f, -0.0125f,
+    -0.0125f,  0.0125f,
+     0.0125f, -0.0125f,
+     0.0125f,  0.0125f
+  };
+  unsigned int qVBO;
+  glGenBuffers(1, &qVBO);
+  glGenVertexArrays(1, &fire_particles);
+  glBindVertexArray(fire_particles);
+  glBindBuffer(GL_ARRAY_BUFFER, qVBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(quad_particle), quad_particle,
+               GL_STATIC_DRAW);
+  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float),
+                        (void *) 0);
+  glEnableVertexAttribArray(0);
+  unsigned int iVBO;
+  glGenBuffers(1, &iVBO);
+  glBindBuffer(GL_ARRAY_BUFFER, iVBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(particles), particles, GL_STATIC_DRAW);
+  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float),
+                        (void *) 0);
+  glEnableVertexAttribArray(1);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glVertexAttribDivisor(1, 1);
+
   return 0;
+}
+
+void init_opengl_options() {
+  // Enable depth testing and blending
+  glEnable(GL_DEPTH_TEST);
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void cleanup_scene() {
@@ -184,6 +221,10 @@ void render_scene(GLFWwindow *window) {
     set_mat4("projection", persp_proj, proj_shader);
     set_mat4("view", view, proj_shader);
 
+    glUseProgram(fire_shader);
+    set_mat4("projection", persp_proj, fire_shader);
+    set_mat4("view", view, fire_shader);
+
     if (wire_frame) {
       glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     } else {
@@ -194,7 +235,7 @@ void render_scene(GLFWwindow *window) {
       render_skybox();
     }
     if (render_arena) {
-      render_oct_tree(physics_sim);
+      render_oct_tree(combat_sim);
     }
     if (render_bounds) {
       render_dead_zones();
@@ -256,15 +297,17 @@ void render_game_entity(ENTITY *ent) {
     } else if ( projectiles[(size_t) wrapper->data].type == LASER) {
       set_vec3("col",(vec3){1.0, 0.0, 0.0}, proj_shader);
     }
-    if (projectiles[(size_t) wrapper->data].collision) {
-      mat4 model = GLM_MAT4_IDENTITY_INIT;
-      glm_translate(model, ent->translation);
-      glm_quat_rotate(model, ent->rotation, model);
-      glm_scale(model, ent->scale);
-      set_mat4("model", model, proj_shader);
-      draw_model(proj_shader, c_mods.sphere_model.model);
-    } else {
-      draw_entity(proj_shader, ent);
+    if (projectiles[(size_t) wrapper->data].type != T_MELEE) {
+      if (projectiles[(size_t) wrapper->data].collision) {
+        mat4 model = GLM_MAT4_IDENTITY_INIT;
+        glm_translate(model, ent->translation);
+        glm_quat_rotate(model, ent->rotation, model);
+        glm_scale(model, ent->scale);
+        set_mat4("model", model, proj_shader);
+        draw_model(proj_shader, c_mods.sphere_model.model);
+      } else {
+        draw_entity(proj_shader, ent);
+      }
     }
   } else if (wrapper->type == ENEMY_OBJ) {
     ST_ENEMY *enemy = st_enemies + (size_t) wrapper->data;
@@ -289,7 +332,6 @@ void render_game_entity(ENTITY *ent) {
     }
     draw_entity(entity_selected_shader, ent);
   } else if (wrapper->type == ITEM_OBJ) {
-    /* TODO: Update to new shader */
     ST_ITEM *part = items + (size_t) wrapper->data;
     glUseProgram(model_selected_shader);
     mat4 model = GLM_MAT4_IDENTITY_INIT;
@@ -306,6 +348,87 @@ void render_game_entity(ENTITY *ent) {
       draw_model(model_selected_shader,
                  st_mods.station_ship_parts[part->type].model);
     }
+  } else if (wrapper->type == PLAYER_SHIP_OBJ) {
+    draw_entity(entity_selected_shader, ent);
+
+    glUseProgram(fire_shader);
+    float particle_scale = 1.0 + (1.5 * player_ship.cur_speed /
+                           player_ship.thruster.max_vel);
+    set_float("particle_scale", particle_scale, fire_shader);
+    set_float("time", glfwGetTime(), fire_shader);
+
+    mat4 f_model = GLM_MAT4_IDENTITY_INIT;
+    mat4 to_ship = GLM_MAT4_IDENTITY_INIT;
+    mat4 to_thruster = GLM_MAT4_IDENTITY_INIT;
+
+    glm_translate(to_ship, player_ship.ent->translation);
+    glm_quat_rotate(to_ship, player_ship.ent->rotation, to_ship);
+
+    vec3 positions[] = {
+      { 2.78, 0.0, 1.2 },
+      { 2.78, 0.0, -1.2 },
+      { 2.78, -1.0, 0.93 },
+      { 2.78, -1.0, -0.93},
+      { -0.15, -0.87, 6.34},
+      { -0.15, -0.87, -6.34}
+    };
+
+    for (int i = 0; i < 6; i++) {
+      glm_mat4_identity(to_thruster);
+      glBindVertexArray(fire_particles);
+      glm_translate(to_thruster, positions[i]);
+      glm_rotate_z(to_thruster, glm_rad(-90.0), to_thruster);
+      glm_mat4_mul(to_ship, to_thruster, f_model);
+      set_mat4("model", f_model, fire_shader);
+      glDrawArraysInstanced(GL_TRIANGLES, 0, 6, NUM_PARTICLES);
+    }
+    glBindVertexArray(0);
+  } else if (wrapper->type == ENEMY_SHIP_OBJ) {
+    draw_entity(entity_selected_shader, ent);
+
+    SHIP *enemy = sp_enemies + (size_t) wrapper->data;
+    glUseProgram(fire_shader);
+    float particle_scale = 1.0 + (enemy->cur_speed / enemy->thruster.max_vel);
+    set_float("time", glfwGetTime(), fire_shader);
+
+    mat4 f_model = GLM_MAT4_IDENTITY_INIT;
+    mat4 to_ship = GLM_MAT4_IDENTITY_INIT;
+    mat4 to_thruster = GLM_MAT4_IDENTITY_INIT;
+
+    glm_translate(to_ship, enemy->ent->translation);
+    glm_quat_rotate(to_ship, enemy->ent->rotation, to_ship);
+
+    vec4 positions[4];
+    int num_used = 4;
+    if (enemy->ent->model == sp_mods.alien_ship_models[0].model) {
+      glm_vec4_copy((vec4) { 9.89, 0.0, 6.38, 2.0 }, positions[0]);
+      glm_vec4_copy((vec4) { 9.89, 0.0, -6.38, 2.0 }, positions[1]);
+      glm_vec4_copy((vec4) { 8.84, 0.0, 8.80 , 2.0 }, positions[2]);
+      glm_vec4_copy((vec4) { 8.84, 0.0, -8.80, 2.0 }, positions[3]);
+    } else if (enemy->ent->model == sp_mods.alien_ship_models[1].model) {
+      glm_vec4_copy((vec4) { 2.77, 0.42, 1.26, 1.0 }, positions[0]);
+      glm_vec4_copy((vec4) { 2.77, 0.42, -1.26, 1.0 }, positions[1]);
+      glm_vec4_copy((vec4) { 4.75, 0.50, 0.0, 2.0 }, positions[2]);
+      glm_vec4_copy((vec4) { 5.22, -0.71, 0.0, 2.0 }, positions[3]);
+    } else if (enemy->ent->model == sp_mods.alien_ship_models[2].model) {
+      glm_vec4_copy((vec4) { 7.94, 0.0, 4.09, 1.0 }, positions[0]);
+      glm_vec4_copy((vec4) { 7.94, 0.0, -4.09, 1.0 }, positions[1]);
+      glm_vec4_copy((vec4) { 7.94, 0.0, 0.0, 3.0 }, positions[2]);
+      num_used = 3;
+    }
+
+    for (int i = 0; i < num_used; i++) {
+      glm_mat4_identity(to_thruster);
+      glBindVertexArray(fire_particles);
+      glm_translate(to_thruster, positions[i]);
+      glm_rotate_z(to_thruster, glm_rad(-90.0), to_thruster);
+      glm_mat4_mul(to_ship, to_thruster, f_model);
+      set_mat4("model", f_model, fire_shader);
+      set_float("particle_scale", positions[i][W] * particle_scale,
+                fire_shader);
+      glDrawArraysInstanced(GL_TRIANGLES, 0, 6, NUM_PARTICLES);
+    }
+    glBindVertexArray(0);
   } else {
     draw_entity(entity_selected_shader, ent);
   }
@@ -483,6 +606,10 @@ MODEL *get_player_ship_model() {
   return sp_mods.player_ship_model.model;
 }
 
+unsigned int get_fire_particles() {
+  return fire_particles;
+}
+
 unsigned int get_basic_shader() {
   return basic_shader;
 }
@@ -493,6 +620,10 @@ unsigned int get_model_shader() {
 
 unsigned int get_cubemap_shader() {
   return cubemap_shader;
+}
+
+unsigned int get_fire_shader() {
+  return fire_shader;
 }
 
 void toggle_hit_boxes() {
@@ -548,4 +679,15 @@ void reset_load_state() {
   load_error = 0;
   num_loaded = 0;
   pthread_mutex_unlock(&load_state_lock);
+}
+
+int get_enemy_type(size_t index) {
+  if (mode == STATION) {
+    if (st_enemies[index].ent->model == st_mods.alien_models[BRUTE].model) {
+      return BRUTE;
+    } else {
+      return NORMAL;
+    }
+  }
+  return -1;
 }

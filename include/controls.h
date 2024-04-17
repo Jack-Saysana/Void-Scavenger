@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <cglm/cglm.h>
 #include <GLFW/glfw3.h>
+#include <pthread.h>
 #include <engine/engine.h>
 #include <const.h>
 #include <global_vars.h>
@@ -68,6 +69,8 @@ void toggle_ship_parts();
 void toggle_skill_tree();
 int get_terminal_ui_state();
 void set_gamemode_space();
+void set_gamemode_station();
+void reset_station();
 void target_nearest_enemy();
 void toggle_st_waypoint();
 
@@ -75,5 +78,9 @@ int get_item_prompt_state();
 void pickup_item();
 void drop_item(size_t);
 size_t find_first_filled();
+
+void quit();
+void play_audio(int);
+void update_station_player_audio(vec3, versor);
 void ship_shoot();
 void use_power(float, int, SHIP *);

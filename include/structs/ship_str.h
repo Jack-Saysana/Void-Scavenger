@@ -12,6 +12,7 @@ typedef enum ship_weap_type {
   BALLISTIC,
   LASER,
   PLASMA,
+  T_MELEE,
 } S_WEAPON_T;
 
 typedef struct reactor_t {

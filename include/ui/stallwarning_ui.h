@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <pthread.h>
 #include <engine/engine.h>
 #include <const.h>
 #include <global_vars.h>

@@ -33,10 +33,16 @@ void handle_collisions() {
   } else {
     st_player.total_distance_walked += glm_vec3_distance(player_position,
                                               st_player.ent->translation);
+    // Reposition player if out of bounds
+    if (st_player.ent->translation[Y] < -10.0) {
+      glm_vec3_add(cd_obs[0].ent->translation, (vec3) { 0.0, 2.0, 0.0 },
+                   st_player.ent->translation);
+    }
   }
 
   integrate_projectiles();
   update_object_movement();
+  //update_object_movement(2);
 
   // Detect and respond to physics based collisions
   COLLISION *physics_collisions = NULL;
@@ -48,7 +54,9 @@ void handle_collisions() {
   prepare_object_movement();
   handle_physics_collisions(physics_collisions, num_p_col);
   update_object_movement();
+  //update_object_movement(3);
 
+  #if 0
   COLLISION *combat_collisions = NULL;
   size_t num_c_col = get_sim_collisions(combat_sim, &combat_collisions,
                                         sim_sphere->translation,
@@ -63,9 +71,11 @@ void handle_collisions() {
                                         SIM_DIST, 0);
   handle_event_collisions(event_collisions, num_e_col);
 
-  free(physics_collisions);
   free(combat_collisions);
   free(event_collisions);
+  #endif
+
+  free(physics_collisions);
 }
 
 void handle_physics_collisions(COLLISION *cols, size_t num_cols) {
@@ -167,10 +177,13 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
 
     if (proj->source == SRC_ENEMY && (target_wrapper->type == PLAYER_OBJ ||
         target_wrapper->type == PLAYER_SHIP_OBJ)) {
-      if (mode == STATION || proj->type == BALLISTIC) {
-        decrement_player_shield(proj->damage, 0.1);
+      if (mode == STATION) {
+        decrement_player_shield(proj->damage, 0.016);
         st_player.total_damage_taken += proj->damage;
-      } else { 
+      } else if (proj->type == BALLISTIC) {
+        decrement_player_shield(proj->damage, 0.03);
+        st_player.total_damage_taken += proj->damage;
+      } else {
         float shield_dmg = 0;
         float health_dmg = 0;
         if (proj->type == LASER) {
@@ -198,13 +211,16 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
         if (st_enemies[(size_t)target_wrapper->data].cur_health > 0.0) {
           st_player.total_damage_dealt += proj->damage;
         }
-        decrement_enemy_shield((size_t) target_wrapper->data, proj->damage, 0.1);
-        if (mode == STATION && st_enemies[(size_t)target_wrapper->data].cur_health <= 0.0 && 
+        decrement_enemy_shield((size_t) target_wrapper->data, proj->damage,
+                               0.1);
+        if (mode == STATION &&
+            st_enemies[(size_t)target_wrapper->data].cur_health <= 0.0 &&
             st_enemies[(size_t)target_wrapper->data].dropped_xp == 0) {
-          /*Enemey killed by player */
+          /* Enemy killed by player */
           st_player.total_enemies_defeated++;
           st_enemies[(size_t)target_wrapper->data].dropped_xp = 1;
-          float xp = st_enemies[(size_t)target_wrapper->data].amount_xp + E_LEVEL_SCALE * st_player.total_levels_completed;
+          float xp = st_enemies[(size_t)target_wrapper->data].amount_xp +
+                     E_LEVEL_SCALE * st_player.total_levels_completed;
           xp +=  gen_rand_float_plus_minus(xp/E_XP_RANGE);
           st_player.cur_experience += (int)xp;
           st_player.total_experience += (int) xp;
@@ -217,11 +233,12 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
         }
       } else {
         if (proj->type == BALLISTIC) {
-          if (sp_enemies[(size_t)target_wrapper->data].cur_health > 0.0 && 
+          if (sp_enemies[(size_t)target_wrapper->data].cur_health > 0.0 &&
               !sp_enemies[(size_t)target_wrapper->data].invuln) {
             st_player.total_damage_dealt += proj->damage;
           }
-          decrement_enemy_shield((size_t) target_wrapper->data, proj->damage, 0.1);
+          decrement_enemy_shield((size_t)
+                                 target_wrapper->data, proj->damage, 0.1);
         } else {
           float shield_dmg = 0;
           float health_dmg = 0;
@@ -232,27 +249,34 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
             shield_dmg = proj->damage - (proj->damage/2);
             health_dmg = proj->damage + (proj->damage/2);
           }
-          if (sp_enemies[(size_t)target_wrapper->data].cur_shield >= shield_dmg) {
+          if (sp_enemies[(size_t)target_wrapper->data].cur_shield >=
+              shield_dmg) {
             if (!sp_enemies[(size_t)target_wrapper->data].invuln) {
               st_player.total_damage_dealt += shield_dmg;
             }
-            decrement_enemy_shield((size_t) target_wrapper->data, shield_dmg, 0.1);
-          } else if (sp_enemies[(size_t)target_wrapper->data].cur_shield > 0.0) {
+            decrement_enemy_shield((size_t) target_wrapper->data, shield_dmg,
+                                   0.1);
+          } else if (sp_enemies[(size_t)target_wrapper->data].cur_shield >
+                     0.0) {
             if (!sp_enemies[(size_t)target_wrapper->data].invuln) {
-              st_player.total_damage_dealt += sp_enemies[(size_t)target_wrapper->data].cur_shield;
+              st_player.total_damage_dealt +=
+                           sp_enemies[(size_t)target_wrapper->data].cur_shield;
             }
-            decrement_enemy_shield((size_t) target_wrapper->data, 
-                                   sp_enemies[(size_t)target_wrapper->data].cur_shield, 0.1);
+            decrement_enemy_shield((size_t) target_wrapper->data,
+                     sp_enemies[(size_t)target_wrapper->data].cur_shield, 0.1);
           } else {
-            if (sp_enemies[(size_t)target_wrapper->data].cur_health > 0.0 && 
+            if (sp_enemies[(size_t)target_wrapper->data].cur_health > 0.0 &&
               !sp_enemies[(size_t)target_wrapper->data].invuln) {
-              if (health_dmg < sp_enemies[(size_t)target_wrapper->data].cur_health) {
+              if (health_dmg <
+                  sp_enemies[(size_t)target_wrapper->data].cur_health) {
                 st_player.total_damage_dealt += health_dmg;
               } else {
-                st_player.total_damage_dealt += sp_enemies[(size_t)target_wrapper->data].cur_health;
+                st_player.total_damage_dealt +=
+                          sp_enemies[(size_t)target_wrapper->data].cur_health;
               }
             }
-            decrement_enemy_shield((size_t) target_wrapper->data, health_dmg, 0.1);
+            decrement_enemy_shield((size_t)
+                                   target_wrapper->data, health_dmg, 0.1);
           }
         }
         if (sp_enemies[(size_t)target_wrapper->data].cur_health <= 0.0 &&
@@ -292,12 +316,13 @@ void handle_event_collisions(COLLISION *cols, size_t num_cols) {
       cur_enemy->cur_corridor = (size_t) a_wrapper->data;
     }
 
-    // Direct enemies away from one another
+    // Direct station enemies away from one another
     if (a_wrapper->type == ENEMY_OBJ && b_wrapper->type == ENEMY_OBJ) {
       glm_vec3_sub(st_enemies[(size_t) a_wrapper->data].ent->translation,
                    st_enemies[(size_t) b_wrapper->data].ent->translation,
                    temp);
       temp[Y] = 0.0;
+      glm_vec3_normalize(temp);
       glm_vec3_add(temp, st_enemies[(size_t) a_wrapper->data].nearby_enemies,
                    st_enemies[(size_t) a_wrapper->data].nearby_enemies);
       glm_vec3_negate(temp);
@@ -324,6 +349,8 @@ void handle_event_collisions(COLLISION *cols, size_t num_cols) {
           b_wrapper->type == STATION_OBJ) ||
         (a_wrapper->type == STATION_OBJ &&
          b_wrapper->type == PLAYER_SHIP_OBJ)) {
+      // Pause ship noises when entering station mode
+      pause_ship_audio();
       set_gamemode_station();
       return;
     }
@@ -341,6 +368,7 @@ void handle_event_collisions(COLLISION *cols, size_t num_cols) {
     if (target_wrapper->type == PLAYER_SHIP_OBJ) {
       player_out_of_bounds = 1;
       decrement_player_health(10.0, 1.0);
+      play_out_of_bounds_audio();
     } else if (target_wrapper->type == ENEMY_SHIP_OBJ) {
       decrement_enemy_health((size_t) target_wrapper->data, 5.0, 1.0);
     } else if (target_wrapper->type == OBSTACLE_OBJ) {
@@ -352,6 +380,7 @@ void handle_event_collisions(COLLISION *cols, size_t num_cols) {
     set_coords_warning();
   } else {
     stop_coords_warning();
+    pause_out_of_bounds_audio();
   }
 }
 
@@ -368,6 +397,15 @@ void update_object_movement() {
   update_sim_movement(event_sim);
   update_sim_movement(render_sim);
 }
+// DEBUG VERSION OF update_object_movement FOR TRACKING OCT TREE CONTENTS
+/*
+void update_object_movement(int birthmark) {
+  update_sim_movement(physics_sim, birthmark);
+  update_sim_movement(combat_sim, birthmark);
+  update_sim_movement(event_sim, birthmark);
+  update_sim_movement(render_sim, birthmark);
+}
+*/
 
 // ================================= HELPERS =================================
 
@@ -383,6 +421,8 @@ void decrement_player_shield(float damage, float timing) {
               -1000, &player_ship);
 
     player_ship.cur_shield -= damage;
+    play_audio(SPACESHIP_HULL_HIT_WAV);
+
     if (player_ship.cur_shield <= 0.0) {
       player_health_dmg();
       player_ship.cur_health += player_ship.cur_shield;
@@ -397,6 +437,10 @@ void decrement_player_shield(float damage, float timing) {
     }
   } else if (mode == STATION && !st_player.invuln) {
     st_player.cur_shield -= damage;
+    update_timer_memory(&st_player.recharging_shield, NULL);
+    st_player.recharging_shield = 0;
+    add_timer(st_player.shield_recharge_delay, &st_player.recharging_shield,
+              1, NULL);
     if (st_player.cur_shield <= 0.0) {
       player_health_dmg();
       st_player.cur_health += st_player.cur_shield;
@@ -406,6 +450,7 @@ void decrement_player_shield(float damage, float timing) {
       st_player.cur_health = 0.0;
       game_over();
     } else {
+      play_audio(SHIELD_STATION_MODE_HIT_WAV);
       st_player.invuln = 1;
       add_timer(timing, &st_player.invuln, 0, NULL);
     }
@@ -433,6 +478,7 @@ void decrement_player_health(float damage, float timing) {
     } else {
       st_player.invuln = 1;
       add_timer(timing, &st_player.invuln, 0, NULL);
+      play_player_hurt();
     }
   }
 }
@@ -457,6 +503,10 @@ void decrement_enemy_shield(size_t index, float damage, float timing) {
       }
       if (enemy->cur_health <= 0.0) {
         object_wrappers[(size_t) enemy->wrapper_offset].to_delete = 1;
+        // Spawn new enemy to take its place
+        insert_sp_enemy();
+        // Play ship explosion audio
+        play_audio(SPACESHIP_EXPLOSION_WAV);
       } else {
         enemy->invuln = 1;
         add_timer(timing, &enemy->invuln, 0, NULL);
@@ -480,6 +530,8 @@ void decrement_enemy_health(size_t index, float damage, float timing) {
       enemy->cur_health -= damage;
       if (enemy->cur_health <= 0.0) {
         object_wrappers[(size_t) enemy->wrapper_offset].to_delete = 1;
+        // Spawn new enemy to take its place
+        insert_sp_enemy();
       } else {
         enemy->invuln = 1;
         enemy->recharging_shield = 0;
@@ -511,5 +563,6 @@ void update_query_spheres() {
     glm_vec3_copy(camera.pos, sim_sphere->translation);
   }
   update_sim_movement(render_sim);
+  //update_sim_movement(render_sim, 4);
 }
 

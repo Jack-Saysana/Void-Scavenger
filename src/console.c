@@ -49,7 +49,7 @@ void give_item(int type, int rarity) {
   ST_ITEM *part = (ST_ITEM *) malloc(sizeof(ST_ITEM));  
   set_enhancements(part, type, rarity);
   memcpy(&(slot->data), &(part->enhancements), sizeof(part->enhancements));
-  
+
   slot->rarity = part->rarity;
   slot->weapon_type = NOT_WEAPON;
   switch (part->type) {
@@ -101,8 +101,12 @@ void set_gamemode_station() {
   if (mode == STATION) {
     return;
   }
+  pause_ship_audio();
   free_timer_queue();
+  add_timer(TICK_RATE, tick, FUNCTION_PTR, NULL);
   clear_space_mode();
+  reset_listener_orientation();
+  reset_listener_pos();
   init_station_mode();
 }
 
@@ -111,6 +115,9 @@ void set_gamemode_space() {
     return;
   }
   free_timer_queue();
+  add_timer(TICK_RATE, tick, FUNCTION_PTR, NULL);
+  reset_listener_orientation();
+  reset_listener_pos();
   clear_station_mode();
   init_space_mode();
 }
@@ -136,12 +143,14 @@ void set_render_dist(float dist) {
 
 void reset_station() {
   free_timer_queue();
+  add_timer(TICK_RATE, tick, FUNCTION_PTR, NULL);
   clear_station_mode();
   init_station_mode();
 }
 
 void reset_space() {
   free_timer_queue();
+  add_timer(TICK_RATE, tick, FUNCTION_PTR, NULL);
   clear_space_mode();
   init_space_mode();
 }

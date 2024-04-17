@@ -2,6 +2,7 @@
                       CONSOLE.h
   Responsible for handling console prototypes and functionality
 */
+#include <pthread.h>
 #include <global_vars.h>
 #include <structs/player_str.h>
 #include <structs/item_str.h>
@@ -45,3 +46,7 @@ void disable_fps();
 void free_timer_queue();
 I_SLOT *inv_first_avail();
 void set_enhancements(ST_ITEM *, int, int);
+void pause_ship_audio();
+void reset_listener_orientation();
+void reset_listener_pos();
+void tick();

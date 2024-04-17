@@ -31,6 +31,7 @@
 #define setp_dir "./assets/set_pieces"
 #define st_ship_parts_dir "./assets/station_ship_parts"
 #define shaders_dir "./src/shaders"
+#define audio_dir "./assets/audio"
 
 void load_common_assets() {
   c_mods.sphere_model = read_model(misc_dir"/sphere/sphere.obj");
@@ -104,6 +105,18 @@ void load_st_assets() {
   st_mods.corridor_models[2] = read_model(setp_dir"/corner/corner_0.obj");
   st_mods.corridor_models[3] = read_model(setp_dir"/t_junct/t_junct.obj");
   st_mods.corridor_models[4] = read_model(setp_dir"/corridor/corridor_0.obj");
+  st_mods.corridor_models[5] = read_model(setp_dir
+                            "/corner_double_entrance/corner_double_entrance.obj");
+  st_mods.corridor_models[6] = read_model(setp_dir
+                            "/corner_single_entrance/corner_single_entrance.obj");
+  st_mods.corridor_models[7] = read_model(setp_dir
+                            "/corner_single_entrance_alt/corner_single_entrance_alt.obj");
+  st_mods.corridor_models[8] = read_model(setp_dir"/double_corner/double_corner.obj");
+  st_mods.corridor_models[9] = read_model(setp_dir"/flat_door/flat_door.obj");
+  st_mods.corridor_models[10] = read_model(setp_dir"/flat_door_nest/flat_door_nest.obj");
+  st_mods.corridor_models[11] = read_model(setp_dir"/flat_wall/flat_wall.obj");
+  st_mods.corridor_models[12] = read_model(setp_dir"/flat_wall_nest/flat_wall_nest.obj");
+  st_mods.corridor_models[13] = read_model(setp_dir"/mid_floor/mid_floor.obj");
   st_mods.station_obstacles[0] = read_model(st_obs_dir"/ammo_crate_0/ammo_crate_0.obj");
   st_mods.station_obstacles[1] = read_model(st_obs_dir"/ammo_crate_1/ammo_crate_1.obj");
   st_mods.station_obstacles[2] = read_model(st_obs_dir"/crate_0/crate_0.obj");
@@ -170,12 +183,36 @@ void free_st_assets() {
   }
 }
 
+void load_audio_tracks() {
+  add_audio(audio_dir"/ballistic_spaceship_gun.wav");
+  add_audio(audio_dir"/laser_spaceship_gun.wav");
+  add_audio(audio_dir"/plasma_spaceship_gun.wav");
+  add_audio(audio_dir"/station_mode_weapon.wav");
+  add_audio(audio_dir"/spaceship_explosion.wav");
+  add_audio(audio_dir"/shield_station_mode_hit.wav");
+  add_audio(audio_dir"/spaceship_hull_hit.wav");
+  add_audio(audio_dir"/world_exit.wav");
+  add_audio(audio_dir"/player_death_1.wav");
+  add_audio(audio_dir"/player_death_2.wav");
+  add_audio(audio_dir"/player_hurt_1.wav");
+  add_audio(audio_dir"/player_hurt_2.wav");
+  add_audio(audio_dir"/player_hurt_3.wav");
+  add_audio(audio_dir"/player_hurt_4.wav");
+  add_audio(audio_dir"/alien_normal_talking.wav");
+  add_audio(audio_dir"/alien_normal_death.wav");
+  add_audio(audio_dir"/alien_brute_talking.wav");
+  add_audio(audio_dir"/alien_brute_death.wav");
+  add_audio(audio_dir"/StarWars60.wav");
+  generate_ship_noises();
+}
+
 void *load_assets(void *arg) {
   load_error = 0;
 
   load_common_assets();
   load_sp_assets();
   load_st_assets();
+  load_audio_tracks();
 
   pthread_mutex_lock(&load_state_lock);
   finished_loading = 1;
@@ -187,4 +224,5 @@ void *load_assets(void *arg) {
 
   return 0;
 }
+
 

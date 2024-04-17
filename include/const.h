@@ -1,11 +1,16 @@
 #ifndef __CONST_H__
 #define __CONST_H__
 
+// Tick Constants
+#define TICK_RATE (0.05)      // 1/20 sec
+
 // Player constants
 #define P_BASE_HEALTH (100.0)
 #define P_BASE_SHIELD (100.0)
 #define P_BASE_SPEED (7.5)
 #define P_BASE_FIRERATE (0.1)
+#define P_BASE_SHIELD_RECHARGE (5.0)
+#define P_BASE_SHIELD_DELAY (2.0)
 #define P_BASE_MAX_EXP (100.0)
 #define P_BASE_DAMAGE (10.0)
 #define P_LEVEL_SCALE (50.0)
@@ -27,6 +32,7 @@
 #define S_BASE_NUM_BARRELS (2)
 #define S_BASE_BULLET_SIZE (1.0)
 #define S_BASE_PROJ_SPEED (100.0)
+#define S_E_BASE_PROJ_SPEED (300.0)
 #define S_BASE_RANGE (500.0)
 #define S_BASE_ANG_VEL (0.25)
 #define S_BASE_ANG_ACCEL (0.25)
@@ -176,10 +182,21 @@
 #define RARITY_ERR    (-1)
 
 // Enemy Constants
+#define MAX_SP_AGRO_RANGE (512.0)
+#define MIN_SP_FOLLOW_RANGE (100.0)
+#define SP_OBJ_AVOIDANCE_THRESHOLD (0.7071)
+#define SP_AVOID_BOUNDS_PRIORITY (100.0)
+#define SP_AVOID_OBSTACLE_PRIORITY (2.0)
+#define SP_CHASE_PRIORITY (1.0)
+#define SP_SHOT_DELAY (2.5)
+
 #define NUM_ALIEN_TYPES (2)
 #define NUM_ALIEN_SHIP_TYPES (3)
 #define NUM_ALIEN_ATTACK_TYPES (7)
 #define NUM_ALIEN_MOV_TYPES (4)
+#define ST_E_BASE_PROJ_SPEED (10.0)
+#define ST_E_BASE_PROJ_DAMAGE (10.0)
+#define ST_E_BASE_PROJ_RANGE (100.0)
 #define E_ANIM_HURT_MELEE (0)
 #define E_ANIM_HURT_RANGED (1)
 #define E_ANIM_SHOOTING (2)
@@ -188,6 +205,42 @@
 #define E_ANIM_SWINGING (5)
 #define E_ANIM_WALK_MELEE (6)
 #define E_ANIM_WALK_RANGED (7)
+#define E_MELEE (0)
+#define E_RANGED (1)
+#define E_RANDOM (2)
+
+// Audio Tracks and Constants
+#define BALLISTIC_GUN_WAV           (0)
+#define LASER_GUN_WAV               (1)
+#define PLASMA_GUN_WAV              (2)
+#define STATION_MODE_WEAPON_WAV     (3)
+#define SPACESHIP_EXPLOSION_WAV     (4)
+#define SHIELD_STATION_MODE_HIT_WAV (5)
+#define SPACESHIP_HULL_HIT_WAV      (6)
+#define WORLD_EXIT_WAV              (7)
+#define PLAYER_DEATH_1_WAV          (8)
+#define PLAYER_DEATH_2_WAV          (9)
+#define PLAYER_HURT_1_WAV           (10)
+#define PLAYER_HURT_2_WAV           (11)
+#define PLAYER_HURT_3_WAV           (12)
+#define PLAYER_HURT_4_WAV           (13)
+#define ALIEN_NORMAL_TALKING_WAV    (14)
+#define ALIEN_NORMAL_DEATH_WAV      (15)
+#define ALIEN_BRUTE_TALKING_WAV     (16)
+#define ALIEN_BRUTE_DEATH_WAV       (17)
+#define TEST_THEME                  (18)
+#define SHIP_SINE_WAVE              (19)
+#define SHIP_TRI_WAVE_1             (20)
+#define SHIP_TRI_WAVE_2             (21)
+
+#define INVALID_SOURCE              (-1)
+#define SOURCE_PAUSED               (0)
+#define SOURCE_PLAYING              (1)
+#define BASE_SINE_FREQUENCY         (150.0)
+#define BASE_TRIANGLE_FREQUENCY     (49.0)
+#define MAX_SHIP_VELOCITY_TONE      (10.0)
+#define MAX_TONE                    (100.0)
+#define MAX_GAIN_DIST               (25.0)
 
 // Station Eneemy Types
 #define BRUTE (0)
@@ -206,7 +259,6 @@
 #define E_HIGH_SPEED (2)
 #define E_ULTRA_SPEED (3)
 
-
 #define E_BASE_HEALTH_NORMAL (100.0)
 #define E_BASE_HEALTH_BRUTE (150.0)
 #define E_HEALTH_MODIFIER_NORMAL (25.0)
@@ -214,8 +266,9 @@
 #define E_LEVEL_SCALE_CAP (10.0)
 #define E_BASE_SPEED_NORMAL (3.0)
 #define E_BASE_SPEED_BRUTE (1.75)
-#define E_BASE_FIRERATE_NORMAL (0.05)
-#define E_BASE_FIRERATE_BRUTE (0.1)
+#define E_BASE_FIRERATE_NORMAL (0.2)
+#define E_BASE_FIRERATE_BRUTE (0.5)
+#define E_BASE_FIRERATE_MELEE (0.5)
 #define E_BASE_XP (20.0)
 #define E_BRUTE_XP (30.0)
 #define E_LEVEL_SCALE (10.0)
@@ -236,14 +289,14 @@
 #define STAT_PROJ (1)
 
 // Simulation constants
-#define BASE_SPACE_SIZE (256.0)
-#define SPACE_DEPTH (8)
+#define BASE_SPACE_SIZE (1024.0)
+#define SPACE_DEPTH (10)
 #define STATION_SIZE (80.0)
 #define STATION_DEPTH (6)
 #define ST_BASE_RENDER_DIST (40.0)
 #define ST_BASE_SIM_DIST (32.0)
-#define SP_BASE_RENDER_DIST (500.0)
-#define SP_BASE_SIM_DIST (256.0)
+#define SP_BASE_RENDER_DIST (2000.0)
+#define SP_BASE_SIM_DIST (2000.0)
 #define BASE_NUM_ENEMIES (5)
 #define ST_GRAVITY (12.0)
 
@@ -253,16 +306,44 @@
 #define TYPE_ASTEROID (0)
 
 // Corridor constants
-#define NUM_CORRIDOR_TYPES (5)
+#define NUM_CORRIDOR_TYPES (14)
 #define TYPE_ONE_WAY (0)
 #define TYPE_FOUR_WAY (1)
 #define TYPE_CORNER (2)
 #define TYPE_T_JUNCT (3)
 #define TYPE_CORRIDOR (4)
+#define CORNER_DOUBLE_ENTRANCE     (5)
+#define CORNER_SINGLE_ENTRANCE     (6)
+#define CORNER_SINGLE_ENTRANCE_ALT (7)
+#define DOUBLE_CORNER              (8)
+#define FLAT_DOOR                  (9)
+#define FLAT_DOOR_NEST             (10)
+#define FLAT_WALL                  (11)
+#define FLAT_WALL_NEST             (12)
+#define MID_FLOOR                  (13)
 #define NEIGHBOR_POS_X (0)
 #define NEIGHBOR_NEG_X (1)
 #define NEIGHBOR_POS_Z (2)
 #define NEIGHBOR_NEG_Z (3)
+
+#define NEIGHBOR_TOP_LEFT (0)
+#define NEIGHBOR_TOP (1)
+#define NEIGHBOR_TOP_RIGHT (2)
+#define NEIGHBOR_LEFT (3)
+#define NEIGHBOR_RIGHT (4)
+#define NEIGHBOR_BOTTOM_LEFT (5)
+#define NEIGHBOR_BOTTOM (6)
+#define NEIGHBOR_BOTTOM_RIGHT (7)
+
+#define SEARCHABLE_TL (0x1)
+#define SEARCHABLE_T  (0x2)
+#define SEARCHABLE_TR (0x4)
+#define SEARCHABLE_L  (0x8)
+#define SEARCHABLE_R  (0x10)
+#define SEARCHABLE_BL (0x20)
+#define SEARCHABLE_B  (0x40)
+#define SEARCHABLE_BR (0x80)
+#define SEARCHABLE_ALL (0xFF)
 
 // Station obstacle constants
 #define NUM_STATION_OBSTACLE_TYPES (20)
@@ -294,7 +375,7 @@
 #define BASE_COLLISION_DAMAGE     (50.0)
 
 // Targeting System consts
-#define MAX_TARGET_DIST (100.0)
+#define MAX_TARGET_DIST (512.0)
 
 // Pathfinding consts
 #define ST_ENEMY_SEARCH_DEPTH (4)
@@ -307,6 +388,8 @@
 #define Z (2)
 #define W (3)
 
+#define FUNCTION_PTR (-1000)
+
 #define TOP (0)
 #define BOTTOM (1)
 #define LEFT (2)
@@ -315,5 +398,10 @@
 #define BACK (5)
 
 #define INVALID_FRAME (0xFFFFFFFF)
+
+#define POSITIVE (0)
+#define NEGATIVE (1)
+
+#define NUM_PARTICLES (1000)
 
 #endif

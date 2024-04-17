@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <cglm/cglm.h>
+#include <pthread.h>
 #include <engine/engine.h>
 #include <const.h>
 #include <global_vars.h>
@@ -22,3 +23,4 @@ int add_timer(float, void *, int, void *);
 void recharge_ship_shield(SHIP *);
 void reactor_recharge(SHIP *);
 
+void update_ship_noises();
