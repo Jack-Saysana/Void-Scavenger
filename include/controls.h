@@ -75,3 +75,5 @@ int get_item_prompt_state();
 void pickup_item();
 void drop_item(size_t);
 size_t find_first_filled();
+void ship_shoot();
+void use_power(float, int, SHIP *);

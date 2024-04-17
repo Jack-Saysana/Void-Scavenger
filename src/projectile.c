@@ -42,7 +42,9 @@ size_t init_projectile(vec3 pos, vec3 dir, float speed, PROJ_SOURCE source,
     fprintf(stderr, "Error: Unable to allocate projectile entity\n");
     return INVALID_INDEX;
   }
-
+  vec3 scaler = {1.0,1.0,1.0};
+  glm_vec3_scale_as(scaler,player_ship.weapon.bullet_size,scaler);
+  glm_vec3_copy(scaler, projectile->ent->scale);
   projectile->wrapper_offset = init_wrapper(PROJ_OBJ, projectile->ent,
                                            (void *) num_projectiles);
   if (projectile->wrapper_offset == INVALID_INDEX) {
