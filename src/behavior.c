@@ -124,10 +124,11 @@ void sp_enemy_pathfind(size_t index) {
     }
   }
   glm_vec3_scale_as(forward, enemy->cur_speed, enemy->ent->velocity);
-  if (ESHOOT_ON && enemy->e_can_shoot) {
+  if (ESHOOT_ON && enemy->e_can_shoot && !enemy->ship_stalled) {
     /* fire rate timer */
     enemy->e_can_shoot = 0;
     add_timer(1, (void *) &enemy->e_can_shoot, 1, NULL);
+    use_power(enemy->weapon.max_power_draw, TYPE_WEAPON, enemy);
     /* get ship vectors */
     vec3 ship_forward;
     glm_quat_rotatev(enemy->ent->rotation, (vec3){-1.0, 0.0, 0.0}, ship_forward);

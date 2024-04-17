@@ -48,7 +48,7 @@ int main() {
     enemy_behavior();
     player_ship_thrust_move();
     recharge_player_shield();
-    reactor_recharge();
+    reactor_recharge_player();
     handle_collisions();
     refresh_objects();
     update_ui_components();

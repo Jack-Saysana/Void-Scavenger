@@ -224,9 +224,6 @@ float calc_power_usage(SHIP *ship) {
 
 
 void use_power(float pwr_draw, int type, SHIP * ship) {
-  if (ship != &player_ship) {
-    return;
-  }
   float delay_time;
   float new_pwr_draw;
   if (type == TYPE_WEAPON) {
@@ -234,7 +231,7 @@ void use_power(float pwr_draw, int type, SHIP * ship) {
     delay_time = pwr_draw;
   } else if (type == TYPE_THRUSTER) {
     new_pwr_draw = pwr_draw * DELTA_TIME * 
-                   player_ship.thruster.max_accel * S_THRUSTER_PWR_USE_FACTOR;
+                   ship->thruster.max_accel * S_THRUSTER_PWR_USE_FACTOR;
     delay_time = pwr_draw * S_THRUSTER_PWR_DELAY_FACTOR;
   } else if (type == TYPE_SHIELD) {
     new_pwr_draw = pwr_draw * DELTA_TIME;
@@ -242,27 +239,32 @@ void use_power(float pwr_draw, int type, SHIP * ship) {
   } else {
     return;
   }
-  player_ship.cur_power_use += new_pwr_draw;
-  if (player_ship.cur_power_use >= player_ship.reactor.max_output) {
+  ship->cur_power_use += new_pwr_draw;
+  if (ship->cur_power_use >= ship->reactor.max_output) {
     //initiate stall
-    player_ship.cur_power_use = player_ship.reactor.max_output;
-    stall_ship(&player_ship);
+    ship->cur_power_use = ship->reactor.max_output;
+    if (ship == &player_ship) {
+      stall_ship(ship);
+    } else {
+      ship->ship_stalled = 1;
+      add_timer(S_E_STALL_TIME, destall_enemy_ship, -1000, ship);
+    }
   }
-  if (player_ship.reactor_can_recharge == 1) {
-    player_ship.reactor_can_recharge = 0;
+  if (ship->reactor_can_recharge == 1) {
+    ship->reactor_can_recharge = 0;
   } else {
     //delete previous disable reactor timer
-    update_timer_memory((void*) &player_ship.reactor_can_recharge, NULL);
+    update_timer_memory((void*) &ship->reactor_can_recharge, NULL);
   }
-  add_timer(delay_time, (void *) &player_ship.reactor_can_recharge, 1, NULL);
+  add_timer(delay_time, (void *) &ship->reactor_can_recharge, 1, NULL);
 }
 
-void reactor_recharge() {
-  if (player_ship.cur_power_use > 0.0 && player_ship.reactor_can_recharge
-      && !player_ship.ship_stalled) {
-    player_ship.cur_power_use -= DELTA_TIME * player_ship.reactor.recharge_rate;
-    if (player_ship.cur_power_use <= 0.0) {
-      player_ship.cur_power_use = 0.0;
+void reactor_recharge(SHIP * ship) {
+  if (ship->cur_power_use > 0.0 && ship->reactor_can_recharge
+      && !ship->ship_stalled) {
+    ship->cur_power_use -= DELTA_TIME * ship->reactor.recharge_rate;
+    if (ship->cur_power_use <= 0.0) {
+      ship->cur_power_use = 0.0;
     }
   }
 }
@@ -302,4 +304,9 @@ void stall_ship(SHIP * ship) {
   ship->ship_stalled = 1;
   start_stallwarning();
   add_timer(ship->reactor.stall_time, destall_ship, -1000, ship);
+}
+
+void destall_enemy_ship(SHIP * ship) {
+  ship->ship_stalled = 0;
+  ship->cur_power_use = 0.0;
 }
