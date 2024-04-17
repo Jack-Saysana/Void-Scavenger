@@ -295,15 +295,17 @@ void render_game_entity(ENTITY *ent) {
     } else if ( projectiles[(size_t) wrapper->data].type == LASER) {
       set_vec3("col",(vec3){1.0, 0.0, 0.0}, proj_shader);
     }
-    if (projectiles[(size_t) wrapper->data].collision) {
-      mat4 model = GLM_MAT4_IDENTITY_INIT;
-      glm_translate(model, ent->translation);
-      glm_quat_rotate(model, ent->rotation, model);
-      glm_scale(model, ent->scale);
-      set_mat4("model", model, proj_shader);
-      draw_model(proj_shader, c_mods.sphere_model.model);
-    } else {
-      draw_entity(proj_shader, ent);
+    if (projectiles[(size_t) wrapper->data].type != T_MELEE) {
+      if (projectiles[(size_t) wrapper->data].collision) {
+        mat4 model = GLM_MAT4_IDENTITY_INIT;
+        glm_translate(model, ent->translation);
+        glm_quat_rotate(model, ent->rotation, model);
+        glm_scale(model, ent->scale);
+        set_mat4("model", model, proj_shader);
+        draw_model(proj_shader, c_mods.sphere_model.model);
+      } else {
+        draw_entity(proj_shader, ent);
+      }
     }
   } else if (wrapper->type == ENEMY_OBJ) {
     ST_ENEMY *enemy = st_enemies + (size_t) wrapper->data;
@@ -328,7 +330,6 @@ void render_game_entity(ENTITY *ent) {
     }
     draw_entity(entity_selected_shader, ent);
   } else if (wrapper->type == ITEM_OBJ) {
-    /* TODO: Update to new shader */
     ST_ITEM *part = items + (size_t) wrapper->data;
     glUseProgram(model_selected_shader);
     mat4 model = GLM_MAT4_IDENTITY_INIT;
@@ -666,4 +667,15 @@ void reset_load_state() {
   load_error = 0;
   num_loaded = 0;
   pthread_mutex_unlock(&load_state_lock);
+}
+
+int get_enemy_type(size_t index) {
+  if (mode == STATION) {
+    if (st_enemies[index].ent->model == st_mods.alien_models[BRUTE].model) {
+      return BRUTE;
+    } else {
+      return NORMAL;
+    }
+  }
+  return -1;
 }

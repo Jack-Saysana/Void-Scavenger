@@ -8,7 +8,6 @@ void tick() {
   }
 
   /* Combat and Event Collision Detection */
-#if 1
   COLLISION *combat_collisions = NULL;
   size_t num_c_col = get_sim_collisions(combat_sim, &combat_collisions,
                                         sim_sphere->translation,
@@ -27,11 +26,15 @@ void tick() {
   free(combat_collisions);
   free(event_collisions);
 
-#endif
   enemy_behavior();
   player_ship_thrust_move();
   recharge_player_shield();
   delete_stale_objects();
+
+  // Ticked Audio
+  if (mode == SPACE) {
+    update_ship_noises();
+  }
 
   add_timer(TICK_RATE, tick, FUNCTION_PTR, NULL);
   prepare_object_movement();

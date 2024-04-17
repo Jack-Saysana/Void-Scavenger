@@ -55,6 +55,7 @@ int init_space_mode() {
                                             (void *) &player_ship);
   player_ship.cur_speed = 0.0;
   glm_vec3_negate_to(sp_station->translation, player_ship.ent->translation);
+  reset_sp_player_state();
 
   // Place player ship entity into simulations
   status = player_ship_insert_sim();
@@ -181,6 +182,7 @@ void clear_space_mode() {
     free_entity(sp_obs[i].ent);
   }
 
+
   num_enemies = 0;
   num_projectiles = 0;
   num_obstacles = 0;
@@ -204,9 +206,6 @@ int init_station_mode() {
 
   /* Re-enable shooting (if not already) */
   enable_shooting();
-
-  /* Clear inventory */
-  // reset_inventory();
 
   // Initialize proper render distances
   RENDER_DIST = ST_BASE_RENDER_DIST;
@@ -232,6 +231,8 @@ int init_station_mode() {
   reset_physics(st_player.ent);
   st_player.wrapper_offset = init_wrapper(PLAYER_OBJ, st_player.ent,
                                           (void *) &st_player);
+  reset_st_player_state();
+
   // Place station entities in simulations
   status = init_enemy_buffer();
   if (status) {
@@ -256,6 +257,7 @@ int init_station_mode() {
   if (status) {
     return -1;
   }
+
   create_station_corridors();
 
   // Place player entity in simulation

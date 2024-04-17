@@ -25,3 +25,6 @@ void reset_player();
 void free_timer_queue();
 void tick();
 void add_timer(float, void *, int, void *);
+void play_player_death();
+void play_ship_explosion();
+void pause_ship_audio();
