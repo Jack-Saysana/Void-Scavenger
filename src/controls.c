@@ -448,6 +448,14 @@ void input_keys(GLFWwindow *window) {
   } else {
     holding_tab = 0;
   }
+
+  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS && !holding_esc) {
+    holding_esc = 1;
+    /* Handle ESC press*/
+    toggle_esc();
+  } else if (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS) {
+    holding_esc = 0;
+  }
 }
 
 void advance_cursor() {

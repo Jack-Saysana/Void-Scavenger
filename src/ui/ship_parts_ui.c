@@ -266,6 +266,7 @@ void toggle_ship_parts() {
   } else {
     set_ui_enabled(ship_parts.ui_ship_parts_root, 1);
     set_ui_enabled(inventory.ui_inventory_root, 0);
+    set_ui_enabled(ui_esc_root, 0);
     CURSOR_ENABLED = 1;
   }
 }

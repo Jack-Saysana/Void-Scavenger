@@ -44,6 +44,24 @@ void init_ui_components() {
     exit(1);
   }
 
+  // Initialize ESC menu
+  if (init_esc()) {
+    printf("Could not initialize ESC menu!\n");
+    exit(1);
+  }
+
+  // Initialize render menu
+  if (init_render()) {
+    printf("Could not initialize render menu!\n");
+    exit(1);
+  }
+
+  // Initialize control menu
+  if (init_control()) {
+    printf("Could not initialize control menu!\n");
+    exit(1);
+  }
+
   coordinates_ui_initialize();
   fps_ui_initialize();
   init_terminal_ui();
@@ -83,4 +101,7 @@ void update_ui_components() {
   update_waypoint_ui();
   update_damage_ui();
   update_main_menu_ui();
+  update_render();
+  update_control();
+  update_esc();
 }

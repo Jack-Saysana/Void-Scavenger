@@ -102,6 +102,10 @@ extern STATS stats;
 extern INVENTORY inventory;
 extern SHIP_PARTS ship_parts;
 extern SKILL_TREE skill_tree;
+extern UI_COMP *ui_esc_root;
+extern UI_COMP *ui_render_root;
+extern int render_distance_display_value;
+extern UI_COMP *ui_control_root;
 
 // Arena globals
 extern float space_size;
