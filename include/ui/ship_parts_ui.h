@@ -41,5 +41,6 @@ I_SLOT *inv_first_avail();
 void ship_shield_recharge_delay(void *);
 void update_timer_args(void *, void *, void *);
 int add_timer(float, void *, int, void *);
+void reset_equipped_parts();
 
 #endif

@@ -34,6 +34,21 @@
 #define S_BASE_ACCEL (5.0)
 #define S_BASE_THRUSTER_PWR_DRAW (5.0)
 
+//Base ship parts
+#define S_BASE_PART_HULL        ((S_HULL){S_BASE_HEALTH})
+#define S_BASE_PART_REACTOR     ((S_REACTOR){S_BASE_PWR_OUTPUT, \
+                                S_BASE_REACTOR_RECHARGE, S_BASE_STALL_TIME})
+#define S_BASE_PART_SHIELD      ((S_SHIELD){S_BASE_SHIELD,\
+                                S_BASE_SHIELD_RECHARGE, S_BASE_SHIELD_DELAY,\
+                                S_BASE_PWR_DRAW})
+#define S_BASE_PART_WEAPON      ((S_WEAPON){BALLISTIC, S_BASE_DAMAGE,\
+                                S_BASE_FIRERATE, S_BASE_WEAPON_PWR_DRAW,\
+                                S_BASE_PROJ_SPEED, S_BASE_RANGE,\
+                                S_BASE_BULLET_SIZE, S_BASE_NUM_BARRELS})
+#define S_BASE_PART_WING        ((S_WING){S_BASE_ANG_VEL, S_BASE_ANG_ACCEL})
+#define S_BASE_PART_THRUSTER    ((S_THRUSTER){S_BASE_VEL, S_BASE_ACCEL,\
+                                S_BASE_THRUSTER_PWR_DRAW})
+
 //Ship Enemy Type Constants
 #define S_E_HEALTH_TYPE_BASE_HEALTH (160.0)
 #define S_E_HEALTH_TYPE_BASE_SHIELD (40.0)
