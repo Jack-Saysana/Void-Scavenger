@@ -7,6 +7,8 @@
 static ENTITY *dead_zones[6] = { NULL };
 static ENTITY *sp_station = NULL;
 static ENTITY *st_terminal = NULL;
+static int attack_types_picked[E_BASE_NUM_TYPES];
+static int mov_types_picked[E_BASE_NUM_TYPES];
 
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
