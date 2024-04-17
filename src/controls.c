@@ -219,7 +219,6 @@ void input_keys(GLFWwindow *window) {
         /* FPS movment */
         if (i == GLFW_KEY_W) {
           /* Handle W press */
-          //move_camera(&camera, MOVE_FORWARD);
           vec3 player_forward;
           glm_quat_rotatev(st_player.ent->rotation, (vec3){-1.0, 0.0, 0.0}, player_forward);
           glm_normalize(player_forward);
@@ -229,7 +228,6 @@ void input_keys(GLFWwindow *window) {
         }
         if (i == GLFW_KEY_S) {
           /* Handle S press */
-          // move_camera(&camera, MOVE_BACKWARD);
           vec3 player_forward;
           glm_quat_rotatev(st_player.ent->rotation, (vec3){-1.0, 0.0, 0.0}, player_forward);
           glm_normalize(player_forward);
@@ -240,7 +238,6 @@ void input_keys(GLFWwindow *window) {
         }
         if (i == GLFW_KEY_A) {
           /* Handle A press */
-          // move_camera(&camera, MOVE_LEFT);
           vec3 player_left;
           glm_quat_rotatev(st_player.ent->rotation, (vec3){0.0, 0.0, 1.0},
                             player_left);
@@ -251,7 +248,6 @@ void input_keys(GLFWwindow *window) {
         }
         if (i == GLFW_KEY_D) {
           /* Handle D press */
-          // move_camera(&camera, MOVE_RIGHT);
           vec3 player_left;
           glm_quat_rotatev(st_player.ent->rotation, (vec3){0.0, 0.0, 1.0},
                             player_left);

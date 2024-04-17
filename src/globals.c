@@ -75,5 +75,12 @@ I_SLOT equipped_weapon;
 I_SLOT equipped_wing;
 
 int part_spawn_chance[RARITY_LEVELS] = {
-  50, 25, 10, 3, 0 
+  50, 25, 10, 3, 0
 };
+
+TRACK *tracks = NULL;
+size_t num_tracks = 0;
+size_t tracks_buff_len = 0;
+int AUDIO_EXPLICIT = 0;
+int AUDIO_DEBUG = 0;
+float global_volume = 1.0;

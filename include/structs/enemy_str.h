@@ -35,6 +35,7 @@ typedef struct station_enemy {
   int invuln;
   int dropped_xp;
   float amount_xp;
+  int can_speak;
 
   // Animation data
   unsigned int cur_frame;

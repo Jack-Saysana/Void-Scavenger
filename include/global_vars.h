@@ -2,10 +2,14 @@
 #define __GLOBAL_VARS_H__
 
 #include <engine/engine.h>
+#include <AL/al.h>
+#include <AL/alc.h>
+#include <AL/alut.h>
 #include <structs/camera_str.h>
 #include <structs/player_str.h>
 #include <structs/ship_str.h>
 #include <structs/enemy_str.h>
+#include <structs/audio_str.h>
 #include <structs/projectile_str.h>
 #include <structs/item_str.h>
 #include <structs/obstacle_str.h>
@@ -124,5 +128,13 @@ extern I_SLOT equipped_wing;
 // Parts Spawn Chance
 
 extern int part_spawn_chance[];
+
+// Audio
+extern TRACK *tracks;
+extern size_t tracks_buff_len;
+extern size_t num_tracks;
+extern int AUDIO_EXPLICIT;
+extern int AUDIO_DEBUG;
+extern float global_volume;
 
 #endif

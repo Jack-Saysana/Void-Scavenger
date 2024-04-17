@@ -32,3 +32,6 @@ void decrement_enemy_health(size_t, float, float);
 void update_query_spheres();
 
 void add_timer(float, void *, int, void *);
+
+void update_station_player_audio(vec3, versor);
+void update_ship_noises();
