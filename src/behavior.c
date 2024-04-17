@@ -991,7 +991,9 @@ void print_cell_data(CELL_DATA *data) {
       for (size_t k = 0; k < num_corridors; k++) {
         if (pos[X] == cd_obs[k].ent->translation[X] &&
             pos[Y] == cd_obs[k].ent->translation[Z]) {
+	  #ifdef __linux__
           printf("%02ld ", k);
+          #endif
           found = 1;
           break;
         }
