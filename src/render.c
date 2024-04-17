@@ -111,7 +111,6 @@ int init_scene() {
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  ESHOOT_ON = 0;
 
   glm_vec3_copy((vec3) {0.0, 0.0, 0.0}, camera.pos);
   camera.pitch = 0.0;
@@ -256,15 +255,17 @@ void render_game_entity(ENTITY *ent) {
     } else if ( projectiles[(size_t) wrapper->data].type == LASER) {
       set_vec3("col",(vec3){1.0, 0.0, 0.0}, proj_shader);
     }
-    if (projectiles[(size_t) wrapper->data].collision) {
-      mat4 model = GLM_MAT4_IDENTITY_INIT;
-      glm_translate(model, ent->translation);
-      glm_quat_rotate(model, ent->rotation, model);
-      glm_scale(model, ent->scale);
-      set_mat4("model", model, proj_shader);
-      draw_model(proj_shader, c_mods.sphere_model.model);
-    } else {
-      draw_entity(proj_shader, ent);
+    if (projectiles[(size_t) wrapper->data].type != T_MELEE) {
+      if (projectiles[(size_t) wrapper->data].collision) {
+        mat4 model = GLM_MAT4_IDENTITY_INIT;
+        glm_translate(model, ent->translation);
+        glm_quat_rotate(model, ent->rotation, model);
+        glm_scale(model, ent->scale);
+        set_mat4("model", model, proj_shader);
+        draw_model(proj_shader, c_mods.sphere_model.model);
+      } else {
+        draw_entity(proj_shader, ent);
+      }
     }
   } else if (wrapper->type == ENEMY_OBJ) {
     ST_ENEMY *enemy = st_enemies + (size_t) wrapper->data;

@@ -60,7 +60,7 @@ float REAL_DELTA = 0.0;
 
 float space_size = 0.0;
 
-int ESHOOT_ON = 0;
+int ESHOOT_ON = 1;
 int keyboard_enabled = 1;
 time_t start_time;
 
@@ -75,5 +75,5 @@ I_SLOT equipped_weapon;
 I_SLOT equipped_wing;
 
 int part_spawn_chance[RARITY_LEVELS] = {
-  50, 25, 10, 3, 0 
+  50, 25, 10, 3, 0
 };
