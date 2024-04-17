@@ -20,6 +20,4 @@ ENTITY *init_player_ship_ent();
 
 int add_timer(float, void *, int, void *);
 void recharge_ship_shield(SHIP *);
-size_t init_projectile(vec3, vec3, float, PROJ_SOURCE, S_WEAPON_T, float,
-                       float, size_t);
-int projectile_insert_sim(size_t);
+

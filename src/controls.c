@@ -79,7 +79,7 @@ void mouse_pos_callback(GLFWwindow *window, double x_pos, double y_pos) {
     versor rot_quat = GLM_QUAT_IDENTITY_INIT;
     glm_mat4_quat(rotation, rot_quat);
     glm_quat_mul(rot_quat, st_player.ent->rotation, st_player.ent->rotation);
-  } else if (!CURSOR_ENABLED && mode == SPACE) {
+  } else if (!CURSOR_ENABLED && mode == SPACE && !player_ship.ship_stalled) {
     mat3 ship_to_world = GLM_MAT3_IDENTITY_INIT;
     glm_quat_rotatev(player_ship.ent->rotation, (vec3) { 0.0, 0.0, -1.0 },
                      ship_to_world[X]);
@@ -241,23 +241,27 @@ void input_keys(GLFWwindow *window) {
           }
         }
       } else if (!console_enabled && mode == SPACE) {
-        if (i == GLFW_KEY_W) {
+        if (i == GLFW_KEY_W && !player_ship.ship_stalled) {
           /* Handle W press */
           /* increases curent speed of player ship up to max_vel */
           if (player_ship.cur_speed >= player_ship.thruster.max_vel) {
             player_ship.cur_speed = player_ship.thruster.max_vel;
           } else {
             player_ship.cur_speed += DELTA_TIME * player_ship.thruster.max_accel;
+            use_power(player_ship.thruster.max_power_draw, 
+                      TYPE_THRUSTER, &player_ship);
           }
-        } else if (i == GLFW_KEY_S){
+        } else if (i == GLFW_KEY_S && !player_ship.ship_stalled){
           /* Handle S press */
           /* decreases curent speed of player ship down to 0 */
           if (player_ship.cur_speed <= 0 ) {
             player_ship.cur_speed = 0;
           } else {
             player_ship.cur_speed -= DELTA_TIME * player_ship.thruster.max_accel;
+            use_power(player_ship.thruster.max_power_draw, 
+                      TYPE_THRUSTER, &player_ship);
           }
-        } else if (i == GLFW_KEY_A){
+        } else if (i == GLFW_KEY_A && !player_ship.ship_stalled){
           /* Handle A press */
           /*roll left*/
           vec3 ship_forward;
@@ -267,7 +271,7 @@ void input_keys(GLFWwindow *window) {
           versor rot_quat = GLM_QUAT_IDENTITY_INIT;
           glm_mat4_quat(rotation, rot_quat);
           glm_quat_mul(rot_quat, player_ship.ent->rotation, player_ship.ent->rotation);
-        } else if (i == GLFW_KEY_D){
+        } else if (i == GLFW_KEY_D && !player_ship.ship_stalled){
           /* Handle D press */
           /*roll right*/
           vec3 ship_forward;
