@@ -111,9 +111,13 @@ int init_control() {
 void update_control() {
   if (ui_control_root->enabled) {
     if (mode == SPACE) {
+      snprintf(control_instruction_title_buffer, CONTROL_BUFFER_SIZE, "SPACE MODE");
+      set_ui_text(ui_control_instruction_title_text, control_instruction_title_buffer, 1.0, T_CENTER, fixed_sys, GLM_VEC3_ZERO);
       snprintf(control_instruction_key_buffer, CONTROL_BUFFER_SIZE, "[W]ACCEL  [S]DECEL  [A]LEFT ROLL        [D]RIGHT ROLL       ");
       set_ui_text(ui_control_instruction_key_text, control_instruction_key_buffer, 1.0, T_CENTER, fixed_sys, GLM_VEC3_ZERO);
     } else if (mode == STATION) {
+      snprintf(control_instruction_title_buffer, CONTROL_BUFFER_SIZE, "STATION MODE");
+      set_ui_text(ui_control_instruction_title_text, control_instruction_title_buffer, 1.0, T_CENTER, fixed_sys, GLM_VEC3_ZERO);
       snprintf(control_instruction_key_buffer, CONTROL_BUFFER_SIZE, "[W]FORWARD  [S]BACK [A]LEFT     [D]RIGHT");
       set_ui_text(ui_control_instruction_key_text, control_instruction_key_buffer, 1.0, T_CENTER, fixed_sys, GLM_VEC3_ZERO);
     }

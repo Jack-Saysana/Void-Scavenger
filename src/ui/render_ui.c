@@ -137,11 +137,11 @@ void update_render() {
   set_ui_text(ui_render_render_distance_value_text, render_distance_buffer, 0.42, T_CENTER, fixed_sys, GLM_VEC3_ZERO);
 
   if (mode == SPACE) {
-    RENDER_DIST = (SP_BASE_RENDER_DIST / 100) * render_distance_multiplier;
-    SIM_DIST = (SP_BASE_SIM_DIST / 100) * render_distance_multiplier;
+    set_render_dist((SP_BASE_RENDER_DIST / 100) * render_distance_multiplier);
+    set_sim_dist((SP_BASE_SIM_DIST / 100) * render_distance_multiplier);
   } else if (mode == STATION) {
-    RENDER_DIST = (ST_BASE_RENDER_DIST / 100) * render_distance_multiplier;
-    SIM_DIST = (ST_BASE_SIM_DIST / 100) * render_distance_multiplier;
+    set_render_dist((ST_BASE_RENDER_DIST / 100) * render_distance_multiplier);
+    set_sim_dist((ST_BASE_SIM_DIST / 100) * render_distance_multiplier);
   }
 }
 

@@ -35,3 +35,5 @@ void glowing_items_on_click();
 
 /* ================= EXTERNALLY DEFINED FUNCTIONS ================ */
 UI_COMP *init_blue_button(UI_COMP *, vec2, float, float, int);
+void set_render_dist(float dist);
+void set_sim_dist(float dist);
