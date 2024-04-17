@@ -54,6 +54,7 @@ int init_space_mode() {
   player_ship.wrapper_offset = init_wrapper(PLAYER_SHIP_OBJ, player_ship.ent,
                                             (void *) &player_ship);
   player_ship.cur_speed = 0.0;
+  reset_sp_player_state();
 
   // Place player ship entity into simulations
   status = player_ship_insert_sim();
@@ -214,6 +215,8 @@ int init_station_mode() {
   reset_physics(st_player.ent);
   st_player.wrapper_offset = init_wrapper(PLAYER_OBJ, st_player.ent,
                                           (void *) &st_player);
+  reset_st_player_state();
+
   // Place station entities in simulations
   status = init_enemy_buffer();
   if (status) {

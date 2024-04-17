@@ -119,3 +119,5 @@ void set_st_waypoint_enabled(int);
 void reset_dmg_ui_state();
 
 void reset_inventory();
+void reset_st_player_state();
+void reset_sp_player_state();

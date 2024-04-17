@@ -42,6 +42,11 @@ size_t init_projectile(vec3 pos, vec3 dir, float speed, PROJ_SOURCE source,
     fprintf(stderr, "Error: Unable to allocate projectile entity\n");
     return INVALID_INDEX;
   }
+  if (type == T_MELEE) {
+    projectile->ent->scale[X] = 5.0;
+    projectile->ent->scale[Y] = 2.0;
+    projectile->ent->scale[Z] = 5.0;
+  }
 
   projectile->wrapper_offset = init_wrapper(PROJ_OBJ, projectile->ent,
                                            (void *) num_projectiles);

@@ -127,7 +127,7 @@ void sp_enemy_pathfind(size_t index) {
   if (ESHOOT_ON && enemy->e_can_shoot) {
     /* fire rate timer */
     enemy->e_can_shoot = 0;
-    add_timer(1, (void *) &enemy->e_can_shoot, 1, NULL);
+    add_timer(enemy->weapon.fire_rate, (void *) &enemy->e_can_shoot, 1, NULL);
     /* get ship vectors */
     vec3 ship_forward;
     glm_quat_rotatev(enemy->ent->rotation, (vec3){-1.0, 0.0, 0.0}, ship_forward);
@@ -325,7 +325,7 @@ void st_enemy_pathfind(size_t index) {
     enemy->ent->velocity[X] = vel[X];
     enemy->ent->velocity[Z] = vel[Z];
   }
-  if (alignment < 0.99) {
+  if (alignment < 1.0) {
     vec3 test_dir = GLM_VEC3_ZERO_INIT;
     glm_vec3_cross(forward, target_dir, test_dir);
     glm_vec3_normalize(test_dir);
@@ -338,14 +338,56 @@ void st_enemy_pathfind(size_t index) {
     glm_vec3_zero(enemy->ent->ang_velocity);
   }
 
-  // Animate walk cycle
-  if (enemy->cur_frame == INVALID_FRAME && target_speed) {
+  // Attack Player
+  float player_alignment = glm_vec3_dot(forward, to_player);
+  if (enemy->weapon_type == RANGED && clear_shot && player_alignment > 0.9 &&
+      ESHOOT_ON && enemy->can_shoot) {
+    enemy->can_shoot = 0;
+    add_timer(enemy->fire_rate, (void *) &enemy->can_shoot, 1, NULL);
+
+    vec3 proj_pos = GLM_VEC3_ZERO_INIT;
+    glm_vec3_scale(forward, 1.0, proj_pos);
+    glm_vec3_add(enemy->ent->translation, proj_pos, proj_pos);
+
+    size_t proj_index = init_projectile(proj_pos,
+                                        forward,
+                                        ST_E_BASE_PROJ_SPEED +
+                                        enemy->cur_speed,
+                                        SRC_ENEMY,
+                                        LASER,
+                                        ST_E_BASE_PROJ_DAMAGE,
+                                        ST_E_BASE_PROJ_RANGE,
+                                        1);
+    projectile_insert_sim(proj_index);
+
+    enemy->cur_frame = 0;
+    add_timer(0.016, st_enemy_shoot_anim, -1000, (void *) index);
+  } else if (enemy->weapon_type == MELEE && clear_shot &&
+             player_alignment > 0.9 && ESHOOT_ON && enemy->can_shoot &&
+             player_dist < 3.0) {
+    enemy->can_shoot = 0;
+    add_timer(enemy->fire_rate, (void *) &enemy->can_shoot, 1, NULL);
+
+    vec3 proj_pos = GLM_VEC3_ZERO_INIT;
+    glm_vec3_scale_as(forward, 2.0, proj_pos);
+    glm_vec3_add(enemy->ent->translation, proj_pos, proj_pos);
+
+    size_t proj_index = init_projectile(proj_pos,
+                                        forward,
+                                        enemy->cur_speed + 0.01,
+                                        SRC_ENEMY,
+                                        T_MELEE,
+                                        ST_E_BASE_PROJ_DAMAGE,
+                                        0.2,
+                                        1);
+    projectile_insert_sim(proj_index);
+
+    enemy->cur_frame = 0;
+    add_timer(0.016, st_enemy_swing_anim, -1000, (void *) index);
+  } else if (enemy->cur_frame == INVALID_FRAME && target_speed) {
+    // Animate walk cycle
     enemy->cur_frame = 0;
     add_timer(0.016, st_enemy_walk_cycle, -1000, (void *) index);
-  } else if (enemy->cur_frame != INVALID_FRAME && target_speed == 0.0) {
-    enemy->cur_frame = INVALID_FRAME;
-    update_timer_args(st_enemy_walk_cycle, (void *) index,
-                      (void *) INVALID_INDEX);
   }
 }
 

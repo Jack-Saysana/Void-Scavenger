@@ -42,7 +42,9 @@ void print_cell_data(CELL_DATA *);
 
 int add_timer(float, void *, int, void *);
 void update_timer_args(void *, void *, void *);
-void st_enemy_walk_cycle(void *);
 size_t init_projectile(vec3, vec3, float, PROJ_SOURCE, S_WEAPON_T, float,
                        float, size_t);
 int projectile_insert_sim(size_t);
+void st_enemy_shoot_anim(void *);
+void st_enemy_swing_anim(void *);
+void st_enemy_walk_cycle(void *);

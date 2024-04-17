@@ -168,9 +168,9 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
     if (proj->source == SRC_ENEMY && (target_wrapper->type == PLAYER_OBJ ||
         target_wrapper->type == PLAYER_SHIP_OBJ)) {
       if (mode == STATION || proj->type == BALLISTIC) {
-        decrement_player_shield(proj->damage, 0.1);
+        decrement_player_shield(proj->damage, 0.03);
         st_player.total_damage_taken += proj->damage;
-      } else { 
+      } else {
         float shield_dmg = 0;
         float health_dmg = 0;
         if (proj->type == LASER) {
@@ -199,7 +199,7 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
           st_player.total_damage_dealt += proj->damage;
         }
         decrement_enemy_shield((size_t) target_wrapper->data, proj->damage, 0.1);
-        if (mode == STATION && st_enemies[(size_t)target_wrapper->data].cur_health <= 0.0 && 
+        if (mode == STATION && st_enemies[(size_t)target_wrapper->data].cur_health <= 0.0 &&
             st_enemies[(size_t)target_wrapper->data].dropped_xp == 0) {
           /*Enemey killed by player */
           st_player.total_enemies_defeated++;
@@ -217,7 +217,7 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
         }
       } else {
         if (proj->type == BALLISTIC) {
-          if (sp_enemies[(size_t)target_wrapper->data].cur_health > 0.0 && 
+          if (sp_enemies[(size_t)target_wrapper->data].cur_health > 0.0 &&
               !sp_enemies[(size_t)target_wrapper->data].invuln) {
             st_player.total_damage_dealt += proj->damage;
           }
@@ -241,10 +241,10 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
             if (!sp_enemies[(size_t)target_wrapper->data].invuln) {
               st_player.total_damage_dealt += sp_enemies[(size_t)target_wrapper->data].cur_shield;
             }
-            decrement_enemy_shield((size_t) target_wrapper->data, 
+            decrement_enemy_shield((size_t) target_wrapper->data,
                                    sp_enemies[(size_t)target_wrapper->data].cur_shield, 0.1);
           } else {
-            if (sp_enemies[(size_t)target_wrapper->data].cur_health > 0.0 && 
+            if (sp_enemies[(size_t)target_wrapper->data].cur_health > 0.0 &&
               !sp_enemies[(size_t)target_wrapper->data].invuln) {
               if (health_dmg < sp_enemies[(size_t)target_wrapper->data].cur_health) {
                 st_player.total_damage_dealt += health_dmg;
@@ -399,6 +399,10 @@ void decrement_player_shield(float damage, float timing) {
     }
   } else if (mode == STATION && !st_player.invuln) {
     st_player.cur_shield -= damage;
+    update_timer_memory(&st_player.recharging_shield, NULL);
+    st_player.recharging_shield = 0;
+    add_timer(st_player.shield_recharge_delay, &st_player.recharging_shield,
+              1, NULL);
     if (st_player.cur_shield <= 0.0) {
       player_health_dmg();
       st_player.cur_health += st_player.cur_shield;

@@ -138,7 +138,7 @@ void mouse_button_callback(GLFWwindow *window, int button, int action,
                                             forward,
                                             10.0 + st_player.speed,
                                             SRC_PLAYER,
-                                            player_ship.weapon.type,
+                                            LASER,
                                             st_player.damage,
                                             100.0,
                                             1);

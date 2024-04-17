@@ -88,10 +88,12 @@ size_t init_enemy(size_t index) {
   }
   if (gen_rand_int(2)) {
     new_enemy->weapon_type = MELEE;
+    new_enemy->fire_rate = E_BASE_FIRERATE_MELEE;
   } else {
     new_enemy->weapon_type = RANGED;
   }
   new_enemy->invuln = 0;
+  new_enemy->can_shoot = 1;
   new_enemy->cur_frame = INVALID_FRAME;
   new_enemy->dropped_xp = 0;
 
@@ -114,9 +116,14 @@ void delete_enemy(size_t index) {
   }
 
   update_timer_memory(&st_enemies[index].invuln, NULL);
+  update_timer_memory(&st_enemies[index].can_shoot, NULL);
   update_timer_args(st_enemy_walk_cycle, (void *) index,
                     (void *) INVALID_INDEX);
   update_timer_args(st_enemy_hurt_anim, (void *) index,
+                    (void *) INVALID_INDEX);
+  update_timer_args(st_enemy_shoot_anim, (void *) index,
+                    (void *) INVALID_INDEX);
+  update_timer_args(st_enemy_swing_anim, (void *) index,
                     (void *) INVALID_INDEX);
   free_entity(st_enemies[index].ent);
   delete_wrapper(st_enemies[index].wrapper_offset);
@@ -129,9 +136,15 @@ void delete_enemy(size_t index) {
   st_enemies[index] = st_enemies[num_enemies];
   update_timer_memory(&st_enemies[num_enemies].invuln,
                       &st_enemies[index].invuln);
+  update_timer_memory(&st_enemies[num_enemies].can_shoot,
+                      &st_enemies[index].can_shoot);
   update_timer_args(st_enemy_walk_cycle, (void *) num_enemies,
                     (void *) index);
   update_timer_args(st_enemy_hurt_anim, (void *) num_enemies,
+                    (void *) index);
+  update_timer_args(st_enemy_shoot_anim, (void *) num_enemies,
+                    (void *) index);
+  update_timer_args(st_enemy_swing_anim, (void *) num_enemies,
                     (void *) index);
   SOBJ *wrapper = object_wrappers + st_enemies[index].wrapper_offset;
   wrapper->data = (void *) index;
@@ -313,6 +326,7 @@ void delete_enemy_ship(size_t index) {
   }
 
   update_timer_memory(&sp_enemies[index].invuln, NULL);
+  update_timer_memory(&sp_enemies[index].e_can_shoot, NULL);
   update_timer_args(sp_enemy_shield_dmg, (void *) index,
                     (void *) INVALID_INDEX);
   update_timer_args(ship_shield_recharge_delay, (void *) index,
@@ -328,6 +342,8 @@ void delete_enemy_ship(size_t index) {
   sp_enemies[index] = sp_enemies[num_enemies];
   update_timer_memory(&sp_enemies[num_enemies].invuln,
                       &sp_enemies[index].invuln);
+  update_timer_memory(&sp_enemies[num_enemies].e_can_shoot,
+                      &sp_enemies[index].e_can_shoot);
   update_timer_args(sp_enemy_shield_dmg, (void *) num_enemies,
                     (void *) index);
   update_timer_args(ship_shield_recharge_delay, (void *) num_enemies,
@@ -435,9 +451,10 @@ void st_enemy_walk_cycle(void *args) {
   }
 
   ST_ENEMY *enemy = st_enemies + index;
-  if (enemy->invuln) {
+  if (enemy->invuln || glm_vec3_norm(enemy->ent->velocity) <= 0.01) {
     return;
   }
+
   size_t duration = 0;
   if (enemy->weapon_type == RANGED) {
     duration = enemy->ent->model->animations[E_ANIM_WALK_RANGED].duration;
@@ -477,6 +494,44 @@ void st_enemy_hurt_anim(void *args) {
       enemy->cur_frame = INVALID_FRAME;
       enemy->invuln = 0;
     }
+  }
+}
+
+void st_enemy_shoot_anim(void *args) {
+  size_t index = (size_t) args;
+  if (index == INVALID_INDEX) {
+    return;
+  }
+
+  ST_ENEMY *enemy = st_enemies + index;
+  size_t duration = 0;
+  duration = enemy->ent->model->animations[E_ANIM_SHOOTING].duration;
+  animate(enemy->ent, E_ANIM_SHOOTING, enemy->cur_frame);
+
+  if (enemy->cur_frame < duration) {
+    enemy->cur_frame++;
+    add_timer(0.02, st_enemy_shoot_anim, -1000, args);
+  } else {
+    enemy->cur_frame = INVALID_FRAME;
+  }
+}
+
+void st_enemy_swing_anim(void *args) {
+  size_t index = (size_t) args;
+  if (index == INVALID_INDEX) {
+    return;
+  }
+
+  ST_ENEMY *enemy = st_enemies + index;
+  size_t duration = 0;
+  duration = enemy->ent->model->animations[E_ANIM_SWINGING].duration;
+  animate(enemy->ent, E_ANIM_SWINGING, enemy->cur_frame);
+
+  if (enemy->cur_frame < duration) {
+    enemy->cur_frame++;
+    add_timer(0.02, st_enemy_swing_anim, -1000, args);
+  } else {
+    enemy->cur_frame = INVALID_FRAME;
   }
 }
 
