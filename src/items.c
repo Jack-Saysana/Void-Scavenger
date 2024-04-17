@@ -215,197 +215,196 @@ void set_enhancements(ST_ITEM *part, int type, int rarity) {
     part->rarity = rarity;
 
     /* Creates a range of plus or minus 2.5% which the modifier can add */
-    float randomness = gen_rand_float(0.5) + 0.975;
-    float b_offset = randomness * BLUE_DIFF;
-    float g_offset = randomness * GREEN_DIFF;
-    float p_offset = randomness * PURPLE_DIFF;
-    float gd_offset = randomness * GOLD_DIFF;
+    // float randomness = gen_rand_float(0.5) + 0.975;
+    // float b_offset = randomness * BLUE_DIFF;
+    // float g_offset = randomness * GREEN_DIFF;
+    // float p_offset = randomness * PURPLE_DIFF;
+    // float gd_offset = randomness * GOLD_DIFF;
 
+    float modifier_pool = 0;
+    if (rarity == WHITE_RARITY) {
+      modifier_pool = WHITE_POOL;
+    } else if (rarity == BLUE_RARITY) {
+      modifier_pool = BLUE_POOL;
+    } else if (rarity == GREEN_RARITY) {
+      modifier_pool = GREEN_POOL;
+    } else if (rarity == PURPLE_RARITY) {
+      modifier_pool = PURPLE_POOL;
+    } else if (rarity == GOLD_RARITY) {
+      modifier_pool = GOLD_POOL;
+    }
+    float pick[MAX_NUM_STATS];
     if (type == TYPE_THRUSTER) {
-      part->enhancements.thruster.max_vel = S_BASE_VEL;
-      part->enhancements.thruster.max_accel = S_BASE_ACCEL;
-      part->enhancements.thruster.max_power_draw = S_BASE_PWR_DRAW;
-      if (rarity == BLUE_RARITY) {
-        part->enhancements.thruster.max_vel *= b_offset;
-        part->enhancements.thruster.max_accel *= b_offset;
-        part->enhancements.thruster.max_power_draw *= b_offset;
-      } else if (rarity == GREEN_RARITY) {
-        part->enhancements.thruster.max_vel *= g_offset;
-        part->enhancements.thruster.max_accel *= g_offset;
-        part->enhancements.thruster.max_power_draw *= g_offset;
-      } else if (rarity == PURPLE_RARITY) {
-        part->enhancements.thruster.max_vel *= p_offset;
-        part->enhancements.thruster.max_accel *= p_offset;
-        part->enhancements.thruster.max_power_draw *= p_offset;
-      } else if (rarity == GOLD_RARITY) {
-        part->enhancements.thruster.max_vel *= gd_offset;
-        part->enhancements.thruster.max_accel *= gd_offset;
-        part->enhancements.thruster.max_power_draw *= gd_offset;
+      modifier_pool = modifier_pool * THRUSTER_NUM_STATS; //3
+      distribute_picks(THRUSTER_NUM_STATS, modifier_pool, pick);
+      part->enhancements.thruster.max_vel = THRUSTER_MAX_VEL_MIN 
+        + (pick[0] * THRUSTER_MAX_VEL_MODIFIER);
+      part->enhancements.thruster.max_accel = THRUSTER_MAX_ACCEL_MIN
+        + (pick[1] * THRUSTER_MAX_ACCEL_MODIFIER);
+      part->enhancements.thruster.max_power_draw = THRUSTER_MAX_POWER_DRAW_MIN 
+        + (pick[2] * THRUSTER_MAX_POWER_DRAW_MODIFIER);
+      if (part->enhancements.thruster.max_power_draw < THRUSTER_PWR_DRAW_CAP) {
+        float rebate = THRUSTER_PWR_DRAW_CAP -  
+          part->enhancements.thruster.max_power_draw;
+        part->enhancements.thruster.max_power_draw = THRUSTER_PWR_DRAW_CAP;
+        rebate = rebate / THRUSTER_MAX_POWER_DRAW_MODIFIER;
+        rebate = fabs(rebate);
+        distribute_picks(THRUSTER_NUM_STATS - 1, rebate, pick);
+        part->enhancements.thruster.max_vel += 
+          (pick[0] * THRUSTER_MAX_VEL_MODIFIER);
+        part->enhancements.thruster.max_accel += 
+          (pick[1] * THRUSTER_MAX_ACCEL_MODIFIER);
       }
     } else if (type == TYPE_HULL) {
-      part->enhancements.hull.max_health = S_BASE_HEALTH;
-      if (rarity == BLUE_RARITY) {
-        part->enhancements.hull.max_health *= b_offset;
-      } else if (rarity == GREEN_RARITY) {
-        part->enhancements.hull.max_health *= g_offset;
-      } else if (rarity == PURPLE_RARITY) {
-        part->enhancements.hull.max_health *= p_offset;
-      } else if (rarity == GOLD_RARITY) {
-        part->enhancements.hull.max_health *= gd_offset;
-      }
+      modifier_pool = modifier_pool * HULL_NUM_STATS; //1
+      float pick1 = modifier_pool;
+      part->enhancements.hull.max_health = HULL_HEALTH_MIN 
+        + (pick1 * HULL_HEALTH_MODIFIER);
     } else if (type == TYPE_REACTOR) {
-      part->enhancements.reactor.max_output = S_BASE_PWR_OUTPUT;
-      if (rarity == BLUE_RARITY) {
-        part->enhancements.reactor.max_output *= b_offset;
-      } else if (rarity == GREEN_RARITY) {
-        part->enhancements.reactor.max_output *= g_offset;
-      } else if (rarity == PURPLE_RARITY) {
-        part->enhancements.reactor.max_output *= p_offset;
-      } else if (rarity == GOLD_RARITY) {
-        part->enhancements.reactor.max_output *= gd_offset;
+      modifier_pool = modifier_pool * REACTOR_NUM_STATS; //3
+      distribute_picks(REACTOR_NUM_STATS, modifier_pool, pick);
+      part->enhancements.reactor.max_output = REACTOR_MAX_POWER_OUTPUT_MIN 
+        + (pick[0] * REACTOR_MAX_POWER_OUTPUT_MODIFIER);
+      part->enhancements.reactor.recharge_rate = REACTOR_RECHARGE_RATE_MIN
+        + (pick[1] * REACTOR_RECHARGE_RATE_MODIFIER);
+      part->enhancements.reactor.stall_time = REACTOR_STALL_TIME_MIN
+        + (pick[2] * REACTOR_STALL_TIME_MODIFIER);
+      if (part->enhancements.reactor.stall_time < REACTOR_STALL_TIME_CAP) {
+        float rebate = REACTOR_STALL_TIME_CAP -  
+          part->enhancements.reactor.stall_time;
+        part->enhancements.reactor.stall_time = REACTOR_STALL_TIME_CAP;
+        rebate = rebate / REACTOR_STALL_TIME_MODIFIER;
+        rebate = fabs(rebate);
+        distribute_picks(REACTOR_NUM_STATS - 1, rebate, pick);
+        part->enhancements.reactor.max_output +=
+          (pick[0] * REACTOR_MAX_POWER_OUTPUT_MODIFIER);
+        part->enhancements.reactor.recharge_rate += 
+          (pick[1] * REACTOR_RECHARGE_RATE_MODIFIER);
       }
     } else if (type == TYPE_SHIELD) {
-      part->enhancements.shield.max_shield = S_BASE_SHIELD;
-      part->enhancements.shield.recharge_rate = S_BASE_SHIELD_RECHARGE;
-      part->enhancements.shield.recharge_delay = S_BASE_SHIELD_DELAY;
-      part->enhancements.shield.power_draw = S_BASE_PWR_DRAW;
-      if (rarity == BLUE_RARITY) {
-        part->enhancements.shield.max_shield *= b_offset;
-        part->enhancements.shield.recharge_rate *= b_offset;
-        part->enhancements.shield.recharge_delay *= b_offset;
-        part->enhancements.shield.power_draw *= b_offset;
-      } else if (rarity == GREEN_RARITY) {
-        part->enhancements.shield.max_shield *= g_offset;
-        part->enhancements.shield.recharge_rate *= g_offset;
-        part->enhancements.shield.recharge_delay *= g_offset;
-        part->enhancements.shield.power_draw *= g_offset;
-      } else if (rarity == PURPLE_RARITY) {
-        part->enhancements.shield.max_shield *= p_offset;
-        part->enhancements.shield.recharge_rate *= p_offset;
-        part->enhancements.shield.recharge_delay *= p_offset;
-        part->enhancements.shield.power_draw *= p_offset;
-      } else if (rarity == GOLD_RARITY) {
-        part->enhancements.shield.max_shield *= gd_offset;
-        part->enhancements.shield.recharge_rate *= gd_offset;
-        part->enhancements.shield.recharge_delay *= gd_offset;
-        part->enhancements.shield.power_draw *= gd_offset;
+      modifier_pool = modifier_pool * SHIELD_NUM_STATS; //4
+      distribute_picks(SHIELD_NUM_STATS, modifier_pool, pick);
+      part->enhancements.shield.max_shield = SHIELD_MAX_SHIELD_MIN
+        + (pick[0] * SHIELD_MAX_SHIELD_MODIFIER);
+      part->enhancements.shield.recharge_rate = SHIELD_RECHARGE_RATE_MIN
+        + (pick[1] * SHIELD_RECHARGE_RATE_MODIFIER);
+      part->enhancements.shield.recharge_delay = SHIELD_RECHARGE_DELAY_MIN 
+        + (pick[2] * SHIELD_RECHARGE_DELAY_MODIFIER);
+      part->enhancements.shield.power_draw = SHIELD_POWER_DRAW_MIN 
+        + (pick[3] * SHIELD_POWER_DRAW_MODIFIER);
+      if(part->enhancements.shield.recharge_delay < SHIELD_RECHARGE_DELAY_CAP) {
+        float rebate =  SHIELD_RECHARGE_DELAY_CAP - 
+            part->enhancements.shield.recharge_delay;
+        part->enhancements.shield.recharge_delay = SHIELD_RECHARGE_DELAY_CAP;
+        rebate = rebate / SHIELD_RECHARGE_DELAY_MODIFIER;
+        rebate = fabs(rebate);
+        distribute_picks(SHIELD_NUM_STATS - 1, rebate, pick);
+        part->enhancements.shield.max_shield += 
+            (pick[0] * SHIELD_MAX_SHIELD_MODIFIER);
+        part->enhancements.shield.recharge_rate += 
+            (pick[1] * SHIELD_RECHARGE_RATE_MODIFIER);
+        part->enhancements.shield.power_draw += 
+            (pick[2] * SHIELD_POWER_DRAW_MODIFIER); 
       }
-    } else if (type == TYPE_WEAPON_BALLISTIC) {
-      /* TODO: Fill in with ballistic specific changes */
-      part->enhancements.weapon.type = BALLISTIC;
-      part->enhancements.weapon.damage = S_BASE_DAMAGE;
-      part->enhancements.weapon.fire_rate = S_BASE_FIRERATE;
-      part->enhancements.weapon.max_power_draw = S_BASE_PWR_DRAW;
-      part->enhancements.weapon.proj_speed = S_BASE_PROJ_SPEED;
-      part->enhancements.weapon.range = S_BASE_RANGE;
-      if (rarity == BLUE_RARITY) {
-        part->enhancements.weapon.damage *= b_offset;
-        part->enhancements.weapon.fire_rate *= b_offset;
-        part->enhancements.weapon.max_power_draw *= b_offset;
-        part->enhancements.weapon.proj_speed *= b_offset;
-        part->enhancements.weapon.range *= b_offset;
-      } else if (rarity == GREEN_RARITY) {
-        part->enhancements.weapon.damage *= g_offset;
-        part->enhancements.weapon.fire_rate *= g_offset;
-        part->enhancements.weapon.max_power_draw *= g_offset;
-        part->enhancements.weapon.proj_speed *= g_offset;
-        part->enhancements.weapon.range *= g_offset;
-      } else if (rarity == PURPLE_RARITY) {
-        part->enhancements.weapon.damage *= p_offset;
-        part->enhancements.weapon.fire_rate *= p_offset;
-        part->enhancements.weapon.max_power_draw *= p_offset;
-        part->enhancements.weapon.proj_speed *= p_offset;
-        part->enhancements.weapon.range *= p_offset;
-      } else if (rarity == GOLD_RARITY) {
-        part->enhancements.weapon.damage *= gd_offset;
-        part->enhancements.weapon.fire_rate *= gd_offset;
-        part->enhancements.weapon.max_power_draw *= gd_offset;
-        part->enhancements.weapon.proj_speed *= gd_offset;
-        part->enhancements.weapon.range *= gd_offset;
+      if (part->enhancements.shield.power_draw < SHIELD_PWR_DRAW_CAP) {
+        float rebate = SHIELD_PWR_DRAW_CAP - 
+            part->enhancements.shield.power_draw;
+        part->enhancements.shield.power_draw = SHIELD_PWR_DRAW_CAP;
+        rebate = rebate / SHIELD_POWER_DRAW_MODIFIER;
+        rebate = fabs(rebate);
+        distribute_picks(SHIELD_NUM_STATS - 2, rebate, pick);
+        part->enhancements.shield.max_shield += 
+            (pick[0] * SHIELD_MAX_SHIELD_MODIFIER);
+        part->enhancements.shield.recharge_rate += 
+            (pick[1] * SHIELD_RECHARGE_RATE_MODIFIER);
       }
-    } else if (type == TYPE_WEAPON_LASER) {
-      /* TODO: Fill in with laser specific changes */
-      part->enhancements.weapon.type = LASER;
-      part->enhancements.weapon.damage = S_BASE_DAMAGE;
-      part->enhancements.weapon.fire_rate = S_BASE_FIRERATE_LASER;
-      part->enhancements.weapon.max_power_draw = S_BASE_PWR_DRAW;
-      part->enhancements.weapon.proj_speed = S_BASE_PROJ_SPEED;
-      part->enhancements.weapon.range = S_BASE_RANGE;
-      if (rarity == BLUE_RARITY) {
-        part->enhancements.weapon.damage *= b_offset;
-        part->enhancements.weapon.fire_rate *= b_offset;
-        part->enhancements.weapon.max_power_draw *= b_offset;
-        part->enhancements.weapon.proj_speed *= b_offset;
-        part->enhancements.weapon.range *= b_offset;
-      } else if (rarity == GREEN_RARITY) {
-        part->enhancements.weapon.damage *= g_offset;
-        part->enhancements.weapon.fire_rate *= g_offset;
-        part->enhancements.weapon.max_power_draw *= g_offset;
-        part->enhancements.weapon.proj_speed *= g_offset;
-        part->enhancements.weapon.range *= g_offset;
-      } else if (rarity == PURPLE_RARITY) {
-        part->enhancements.weapon.damage *= p_offset;
-        part->enhancements.weapon.fire_rate *= p_offset;
-        part->enhancements.weapon.max_power_draw *= p_offset;
-        part->enhancements.weapon.proj_speed *= p_offset;
-        part->enhancements.weapon.range *= p_offset;
-      } else if (rarity == GOLD_RARITY) {
-        part->enhancements.weapon.damage *= gd_offset;
-        part->enhancements.weapon.fire_rate *= gd_offset;
-        part->enhancements.weapon.max_power_draw *= gd_offset;
-        part->enhancements.weapon.proj_speed *= gd_offset;
-        part->enhancements.weapon.range *= gd_offset;
+    } else if (type == TYPE_WEAPON_BALLISTIC || type == TYPE_WEAPON_LASER 
+               || type == TYPE_WEAPON_PLASMA) {
+      modifier_pool = modifier_pool * WEAPON_NUM_STATS; //7
+      distribute_picks(WEAPON_NUM_STATS, modifier_pool, pick);
+      part->enhancements.weapon.damage = WEAPON_DAMAGE_MIN
+        + (pick[0] * WEAPON_DAMAGE_MODIFIER);
+      if (type == TYPE_WEAPON_LASER) {
+        part->enhancements.weapon.fire_rate = WEAPON_FIRE_RATE_MIN_LASER
+        + (pick[1] * WEAPON_FIRE_RATE_MODIFIER);
+        part->enhancements.weapon.type = LASER;
+      } else {
+        part->enhancements.weapon.fire_rate = WEAPON_FIRE_RATE_MIN
+        + (pick[1] * WEAPON_FIRE_RATE_MODIFIER);
+        if (type == TYPE_WEAPON_BALLISTIC) {
+          part->enhancements.weapon.type = BALLISTIC;
+        } else {
+          part->enhancements.weapon.type = PLASMA;
+        }
       }
-
-    } else if (type == TYPE_WEAPON_PLASMA) {
-      /* TODO: Fill in with plasma specific changes */
-      part->enhancements.weapon.type = PLASMA;
-      part->enhancements.weapon.damage = S_BASE_DAMAGE;
-      part->enhancements.weapon.fire_rate = S_BASE_FIRERATE;
-      part->enhancements.weapon.max_power_draw = S_BASE_PWR_DRAW;
-      part->enhancements.weapon.proj_speed = S_BASE_PROJ_SPEED;
-      part->enhancements.weapon.range = S_BASE_RANGE;
-      if (rarity == BLUE_RARITY) {
-        part->enhancements.weapon.damage *= b_offset;
-        part->enhancements.weapon.fire_rate *= b_offset;
-        part->enhancements.weapon.max_power_draw *= b_offset;
-        part->enhancements.weapon.proj_speed *= b_offset;
-        part->enhancements.weapon.range *= b_offset;
-      } else if (rarity == GREEN_RARITY) {
-        part->enhancements.weapon.damage *= g_offset;
-        part->enhancements.weapon.fire_rate *= g_offset;
-        part->enhancements.weapon.max_power_draw *= g_offset;
-        part->enhancements.weapon.proj_speed *= g_offset;
-        part->enhancements.weapon.range *= g_offset;
-      } else if (rarity == PURPLE_RARITY) {
-        part->enhancements.weapon.damage *= p_offset;
-        part->enhancements.weapon.fire_rate *= p_offset;
-        part->enhancements.weapon.max_power_draw *= p_offset;
-        part->enhancements.weapon.proj_speed *= p_offset;
-        part->enhancements.weapon.range *= p_offset;
-      } else if (rarity == GOLD_RARITY) {
-        part->enhancements.weapon.damage *= gd_offset;
-        part->enhancements.weapon.fire_rate *= gd_offset;
-        part->enhancements.weapon.max_power_draw *= gd_offset;
-        part->enhancements.weapon.proj_speed *= gd_offset;
-        part->enhancements.weapon.range *= gd_offset;
+      part->enhancements.weapon.max_power_draw = WEAPON_POWER_DRAW_MIN 
+        + (pick[2] * WEAPON_POWER_DRAW_MODIFIER);
+      part->enhancements.weapon.proj_speed = WEAPON_PROJ_SPEED_MIN
+        + (pick[3] * WEAPON_PROJ_SPEED_MODIFIER);
+      part->enhancements.weapon.range = WEAPON_RANGE_MIN
+        + (pick[4] * WEAPON_RANGE_MODIFIER);
+      part->enhancements.weapon.bullet_size = WEAPON_BULLET_SIZE_MIN
+        + (pick[5] * WEAPON_BULLET_SIZE_MODIFIER);
+      part->enhancements.weapon.num_barrels = WEAPON_NUM_BARRELS_MIN
+        + (pick[6] * WEAPON_NUM_BARRELS_MODIFIER);
+      if (part->enhancements.weapon.num_barrels > WEAPON_NUM_BARRELS_CAP) {
+        float rebate = (float)part->enhancements.weapon.num_barrels - 
+            WEAPON_NUM_BARRELS_CAP;
+        part->enhancements.weapon.num_barrels = (int)WEAPON_NUM_BARRELS_CAP;
+        rebate = rebate / WEAPON_NUM_BARRELS_MODIFIER;
+        distribute_picks(WEAPON_NUM_STATS - 1, rebate, pick);
+        part->enhancements.weapon.damage += (pick[0] * WEAPON_DAMAGE_MODIFIER);
+        part->enhancements.weapon.max_power_draw += 
+            (pick[1] * WEAPON_POWER_DRAW_MODIFIER);
+        part->enhancements.weapon.proj_speed += 
+            (pick[2] * WEAPON_PROJ_SPEED_MODIFIER);
+        part->enhancements.weapon.range += 
+            (pick[3] * WEAPON_RANGE_MODIFIER);
+        part->enhancements.weapon.bullet_size += 
+            (pick[4] * WEAPON_BULLET_SIZE_MODIFIER);
+        part->enhancements.weapon.fire_rate += 
+            (pick[5] * WEAPON_FIRE_RATE_MODIFIER);
+      }
+      if (part->enhancements.weapon.fire_rate < WEAPON_FIRERATE_CAP) {
+        float rebate =  WEAPON_FIRERATE_CAP - 
+            part->enhancements.weapon.fire_rate;
+        part->enhancements.weapon.fire_rate = WEAPON_FIRERATE_CAP;
+        rebate = rebate / WEAPON_FIRE_RATE_MODIFIER;
+        rebate = fabs(rebate);
+        distribute_picks(WEAPON_NUM_STATS - 2, rebate, pick);
+        part->enhancements.weapon.damage += (pick[0] * WEAPON_DAMAGE_MODIFIER);
+        part->enhancements.weapon.max_power_draw += 
+            (pick[1] * WEAPON_POWER_DRAW_MODIFIER);
+        part->enhancements.weapon.proj_speed += 
+            (pick[2] * WEAPON_PROJ_SPEED_MODIFIER);
+        part->enhancements.weapon.range += 
+            (pick[3] * WEAPON_RANGE_MODIFIER);
+        part->enhancements.weapon.bullet_size += 
+            (pick[4] * WEAPON_BULLET_SIZE_MODIFIER);
+      }
+      if (part->enhancements.weapon.max_power_draw < WEAPON_PWR_DRAW_CAP) {
+        float rebate =  WEAPON_PWR_DRAW_CAP - 
+            part->enhancements.weapon.max_power_draw;
+        part->enhancements.weapon.max_power_draw = WEAPON_PWR_DRAW_CAP;
+        rebate = rebate / WEAPON_POWER_DRAW_MODIFIER;
+        rebate = fabs(rebate);
+        distribute_picks(WEAPON_NUM_STATS - 3, rebate, pick);
+        part->enhancements.weapon.damage += 
+            (pick[0] * WEAPON_DAMAGE_MODIFIER);
+        part->enhancements.weapon.proj_speed += 
+            (pick[1] * WEAPON_PROJ_SPEED_MODIFIER);
+        part->enhancements.weapon.range += 
+            (pick[2] * WEAPON_RANGE_MODIFIER);
+        part->enhancements.weapon.bullet_size += 
+            (pick[3] * WEAPON_BULLET_SIZE_MODIFIER);
       }
     } else if (type == TYPE_WING) {
-      part->enhancements.wing.max_ang_vel = S_BASE_ANG_VEL;
-      part->enhancements.wing.max_ang_accel = S_BASE_ANG_ACCEL;
-      if (rarity == BLUE_RARITY) {
-        part->enhancements.wing.max_ang_vel *= b_offset;
-        part->enhancements.wing.max_ang_accel *= b_offset;
-      } else if (rarity == GREEN_RARITY) {
-        part->enhancements.wing.max_ang_vel *= g_offset;
-        part->enhancements.wing.max_ang_accel *= g_offset; 
-      } else if (rarity == PURPLE_RARITY) {
-        part->enhancements.wing.max_ang_vel *= p_offset;
-        part->enhancements.wing.max_ang_accel *= p_offset;
-      } else if (rarity == GOLD_RARITY) {
-        part->enhancements.wing.max_ang_vel *= gd_offset;
-        part->enhancements.wing.max_ang_accel *= gd_offset;
-      }
+      modifier_pool = modifier_pool * WING_NUM_STATS; //2
+      distribute_picks(WING_NUM_STATS, modifier_pool, pick);
+      part->enhancements.wing.max_ang_vel = WING_ANG_VEL_MIN
+        + (pick[0] * WING_ANG_VEL_MODIFIER);
+      part->enhancements.reactor.recharge_rate = WING_ANG_ACCEL_MIN
+        + (pick[1] * WING_ANG_ACCEL_MODIFIER);
     } else {
       fprintf(stderr, "Trying to add enhancement to unknown part type (%d)!\n",
               type);
@@ -415,6 +414,34 @@ void set_enhancements(ST_ITEM *part, int type, int rarity) {
     fprintf(stderr, "Trying to add enhancements to NULL ship_part (%d)!\n",
             type);
     return;
+  }
+}
+
+void distribute_picks(int num_stats, float pool_size, float * pick) {
+  float spot_picks[num_stats];
+  for (int i = 0; i < num_stats - 1; i++) {
+    spot_picks[i] = gen_rand_float(1000.0);
+  }
+  spot_picks[num_stats - 1] = 1000.0;
+  int swapped = 0;
+  for (int i = 0; i < num_stats - 1; i++) {
+    swapped = 0;
+    for (int j = 0; j < num_stats - i - 1; j++) {
+      if (spot_picks[j] > spot_picks[j+1]) {
+        float temp = spot_picks[j];
+        spot_picks[j] = spot_picks[j+1];
+        spot_picks[j+1] = temp;
+        swapped = 1;
+      }
+    }
+    if (swapped == 0) {
+      break;
+    }
+  }
+  float last_spot_pick = 0;
+  for (int k = 0; k < num_stats; k++) {
+    pick[k] = ((spot_picks[k] - last_spot_pick) / 1000.0) * pool_size;
+    last_spot_pick = spot_picks[k];
   }
 }
 

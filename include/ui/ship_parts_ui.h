@@ -15,7 +15,7 @@ Implements the functionality for defining UI components for player's space
 mode ship parts.
 */
 
-#define SHIP_PARTS_TEXT_BUFFER_SIZE (128)
+#define SHIP_PARTS_TEXT_BUFFER_SIZE (256)
 
 /* GLOBALS */
 SHIP_PARTS ship_parts;
@@ -42,5 +42,6 @@ I_SLOT *inv_first_avail();
 void ship_shield_recharge_delay(void *);
 void update_timer_args(void *, void *, void *);
 int add_timer(float, void *, int, void *);
+void reset_equipped_parts();
 
 #endif

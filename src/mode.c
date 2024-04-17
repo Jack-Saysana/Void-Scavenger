@@ -86,7 +86,6 @@ int init_space_mode() {
   for (int i = 0; i < E_BASE_NUM_TYPES; i++) {
     attack_types_picked[i] = gen_rand_int(e_attack_type_range + 1);
     mov_types_picked[i] = gen_rand_int(e_mov_type_range + 1);
-    printf("\nPicked Attack_type %d, Mov Type %d\n", attack_types_picked[i], mov_types_picked[i]);
   }
   if (num_enemies > 0) {
     for (int i = 0; i < num_enemies; i++) {
@@ -217,7 +216,7 @@ int init_station_mode() {
 
   // Initialize simulations
   physics_sim = init_sim(STATION_SIZE, STATION_DEPTH);
-  sim_add_force(physics_sim, (vec3) { 0.0, -GRAVITY, 0.0 });
+  sim_add_force(physics_sim, (vec3) { 0.0, -ST_GRAVITY, 0.0 });
   combat_sim = init_sim(STATION_SIZE, STATION_DEPTH);
   render_sim = init_sim(STATION_SIZE, STATION_DEPTH);
   event_sim = init_sim(STATION_SIZE, STATION_DEPTH);

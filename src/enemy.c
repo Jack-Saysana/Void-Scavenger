@@ -76,14 +76,18 @@ size_t init_enemy(size_t index, int weapon) {
   glm_vec3_zero(new_enemy->nearby_enemies);
 
   if (index == BRUTE) {
-    new_enemy->max_health = E_BASE_HEALTH_BRUTE;
-    new_enemy->cur_health = E_BASE_HEALTH_BRUTE;
+    new_enemy->max_health = E_BASE_HEALTH_BRUTE + 
+        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP) 
+        * E_HEALTH_MODIFIER_BRUTE;
+    new_enemy->cur_health = new_enemy->max_health;
     new_enemy->cur_speed = E_BASE_SPEED_BRUTE;
     new_enemy->fire_rate = E_BASE_FIRERATE_BRUTE;
     new_enemy->amount_xp = E_BRUTE_XP;
   } else {
-    new_enemy->max_health = E_BASE_HEALTH_NORMAL;
-    new_enemy->cur_health = E_BASE_HEALTH_NORMAL;
+    new_enemy->max_health = E_BASE_HEALTH_NORMAL + 
+        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP) 
+        * E_HEALTH_MODIFIER_NORMAL;
+    new_enemy->cur_health = new_enemy->max_health;
     new_enemy->cur_speed = E_BASE_SPEED_NORMAL;
     new_enemy->fire_rate = E_BASE_FIRERATE_NORMAL;
     new_enemy->amount_xp = E_BASE_XP;
@@ -269,32 +273,60 @@ size_t init_enemy_ship(int index, int mov_type) {
 
   if (index == STANDARD_BALLISTIC) {
     new_enemy->weapon.type = BALLISTIC;
-    new_enemy->hull.max_health = S_BASE_HEALTH;
-    new_enemy->shield.max_shield = S_BASE_SHIELD;
+    new_enemy->hull.max_health = S_BASE_HEALTH + 
+        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
+        * S_E_STANDARD_TYPE_HEALTH_MODIFIER;
+    new_enemy->shield.max_shield = S_BASE_SHIELD +
+        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
+        * S_E_STANDARD_TYPE_SHIELD_MODIFIER;
   } else if (index == HEALTH_BALLISTIC) {
     new_enemy->weapon.type = BALLISTIC;
-    new_enemy->hull.max_health = S_E_HEALTH_TYPE_BASE_HEALTH;
-    new_enemy->shield.max_shield = S_E_HEALTH_TYPE_BASE_SHIELD;
+    new_enemy->hull.max_health = S_E_HEALTH_TYPE_BASE_HEALTH + 
+        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
+        * S_E_HEALTH_TYPE_HEALTH_MODIFIER;
+    new_enemy->shield.max_shield = S_E_HEALTH_TYPE_BASE_SHIELD + 
+        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
+        * S_E_HEALTH_TYPE_SHIELD_MODIFIER;
   } else if (index == SHIELD_BALLISTIC) {
     new_enemy->weapon.type = BALLISTIC;
-    new_enemy->hull.max_health = S_E_SHIELD_TYPE_BASE_HEALTH;
-    new_enemy->shield.max_shield = S_E_SHIELD_TYPE_BASE_SHIELD;
+    new_enemy->hull.max_health = S_E_SHIELD_TYPE_BASE_HEALTH + 
+        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
+        * S_E_SHIELD_TYPE_HEALTH_MODIFIER;
+    new_enemy->shield.max_shield = S_E_SHIELD_TYPE_BASE_SHIELD +
+        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
+        * S_E_SHIELD_TYPE_SHIELD_MODIFIER;
   } else if (index == STANDARD_PLASMA) {
     new_enemy->weapon.type = PLASMA;
-    new_enemy->hull.max_health = S_BASE_HEALTH;
-    new_enemy->shield.max_shield = S_BASE_SHIELD;
+    new_enemy->hull.max_health = S_BASE_HEALTH +
+        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
+        * S_E_STANDARD_TYPE_HEALTH_MODIFIER;
+    new_enemy->shield.max_shield = S_BASE_SHIELD +
+        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
+        * S_E_STANDARD_TYPE_SHIELD_MODIFIER;
   } else if (index == STANDARD_LASER) {
     new_enemy->weapon.type = LASER;
-    new_enemy->hull.max_health = S_BASE_HEALTH;
-    new_enemy->shield.max_shield = S_BASE_SHIELD;
+    new_enemy->hull.max_health = S_BASE_HEALTH +
+        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
+        * S_E_STANDARD_TYPE_HEALTH_MODIFIER;
+    new_enemy->shield.max_shield = S_BASE_SHIELD + 
+        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
+        * S_E_STANDARD_TYPE_SHIELD_MODIFIER;
   } else if (index == HEALTH_LASER) {
     new_enemy->weapon.type = LASER;
-    new_enemy->hull.max_health = S_E_HEALTH_TYPE_BASE_HEALTH;
-    new_enemy->shield.max_shield = S_E_HEALTH_TYPE_BASE_SHIELD;
+    new_enemy->hull.max_health = S_E_HEALTH_TYPE_BASE_HEALTH +
+        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
+        * S_E_HEALTH_TYPE_HEALTH_MODIFIER;
+    new_enemy->shield.max_shield = S_E_HEALTH_TYPE_BASE_SHIELD + 
+        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
+        * S_E_HEALTH_TYPE_SHIELD_MODIFIER;
   } else if (index == SHIELD_PLASMA) {
     new_enemy->weapon.type = PLASMA;
-    new_enemy->hull.max_health = S_E_SHIELD_TYPE_BASE_HEALTH;
-    new_enemy->shield.max_shield = S_E_SHIELD_TYPE_BASE_SHIELD;
+    new_enemy->hull.max_health = S_E_SHIELD_TYPE_BASE_HEALTH +
+        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
+        * S_E_SHIELD_TYPE_HEALTH_MODIFIER;
+    new_enemy->shield.max_shield = S_E_SHIELD_TYPE_BASE_SHIELD +
+        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
+        * S_E_SHIELD_TYPE_SHIELD_MODIFIER;
   }
 
   if (mov_type == E_LOW_SPEED) {

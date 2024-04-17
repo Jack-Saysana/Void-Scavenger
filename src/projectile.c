@@ -46,6 +46,10 @@ size_t init_projectile(vec3 pos, vec3 dir, float speed, PROJ_SOURCE source,
     projectile->ent->scale[X] = 5.0;
     projectile->ent->scale[Y] = 2.0;
     projectile->ent->scale[Z] = 5.0;
+  } else {
+    vec3 scaler = {1.0,1.0,1.0};
+    glm_vec3_scale_as(scaler,player_ship.weapon.bullet_size,scaler);
+    glm_vec3_copy(scaler, projectile->ent->scale);
   }
 
   projectile->wrapper_offset = init_wrapper(PROJ_OBJ, projectile->ent,

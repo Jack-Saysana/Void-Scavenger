@@ -65,6 +65,7 @@ typedef struct player {
   float cur_shield;
   float max_shield;
   float speed;
+  float jump;
   float fire_rate;
   float shield_recharge_rate;
   float shield_recharge_delay;
