@@ -38,6 +38,7 @@ void st_enemy_pathfind(size_t);
 int gen_rand_int(int);
 void ship_shield_recharge_delay(void *);
 void recharge_ship_shield(SHIP *);
+void reactor_recharge(SHIP *);
 size_t init_projectile(vec3, vec3, float, PROJ_SOURCE, S_WEAPON_T, float,
                        float, size_t);
 int projectile_insert_sim(size_t);

@@ -30,7 +30,7 @@ void tick() {
   player_ship_thrust_move();
   recharge_player_shield();
   delete_stale_objects();
-  reactor_recharge();
+  reactor_recharge_player();
 
   // Ticked Audio
   if (mode == SPACE) {

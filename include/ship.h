@@ -10,6 +10,7 @@
 void use_power(float, int, SHIP *);
 void stall_ship(SHIP *);
 void destall_ship(SHIP *);
+void destall_enemy_ship(SHIP *);
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 

@@ -162,9 +162,11 @@ void sp_enemy_pathfind(size_t index) {
   }
   glm_vec3_scale_as(forward, enemy->cur_speed, enemy->ent->velocity);
 
-  if (ESHOOT_ON && enemy->e_can_shoot && player_alignment > 0.9) {
+  if (ESHOOT_ON && enemy->e_can_shoot && player_alignment > 0.9 &&
+      !enemy->ship_stalled) {
     enemy->e_can_shoot = 0;
     add_timer(1, (void *) &enemy->e_can_shoot, 1, NULL);
+    use_power(enemy->weapon.max_power_draw, TYPE_WEAPON, enemy);
 
     vec3 gun_pos = GLM_VEC3_ZERO_INIT;
     glm_vec3_scale_as(forward, 12.0, gun_pos);

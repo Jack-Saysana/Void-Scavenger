@@ -72,6 +72,7 @@
 #define S_E_HIGH_SPEED_BASE_ACCEL (7.0)
 #define S_E_ULTRA_SPEED_BASE_VEL (40.0)
 #define S_E_ULTRA_SPEED_BASE_ACCEL (8.0)
+#define S_E_STALL_TIME (3.5)
 
 
 //Ship Part Generation
@@ -155,6 +156,7 @@
 #define S_WEAPON_PWR_USE_FACTOR (0.5)
 #define S_SHIELD_PWR_DELAY_FACTOR (0.75)
 #define S_REACTOR_DESTALL_MIN (0.25)
+#define S_THRUSTER_REVERSE_FACTOR (0.5)
 
 // Station Ship Parts Constants
 #define NUM_STATION_SHIP_PART_TYPES (6)

@@ -271,61 +271,82 @@ size_t init_enemy_ship(int index, int mov_type) {
     return -1;
   }
 
+  new_enemy->hull = S_BASE_PART_HULL;
+  new_enemy->reactor = S_BASE_PART_REACTOR;
+  new_enemy->shield = S_BASE_PART_SHIELD;
+  new_enemy->weapon = S_BASE_PART_WEAPON;
+  new_enemy->wing = S_BASE_PART_WING;
+  new_enemy->thruster = S_BASE_PART_THRUSTER;
+
   if (index == STANDARD_BALLISTIC) {
     new_enemy->weapon.type = BALLISTIC;
     new_enemy->hull.max_health = S_BASE_HEALTH + 
-        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
+        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP 
+        ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
         * S_E_STANDARD_TYPE_HEALTH_MODIFIER;
     new_enemy->shield.max_shield = S_BASE_SHIELD +
-        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
+        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP 
+        ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
         * S_E_STANDARD_TYPE_SHIELD_MODIFIER;
   } else if (index == HEALTH_BALLISTIC) {
     new_enemy->weapon.type = BALLISTIC;
     new_enemy->hull.max_health = S_E_HEALTH_TYPE_BASE_HEALTH + 
-        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
+        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP 
+        ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
         * S_E_HEALTH_TYPE_HEALTH_MODIFIER;
     new_enemy->shield.max_shield = S_E_HEALTH_TYPE_BASE_SHIELD + 
-        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
+        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP 
+        ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
         * S_E_HEALTH_TYPE_SHIELD_MODIFIER;
   } else if (index == SHIELD_BALLISTIC) {
     new_enemy->weapon.type = BALLISTIC;
     new_enemy->hull.max_health = S_E_SHIELD_TYPE_BASE_HEALTH + 
-        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
+        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP 
+        ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
         * S_E_SHIELD_TYPE_HEALTH_MODIFIER;
     new_enemy->shield.max_shield = S_E_SHIELD_TYPE_BASE_SHIELD +
-        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
+        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP 
+        ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
         * S_E_SHIELD_TYPE_SHIELD_MODIFIER;
   } else if (index == STANDARD_PLASMA) {
     new_enemy->weapon.type = PLASMA;
     new_enemy->hull.max_health = S_BASE_HEALTH +
-        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
+        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP 
+        ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
         * S_E_STANDARD_TYPE_HEALTH_MODIFIER;
     new_enemy->shield.max_shield = S_BASE_SHIELD +
-        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
+        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP 
+        ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
         * S_E_STANDARD_TYPE_SHIELD_MODIFIER;
   } else if (index == STANDARD_LASER) {
     new_enemy->weapon.type = LASER;
     new_enemy->hull.max_health = S_BASE_HEALTH +
-        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
+        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP 
+        ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
         * S_E_STANDARD_TYPE_HEALTH_MODIFIER;
     new_enemy->shield.max_shield = S_BASE_SHIELD + 
-        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
+        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP 
+        ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
         * S_E_STANDARD_TYPE_SHIELD_MODIFIER;
   } else if (index == HEALTH_LASER) {
     new_enemy->weapon.type = LASER;
     new_enemy->hull.max_health = S_E_HEALTH_TYPE_BASE_HEALTH +
-        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
+        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP 
+        ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
         * S_E_HEALTH_TYPE_HEALTH_MODIFIER;
     new_enemy->shield.max_shield = S_E_HEALTH_TYPE_BASE_SHIELD + 
-        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
+        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP 
+        ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
         * S_E_HEALTH_TYPE_SHIELD_MODIFIER;
   } else if (index == SHIELD_PLASMA) {
     new_enemy->weapon.type = PLASMA;
     new_enemy->hull.max_health = S_E_SHIELD_TYPE_BASE_HEALTH +
-        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
+        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP 
+        ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
         * S_E_SHIELD_TYPE_HEALTH_MODIFIER;
     new_enemy->shield.max_shield = S_E_SHIELD_TYPE_BASE_SHIELD +
-        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
+        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP 
+        ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
         * S_E_SHIELD_TYPE_SHIELD_MODIFIER;
   }
 
@@ -358,10 +379,13 @@ size_t init_enemy_ship(int index, int mov_type) {
 
   new_enemy->cur_health = new_enemy->hull.max_health;
   new_enemy->cur_shield = new_enemy->shield.max_shield;
+  new_enemy->cur_power_use = 0.0;
   new_enemy->recharging_shield = 0;
+  new_enemy->reactor_can_recharge = 1;
   new_enemy->invuln = 0;
   new_enemy->e_can_shoot = 1;
-
+  new_enemy->ship_stalled = 0;
+  
   num_enemies++;
   if (num_enemies == enemy_buff_len) {
     int status = double_buffer((void **) &sp_enemies, &enemy_buff_len,
@@ -494,6 +518,7 @@ void enemy_behavior() {
     wrapper = object_wrappers + (size_t) sim_enemies[i].b_ent->data;
     if (mode == SPACE && wrapper->type == ENEMY_SHIP_OBJ) {
       recharge_ship_shield(sp_enemies + (size_t) wrapper->data);
+      reactor_recharge(sp_enemies + (size_t) wrapper->data);
       sp_enemy_pathfind((size_t) wrapper->data);
     } else if (mode == STATION && wrapper->type == ENEMY_OBJ) {
       st_enemy_pathfind((size_t) wrapper->data);

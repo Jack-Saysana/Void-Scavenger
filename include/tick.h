@@ -37,4 +37,4 @@ void add_timer(float, void *, int, void *);
 
 void update_station_player_audio(vec3, versor);
 void update_ship_noises();
-void reactor_recharge();
+void reactor_recharge_player();

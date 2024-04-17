@@ -298,6 +298,12 @@ void recharge_player_shield() {
   }
 }
 
+void reactor_recharge_player() {
+  if (mode == SPACE) {
+    reactor_recharge(&player_ship);
+  }
+}
+
 void get_player_coordinates(vec3 coords) {
   if (mode == SPACE) {
     glm_vec3_copy(player_ship.ent->translation, coords);

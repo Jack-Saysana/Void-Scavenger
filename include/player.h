@@ -21,4 +21,6 @@ ENTITY *init_player_ship_ent();
 
 int add_timer(float, void *, int, void *);
 void recharge_ship_shield(SHIP *);
+void reactor_recharge(SHIP *);
+
 void update_ship_noises();
