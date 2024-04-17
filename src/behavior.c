@@ -374,7 +374,7 @@ void st_enemy_pathfind(size_t index) {
     add_timer(enemy->fire_rate, (void *) &enemy->can_shoot, 1, NULL);
 
     vec3 proj_pos = GLM_VEC3_ZERO_INIT;
-    glm_vec3_scale_as(forward, 2.0, proj_pos);
+    glm_vec3_scale_as(forward, 1.25, proj_pos);
     glm_vec3_add(enemy->ent->translation, proj_pos, proj_pos);
 
     size_t proj_index = init_projectile(proj_pos,
