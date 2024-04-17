@@ -25,8 +25,12 @@ void sp_enemy_pathfind(size_t index) {
   glm_vec3_cross(forward, up, side);
   glm_vec3_normalize(side);
 
-  float stop_time = -enemy->thruster.max_vel / -enemy->thruster.max_accel;
-  float stop_dist = (enemy->thruster.max_vel * stop_time) +
+  //float stop_time = -enemy->thruster.max_vel / -enemy->thruster.max_accel;
+  //float stop_dist = (enemy->thruster.max_vel * stop_time) +
+  //                  (0.5 * enemy->thruster.max_accel *
+  //                   enemy->thruster.max_accel * stop_time);
+  float stop_time = -enemy->cur_speed / -enemy->thruster.max_accel;
+  float stop_dist = (enemy->cur_speed * stop_time) +
                     (0.5 * enemy->thruster.max_accel *
                      enemy->thruster.max_accel * stop_time);
   float turning_rad = 50.0 + stop_dist;
@@ -314,9 +318,13 @@ void get_shot_target(vec3 e_pos, vec3 t_pos, vec3 t_vel, float proj_speed,
       t = t2;
     }
   } else if (t1 > 0.0) {
-    t = t1;
+    // Add constant to time to make enemies lead their shots a little bit more.
+    // This improves their aim.
+    t = t1 + SP_SHOT_DELAY;
   } else if (t2 > 0.0) {
-    t = t2;
+    // Add constant to time to make enemies lead their shots a little bit more.
+    // This improves their aim.
+    t = t2 + SP_SHOT_DELAY;
   } else {
     glm_vec3_sub(t_pos, e_pos, dest);
     glm_vec3_normalize(dest);

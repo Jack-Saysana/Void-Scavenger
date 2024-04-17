@@ -45,3 +45,4 @@ void set_item_prompt(int);
 
 void ship_shield_recharge_delay(void *);
 void update_timer_args(void *, void *, void *);
+void insert_sp_enemy();

@@ -54,6 +54,7 @@ int init_space_mode() {
   player_ship.wrapper_offset = init_wrapper(PLAYER_SHIP_OBJ, player_ship.ent,
                                             (void *) &player_ship);
   player_ship.cur_speed = 0.0;
+  glm_vec3_negate_to(sp_station->translation, player_ship.ent->translation);
 
   // Place player ship entity into simulations
   status = player_ship_insert_sim();
@@ -67,8 +68,8 @@ int init_space_mode() {
   srand(glfwGetTime());
   vec3 pos = GLM_VEC3_ZERO_INIT;
   versor rot = GLM_QUAT_IDENTITY_INIT;
-  int num_enemies = BASE_NUM_ENEMIES + (rand() % 5) - 2; //TODO update amount of enemeies based on level
-  //int num_enemies = 0; //TODO update amount of enemeies based on level
+  int num_enemies = BASE_NUM_ENEMIES +
+                    gen_rand_int(5 * (st_player.cur_level + 1));
   int e_attack_type_range = 0;
   int e_mov_type_range = 0;
   if (st_player.total_levels_completed > E_TYPE_UPDATE_2) {
@@ -81,8 +82,6 @@ int init_space_mode() {
     e_attack_type_range = 2;
     e_mov_type_range = 1;
   }
-  int attack_types_picked[E_BASE_NUM_TYPES];
-  int mov_types_picked[E_BASE_NUM_TYPES];
   for (int i = 0; i < E_BASE_NUM_TYPES; i++) {
     attack_types_picked[i] = gen_rand_int(e_attack_type_range + 1);
     mov_types_picked[i] = gen_rand_int(e_mov_type_range + 1);
@@ -117,6 +116,22 @@ int init_space_mode() {
   spawn_space_debris();
 
   return 0;
+}
+
+void insert_sp_enemy() {
+  vec3 pos = GLM_VEC3_ZERO_INIT;
+  versor rot = GLM_QUAT_IDENTITY_INIT;
+  gen_rand_vec3(&pos, 2.0 * space_size);
+  pos[X] -= space_size;
+  pos[Y] -= space_size;
+  pos[Z] -= space_size;
+
+  gen_rand_vec4(&rot, 1.0);
+  glm_quat_normalize(rot);
+  int attack_picker = gen_rand_int(E_BASE_NUM_TYPES);
+  int mov_picker = gen_rand_int(E_BASE_NUM_TYPES);
+  spawn_sp_enemy(pos, rot, attack_types_picked[attack_picker],
+                 mov_types_picked[mov_picker]);
 }
 
 void spawn_asteroids() {

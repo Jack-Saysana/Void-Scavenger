@@ -479,6 +479,8 @@ void decrement_enemy_shield(size_t index, float damage, float timing) {
       }
       if (enemy->cur_health <= 0.0) {
         object_wrappers[(size_t) enemy->wrapper_offset].to_delete = 1;
+        // Spawn new enemy to take its place
+        insert_sp_enemy();
       } else {
         enemy->invuln = 1;
         add_timer(timing, &enemy->invuln, 0, NULL);
@@ -502,6 +504,8 @@ void decrement_enemy_health(size_t index, float damage, float timing) {
       enemy->cur_health -= damage;
       if (enemy->cur_health <= 0.0) {
         object_wrappers[(size_t) enemy->wrapper_offset].to_delete = 1;
+        // Spawn new enemy to take its place
+        insert_sp_enemy();
       } else {
         enemy->invuln = 1;
         enemy->recharging_shield = 0;
