@@ -178,7 +178,7 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
     if (proj->source == SRC_ENEMY && (target_wrapper->type == PLAYER_OBJ ||
         target_wrapper->type == PLAYER_SHIP_OBJ)) {
       if (mode == STATION || proj->type == BALLISTIC) {
-        decrement_player_shield(proj->damage, 0.03);
+        //decrement_player_shield(proj->damage, 0.016);
         st_player.total_damage_taken += proj->damage;
       } else {
         float shield_dmg = 0;
