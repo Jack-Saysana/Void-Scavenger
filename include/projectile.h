@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <pthread.h>
 #include <engine/engine.h>
 #include <const.h>
 #include <cglm/cglm.h>

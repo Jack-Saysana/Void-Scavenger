@@ -1,6 +1,7 @@
 #ifndef __GLOBAL_VARS_H__
 #define __GLOBAL_VARS_H__
 
+#include <pthread.h>
 #include <engine/engine.h>
 #include <AL/al.h>
 #include <AL/alc.h>

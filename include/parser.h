@@ -4,6 +4,7 @@
 #include <structs/lexer_str.h>
 #include <structs/parser_str.h>
 #include <float.h>
+#include <pthread.h>
 #include <global_vars.h>
 #include <structs/ship_str.h>
 #include <const.h>

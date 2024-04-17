@@ -1,6 +1,7 @@
 #ifndef __SHIP_PARTS_UI__
 #define __SHIP_PARTS_UI__
 
+#include <pthread.h>
 #include <engine/ui_component.h>
 #include <ui/structs/ship_parts_ui_str.h>
 #include <global_vars.h>

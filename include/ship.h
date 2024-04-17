@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <pthread.h>
 #include <engine/engine.h>
 #include <global_vars.h>
 

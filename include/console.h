@@ -2,6 +2,7 @@
                       CONSOLE.h
   Responsible for handling console prototypes and functionality
 */
+#include <pthread.h>
 #include <global_vars.h>
 #include <structs/player_str.h>
 #include <structs/item_str.h>

@@ -1,4 +1,5 @@
 #include <GLFW/glfw3.h>
+#include <pthread.h>
 #include <engine/engine.h>
 #include <global_vars.h>
 #include <const.h>

@@ -5,6 +5,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <pthread.h>
 #include <global_vars.h>
 
 #define FUNC_PTR (-1000)

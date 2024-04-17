@@ -3,6 +3,7 @@
 #include <time.h>
 #include <cglm/cglm.h>
 #include <const.h>
+#include <pthread.h>
 #include <global_vars.h>
 
 #define IN            (0)

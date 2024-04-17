@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <cglm/cglm.h>
 #include <GLFW/glfw3.h>
+#include <pthread.h>
 #include <engine/engine.h>
 #include <const.h>
 #include <global_vars.h>

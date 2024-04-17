@@ -1,5 +1,6 @@
 #pragma once
 
+#include <pthread.h>
 #include <engine/engine.h>
 #include <global_vars.h>
 #include <stdio.h>
