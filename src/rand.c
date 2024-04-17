@@ -1,3 +1,4 @@
+#include <pthread.h>
 #include <engine/engine.h>
 #include <math.h>
 #include <time.h>
