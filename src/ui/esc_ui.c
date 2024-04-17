@@ -67,6 +67,7 @@ int init_esc() {
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
   );
   set_ui_text(ui_esc_control_button, "GAME CONTROL", 0.25, T_CENTER, fixed_sys, GLM_VEC3_ONE);
+  set_ui_on_click(ui_esc_control_button, (void *) control_on_click, NULL);
 
   ui_esc_difficulty_root = add_ui_comp(
     ui_esc_background, // UI_COMP *parent
@@ -94,9 +95,10 @@ void toggle_esc() {
   if (ui_esc_root->enabled) {
     set_ui_enabled(ui_esc_root, 0);
     CURSOR_ENABLED = 0;
-  } else if (ui_render_root->enabled) {
+  } else if (ui_render_root->enabled || ui_control_root->enabled) {
     set_ui_enabled(ui_esc_root, 0);
     set_ui_enabled(ui_render_root, 0);
+    set_ui_enabled(ui_control_root, 0);
     set_ui_enabled(inventory.ui_inventory_root, 0);
     set_ui_enabled(skill_tree.ui_skill_tree_root, 0);
     set_ui_enabled(ship_parts.ui_ship_parts_root, 0);
@@ -113,4 +115,9 @@ void toggle_esc() {
 void render_on_click() {
   set_ui_enabled(ui_esc_root, 0);
   set_ui_enabled(ui_render_root, 1);
+}
+
+void control_on_click() {
+  set_ui_enabled(ui_esc_root, 0);
+  set_ui_enabled(ui_control_root, 1);
 }

@@ -56,6 +56,12 @@ void init_ui_components() {
     exit(1);
   }
 
+  // Initialize control menu
+  if (init_control()) {
+    printf("Could not initialize control menu!\n");
+    exit(1);
+  }
+
   coordinates_ui_initialize();
   fps_ui_initialize();
   init_terminal_ui();
@@ -95,4 +101,5 @@ void update_ui_components() {
   update_damage_ui();
   update_main_menu_ui();
   update_render();
+  update_control();
 }

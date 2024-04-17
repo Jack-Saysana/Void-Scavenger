@@ -22,6 +22,7 @@ UI_COMP *ui_esc_difficulty_button;
 int init_esc();
 void toggle_esc();
 void render_on_click();
+void control_on_click();
 
 /* ================= EXTERNALLY DEFINED FUNCTIONS ================ */
 UI_COMP *init_blue_button(UI_COMP *, vec2, float, float, int);

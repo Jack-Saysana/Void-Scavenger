@@ -13,6 +13,8 @@ Implements the functionality for defining UI components for render menu.
     otherwise unsuccessful
 */
 int init_render() {
+  render_distance_multiplier = 50;
+
   ui_render_root = add_ui_comp(
     UI_ROOT_COMP, // UI_COMP *parent
     (vec2) { 0.0, 0.0 }, // vec2 pos
@@ -48,7 +50,7 @@ int init_render() {
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
   );
   set_ui_text(ui_render_back_button, "BACK", 0.25, T_CENTER, fixed_sys, GLM_VEC3_ONE);
-  set_ui_on_click(ui_render_back_button, (void *) back_on_click, NULL);
+  set_ui_on_click(ui_render_back_button, (void *) render_back_on_click, NULL);
   
   ui_render_render_distance_root = add_ui_comp(
     ui_render_background, // UI_COMP *parent
@@ -87,7 +89,9 @@ int init_render() {
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
   );
   set_ui_texture(ui_render_render_distance_value_text, "assets/transparent.png");
-  set_ui_text(ui_render_render_distance_value_text, "50", 0.42, T_CENTER, fixed_sys, GLM_VEC3_ZERO);
+  memset(render_distance_buffer, '\0', RENDER_BUFFER_SIZE);
+  snprintf(render_distance_buffer, RENDER_BUFFER_SIZE, "%d", render_distance_multiplier);
+  set_ui_text(ui_render_render_distance_value_text, render_distance_buffer, 0.42, T_CENTER, fixed_sys, GLM_VEC3_ZERO);
 
   ui_render_render_distance_plus_button = init_blue_button(
     ui_render_render_distance_root, // UI_COMP *parent
@@ -128,19 +132,34 @@ void update_render() {
   } else {
     set_ui_text(ui_render_glowing_items_button, "GLOWING ITEMS: OFF", 0.25, T_CENTER, fixed_sys, GLM_VEC3_ONE);
   }
+
+  snprintf(render_distance_buffer, RENDER_BUFFER_SIZE, "%d", render_distance_multiplier);
+  set_ui_text(ui_render_render_distance_value_text, render_distance_buffer, 0.42, T_CENTER, fixed_sys, GLM_VEC3_ZERO);
+
+  if (mode == SPACE) {
+    RENDER_DIST = (SP_BASE_RENDER_DIST / 100) * render_distance_multiplier;
+    SIM_DIST = (SP_BASE_SIM_DIST / 100) * render_distance_multiplier;
+  } else if (mode == STATION) {
+    RENDER_DIST = (ST_BASE_RENDER_DIST / 100) * render_distance_multiplier;
+    SIM_DIST = (ST_BASE_SIM_DIST / 100) * render_distance_multiplier;
+  }
 }
 
-void back_on_click() {
+void render_back_on_click() {
   set_ui_enabled(ui_esc_root, 1);
   set_ui_enabled(ui_render_root, 0);
 }
 
 void render_distance_minus_on_click() {
-
+  if (render_distance_multiplier > 0) {
+    render_distance_multiplier -= 5;
+  }
 }
 
 void render_distance_plus_on_click() {
-
+  if (render_distance_multiplier < 100) {
+    render_distance_multiplier += 5;
+  }
 }
 
 void glowing_items_on_click() {

@@ -42,3 +42,5 @@ void init_item_prompt_ui();
 int init_esc();
 int init_render();
 void update_render();
+int init_control();
+void update_control();
