@@ -12,6 +12,7 @@ void handle_event_collisions(COLLISION *, size_t);
 
 void prepare_object_movement();
 void update_object_movement();
+//void update_object_movement(int);
 
 void decrement_player_shield(float, float);
 void decrement_player_health(float, float);
@@ -44,6 +45,7 @@ void set_item_prompt(int);
 
 void ship_shield_recharge_delay(void *);
 void update_timer_args(void *, void *, void *);
+void insert_sp_enemy();
 void update_timer_memory(void *, void *);
 
 void play_out_of_bounds_audio();

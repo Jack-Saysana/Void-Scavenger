@@ -30,6 +30,7 @@ static unsigned int bone_shader = 0;
 static unsigned int proj_shader = 0;
 static unsigned int glow_entity_shader = 0;
 static unsigned int glow_model_shader = 0;
+static unsigned int fire_shader = 0;
 
 // Common models
 typedef struct common_models {
@@ -68,6 +69,9 @@ ST_MODELS st_mods;
 
 // Cubemaps
 unsigned int skybox;
+
+// Particle Systems
+static unsigned int fire_particles;
 
 // Model loading state info
 pthread_mutex_t load_state_lock;

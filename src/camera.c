@@ -35,11 +35,17 @@ void get_cam_matrix(CAM *cam, mat4 dest) {
     mat4 shiprot;
     glm_quat_mat4(player_ship.ent->rotation, shiprot);
     vec3 ship_forward;
-    glm_mat4_mulv3(shiprot, (vec3){-1.0, 0.0, 0.0}, 1.0, ship_forward);
     vec3 ship_up;
-    glm_mat4_mulv3(shiprot, (vec3){0.0, 1.0, 0.0}, 1.0, ship_up);
     vec3 ship_side;
-    glm_mat4_mulv3(shiprot, (vec3){0.0, 0.0, -1.0}, 1.0, ship_side);
+    if (holding_alpha_key('R')) {
+      glm_mat4_mulv3(shiprot, (vec3){1.0, 0.0, 0.0}, 1.0, ship_forward);
+      glm_mat4_mulv3(shiprot, (vec3){0.0, 1.0, 0.0}, 1.0, ship_up);
+      glm_mat4_mulv3(shiprot, (vec3){0.0, 0.0, 1.0}, 1.0, ship_side);
+    } else {
+      glm_mat4_mulv3(shiprot, (vec3){-1.0, 0.0, 0.0}, 1.0, ship_forward);
+      glm_mat4_mulv3(shiprot, (vec3){0.0, 1.0, 0.0}, 1.0, ship_up);
+      glm_mat4_mulv3(shiprot, (vec3){0.0, 0.0, -1.0}, 1.0, ship_side);
+    }
     mat4 ship_view = GLM_MAT4_IDENTITY_INIT;
     glm_vec3_copy(ship_side, ship_view[0]);
     glm_vec3_copy(ship_up, ship_view[1]);

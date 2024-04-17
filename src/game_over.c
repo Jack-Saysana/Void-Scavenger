@@ -28,6 +28,7 @@ void reset_game() {
   cursor_on(OFF);
   set_keyboard_enabledness(ON);
   free_timer_queue();
+  add_timer(TICK_RATE, tick, FUNCTION_PTR, NULL);
   if (mode == STATION) {
     clear_station_mode();
   } else {

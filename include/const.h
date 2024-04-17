@@ -26,6 +26,7 @@
 #define S_BASE_FIRERATE (0.1)
 #define S_BASE_FIRERATE_LASER (0.3)
 #define S_BASE_PROJ_SPEED (100.0)
+#define S_E_BASE_PROJ_SPEED (300.0)
 #define S_BASE_RANGE (500.0)
 #define S_BASE_ANG_VEL (0.25)
 #define S_BASE_ANG_ACCEL (0.25)
@@ -66,6 +67,14 @@
 #define RARITY_ERR    (-1)
 
 // Enemy Constants
+#define MAX_SP_AGRO_RANGE (512.0)
+#define MIN_SP_FOLLOW_RANGE (100.0)
+#define SP_OBJ_AVOIDANCE_THRESHOLD (0.7071)
+#define SP_AVOID_BOUNDS_PRIORITY (100.0)
+#define SP_AVOID_OBSTACLE_PRIORITY (2.0)
+#define SP_CHASE_PRIORITY (1.0)
+#define SP_SHOT_DELAY (2.5)
+
 #define NUM_ALIEN_TYPES (2)
 #define NUM_ALIEN_SHIP_TYPES (3)
 #define NUM_ALIEN_ATTACK_TYPES (7)
@@ -161,14 +170,14 @@
 #define STAT_PROJ (1)
 
 // Simulation constants
-#define BASE_SPACE_SIZE (256.0)
-#define SPACE_DEPTH (8)
+#define BASE_SPACE_SIZE (1024.0)
+#define SPACE_DEPTH (10)
 #define STATION_SIZE (80.0)
 #define STATION_DEPTH (6)
 #define ST_BASE_RENDER_DIST (40.0)
 #define ST_BASE_SIM_DIST (32.0)
-#define SP_BASE_RENDER_DIST (500.0)
-#define SP_BASE_SIM_DIST (256.0)
+#define SP_BASE_RENDER_DIST (2000.0)
+#define SP_BASE_SIM_DIST (2000.0)
 #define BASE_NUM_ENEMIES (5)
 
 // Asteroid constants
@@ -246,7 +255,7 @@
 #define BASE_COLLISION_DAMAGE     (50.0)
 
 // Targeting System consts
-#define MAX_TARGET_DIST (100.0)
+#define MAX_TARGET_DIST (512.0)
 
 // Pathfinding consts
 #define ST_ENEMY_SEARCH_DEPTH (4)
@@ -269,5 +278,10 @@
 #define BACK (5)
 
 #define INVALID_FRAME (0xFFFFFFFF)
+
+#define POSITIVE (0)
+#define NEGATIVE (1)
+
+#define NUM_PARTICLES (1000)
 
 #endif

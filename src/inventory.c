@@ -26,8 +26,10 @@ void pickup_item() {
     break;
   }
   if (!part) {
+    free(col);
     return;
   }
+  free(col);
 
   /* Copy over union data for part data */
   memcpy(&(slot->data), &(part->enhancements), sizeof(part->enhancements));

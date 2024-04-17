@@ -516,3 +516,7 @@ void set_keyboard_enabledness(int set) {
 void set_can_shoot(int is_can_shoot) {
   can_shoot = is_can_shoot;
 }
+
+int holding_alpha_key(int i) {
+  return !is_console_enabled() && holding_alpha[i - GLFW_KEY_A];
+}

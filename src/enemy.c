@@ -318,10 +318,10 @@ size_t init_enemy_ship(int index, int mov_type) {
   new_enemy->weapon.damage = S_BASE_DAMAGE;
   new_enemy->weapon.fire_rate = S_BASE_FIRERATE;
   new_enemy->weapon.max_power_draw = S_BASE_PWR_DRAW;
-  new_enemy->weapon.proj_speed = S_BASE_PROJ_SPEED;
+  new_enemy->weapon.proj_speed = S_E_BASE_PROJ_SPEED;
   new_enemy->weapon.range = S_BASE_RANGE;
-  new_enemy->wing.max_ang_vel = S_BASE_ANG_VEL;
-  new_enemy->wing.max_ang_accel = S_BASE_ANG_ACCEL;
+  new_enemy->wing.max_ang_vel = S_BASE_ANG_VEL * 4.0;
+  new_enemy->wing.max_ang_accel = S_BASE_ANG_ACCEL * 4.0;
   new_enemy->thruster.max_power_draw = S_BASE_PWR_DRAW;
 
   new_enemy->cur_health = new_enemy->hull.max_health;

@@ -2,6 +2,7 @@
 
 void tick() {
   update_object_movement();
+  //update_object_movement(6);
   if (mode != SPACE && mode != STATION) {
     return;
   }
@@ -14,6 +15,7 @@ void tick() {
   prepare_object_movement();
   handle_combat_collisions(combat_collisions, num_c_col);
   update_object_movement();
+  //update_object_movement(7);
 
   COLLISION *event_collisions = NULL;
   size_t num_e_col = get_sim_collisions(event_sim, &event_collisions,

@@ -237,6 +237,7 @@ void player_ship_remove_sim() {
   sim_remove_entity(physics_sim, player_ship.ent);
   sim_remove_entity(combat_sim, player_ship.ent);
   sim_remove_entity(event_sim, player_ship.ent);
+  sim_remove_entity(render_sim, player_ship.ent);
 }
 
 void reset_sp_player_state() {

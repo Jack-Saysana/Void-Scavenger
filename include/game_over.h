@@ -1,6 +1,7 @@
 #pragma once
 
 #include <engine/engine.h>
+#include <const.h>
 #include <global_vars.h>
 #include <time.h>
 
@@ -22,6 +23,8 @@ void init_space_mode();
 void clear_station_mode();
 void reset_player();
 void free_timer_queue();
+void tick();
+void add_timer(float, void *, int, void *);
 void play_player_death();
 void play_ship_explosion();
 void pause_ship_audio();
