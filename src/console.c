@@ -104,10 +104,12 @@ void set_gamemode_station() {
   pause_ship_audio();
   free_timer_queue();
   add_timer(TICK_RATE, tick, FUNCTION_PTR, NULL);
+  pause_audio(SPACE_THEME);
   clear_space_mode();
   reset_listener_orientation();
   reset_listener_pos();
   init_station_mode();
+  play_audio(STATION_THEME);
 }
 
 void set_gamemode_space() {
@@ -118,8 +120,10 @@ void set_gamemode_space() {
   add_timer(TICK_RATE, tick, FUNCTION_PTR, NULL);
   reset_listener_orientation();
   reset_listener_pos();
+  pause_audio(STATION_THEME);
   clear_station_mode();
   init_space_mode();
+  play_audio(SPACE_THEME);
 }
 
 void quit() {

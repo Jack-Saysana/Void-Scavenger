@@ -50,3 +50,5 @@ void pause_ship_audio();
 void reset_listener_orientation();
 void reset_listener_pos();
 void tick();
+void play_audio(int);
+void pause_audio(int);

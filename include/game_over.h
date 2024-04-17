@@ -29,3 +29,5 @@ void add_timer(float, void *, int, void *);
 void play_player_death();
 void play_ship_explosion();
 void pause_ship_audio();
+void play_audio(int);
+void pause_audio(int);

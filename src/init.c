@@ -73,6 +73,8 @@ int init_game() {
 
   init_ui_components();
 
+  play_audio(MAIN_THEME);
+
   return 0;
 }
 

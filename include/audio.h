@@ -20,7 +20,8 @@
 
 #define PRINT_ERROR(s) {\
   if (AUDIO_DEBUG) \
-    fprintf(stderr, "%s: %d\n", s, alGetError());\
+    fprintf(stderr, "%s:\nAL ERROR: %d\nALUT ERROR: %s\n", \
+    s, alGetError(), alutGetErrorString(alutGetError()));\
 }
 
 static int enemy_audio_allowed = 1;
