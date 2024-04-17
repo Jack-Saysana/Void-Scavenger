@@ -290,7 +290,6 @@ void render_game_entity(ENTITY *ent) {
     }
     draw_entity(entity_selected_shader, ent);
   } else if (wrapper->type == ITEM_OBJ) {
-    /* Renders items glowing if enabled, otherwise, normally renders them */
     ST_ITEM *part = items + (size_t) wrapper->data;
     glUseProgram(model_selected_shader);
     mat4 model = GLM_MAT4_IDENTITY_INIT;
@@ -549,4 +548,15 @@ void reset_load_state() {
   load_error = 0;
   num_loaded = 0;
   pthread_mutex_unlock(&load_state_lock);
+}
+
+int get_enemy_type(size_t index) {
+  if (mode == STATION) {
+    if (st_enemies[index].ent->model == st_mods.alien_models[BRUTE].model) {
+      return BRUTE;
+    } else {
+      return NORMAL;
+    }
+  }
+  return -1;
 }

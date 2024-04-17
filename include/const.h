@@ -1,6 +1,9 @@
 #ifndef __CONST_H__
 #define __CONST_H__
 
+// Tick Constants
+#define TICK_RATE (0.05)      // 1/20 sec
+
 // Player constants
 #define P_BASE_HEALTH (100.0)
 #define P_BASE_SHIELD (100.0)
@@ -81,6 +84,39 @@
 #define E_MELEE (0)
 #define E_RANGED (1)
 #define E_RANDOM (2)
+
+// Audio Tracks and Constants
+#define BALLISTIC_GUN_WAV           (0)
+#define LASER_GUN_WAV               (1)
+#define PLASMA_GUN_WAV              (2)
+#define STATION_MODE_WEAPON_WAV     (3)
+#define SPACESHIP_EXPLOSION_WAV     (4)
+#define SHIELD_STATION_MODE_HIT_WAV (5)
+#define SPACESHIP_HULL_HIT_WAV      (6)
+#define WORLD_EXIT_WAV              (7)
+#define PLAYER_DEATH_1_WAV          (8)
+#define PLAYER_DEATH_2_WAV          (9)
+#define PLAYER_HURT_1_WAV           (10)
+#define PLAYER_HURT_2_WAV           (11)
+#define PLAYER_HURT_3_WAV           (12)
+#define PLAYER_HURT_4_WAV           (13)
+#define ALIEN_NORMAL_TALKING_WAV    (14)
+#define ALIEN_NORMAL_DEATH_WAV      (15)
+#define ALIEN_BRUTE_TALKING_WAV     (16)
+#define ALIEN_BRUTE_DEATH_WAV       (17)
+#define TEST_THEME                  (18)
+#define SHIP_SINE_WAVE              (19)
+#define SHIP_TRI_WAVE_1             (20)
+#define SHIP_TRI_WAVE_2             (21)
+
+#define INVALID_SOURCE              (-1)
+#define SOURCE_PAUSED               (0)
+#define SOURCE_PLAYING              (1)
+#define BASE_SINE_FREQUENCY         (150.0)
+#define BASE_TRIANGLE_FREQUENCY     (49.0)
+#define MAX_SHIP_VELOCITY_TONE      (10.0)
+#define MAX_TONE                    (100.0)
+#define MAX_GAIN_DIST               (25.0)
 
 #define BRUTE (0)
 #define NORMAL (1)
@@ -222,6 +258,8 @@
 #define Y (1)
 #define Z (2)
 #define W (3)
+
+#define FUNCTION_PTR (-1000)
 
 #define TOP (0)
 #define BOTTOM (1)

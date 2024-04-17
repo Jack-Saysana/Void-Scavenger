@@ -73,6 +73,23 @@ size_t init_projectile(vec3 pos, vec3 dir, float speed, PROJ_SOURCE source,
     }
   }
 
+  // Audio
+  if (mode == STATION) {
+    if (source == SRC_PLAYER) {
+      play_audio(STATION_MODE_WEAPON_WAV);
+    }
+  } else {
+    if (source == SRC_PLAYER) {
+      if (type == BALLISTIC) {
+        play_audio(BALLISTIC_GUN_WAV);
+      } else if (type == LASER) {
+        play_audio(LASER_GUN_WAV);
+      } else if (type == PLASMA) {
+        play_audio(PLASMA_GUN_WAV);
+      }
+    }
+  }
+
   return num_projectiles - 1;
 }
 

@@ -14,7 +14,7 @@ export LD_LIBRARY_PATH = $(PWD)/lib
 ifeq ($(OS),Windows_NT)
 	LIBS += -L ./lib
 	INCLUDE += -I ./include
-	LINK += -l:glfw3.dll -l:libcglm.a -lopengl32 -l:libengine_win.a
+	LINK += -l:glfw3.dll -l:libcglm.a -lopengl32 -lalut -lopenal -l:libengine_win.a
 else
 	detected_OS = $(shell uname)
 	ifeq ($(detected_OS),Linux)
@@ -22,7 +22,7 @@ else
 		LIBS += -L ./lib
 		INCLUDE += -I ./include
 		LINK += -l:libglfw.so.3 -lGL -lX11 -l:libXrandr.so.2 -l:libXi.so.6 -l:libengine_lin.a
-		LINK += -ldl -lm -l:libcglm.so.0 -lpthread
+		LINK += -ldl -lm -l:libcglm.so.0 -lpthread -lalut -lopenal
 	endif
 endif
 

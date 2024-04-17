@@ -48,3 +48,5 @@ int projectile_insert_sim(size_t);
 void st_enemy_shoot_anim(void *);
 void st_enemy_swing_anim(void *);
 void st_enemy_walk_cycle(void *);
+
+void enemy_speak(size_t);

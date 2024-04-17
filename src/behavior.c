@@ -158,6 +158,7 @@ void sp_enemy_pathfind(size_t index) {
 
 void st_enemy_pathfind(size_t index) {
   ST_ENEMY *enemy = st_enemies + index;
+  enemy_speak(index);
   if (enemy->invuln) {
     return;
   }
