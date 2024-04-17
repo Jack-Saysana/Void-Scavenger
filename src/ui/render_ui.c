@@ -151,7 +151,7 @@ void render_back_on_click() {
 }
 
 void render_distance_minus_on_click() {
-  if (render_distance_multiplier > 0) {
+  if (render_distance_multiplier > 5) {
     render_distance_multiplier -= 5;
   }
 }
