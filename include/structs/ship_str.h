@@ -12,10 +12,13 @@ typedef enum ship_weap_type {
   BALLISTIC,
   LASER,
   PLASMA,
+  T_MELEE,
 } S_WEAPON_T;
 
 typedef struct reactor_t {
   float max_output;
+  float recharge_rate;
+  float stall_time;
 } S_REACTOR;
 
 typedef struct hull_t {
@@ -36,6 +39,8 @@ typedef struct weapon_t {
   float max_power_draw;
   float proj_speed;
   float range;
+  float bullet_size;
+  int num_barrels;
 } S_WEAPON;
 
 typedef struct wing_t {
@@ -65,9 +70,12 @@ typedef struct ship_t {
   float cur_health;
   float cur_shield;
   float cur_speed;
+  float cur_power_use;
   // Flag denoting if the ship is current invulnerable to damage
   int invuln;
   int recharging_shield;
+  int reactor_can_recharge;
+  int ship_stalled;
 
   int e_can_shoot;
   // Float denoting the current opacity of the ship's shield

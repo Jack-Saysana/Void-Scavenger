@@ -208,7 +208,10 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
     switch (inventory_slot->type) {
       case I_SLOT_REACTOR:
         snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE,
-                 "[MAX OUTPUT = %.2f]", inventory_slot->data.reactor.max_output);
+                 "[MAX OUTPUT = %.2f]\n[RECHARGE RATE = %.2F]\n[STALL TIME = %.2f]", 
+                 inventory_slot->data.reactor.max_output,
+                 inventory_slot->data.reactor.recharge_rate,
+                 inventory_slot->data.reactor.stall_time);
         break;
       case I_SLOT_HULL:
         snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE,
@@ -222,10 +225,11 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
         break;
       case I_SLOT_WEAPON:
         snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE,
-                  "[DAMAGE = %.2f]\n[FIRE RATE = %.2f]\n[MAX POWER DRAW = %.2f]\n[PROJCTION SPEED = %.2f]\n[RANGE = %.2f]", 
+                  "[DAMAGE = %.2f]\n[FIRE RATE = %.2f]\n[MAX POWER DRAW = %.2f]\n[PROJ SPEED = %.2f]\n[RANGE = %.2f]\n[PROJ SIZE = %.2f]\n[NUM BARRELS = %d]", 
                   inventory_slot->data.weapon.damage, inventory_slot->data.weapon.fire_rate, 
                   inventory_slot->data.weapon.max_power_draw, inventory_slot->data.weapon.proj_speed, 
-                  inventory_slot->data.weapon.range);
+                  inventory_slot->data.weapon.range, inventory_slot->data.weapon.bullet_size,
+                  inventory_slot->data.weapon.num_barrels);
         break;
       case I_SLOT_WING:
         snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE, 

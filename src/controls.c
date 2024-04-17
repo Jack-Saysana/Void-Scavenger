@@ -79,7 +79,7 @@ void mouse_pos_callback(GLFWwindow *window, double x_pos, double y_pos) {
     versor rot_quat = GLM_QUAT_IDENTITY_INIT;
     glm_mat4_quat(rotation, rot_quat);
     glm_quat_mul(rot_quat, st_player.ent->rotation, st_player.ent->rotation);
-  } else if (!CURSOR_ENABLED && mode == SPACE) {
+  } else if (!CURSOR_ENABLED && mode == SPACE && !player_ship.ship_stalled) {
     mat3 ship_to_world = GLM_MAT3_IDENTITY_INIT;
     glm_quat_rotatev(player_ship.ent->rotation, (vec3) { 0.0, 0.0, -1.0 },
                      ship_to_world[X]);
@@ -138,7 +138,7 @@ void mouse_button_callback(GLFWwindow *window, int button, int action,
                                             forward,
                                             10.0 + st_player.speed,
                                             SRC_PLAYER,
-                                            player_ship.weapon.type,
+                                            LASER,
                                             st_player.damage,
                                             100.0,
                                             1);
@@ -149,53 +149,7 @@ void mouse_button_callback(GLFWwindow *window, int button, int action,
         /* fire rate timer */
         can_shoot = 0;
         add_timer(player_ship.weapon.fire_rate, (void *) &can_shoot, 1, NULL);
-        /* get ship vectors */
-        vec3 ship_forward;
-        glm_quat_rotatev(player_ship.ent->rotation, (vec3){-1.0, 0.0, 0.0}, ship_forward);
-        glm_normalize(ship_forward);
-        vec3 ship_side;
-        glm_quat_rotatev(player_ship.ent->rotation, (vec3){0.0, 0.0, 1.0}, ship_side);
-        glm_normalize(ship_side);
-        vec3 ship_up;
-        glm_quat_rotatev(player_ship.ent->rotation, (vec3){0.0, 1.0, 0.0}, ship_up);
-        glm_normalize(ship_up);
-        /* rotate left gun to converage */
-        glm_vec3_rotate(ship_forward, glm_rad(-1.5), ship_side);
-        glm_vec3_rotate(ship_forward, glm_rad(-0.3125), ship_up);
-        /* get left gun offset pos */
-        vec3 gun_pos = GLM_VEC3_ZERO_INIT;
-        glm_vec3_scale_as(ship_forward, 7.0, gun_pos);
-        glm_vec3_add(player_ship.ent->translation, gun_pos, gun_pos);
-        glm_vec3_add(gun_pos, ship_side, gun_pos);
-        /* spawn left projectile*/
-        size_t proj_index = init_projectile(gun_pos,
-                                            ship_forward,
-                                            player_ship.weapon.proj_speed +
-                                            player_ship.cur_speed,
-                                            SRC_PLAYER,
-                                            player_ship.weapon.type,
-                                            player_ship.weapon.damage,
-                                            player_ship.weapon.range,
-                                            0);
-        projectile_insert_sim(proj_index);
-        /* get right gun offset pos */
-        glm_vec3_negate(ship_side);
-        glm_vec3_scale_as(ship_forward, 7.0, gun_pos);
-        glm_vec3_add(player_ship.ent->translation, gun_pos, gun_pos);
-        glm_vec3_add(gun_pos, ship_side, gun_pos);
-        /* rotate right gun to converage */
-        glm_vec3_rotate(ship_forward, glm_rad(0.625), ship_up);
-        /* spawn right projectile*/
-        proj_index = init_projectile(gun_pos,
-                                     ship_forward,
-                                     player_ship.weapon.proj_speed +
-                                     player_ship.cur_speed,
-                                     SRC_PLAYER,
-                                     player_ship.weapon.type,
-                                     player_ship.weapon.damage,
-                                     player_ship.weapon.range,
-                                     0);
-        projectile_insert_sim(proj_index);
+        ship_shoot();
       }
     }
   }
@@ -211,7 +165,8 @@ void input_keys(GLFWwindow *window) {
   }
   for (int i = GLFW_KEY_A; i <= GLFW_KEY_Z; i++) {
     if (glfwGetKey(window, i) == GLFW_PRESS) {
-      if (console_enabled && cons_cmd_len < MAX_CMD_LEN - 1 && !holding_alpha[i - GLFW_KEY_A]) {
+      if (console_enabled && cons_cmd_len < MAX_CMD_LEN - 1 &&
+          !holding_alpha[i - GLFW_KEY_A]) {
         cons_cmd[cons_cmd_len++] = i + 32;
         update_console_text(cons_cmd);
         advance_cursor();
@@ -219,7 +174,6 @@ void input_keys(GLFWwindow *window) {
         /* FPS movment */
         if (i == GLFW_KEY_W) {
           /* Handle W press */
-          //move_camera(&camera, MOVE_FORWARD);
           vec3 player_forward;
           glm_quat_rotatev(st_player.ent->rotation, (vec3){-1.0, 0.0, 0.0}, player_forward);
           glm_normalize(player_forward);
@@ -229,7 +183,6 @@ void input_keys(GLFWwindow *window) {
         }
         if (i == GLFW_KEY_S) {
           /* Handle S press */
-          // move_camera(&camera, MOVE_BACKWARD);
           vec3 player_forward;
           glm_quat_rotatev(st_player.ent->rotation, (vec3){-1.0, 0.0, 0.0}, player_forward);
           glm_normalize(player_forward);
@@ -240,7 +193,6 @@ void input_keys(GLFWwindow *window) {
         }
         if (i == GLFW_KEY_A) {
           /* Handle A press */
-          // move_camera(&camera, MOVE_LEFT);
           vec3 player_left;
           glm_quat_rotatev(st_player.ent->rotation, (vec3){0.0, 0.0, 1.0},
                             player_left);
@@ -251,7 +203,6 @@ void input_keys(GLFWwindow *window) {
         }
         if (i == GLFW_KEY_D) {
           /* Handle D press */
-          // move_camera(&camera, MOVE_RIGHT);
           vec3 player_left;
           glm_quat_rotatev(st_player.ent->rotation, (vec3){0.0, 0.0, 1.0},
                             player_left);
@@ -287,23 +238,27 @@ void input_keys(GLFWwindow *window) {
           }
         }
       } else if (!console_enabled && mode == SPACE) {
-        if (i == GLFW_KEY_W) {
+        if (i == GLFW_KEY_W && !player_ship.ship_stalled) {
           /* Handle W press */
           /* increases curent speed of player ship up to max_vel */
           if (player_ship.cur_speed >= player_ship.thruster.max_vel) {
             player_ship.cur_speed = player_ship.thruster.max_vel;
           } else {
             player_ship.cur_speed += DELTA_TIME * player_ship.thruster.max_accel;
+            use_power(player_ship.thruster.max_power_draw, 
+                      TYPE_THRUSTER, &player_ship);
           }
-        } else if (i == GLFW_KEY_S){
+        } else if (i == GLFW_KEY_S && !player_ship.ship_stalled){
           /* Handle S press */
           /* decreases curent speed of player ship down to 0 */
           if (player_ship.cur_speed <= 0 ) {
             player_ship.cur_speed = 0;
           } else {
             player_ship.cur_speed -= DELTA_TIME * player_ship.thruster.max_accel;
+            use_power(player_ship.thruster.max_power_draw, 
+                      TYPE_THRUSTER, &player_ship);
           }
-        } else if (i == GLFW_KEY_A){
+        } else if (i == GLFW_KEY_A && !player_ship.ship_stalled){
           /* Handle A press */
           /*roll left*/
           vec3 ship_forward;
@@ -313,7 +268,7 @@ void input_keys(GLFWwindow *window) {
           versor rot_quat = GLM_QUAT_IDENTITY_INIT;
           glm_mat4_quat(rotation, rot_quat);
           glm_quat_mul(rot_quat, player_ship.ent->rotation, player_ship.ent->rotation);
-        } else if (i == GLFW_KEY_D){
+        } else if (i == GLFW_KEY_D && !player_ship.ship_stalled){
           /* Handle D press */
           /*roll right*/
           vec3 ship_forward;
@@ -344,7 +299,7 @@ void input_keys(GLFWwindow *window) {
     for (int i = GLFW_KEY_0; i <= GLFW_KEY_9; i++) {
     if (glfwGetKey(window, i) == GLFW_PRESS && !holding_num[i - GLFW_KEY_0]) {
       holding_num[i - GLFW_KEY_0] = 1;
-      if (console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
+      if (cheats && console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
         cons_cmd[cons_cmd_len++] = i;
         update_console_text(cons_cmd);
         advance_cursor();
@@ -359,7 +314,7 @@ void input_keys(GLFWwindow *window) {
   if (glfwGetKey(window, GLFW_KEY_MINUS) == GLFW_PRESS &&
       !holding_shift && !holding_minus) {
     holding_minus = 1;
-    if (console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
+    if (cheats && console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
       cons_cmd[cons_cmd_len++] = '-';
       update_console_text(cons_cmd);
       advance_cursor();
@@ -373,10 +328,19 @@ void input_keys(GLFWwindow *window) {
 
   /* Space */
   if (glfwGetKey(window, GLFW_KEY_SPACE)) {
-    if (console_enabled && cons_cmd_len < MAX_CMD_LEN - 1 && !holding_space) {
+    if (cheats && console_enabled && cons_cmd_len < MAX_CMD_LEN - 1 && !holding_space) {
       cons_cmd[cons_cmd_len++] = ' ';
       update_console_text(cons_cmd);
       advance_cursor();
+    } else if (!holding_space && !console_enabled && mode == STATION && 
+               (st_player.ent->velocity[Y] < 0.001 && st_player.ent->velocity[Y] > 0.0)) {
+      //Handle jump
+      vec3 player_up;
+      glm_quat_rotatev(st_player.ent->rotation, (vec3){0.0, 1.0, 0.0}, player_up);
+      glm_normalize(player_up);
+      glm_vec3_scale(player_up, st_player.jump, player_up);
+      glm_vec3_add(player_up, st_player.ent->velocity,
+                    st_player.ent->velocity);
     }
     holding_space = 1;
   } else if (glfwGetKey(window, GLFW_KEY_SPACE) != GLFW_PRESS) {
@@ -387,7 +351,7 @@ void input_keys(GLFWwindow *window) {
   if (glfwGetKey(window, GLFW_KEY_MINUS) == GLFW_PRESS && holding_shift &&
       !holding_underscore) {
     holding_underscore = 1;
-    if (console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
+    if (cheats && console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
       cons_cmd[cons_cmd_len++] = '_';
       update_console_text(cons_cmd);
       advance_cursor();
@@ -402,7 +366,7 @@ void input_keys(GLFWwindow *window) {
   /* Enter */
   if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS && !holding_enter) {
     holding_enter = 1;
-    if (console_enabled) {
+    if (cheats && console_enabled) {
       cons_cmd[cons_cmd_len++] = '\0';
       /* Call lexer to tokenize and parse the command */
       tokenize(cons_cmd, cons_cmd_len);
@@ -427,7 +391,7 @@ void input_keys(GLFWwindow *window) {
   /* Period / Dot */
   if (glfwGetKey(window, GLFW_KEY_PERIOD) == GLFW_PRESS && !holding_dot) {
     holding_dot = 1;
-    if (console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
+    if (cheats && console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
       cons_cmd[cons_cmd_len++] = '.';
       update_console_text(cons_cmd);
       advance_cursor();
@@ -439,7 +403,7 @@ void input_keys(GLFWwindow *window) {
   /* Backspace */
   if (glfwGetKey(window, GLFW_KEY_BACKSPACE) == GLFW_PRESS && !holding_backspace) {
     holding_backspace = 1;
-    if (console_enabled && cons_cmd_len > 0) {
+    if (cheats && console_enabled && cons_cmd_len > 0) {
       cons_cmd[--cons_cmd_len] = '\0';
       update_console_text(cons_cmd);
       retreat_cursor();
@@ -451,21 +415,23 @@ void input_keys(GLFWwindow *window) {
   /* Slash */
   if (glfwGetKey(window, GLFW_KEY_SLASH) == GLFW_PRESS && !holding_slash) {
     holding_slash = 1;
-    if (console_enabled) {
-      disable_console();
-    } else {
-      enable_console();
-      cons_cmd_len = 0;
-      cons_cursor_pos = 0;
-      for (int i = 0; i < 100; i++) {
-        cons_cmd[i] = '\0';
+    if (cheats) {
+      if (console_enabled) {
+        disable_console();
+      } else {
+        enable_console();
+        cons_cmd_len = 0;
+        cons_cursor_pos = 0;
+        for (int i = 0; i < 100; i++) {
+          cons_cmd[i] = '\0';
+        }
+        cons_cursor[0] = '_';
+        for (int i = 1; i < 101; i++) {
+          cons_cursor[i] = '\0';
+        }
+        update_console_text(cons_cmd);
+        update_console_cursor(cons_cursor);
       }
-      cons_cursor[0] = '_';
-      for (int i = 1; i < 101; i++) {
-        cons_cursor[i] = '\0';
-      }
-      update_console_text(cons_cmd);
-      update_console_cursor(cons_cursor);
     }
   } else if (glfwGetKey(window, GLFW_KEY_SLASH) != GLFW_PRESS) {
     holding_slash = 0;
@@ -475,6 +441,8 @@ void input_keys(GLFWwindow *window) {
   if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS) {
     if (mode == SPACE && !holding_tab) {
       target_nearest_enemy();
+    } else if (mode == STATION && !holding_tab) {
+      toggle_inventory();
     }
     holding_tab = 1;
   } else {
@@ -526,4 +494,8 @@ void set_keyboard_enabledness(int set) {
 
 void set_can_shoot(int is_can_shoot) {
   can_shoot = is_can_shoot;
+}
+
+int holding_alpha_key(int i) {
+  return !is_console_enabled() && holding_alpha[i - GLFW_KEY_A];
 }

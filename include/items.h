@@ -2,6 +2,7 @@
 #include <stddef.h>
 #include <string.h>
 #include <glad/glad.h>
+#include <pthread.h>
 #include <engine/engine.h>
 #include <const.h>
 #include <global_vars.h>
@@ -35,6 +36,7 @@ extern size_t i_size;
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
 void set_enhancements(ST_ITEM *, int, int);
+void distribute_picks(int, float, float *);
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 int double_buffer(void **, size_t *, size_t);

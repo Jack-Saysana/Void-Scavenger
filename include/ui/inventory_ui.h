@@ -1,3 +1,4 @@
+#include <pthread.h>
 #include <engine/ui_component.h>
 #include <ui/structs/inventory_ui_str.h>
 #include <global_vars.h>
@@ -12,7 +13,7 @@ Implements the functionality for defining UI components for player's station
 mode inventory.
 */
 
-#define INVENTORY_TEXT_BUFFER_SIZE (128)
+#define INVENTORY_TEXT_BUFFER_SIZE (256)
 
 /* GLOBALS */
 INVENTORY inventory;

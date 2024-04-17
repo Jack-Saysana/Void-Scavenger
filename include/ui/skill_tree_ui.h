@@ -1,3 +1,4 @@
+#include <pthread.h>
 #include <engine/ui_component.h>
 #include <ui/structs/skill_tree_ui_str.h>
 #include <global_vars.h>

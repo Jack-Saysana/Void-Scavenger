@@ -233,15 +233,15 @@ void update_stats() {
   // check current game mode
   if (mode == SPACE) {
     switch_space_hud();
-    float power_level = (player_ship.reactor.max_output -
-                         calc_power_usage(&player_ship)) /
-                         player_ship.reactor.max_output;
+    float power_level = player_ship.reactor.max_output - 
+                        player_ship.cur_power_use;
     // update stats
     set_ui_height(stats.ui_shield_bar,
                   player_ship.cur_shield / player_ship.shield.max_shield);
     set_ui_height(stats.ui_health_bar,
                   player_ship.cur_health / player_ship.hull.max_health);
-    set_ui_height(stats.ui_energy_bar, power_level);
+    set_ui_height(stats.ui_energy_bar, 
+                  power_level / player_ship.reactor.max_output);
     set_ui_height(stats.ui_thruster_bar,
                   player_ship.cur_speed / player_ship.thruster.max_vel);
   } else if (mode == STATION) {

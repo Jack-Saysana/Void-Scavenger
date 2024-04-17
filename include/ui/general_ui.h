@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdio.h>
+#include <pthread.h>
 #include <engine/engine.h>
 #include <global_vars.h>
 
@@ -45,3 +46,4 @@ void update_render();
 int init_control();
 void update_control();
 void update_esc();
+void stall_ui_initialize();

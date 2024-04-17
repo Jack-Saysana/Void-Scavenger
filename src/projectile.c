@@ -42,6 +42,15 @@ size_t init_projectile(vec3 pos, vec3 dir, float speed, PROJ_SOURCE source,
     fprintf(stderr, "Error: Unable to allocate projectile entity\n");
     return INVALID_INDEX;
   }
+  if (type == T_MELEE) {
+    projectile->ent->scale[X] = 5.0;
+    projectile->ent->scale[Y] = 2.0;
+    projectile->ent->scale[Z] = 5.0;
+  } else {
+    vec3 scaler = {1.0,1.0,1.0};
+    glm_vec3_scale_as(scaler,player_ship.weapon.bullet_size,scaler);
+    glm_vec3_copy(scaler, projectile->ent->scale);
+  }
 
   projectile->wrapper_offset = init_wrapper(PROJ_OBJ, projectile->ent,
                                            (void *) num_projectiles);
@@ -65,6 +74,23 @@ size_t init_projectile(vec3 pos, vec3 dir, float speed, PROJ_SOURCE source,
     if (status) {
       fprintf(stderr, "Error: Unable to reallocate projectile buffer\n");
       return INVALID_INDEX;
+    }
+  }
+
+  // Audio
+  if (mode == STATION) {
+    if (source == SRC_PLAYER) {
+      play_audio(STATION_MODE_WEAPON_WAV);
+    }
+  } else {
+    if (source == SRC_PLAYER) {
+      if (type == BALLISTIC) {
+        play_audio(BALLISTIC_GUN_WAV);
+      } else if (type == LASER) {
+        play_audio(LASER_GUN_WAV);
+      } else if (type == PLASMA) {
+        play_audio(PLASMA_GUN_WAV);
+      }
     }
   }
 
@@ -136,15 +162,20 @@ void integrate_projectiles() {
 
 void integrate_projectile(size_t index) {
   vec3 movement = GLM_VEC3_ZERO_INIT;
-  vec3 old_pos = GLM_VEC3_ZERO_INIT;
+  vec3 pos = GLM_VEC3_ZERO_INIT;
   PROJ *cur_proj = projectiles + index;
-  glm_vec3_copy(cur_proj->ent->translation, old_pos);
+  glm_vec3_copy(cur_proj->ent->translation, pos);
   glm_vec3_scale(cur_proj->ent->velocity, DELTA_TIME, movement);
   glm_vec3_add(movement, cur_proj->ent->translation,
                cur_proj->ent->translation);
 
-  cur_proj->range -= glm_vec3_distance(old_pos, cur_proj->ent->translation);
-  if (cur_proj->range <= 0.0) {
+  cur_proj->range -= glm_vec3_distance(pos, cur_proj->ent->translation);
+  glm_vec3_copy(cur_proj->ent->translation, pos);
+  // Delete projectile if it exausts its range or exists space bounds
+  if (cur_proj->range <= 0.0 ||
+      pos[X] < -space_size || pos[X] > space_size ||
+      pos[Y] < -space_size || pos[Y] > space_size ||
+      pos[Z] < -space_size || pos[Z] > space_size) {
     object_wrappers[cur_proj->wrapper_offset].to_delete = 1;
   }
 }

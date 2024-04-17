@@ -1,5 +1,6 @@
 #pragma once
 
+#include <pthread.h>
 #include <engine/engine.h>
 
 static UI_COMP *console;

@@ -72,6 +72,7 @@ void init_ui_components() {
   init_main_menu_ui();
   game_over_ui_initialize();
   init_item_prompt_ui();
+  stall_ui_initialize();
 }
 
 /*

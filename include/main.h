@@ -1,6 +1,8 @@
 #include <GLFW/glfw3.h>
+#include <pthread.h>
 #include <engine/engine.h>
 #include <global_vars.h>
+#include <const.h>
 
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
@@ -23,3 +25,5 @@ int delete_stale_objects();
 void refresh_objects();
 void loading_init();
 void recharge_player_shield();
+void tick();
+void add_timer(float, void *, int, void *);

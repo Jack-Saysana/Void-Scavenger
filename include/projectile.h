@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <pthread.h>
 #include <engine/engine.h>
 #include <const.h>
 #include <cglm/cglm.h>
@@ -18,3 +19,5 @@ void delete_wrapper(size_t);
 
 void add_timer(float, void *, int, void *);
 void update_timer_args(void *, void *, void *);
+
+void play_audio(int);
