@@ -56,6 +56,10 @@ size_t add_audio(char *filepath) {
     alSourcef(t->source, AL_ROLLOFF_FACTOR, 3.0);
     PRINT_ERROR("alSourcef special accomidations")
   }
+  if (num_tracks == MAIN_THEME || num_tracks == SPACE_THEME ||
+      num_tracks == STATION_THEME) {
+    alSourcei(t->source, AL_LOOPING, AL_TRUE);
+  }
 
   num_tracks++;
   if (num_tracks == tracks_buff_len) {

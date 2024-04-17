@@ -37,7 +37,12 @@ void reset_game() {
   /* Resets all stats back to defaults */
   reset_player();
 
+  // Restart all audio sources which may be playing
+  pause_audio(SPACE_THEME);
+  pause_audio(STATION_THEME);
+
   init_space_mode();
+  play_audio(SPACE_THEME);
 }
 
 int game_over_check() {

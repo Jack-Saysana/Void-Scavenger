@@ -25,6 +25,7 @@ void init_opengl_options();
 int init_audio();
 void exit_audio();
 void load_audio_tracks();
+void play_audio(int);
 
 void cleanup_gl();
 void cleanup_scene();

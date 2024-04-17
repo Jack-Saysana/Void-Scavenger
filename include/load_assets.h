@@ -202,8 +202,10 @@ void load_audio_tracks() {
   add_audio(audio_dir"/alien_normal_death.wav");
   add_audio(audio_dir"/alien_brute_talking.wav");
   add_audio(audio_dir"/alien_brute_death.wav");
-  add_audio(audio_dir"/StarWars60.wav");
   generate_ship_noises();
+  add_audio(audio_dir"/main_menu_theme.wav");
+  add_audio(audio_dir"/space_mode_theme.wav");
+  add_audio(audio_dir"/station_mode_theme.wav");
 }
 
 void *load_assets(void *arg) {
