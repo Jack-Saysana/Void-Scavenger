@@ -234,7 +234,7 @@ void use_power(float pwr_draw, int type, SHIP * ship) {
                    ship->thruster.max_accel * S_THRUSTER_PWR_USE_FACTOR;
     delay_time = pwr_draw * S_THRUSTER_PWR_DELAY_FACTOR;
   } else if (type == TYPE_SHIELD) {
-    new_pwr_draw = pwr_draw * DELTA_TIME;
+    new_pwr_draw = pwr_draw * TICK_RATE;
     delay_time = pwr_draw * S_SHIELD_PWR_DELAY_FACTOR;
   } else {
     return;
@@ -262,7 +262,7 @@ void use_power(float pwr_draw, int type, SHIP * ship) {
 void reactor_recharge(SHIP * ship) {
   if (ship->cur_power_use > 0.0 && ship->reactor_can_recharge
       && !ship->ship_stalled) {
-    ship->cur_power_use -= DELTA_TIME * ship->reactor.recharge_rate;
+    ship->cur_power_use -= TICK_RATE * ship->reactor.recharge_rate;
     if (ship->cur_power_use <= 0.0) {
       ship->cur_power_use = 0.0;
     }
@@ -272,7 +272,7 @@ void reactor_recharge(SHIP * ship) {
 void recharge_ship_shield(SHIP *ship) {
   if (ship->recharging_shield && !ship->ship_stalled) {
     use_power(ship->shield.power_draw, TYPE_SHIELD, ship);
-    ship->cur_shield += ship->shield.recharge_rate * DELTA_TIME;
+    ship->cur_shield += ship->shield.recharge_rate * TICK_RATE;
     if (ship->cur_shield >= ship->shield.max_shield) {
       ship->recharging_shield = 0;
       ship->cur_shield = ship->shield.max_shield;
