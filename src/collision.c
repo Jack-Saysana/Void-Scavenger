@@ -509,7 +509,7 @@ void decrement_enemy_shield(size_t index, float damage, float timing) {
         play_audio(SPACESHIP_EXPLOSION_WAV);
       } else {
         enemy->invuln = 1;
-        add_timer(timing, &enemy->invuln, 0, NULL);
+        add_timer(timing, set_sp_enemy_invuln, FUNCTION_PTR, (void *) index);
       }
     }
   } else if (mode == STATION) {
@@ -539,7 +539,7 @@ void decrement_enemy_health(size_t index, float damage, float timing) {
                           (void *) INVALID_INDEX);
         add_timer(enemy->shield.recharge_delay, ship_shield_recharge_delay,
                   -1000, (void *) index);
-        add_timer(timing, &enemy->invuln, 0, NULL);
+        add_timer(timing, set_sp_enemy_invuln, FUNCTION_PTR, (void *) index);
       }
     }
   } else if (mode == STATION) {

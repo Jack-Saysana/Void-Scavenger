@@ -64,7 +64,8 @@ size_t init_enemy(size_t index, int weapon) {
   new_enemy->ent->type |= T_DRIVING;
   new_enemy->ent->inv_mass = 1.0;
   new_enemy->can_speak = 0;
-  add_timer((15.0 * gold_noise()) + 15.0, &new_enemy->can_speak, 1, NULL);
+  add_timer((15.0 * gold_noise()) + 15.0, set_st_enemy_can_speak, FUNCTION_PTR,
+            (void *) index);
 
   new_enemy->wrapper_offset = init_wrapper(ENEMY_OBJ, new_enemy->ent,
                                            (void *) num_enemies);
@@ -128,9 +129,10 @@ void delete_enemy(size_t index) {
     return;
   }
 
-  update_timer_memory(&st_enemies[index].invuln, NULL);
-  update_timer_memory(&st_enemies[index].can_shoot, NULL);
-  update_timer_memory(&st_enemies[index].can_speak, NULL);
+  update_timer_args(set_st_enemy_can_shoot, (void *) index,
+                    (void *) INVALID_INDEX);
+  update_timer_args(set_st_enemy_can_speak, (void *) index,
+                    (void *) INVALID_INDEX);
   update_timer_args(st_enemy_walk_cycle, (void *) index,
                     (void *) INVALID_INDEX);
   update_timer_args(st_enemy_hurt_anim, (void *) index,
@@ -148,12 +150,10 @@ void delete_enemy(size_t index) {
   }
 
   st_enemies[index] = st_enemies[num_enemies];
-  update_timer_memory(&st_enemies[num_enemies].invuln,
-                      &st_enemies[index].invuln);
-  update_timer_memory(&st_enemies[num_enemies].can_shoot,
-                      &st_enemies[index].can_shoot);
-  update_timer_memory(&st_enemies[num_enemies].can_speak,
-                      &st_enemies[index].can_speak);
+  update_timer_args(set_st_enemy_can_shoot, (void *) num_enemies,
+                    (void *) index);
+  update_timer_args(set_st_enemy_can_speak, (void *) num_enemies,
+                    (void *) index);
   update_timer_args(st_enemy_walk_cycle, (void *) num_enemies,
                     (void *) index);
   update_timer_args(st_enemy_hurt_anim, (void *) num_enemies,
@@ -230,11 +230,29 @@ void enemy_speak(size_t index) {
       play_enemy_audio(st_enemies[index].ent->translation,
                        ALIEN_NORMAL_TALKING_WAV);
     }
-    add_timer((15.0 * gold_noise()) + 15.0,
-              &st_enemies[index].can_speak, 1, NULL);
+    add_timer((15.0 * gold_noise()) + 15.0, set_st_enemy_can_speak,
+              FUNCTION_PTR, (void *) index);
     st_enemies[index].can_speak = 0;
     return;
   }
+}
+
+void set_st_enemy_can_shoot(void *args) {
+  if ((size_t) args == INVALID_INDEX) {
+    return;
+  }
+
+  ST_ENEMY *enemy = st_enemies + (size_t) args;
+  enemy->can_shoot = 1;
+}
+
+void set_st_enemy_can_speak(void *args) {
+  if ((size_t) args == INVALID_INDEX) {
+    return;
+  }
+
+  ST_ENEMY *enemy = st_enemies + (size_t) args;
+  enemy->can_speak = 1;
 }
 
 // =============================== SPACE MODE ================================
@@ -385,7 +403,7 @@ size_t init_enemy_ship(int index, int mov_type) {
   new_enemy->invuln = 0;
   new_enemy->e_can_shoot = 1;
   new_enemy->ship_stalled = 0;
-  
+
   num_enemies++;
   if (num_enemies == enemy_buff_len) {
     int status = double_buffer((void **) &sp_enemies, &enemy_buff_len,
@@ -409,8 +427,14 @@ void delete_enemy_ship(size_t index) {
     set_target_ship_index(INVALID_INDEX);
   }
 
-  update_timer_memory(&sp_enemies[index].invuln, NULL);
-  update_timer_memory(&sp_enemies[index].e_can_shoot, NULL);
+  update_timer_args(set_sp_enemy_invuln, (void *) index,
+                    (void *) INVALID_INDEX);
+  update_timer_args(set_sp_enemy_can_shoot, (void *) index,
+                    (void *) INVALID_INDEX);
+  update_timer_args(set_sp_enemy_reactor_can_recharge, (void *) index,
+                    (void *) INVALID_INDEX);
+  update_timer_args(destall_enemy_ship, (void *) index,
+                    (void *) INVALID_INDEX);
   update_timer_args(sp_enemy_shield_dmg, (void *) index,
                     (void *) INVALID_INDEX);
   update_timer_args(ship_shield_recharge_delay, (void *) index,
@@ -424,10 +448,14 @@ void delete_enemy_ship(size_t index) {
   }
 
   sp_enemies[index] = sp_enemies[num_enemies];
-  update_timer_memory(&sp_enemies[num_enemies].invuln,
-                      &sp_enemies[index].invuln);
-  update_timer_memory(&sp_enemies[num_enemies].e_can_shoot,
-                      &sp_enemies[index].e_can_shoot);
+  update_timer_args(set_sp_enemy_invuln, (void *) num_enemies,
+                    (void *) index);
+  update_timer_args(set_sp_enemy_can_shoot, (void *) num_enemies,
+                    (void *) index);
+  update_timer_args(set_sp_enemy_reactor_can_recharge, (void *) num_enemies,
+                    (void *) index);
+  update_timer_args(destall_enemy_ship, (void *) num_enemies,
+                    (void *) index);
   update_timer_args(sp_enemy_shield_dmg, (void *) num_enemies,
                     (void *) index);
   update_timer_args(ship_shield_recharge_delay, (void *) num_enemies,
@@ -494,6 +522,33 @@ void spawn_sp_enemy(vec3 pos, versor rot, int type, int mov_type) {
   glm_vec3_copy(pos, sp_enemies[index].ent->translation);
   glm_quat_copy(rot, sp_enemies[index].ent->rotation);
   sp_enemy_insert_sim(index);
+}
+
+void set_sp_enemy_invuln(void *args) {
+  if ((size_t) args == INVALID_INDEX) {
+    return;
+  }
+
+  SHIP *enemy = sp_enemies + (size_t) args;
+  enemy->invuln = 0;
+}
+
+void set_sp_enemy_can_shoot(void *args) {
+  if ((size_t) args == INVALID_INDEX) {
+    return;
+  }
+
+  SHIP *enemy = sp_enemies + (size_t) args;
+  enemy->e_can_shoot = 1;
+}
+
+void set_sp_enemy_reactor_can_recharge(void *args) {
+  if ((size_t) args == INVALID_INDEX) {
+    return;
+  }
+
+  SHIP *enemy = sp_enemies + (size_t) args;
+  enemy->reactor_can_recharge = 1;
 }
 
 // ================================ BEHAVIOR =================================

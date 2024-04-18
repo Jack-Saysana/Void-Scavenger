@@ -13,6 +13,13 @@ void st_enemy_hurt_anim(void *);
 void st_enemy_shoot_anim(void *);
 void st_enemy_swing_anim(void *);
 void sp_enemy_shield_dmg(void *);
+void destall_ship(SHIP *);
+void destall_enemy_ship(void *);
+void set_st_enemy_can_shoot(void *);
+void set_st_enemy_can_speak(void *);
+void set_sp_enemy_invuln(void *);
+void set_sp_enemy_can_shoot(void *);
+void set_sp_enemy_reactor_can_recharge(void *);
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 

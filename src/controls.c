@@ -332,7 +332,7 @@ void input_keys(GLFWwindow *window) {
       cons_cmd[cons_cmd_len++] = ' ';
       update_console_text(cons_cmd);
       advance_cursor();
-    } else if (!holding_space && !console_enabled && mode == STATION && 
+    } else if (!holding_space && !console_enabled && mode == STATION &&
                (st_player.ent->velocity[Y] < 0.001 && st_player.ent->velocity[Y] > 0.0)) {
       //Handle jump
       vec3 player_up;
