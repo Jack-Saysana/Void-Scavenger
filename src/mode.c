@@ -206,6 +206,8 @@ int init_station_mode() {
   /* Re-enable shooting (if not already) */
   enable_shooting();
 
+  hide_stallwarning();
+
   // Initialize proper render distances
   RENDER_DIST = ST_BASE_RENDER_DIST;
   glm_vec3_copy((vec3) {RENDER_DIST, RENDER_DIST, RENDER_DIST },

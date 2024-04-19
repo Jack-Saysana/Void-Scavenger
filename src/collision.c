@@ -42,7 +42,6 @@ void handle_collisions() {
 
   integrate_projectiles();
   update_object_movement();
-  //update_object_movement(2);
 
   // Detect and respond to physics based collisions
   COLLISION *physics_collisions = NULL;
@@ -54,26 +53,6 @@ void handle_collisions() {
   prepare_object_movement();
   handle_physics_collisions(physics_collisions, num_p_col);
   update_object_movement();
-  //update_object_movement(3);
-
-  #if 0
-  COLLISION *combat_collisions = NULL;
-  size_t num_c_col = get_sim_collisions(combat_sim, &combat_collisions,
-                                        sim_sphere->translation,
-                                        SIM_DIST, 0);
-  prepare_object_movement();
-  handle_combat_collisions(combat_collisions, num_c_col);
-  update_object_movement();
-
-  COLLISION *event_collisions = NULL;
-  size_t num_e_col = get_sim_collisions(event_sim, &event_collisions,
-                                        sim_sphere->translation,
-                                        SIM_DIST, 0);
-  handle_event_collisions(event_collisions, num_e_col);
-
-  free(combat_collisions);
-  free(event_collisions);
-  #endif
 
   free(physics_collisions);
 }

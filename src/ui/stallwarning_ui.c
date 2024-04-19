@@ -30,6 +30,11 @@ void disable_stallwarning() {
   }
 }
 
+void hide_stallwarning() {
+  player_ship.ship_stalled = 0;
+  set_ui_enabled(stallwarning, (stallwarning_enabled = 0));
+}
+
 
 void start_stallwarning() {
     add_timer(WARNING_TIME, enable_stallwarning, -1000, NULL);
