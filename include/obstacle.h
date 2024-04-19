@@ -24,4 +24,4 @@ void gen_rand_vec3(vec3 *, float);
 void gen_rand_vec4(vec4 *, float);
 float gen_rand_float(float);
 
-void add_timer(float, void *, int);
+void add_timer(float, void *, int, void *);

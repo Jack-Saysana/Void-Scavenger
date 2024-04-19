@@ -12,7 +12,7 @@
 #define P_BASE_SHIELD_RECHARGE (5.0)
 #define P_BASE_SHIELD_DELAY (2.0)
 #define P_BASE_MAX_EXP (100.0)
-#define P_BASE_DAMAGE (10.0)
+#define P_BASE_DAMAGE (100.0)
 #define P_LEVEL_SCALE (50.0)
 #define P_BASE_JUMP (5.0)
 
@@ -262,7 +262,7 @@
 #define E_ULTRA_SPEED (3)
 
 #define E_BASE_HEALTH_NORMAL (100.0)
-#define E_BASE_HEALTH_BRUTE (150.0)
+#define E_BASE_HEALTH_BRUTE (200.0)
 #define E_HEALTH_MODIFIER_NORMAL (25.0)
 #define E_HEALTH_MODIFIER_BRUTE (30.0)
 #define E_LEVEL_SCALE_CAP (10.0)

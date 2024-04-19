@@ -52,7 +52,6 @@ clean:
 	@rm -f ./assets/*/*.obj.bin*
 	@echo "Cleaned ./bin"
 	@mkdir ./bin/
-	
 
 run: threads
 	@./bin/$(PROJ_NAME)
