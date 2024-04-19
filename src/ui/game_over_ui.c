@@ -75,6 +75,8 @@ void set_game_over_stats() {
   float hours_played = minutes_played / 60.0;
   if (minutes_played >= 1.0) {
     time_played = fmodf(time_played, 60.0);
+  } else {
+    minutes_played = 0.0;
   }
   #ifdef __linux
   snprintf(game_over_stats_buffer, GAME_OVER_STATS_SIZE,
