@@ -181,7 +181,6 @@ void clear_space_mode() {
     free_entity(sp_obs[i].ent);
   }
 
-
   num_enemies = 0;
   num_projectiles = 0;
   num_obstacles = 0;

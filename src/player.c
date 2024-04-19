@@ -134,6 +134,7 @@ void reset_player() {
 
   reset_inventory();
   reset_equipped_parts();
+  disable_stallwarning();
 }
 
 // De-allocate player resources at end of game
@@ -269,6 +270,7 @@ void reset_sp_player_state() {
   player_ship.cur_power_use = 0.0;
   player_ship.reactor_can_recharge = 1;
   player_ship.ship_stalled = 0;
+  disable_stallwarning();
 }
 
 void sim_refresh_player_ship() {
