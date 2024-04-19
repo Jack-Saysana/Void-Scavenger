@@ -6,3 +6,10 @@ lib/libgcc_s_seh-1.dll
 lib/libopenal-1.dll
 lib/libstdc++-6.dll
 lib/libwinpthread-1.dll
+CMakeCache.txt
+CMakeFiles/*
+cmake_install.cmake
+*.filters
+*.vcxproj
+*.ninja*
+*.sln

@@ -1,6 +1,10 @@
 #ifndef __CONST_H__
 #define __CONST_H__
 
+// Window Constants
+#define DEFAULT_RES_X (1920)
+#define DEFAULT_RES_Y (1080)
+
 // Tick Constants
 #define TICK_RATE (0.05)      // 1/20 sec
 
@@ -38,7 +42,7 @@
 #define S_BASE_ANG_ACCEL (0.25)
 #define S_BASE_VEL (10.0)
 #define S_BASE_ACCEL (5.0)
-#define S_BASE_THRUSTER_PWR_DRAW (3.5)
+#define S_BASE_THRUSTER_PWR_DRAW (3.0)
 
 //Base ship parts
 #define S_BASE_PART_HULL        ((S_HULL){S_BASE_HEALTH})

@@ -46,6 +46,7 @@
 #define SKILL                ("skill")
 #define POINTS               ("points")
 #define GIVE                 ("give")
+#define RESOLUTION           ("res")
 
 #define WHITE_CMD            ("white")
 #define BLUE_CMD             ("blue")
@@ -106,3 +107,4 @@ void toggle_item_glow();
 void set_gun(S_WEAPON_T);
 void spawn_ship_part_cmd(vec3, int, int);
 void give_item(int, int);
+void set_resolution(int, int);

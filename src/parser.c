@@ -262,6 +262,15 @@ void console_dispatcher() {
             command_not_found();
           }
           /* END: set skill */
+        } else if (strncmp(command[1].tok, RESOLUTION,
+                           sizeof(RESOLUTION)) == 0) {
+          /* BEGIN: set resolution */
+          if (command[2].kind == NUMBER && command[3].kind == NUMBER) {
+            set_resolution(atoi(command[2].tok), atoi(command[3].tok));
+          } else {
+            command_not_found();
+          }
+          /* END: set resolution */
         } else {
           command_not_found();
         }
