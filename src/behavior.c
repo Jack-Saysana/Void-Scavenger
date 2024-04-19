@@ -165,7 +165,7 @@ void sp_enemy_pathfind(size_t index) {
   if (ESHOOT_ON && enemy->e_can_shoot && player_alignment > 0.9 &&
       !enemy->ship_stalled) {
     enemy->e_can_shoot = 0;
-    add_timer(1, (void *) &enemy->e_can_shoot, 1, NULL);
+    add_timer(1, set_sp_enemy_can_shoot, FUNCTION_PTR, (void *) index);
     use_power(enemy->weapon.max_power_draw, TYPE_WEAPON, enemy);
 
     vec3 gun_pos = GLM_VEC3_ZERO_INIT;
@@ -535,7 +535,8 @@ void st_enemy_pathfind(size_t index) {
   if (enemy->weapon_type == RANGED && clear_shot && player_alignment > 0.9 &&
       ESHOOT_ON && enemy->can_shoot) {
     enemy->can_shoot = 0;
-    add_timer(enemy->fire_rate, (void *) &enemy->can_shoot, 1, NULL);
+    add_timer(enemy->fire_rate, set_st_enemy_can_shoot, FUNCTION_PTR,
+              (void *) index);
 
     vec3 proj_pos = GLM_VEC3_ZERO_INIT;
     glm_vec3_scale(forward, 1.0, proj_pos);
@@ -558,7 +559,8 @@ void st_enemy_pathfind(size_t index) {
              player_alignment > 0.9 && ESHOOT_ON && enemy->can_shoot &&
              player_dist < 3.0) {
     enemy->can_shoot = 0;
-    add_timer(enemy->fire_rate, (void *) &enemy->can_shoot, 1, NULL);
+    add_timer(enemy->fire_rate, set_st_enemy_can_shoot, FUNCTION_PTR,
+              (void *) index);
 
     vec3 proj_pos = GLM_VEC3_ZERO_INIT;
     glm_vec3_scale_as(forward, 1.25, proj_pos);

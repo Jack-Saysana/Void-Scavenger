@@ -230,11 +230,11 @@ void use_power(float pwr_draw, int type, SHIP * ship) {
     new_pwr_draw = pwr_draw * S_WEAPON_PWR_USE_FACTOR;
     delay_time = pwr_draw;
   } else if (type == TYPE_THRUSTER) {
-    new_pwr_draw = pwr_draw * DELTA_TIME * 
+    new_pwr_draw = pwr_draw * TICK_RATE *
                    ship->thruster.max_accel * S_THRUSTER_PWR_USE_FACTOR;
     delay_time = pwr_draw * S_THRUSTER_PWR_DELAY_FACTOR;
   } else if (type == TYPE_SHIELD) {
-    new_pwr_draw = pwr_draw * DELTA_TIME;
+    new_pwr_draw = pwr_draw * TICK_RATE;
     delay_time = pwr_draw * S_SHIELD_PWR_DELAY_FACTOR;
   } else {
     return;
@@ -247,22 +247,29 @@ void use_power(float pwr_draw, int type, SHIP * ship) {
       stall_ship(ship);
     } else {
       ship->ship_stalled = 1;
-      add_timer(S_E_STALL_TIME, destall_enemy_ship, -1000, ship);
+      size_t index = ship - sp_enemies;
+      add_timer(S_E_STALL_TIME, destall_enemy_ship, FUNCTION_PTR,
+                (void *) index);
     }
   }
-  if (ship->reactor_can_recharge == 1) {
-    ship->reactor_can_recharge = 0;
-  } else {
-    //delete previous disable reactor timer
+  ship->reactor_can_recharge = 0;
+  //delete previous disable reactor timer
+  if (ship == &player_ship) {
     update_timer_memory((void*) &ship->reactor_can_recharge, NULL);
+    add_timer(delay_time, (void *) &ship->reactor_can_recharge, 1, NULL);
+  } else {
+    size_t index = ship - sp_enemies;
+    update_timer_args(set_sp_enemy_reactor_can_recharge, (void *) index,
+                      NULL);
+    add_timer(delay_time, set_sp_enemy_reactor_can_recharge, FUNCTION_PTR,
+              (void *) index);
   }
-  add_timer(delay_time, (void *) &ship->reactor_can_recharge, 1, NULL);
 }
 
 void reactor_recharge(SHIP * ship) {
   if (ship->cur_power_use > 0.0 && ship->reactor_can_recharge
       && !ship->ship_stalled) {
-    ship->cur_power_use -= DELTA_TIME * ship->reactor.recharge_rate;
+    ship->cur_power_use -= TICK_RATE * ship->reactor.recharge_rate;
     if (ship->cur_power_use <= 0.0) {
       ship->cur_power_use = 0.0;
     }
@@ -272,7 +279,7 @@ void reactor_recharge(SHIP * ship) {
 void recharge_ship_shield(SHIP *ship) {
   if (ship->recharging_shield && !ship->ship_stalled) {
     use_power(ship->shield.power_draw, TYPE_SHIELD, ship);
-    ship->cur_shield += ship->shield.recharge_rate * DELTA_TIME;
+    ship->cur_shield += ship->shield.recharge_rate * TICK_RATE;
     if (ship->cur_shield >= ship->shield.max_shield) {
       ship->recharging_shield = 0;
       ship->cur_shield = ship->shield.max_shield;
@@ -294,6 +301,10 @@ void ship_shield_recharge_delay(void *args) {
 }
 
 void destall_ship(SHIP * ship) {
+  if (!ship) {
+    return;
+  }
+
   ship->ship_stalled = 0;
   end_stallwarning();
   add_timer(0.25, reset_stallwarning, -1000, NULL);
@@ -301,12 +312,21 @@ void destall_ship(SHIP * ship) {
 }
 
 void stall_ship(SHIP * ship) {
+  if (!ship) {
+    return;
+  }
+
   ship->ship_stalled = 1;
   start_stallwarning();
   add_timer(ship->reactor.stall_time, destall_ship, -1000, ship);
 }
 
-void destall_enemy_ship(SHIP * ship) {
-  ship->ship_stalled = 0;
-  ship->cur_power_use = 0.0;
+void destall_enemy_ship(void *args) {
+  size_t index = (size_t) args;
+  if (index == INVALID_INDEX) {
+    return;
+  }
+
+  sp_enemies[index].ship_stalled = 0;
+  sp_enemies[index].cur_power_use = 0.0;
 }

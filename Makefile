@@ -36,6 +36,7 @@ all: ./bin/src $(BUILD_DIR)/$(PROJ_NAME)
 $(BUILD_DIR)/$(PROJ_NAME): $(SRC_OBJS)
 	@$(CC) $(LIBS) $(SRC_OBJS) -o $(BUILD_DIR)/$(PROJ_NAME) $(LINK)
 	@echo "Created $(PROJ_NAME) binary"
+	@cp ./lib/*.dll ./bin
 
 $(BUILD_DIR)/%.c.o: %.c
 	@$(CC) $(DFLAGS) $(INCLUDE) -c $< -o $@
@@ -51,7 +52,6 @@ clean:
 	@rm -f ./assets/*/*.obj.bin*
 	@echo "Cleaned ./bin"
 	@mkdir ./bin/
-	@cp ./lib/glfw3.dll ./bin/glfw3.dll
 
 run: threads
 	@./bin/$(PROJ_NAME)
