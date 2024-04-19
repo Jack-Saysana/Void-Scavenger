@@ -3,6 +3,7 @@
   Responsible for handling console prototypes and functionality
 */
 #include <pthread.h>
+#include <GLFW/glfw3.h>
 #include <global_vars.h>
 #include <structs/player_str.h>
 #include <structs/item_str.h>
@@ -52,3 +53,4 @@ void reset_listener_pos();
 void tick();
 void play_audio(int);
 void pause_audio(int);
+GLFWwindow *get_game_window();

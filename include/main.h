@@ -4,6 +4,8 @@
 #include <global_vars.h>
 #include <const.h>
 
+static GLFWwindow *window = NULL;
+
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
 

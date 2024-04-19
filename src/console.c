@@ -205,3 +205,9 @@ void set_gamelevel(float gamelevel) {
     reset_station();
   }
 }
+
+void set_resolution(int x, int y) {
+  GLFWwindow *window = get_game_window();
+  glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, x, y,
+                       GLFW_DONT_CARE);
+}

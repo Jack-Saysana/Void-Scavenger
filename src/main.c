@@ -9,10 +9,13 @@
 */
 
 int main() {
-  GLFWwindow *window = init_gl("Void Scavenger");
+  window = init_gl("Void Scavenger");
   if (!window) {
     return -1;
   }
+
+  glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, DEFAULT_RES_X,
+                       DEFAULT_RES_Y, GLFW_DONT_CARE);
 
   int status = barebones_init();
   if (status) {
@@ -60,4 +63,8 @@ int main() {
 
   cleanup_game();
   return 0;
+}
+
+GLFWwindow *get_game_window() {
+  return window;
 }

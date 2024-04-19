@@ -201,7 +201,6 @@ int init_player_ship() {
   player_ship.weapon = S_BASE_PART_WEAPON;
   player_ship.wing = S_BASE_PART_WING;
   player_ship.thruster = S_BASE_PART_THRUSTER;
-  
 
   player_ship.ent = init_player_ship_ent();
   if (player_ship.ent == NULL) {

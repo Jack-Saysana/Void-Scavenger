@@ -245,8 +245,8 @@ void input_keys(GLFWwindow *window) {
             player_ship.cur_speed = player_ship.thruster.max_vel;
           } else {
             player_ship.cur_speed += DELTA_TIME * player_ship.thruster.max_accel;
-            use_power(player_ship.thruster.max_power_draw, 
-                      TYPE_THRUSTER, &player_ship);
+            use_power(player_ship.thruster.max_power_draw, TYPE_THRUSTER,
+                      &player_ship);
           }
         } else if (i == GLFW_KEY_S && !player_ship.ship_stalled){
           /* Handle S press */
