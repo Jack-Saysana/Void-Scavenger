@@ -266,7 +266,7 @@ void reset_sp_player_state() {
   player_ship.invuln = 0;
   player_ship.recharging_shield = 0;
   player_ship.render_shield = 0;
-  player_ship.cur_power_use = player_ship.reactor.max_output;
+  player_ship.cur_power_use = 0.0;
   player_ship.reactor_can_recharge = 1;
   player_ship.ship_stalled = 0;
 }
