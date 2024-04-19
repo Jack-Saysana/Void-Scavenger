@@ -84,7 +84,7 @@ UI_COMP *ui_render_glowing_items_root;
 UI_COMP *ui_render_glowing_items_button;
 int render_distance_multiplier;
 static char render_distance_buffer[RENDER_BUFFER_SIZE];
-static size_t cur_res = 0;
+static int cur_res = 0;
 
 GAME_MODE last_game_mode;
 
@@ -95,8 +95,9 @@ void render_back_on_click();
 void render_distance_minus_on_click();
 void render_distance_plus_on_click();
 void glowing_items_on_click();
-void change_resolution(void *);
+void change_resolution(UI_COMP *, void *);
 void update_resolution();
+void write_settings();
 
 /* ================= EXTERNALLY DEFINED FUNCTIONS ================ */
 UI_COMP *init_blue_button(UI_COMP *, vec2, float, float, int);

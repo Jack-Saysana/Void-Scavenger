@@ -14,8 +14,8 @@ int main() {
     return -1;
   }
 
-  glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, DEFAULT_RES_X,
-                       DEFAULT_RES_Y, GLFW_DONT_CARE);
+  read_settings();
+  update_resolution();
 
   int status = barebones_init();
   if (status) {

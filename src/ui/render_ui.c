@@ -140,7 +140,7 @@ int init_render() {
   set_ui_text(ui_resolution_minus_button, "<", 0.42, T_CENTER, fixed_sys,
               GLM_VEC3_ONE);
   set_ui_on_click(ui_resolution_minus_button, (void *) change_resolution,
-                  (void *) 1);
+                  (void *) 0);
 
   ui_resolution_value_text = add_ui_comp(
     ui_resolution_root, // UI_COMP *parent
@@ -269,13 +269,39 @@ void glowing_items_on_click() {
   }
 }
 
-void change_resolution(void *args) {
+void change_resolution(UI_COMP *ui, void *args) {
   size_t move = (size_t) args;
-  cur_res = (cur_res + move) % NUM_RESOLUTIONS;
+  if (move) {
+    cur_res = (cur_res + 1) % NUM_RESOLUTIONS;
+  } else if (cur_res) {
+    cur_res--;
+  } else {
+    cur_res = NUM_RESOLUTIONS - 1;
+  }
   set_ui_text(ui_resolution_value_text, resolution_names[cur_res], 0.42,
               T_CENTER, fixed_sys, GLM_VEC3_ZERO);
 }
 
 void update_resolution() {
   set_resolution(resolutions[cur_res][X], resolutions[cur_res][Y]);
+  write_settings();
+}
+
+void read_settings() {
+  FILE *settings = fopen("./settings.txt", "r");
+  if (settings == NULL) {
+    cur_res = 0;
+    return;
+  }
+  fscanf(settings, "res: %d", &cur_res);
+  fclose(settings);
+}
+
+void write_settings() {
+  FILE *settings = fopen("./settings.txt", "w");
+  if (settings == NULL) {
+    return;
+  }
+  fprintf(settings, "res: %d", cur_res);
+  fclose(settings);
 }
