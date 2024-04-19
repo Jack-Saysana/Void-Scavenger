@@ -426,7 +426,6 @@ int init_skill_tree() {
 
   // set init visibility
   set_ui_enabled(skill_tree.ui_skill_tree_root, 0);
-  
   return 0;
 }
 
@@ -437,7 +436,6 @@ void update_skill_tree() {
   // check current game mode
   if (mode == SPACE) {
     set_ui_enabled(skill_tree.ui_skill_tree_root, 0);
-    
   } else if (mode == STATION) {
     update_skill_tabs();
     // update sp text
@@ -454,6 +452,8 @@ void toggle_skill_tree() {
     set_ui_enabled(skill_tree.ui_skill_tree_root, 1);
     set_ui_enabled(inventory.ui_inventory_root, 0);
     set_ui_enabled(ui_esc_root, 0);
+    set_ui_enabled(ui_render_root, 0);
+    set_ui_enabled(ui_control_root, 0);
     CURSOR_ENABLED = 1;
   }
 }

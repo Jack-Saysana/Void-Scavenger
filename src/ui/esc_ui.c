@@ -21,7 +21,7 @@ int init_esc() {
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(ui_esc_root, "assets/transparent.png");
-  
+
   ui_esc_background = add_ui_comp(
     ui_esc_root, // UI_COMP *parent
     (vec2) { 0.4, -0.3 }, // vec2 pos
