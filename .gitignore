@@ -9,3 +9,7 @@ lib/libwinpthread-1.dll
 CMakeCache.txt
 CMakeFiles/*
 cmake_install.cmake
+*.filters
+*.vcxproj
+*.ninja*
+*.sln
