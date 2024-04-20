@@ -35,6 +35,8 @@ void tick() {
   // Ticked Audio
   if (mode == SPACE) {
     update_ship_noises();
+  } else {
+    update_shield_tone();
   }
 
   add_timer(TICK_RATE, tick, FUNCTION_PTR, NULL);

@@ -19,6 +19,7 @@
 #define P_BASE_DAMAGE (100.0)
 #define P_LEVEL_SCALE (50.0)
 #define P_BASE_JUMP (5.0)
+#define P_BASE_PROJ_SPEED (25.0)
 
 // Ship constants
 #define S_BASE_PWR_OUTPUT (100.0)
@@ -201,7 +202,7 @@
 #define NUM_ALIEN_SHIP_TYPES (3)
 #define NUM_ALIEN_ATTACK_TYPES (7)
 #define NUM_ALIEN_MOV_TYPES (4)
-#define ST_E_BASE_PROJ_SPEED (10.0)
+#define ST_E_BASE_PROJ_SPEED (50.0)
 #define ST_E_BASE_PROJ_DAMAGE (10.0)
 #define ST_E_BASE_PROJ_RANGE (100.0)
 #define E_ANIM_HURT_MELEE (0)
@@ -241,6 +242,8 @@
 #define MAIN_THEME                  (21)
 #define SPACE_THEME                 (22)
 #define STATION_THEME               (23)
+#define SHIELD_SINE_WAVE            (24)
+#define SHIELD_TRI_WAVE             (25)
 
 #define INVALID_SOURCE              (-1)
 #define SOURCE_PAUSED               (0)
@@ -250,6 +253,8 @@
 #define MAX_SHIP_VELOCITY_TONE      (10.0)
 #define MAX_TONE                    (100.0)
 #define MAX_GAIN_DIST               (25.0)
+#define MAX_SHIELD_SINE_FREQUENCY   (150.0)
+#define MAX_SHIELD_TRI_FREQUENCY    (100.0)
 
 // Station Eneemy Types
 #define BRUTE (0)

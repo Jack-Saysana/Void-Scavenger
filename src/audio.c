@@ -89,8 +89,9 @@ void play_audio(int track) {
 
   TRACK *t = tracks + track;
   alSourcePlay(t->source);
-  if (alGetError()) {
-    fprintf(stderr, "Unable to play track %d\n", track);
+  int error = alGetError();
+  if (error) {
+    fprintf(stderr, "Error (%d): Unable to play track %d\n", error, track);
   }
 }
 
@@ -223,6 +224,36 @@ void play_spaceship_hull() {
   play_audio(SPACESHIP_HULL_HIT_WAV);
 }
 
+// =============================== SHIELD AUDIO ==============================
+
+void generate_shield_audio() {
+  generate_sine_tone(BASE_SINE_FREQUENCY);
+  generate_triangle_tone(BASE_TRIANGLE_FREQUENCY);
+
+  alSourcef(tracks[SHIELD_SINE_WAVE].source, AL_GAIN, 0.50);
+  alSourcef(tracks[SHIELD_TRI_WAVE].source, AL_GAIN, 0.50);
+}
+
+void update_shield_tone() {
+  if (st_player.recharging_shield) {
+    float cur_shield = st_player.cur_shield / st_player.max_shield;
+    update_tone_frequency(SHIELD_SINE_WAVE, BASE_SINE_FREQUENCY +
+                         (MAX_SHIELD_SINE_FREQUENCY * cur_shield));
+
+    update_tone_frequency(SHIELD_TRI_WAVE, BASE_TRIANGLE_FREQUENCY +
+                         (MAX_SHIELD_TRI_FREQUENCY * cur_shield));
+    if (check_source_playing(tracks, SHIELD_SINE_WAVE) == SOURCE_PAUSED) {
+      play_audio(SHIELD_SINE_WAVE);
+    }
+    if (check_source_playing(tracks, SHIELD_TRI_WAVE) == SOURCE_PAUSED) {
+      play_audio(SHIELD_TRI_WAVE);
+    }
+  } else {
+    pause_audio(SHIELD_SINE_WAVE);
+    pause_audio(SHIELD_TRI_WAVE);
+  }
+}
+
 // ============================= TONE GENERATION ==============================
 
 /*
@@ -276,6 +307,13 @@ void generate_sine_tone(float frequency) {
   PRINT_ERROR("alSourcei sine ~ AL_LOOPING")
 
   free(buff);
+  #ifdef __linux__
+  fprintf(stderr, "Loaded Track %ld: Sine Tone at %f hz\n", num_tracks,
+          frequency);
+  #else
+  fprintf(stderr, "Loaded Track %lld: Sine Tone at %f hz\n", num_tracks,
+          frequency);
+  #endif
   num_tracks++;
   if (num_tracks == tracks_buff_len) {
     int status = double_buffer((void **) &tracks, &tracks_buff_len,
@@ -307,6 +345,13 @@ void generate_triangle_tone(float frequency) {
   PRINT_ERROR("alSourcei tri ~ AL_LOOPING")
 
   free(buff);
+  #ifdef __linux__
+  fprintf(stderr, "Loaded Track %ld: Triangle Tone at %f hz\n", num_tracks,
+          frequency);
+  #else
+  fprintf(stderr, "Loaded Track %lld: Triangle Tone at %f hz\n", num_tracks,
+          frequency);
+  #endif
   num_tracks++;
   if (num_tracks == tracks_buff_len) {
     int status = double_buffer((void **) &tracks, &tracks_buff_len,

@@ -146,6 +146,9 @@ void set_render_dist(float dist) {
 }
 
 void reset_station() {
+  if (mode != STATION) {
+    return;
+  }
   free_timer_queue();
   add_timer(TICK_RATE, tick, FUNCTION_PTR, NULL);
   clear_station_mode();
@@ -153,6 +156,9 @@ void reset_station() {
 }
 
 void reset_space() {
+  if (mode != SPACE) {
+    return;
+  }
   free_timer_queue();
   add_timer(TICK_RATE, tick, FUNCTION_PTR, NULL);
   clear_space_mode();

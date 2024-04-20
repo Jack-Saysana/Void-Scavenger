@@ -293,7 +293,7 @@ void recharge_player_shield() {
     recharge_ship_shield(&player_ship);
   } else if (mode == STATION) {
     if (st_player.recharging_shield) {
-      st_player.cur_shield += st_player.shield_recharge_rate * DELTA_TIME;
+      st_player.cur_shield += st_player.shield_recharge_rate * TICK_RATE;
       if (st_player.cur_shield >= st_player.max_shield) {
         st_player.recharging_shield = 0;
         st_player.cur_shield = st_player.max_shield;

@@ -77,16 +77,19 @@ size_t init_enemy(size_t index, int weapon) {
   glm_vec3_zero(new_enemy->nearby_enemies);
 
   if (index == BRUTE) {
-    new_enemy->max_health = E_BASE_HEALTH_BRUTE + 
-        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP) 
-        * E_HEALTH_MODIFIER_BRUTE;
+    new_enemy->max_health = E_BASE_HEALTH_BRUTE +
+                            (st_player.total_levels_completed <=
+                             E_LEVEL_SCALE_CAP ?
+                             st_player.total_levels_completed :
+                             E_LEVEL_SCALE_CAP) * E_HEALTH_MODIFIER_BRUTE;
     new_enemy->cur_health = new_enemy->max_health;
     new_enemy->cur_speed = E_BASE_SPEED_BRUTE;
     new_enemy->fire_rate = E_BASE_FIRERATE_BRUTE;
     new_enemy->amount_xp = E_BRUTE_XP;
   } else {
-    new_enemy->max_health = E_BASE_HEALTH_NORMAL + 
-        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP) 
+    new_enemy->max_health = E_BASE_HEALTH_NORMAL +
+        (st_player.total_levels_completed <= E_LEVEL_SCALE_CAP ?
+        st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
         * E_HEALTH_MODIFIER_NORMAL;
     new_enemy->cur_health = new_enemy->max_health;
     new_enemy->cur_speed = E_BASE_SPEED_NORMAL;
