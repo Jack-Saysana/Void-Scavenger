@@ -266,7 +266,7 @@ void console_dispatcher() {
                            sizeof(RESOLUTION)) == 0) {
           /* BEGIN: set resolution */
           if (command[2].kind == NUMBER && command[3].kind == NUMBER) {
-            set_resolution(atoi(command[2].tok), atoi(command[3].tok));
+            set_resolution(atoi(command[2].tok), atoi(command[3].tok), 1);
           } else {
             command_not_found();
           }

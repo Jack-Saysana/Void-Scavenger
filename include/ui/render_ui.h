@@ -82,12 +82,14 @@ UI_COMP *ui_resolution_minus_button;
 UI_COMP *ui_resolution_value_text;
 UI_COMP *ui_resolution_plus_button;
 UI_COMP *ui_resolution_apply_button;
+UI_COMP *ui_windowed_root;
+UI_COMP *ui_windowed_button;
 UI_COMP *ui_render_glowing_items_root;
 UI_COMP *ui_render_glowing_items_button;
-
-int render_distance_multiplier;
+int render_distance_multiplier = 50;
 static char render_distance_buffer[RENDER_BUFFER_SIZE];
 static int cur_res = 0;
+static int windowed = 0;
 
 GAME_MODE last_game_mode;
 
@@ -101,9 +103,10 @@ void glowing_items_on_click();
 void change_resolution(UI_COMP *, void *);
 void update_resolution();
 void write_settings();
+void toggle_windowed();
 
 /* ================= EXTERNALLY DEFINED FUNCTIONS ================ */
 UI_COMP *init_blue_button(UI_COMP *, vec2, float, float, int);
 void set_render_dist(float dist);
 void set_sim_dist(float dist);
-void set_resolution(int, int);
+void set_resolution(int, int, int);

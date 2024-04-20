@@ -14,7 +14,6 @@ Implements the functionality for defining UI components for render menu.
 */
 int init_render() {
   last_game_mode = SPACE;
-  render_distance_multiplier = 50;
 
   ui_render_root = add_ui_comp(
     UI_ROOT_COMP, // UI_COMP *parent
@@ -39,7 +38,8 @@ int init_render() {
     (vec2) { 0.0625, -0.04347826 }, // vec2 pos
     0.875, // float width
     0.17391304, // float height
-    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
+    //ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
+    RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(ui_render_back_root, "assets/transparent.png");
 
@@ -55,10 +55,14 @@ int init_render() {
 
   ui_render_render_distance_root = add_ui_comp(
     ui_render_background, // UI_COMP *parent
-    (vec2) { 0.0625, -0.26086956 }, // vec2 pos
+    //(vec2) { 0.0625, -0.26086956 }, // vec2 pos
+    //(vec2) { 0.0625, -0.24 }, // vec2 pos
+    (vec2) { 0.0625, 0.0 }, // vec2 pos
     0.875, // float width
     0.17391304, // float height
-    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
+    //ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
+    RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
+    SIZE_UNIT_RATIO
   );
   set_ui_texture(ui_render_render_distance_root, "assets/transparent.png");
 
@@ -106,10 +110,13 @@ int init_render() {
 
   ui_resolution_root = add_ui_comp(
     ui_render_background, // UI_COMP *parent
-    (vec2) { 0.0625, -0.47826086 }, // vec2 pos
+    //(vec2) { 0.0625, -0.47826086 }, // vec2 pos
+    (vec2) { 0.0625, 0.0 }, // vec2 pos
     0.875, // float width
-    0.17391304, // float height
-    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
+    //0.17391304, // float height
+    0.24, // float height
+    //ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
+    RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
     SIZE_UNIT_RATIO
   );
   set_ui_texture(ui_resolution_root, "assets/transparent.png");
@@ -118,7 +125,7 @@ int init_render() {
     ui_resolution_root, // UI_COMP *parent
     (vec2) { 0.0, 0.0 }, // vec2 pos
     1.0, // float width
-    0.4, // float height
+    0.325, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
     SIZE_UNIT_RATIO
   );
@@ -128,9 +135,9 @@ int init_render() {
 
   ui_resolution_minus_button = init_blue_button(
     ui_resolution_root, // UI_COMP *parent
-    (vec2) { 0.0, -0.4 }, // vec2 pos
+    (vec2) { 0.0, -0.3 }, // vec2 pos
     0.15, // float width
-    0.6, // float height
+    0.4, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
     SIZE_UNIT_RATIO
   );
@@ -141,9 +148,9 @@ int init_render() {
 
   ui_resolution_value_text = add_ui_comp(
     ui_resolution_root, // UI_COMP *parent
-    (vec2) { 0.15, -0.4 }, // vec2 pos
+    (vec2) { 0.15, -0.3 }, // vec2 pos
     0.7, // float width
-    0.6, // float height
+    0.3, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
     SIZE_UNIT_RATIO
   );
@@ -153,9 +160,9 @@ int init_render() {
 
   ui_resolution_plus_button = init_blue_button(
     ui_resolution_root, // UI_COMP *parent
-    (vec2) { 0.85, -0.4 }, // vec2 pos
+    (vec2) { 0.85, -0.3 }, // vec2 pos
     0.15, // float width
-    0.6, // float height
+    0.4, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
     SIZE_UNIT_RATIO
   );
@@ -168,24 +175,54 @@ int init_render() {
     ui_resolution_root, // UI_COMP *parent
     (vec3) { 0.5, -1.0 }, // vec2 pos
     0.5, // float width
-    0.5, // float height
+    0.25, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
     SIZE_UNIT_RATIO
   );
-  set_ui_pivot(ui_resolution_apply_button, PIVOT_TOP);
+  set_ui_pivot(ui_resolution_apply_button, PIVOT_BOTTOM);
   set_ui_text(ui_resolution_apply_button, "APPLY", 0.5, T_CENTER, fixed_sys,
               GLM_VEC3_ONE);
   set_ui_on_click(ui_resolution_apply_button, (void *) update_resolution,
                   NULL);
 
-  ui_render_glowing_items_root = add_ui_comp(
+  ui_windowed_root = add_ui_comp(
     ui_render_background, // UI_COMP *parent
-    (vec2) { 0.0625, -0.78260868 }, // vec2 pos
+    //(vec2) { 0.0625, -0.715 }, // vec2 pos
+    (vec2) { 0.0625, -0.05 }, // vec2 pos
     0.875, // float width
-    0.17391304, // float height
-    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
+    //0.17391304, // float height
+    0.11, // float height
+    //ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
+    RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
+    SIZE_UNIT_RATIO
   );
   set_ui_texture(ui_render_render_distance_root, "assets/transparent.png");
+
+
+  ui_windowed_button = init_blue_button(
+    ui_windowed_root, // UI_COMP *parent
+    (vec2) { 0.0, 0.0 }, // vec2 pos
+    1.0, // float width
+    1.0, // float height
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
+  );
+  set_ui_text(ui_windowed_button, "WINDOWED: OFF", 0.25, T_CENTER,
+              fixed_sys, GLM_VEC3_ONE);
+  set_ui_on_click(ui_windowed_button, (void *) toggle_windowed, NULL);
+
+  ui_render_glowing_items_root = add_ui_comp(
+    ui_render_background, // UI_COMP *parent
+    //(vec2) { 0.0625, -0.78260868 }, // vec2 pos
+    (vec2) { 0.0625, -0.05 }, // vec2 pos
+    0.875, // float width
+    //0.17391304, // float height
+    0.11, // float height
+    //ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
+    RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
+    SIZE_UNIT_RATIO
+  );
+  set_ui_texture(ui_render_render_distance_root, "assets/transparent.png");
+
 
   ui_render_glowing_items_button = init_blue_button(
     ui_render_glowing_items_root, // UI_COMP *parent
@@ -206,6 +243,16 @@ void update_render() {
     set_ui_text(ui_render_glowing_items_button, "GLOWING ITEMS: ON", 0.25, T_CENTER, fixed_sys, GLM_VEC3_ONE);
   } else {
     set_ui_text(ui_render_glowing_items_button, "GLOWING ITEMS: OFF", 0.25, T_CENTER, fixed_sys, GLM_VEC3_ONE);
+  }
+
+  if (windowed) {
+    set_ui_text(ui_windowed_button, "WINDOWED: ON", 0.25, T_CENTER,
+                fixed_sys, GLM_VEC3_ONE);
+    set_ui_enabled(ui_resolution_root, 0);
+  } else {
+    set_ui_text(ui_windowed_button, "WINDOWED: OFF", 0.25, T_CENTER,
+                fixed_sys, GLM_VEC3_ONE);
+    set_ui_enabled(ui_resolution_root, 1);
   }
 
   snprintf(render_distance_buffer, RENDER_BUFFER_SIZE, "%d", render_distance_multiplier);
@@ -267,6 +314,10 @@ void glowing_items_on_click() {
 }
 
 void change_resolution(UI_COMP *ui, void *args) {
+  if (windowed) {
+    return;
+  }
+
   size_t move = (size_t) args;
   if (move) {
     cur_res = (cur_res + 1) % NUM_RESOLUTIONS;
@@ -280,7 +331,7 @@ void change_resolution(UI_COMP *ui, void *args) {
 }
 
 void update_resolution() {
-  set_resolution(resolutions[cur_res][X], resolutions[cur_res][Y]);
+  set_resolution(resolutions[cur_res][X], resolutions[cur_res][Y], windowed);
   write_settings();
 }
 
@@ -290,8 +341,14 @@ void read_settings() {
     cur_res = 0;
     return;
   }
-  fscanf(settings, "res: %d", &cur_res);
+  fscanf(settings, "res: %d\nrd: %d\nwindowed: %d\n", &cur_res,
+         &render_distance_multiplier, &windowed);
   fclose(settings);
+}
+
+void toggle_windowed() {
+  windowed = !windowed;
+  update_resolution();
 }
 
 void write_settings() {
@@ -299,6 +356,7 @@ void write_settings() {
   if (settings == NULL) {
     return;
   }
-  fprintf(settings, "res: %d", cur_res);
+  fprintf(settings, "res: %d\nrd: %d\nwindowed: %d\n", cur_res,
+          render_distance_multiplier, windowed);
   fclose(settings);
 }
