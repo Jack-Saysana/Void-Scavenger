@@ -251,7 +251,7 @@ void input_keys(GLFWwindow *window) {
           } else {
             player_ship.cur_speed += DELTA_TIME * player_ship.thruster.max_accel;
             use_power(player_ship.thruster.max_power_draw, TYPE_THRUSTER,
-                      &player_ship);
+                      &player_ship, DELTA_TIME);
           }
         } else if (i == GLFW_KEY_S && !player_ship.ship_stalled){
           /* Handle S press */
@@ -261,7 +261,7 @@ void input_keys(GLFWwindow *window) {
           } else {
             player_ship.cur_speed -= DELTA_TIME * player_ship.thruster.max_accel;
             use_power(player_ship.thruster.max_power_draw * S_THRUSTER_REVERSE_FACTOR,
-                      TYPE_THRUSTER, &player_ship);
+                      TYPE_THRUSTER, &player_ship, DELTA_TIME);
           }
         } else if (i == GLFW_KEY_A && !player_ship.ship_stalled){
           /* Handle A press */
