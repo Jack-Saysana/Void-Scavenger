@@ -62,6 +62,12 @@ void init_ui_components() {
     exit(1);
   }
 
+  // Initialize intermediate menu
+  if (init_intermediate()) {
+    printf("Could not initialize intermediate menu!\n");
+    exit(1);
+  }
+
   coordinates_ui_initialize();
   fps_ui_initialize();
   init_terminal_ui();
@@ -104,4 +110,5 @@ void update_ui_components() {
   update_render();
   update_control();
   update_esc();
+  update_intermediate();
 }

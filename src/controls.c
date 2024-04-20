@@ -224,12 +224,17 @@ void input_keys(GLFWwindow *window) {
         if (i == GLFW_KEY_E && get_terminal_ui_state() &&
                    !holding_alpha[i - GLFW_KEY_A]) {
           /* Handle using terminal in space mode */
-          set_gamemode_space();
-          st_player.total_levels_completed++;
-          maze_size++;
-          if (maze_size > 31) {
-            maze_size = 31;
-          }
+          open_intermediate();
+          // set_gamemode_space();
+          // st_player.total_levels_completed++;
+          // maze_size++;
+          // if (maze_size > 31) {
+          //   maze_size = 31;
+          // }
+        }
+        if (i == GLFW_KEY_M && !holding_alpha[i - GLFW_KEY_A]) {
+          /* Handle M press for testing intermediate menu */
+          toggle_intermediate();
         }
         if (i == GLFW_KEY_E && get_item_prompt_state() &&
             !holding_alpha[i - GLFW_KEY_A]) {
@@ -292,6 +297,10 @@ void input_keys(GLFWwindow *window) {
         }
         if (i == GLFW_KEY_C && !holding_alpha[i - GLFW_KEY_A]) {
           toggle_st_waypoint();
+        }
+        if (i == GLFW_KEY_M && !holding_alpha[i - GLFW_KEY_A]) {
+          /* Handle M press for testing intermediate menu */
+          toggle_intermediate();
         }
       }
       holding_alpha[i - GLFW_KEY_A] = 1;

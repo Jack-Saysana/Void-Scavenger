@@ -445,6 +445,9 @@ void update_skill_tree() {
 }
 
 void toggle_skill_tree() {
+  if (ui_intermediate_root->enabled) {
+    return;
+  }
   if (skill_tree.ui_skill_tree_root->enabled) {
     set_ui_enabled(skill_tree.ui_skill_tree_root, 0);
     CURSOR_ENABLED = 0;

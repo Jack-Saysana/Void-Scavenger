@@ -27,18 +27,18 @@ int init_render() {
 
   ui_render_background = add_ui_comp(
     ui_render_root, // UI_COMP *parent
-    (vec2) { 0.4, -0.3 }, // vec2 pos
+    (vec2) { 0.4, -0.2125 }, // vec2 pos
     0.2, // float width
-    0.4, // float height
+    0.575, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(ui_render_background, "assets/ui/hud_color_bg.png");
 
   ui_render_back_root = add_ui_comp(
     ui_render_background, // UI_COMP *parent
-    (vec2) { 0.0625, -0.0625 }, // vec2 pos
+    (vec2) { 0.0625, -0.04347826 }, // vec2 pos
     0.875, // float width
-    0.25, // float height
+    0.17391304, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(ui_render_back_root, "assets/transparent.png");
@@ -55,11 +55,9 @@ int init_render() {
 
   ui_render_render_distance_root = add_ui_comp(
     ui_render_background, // UI_COMP *parent
-    //(vec2) { 0.0625, -0.375 }, // vec2 pos
-    (vec2) { 0.0625, -0.325 }, // vec2 pos
+    (vec2) { 0.0625, -0.26086956 }, // vec2 pos
     0.875, // float width
-    //0.25, // float height
-    0.15, // float height
+    0.17391304, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
   );
   set_ui_texture(ui_render_render_distance_root, "assets/transparent.png");
@@ -108,10 +106,9 @@ int init_render() {
 
   ui_resolution_root = add_ui_comp(
     ui_render_background, // UI_COMP *parent
-    (vec2) { 0.0625, -0.4875 }, // vec2 pos
+    (vec2) { 0.0625, -0.47826086 }, // vec2 pos
     0.875, // float width
-    //0.25, // float height
-    0.15, // float height
+    0.17391304, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
     SIZE_UNIT_RATIO
   );
@@ -168,24 +165,24 @@ int init_render() {
                   (void *) 1);
 
   ui_resolution_apply_button = init_blue_button(
-    ui_resolution_root,
-    (vec3) { 0.5, -1.1 },
-    0.75,
-    0.75,
-    ABSOLUTE_POS | POS_UNIT_RATIO | SIZE_UNIT_RATIO
+    ui_resolution_root, // UI_COMP *parent
+    (vec3) { 0.5, -1.0 }, // vec2 pos
+    0.5, // float width
+    0.5, // float height
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
+    SIZE_UNIT_RATIO
   );
   set_ui_pivot(ui_resolution_apply_button, PIVOT_TOP);
-  set_ui_text(ui_resolution_apply_button, "APPLY", 0.42, T_CENTER, fixed_sys,
+  set_ui_text(ui_resolution_apply_button, "APPLY", 0.5, T_CENTER, fixed_sys,
               GLM_VEC3_ONE);
   set_ui_on_click(ui_resolution_apply_button, (void *) update_resolution,
                   NULL);
 
   ui_render_glowing_items_root = add_ui_comp(
     ui_render_background, // UI_COMP *parent
-    //(vec2) { 0.0625, -0.6875 }, // vec2 pos
-    (vec2) { 0.0625, -0.7875 }, // vec2 pos
+    (vec2) { 0.0625, -0.78260868 }, // vec2 pos
     0.875, // float width
-    0.15, // float height
+    0.17391304, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
   );
   set_ui_texture(ui_render_render_distance_root, "assets/transparent.png");

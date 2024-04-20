@@ -30,7 +30,7 @@ int init_ship_parts() {
 
   ship_parts.ui_ship_parts_background = add_ui_comp(
     ship_parts.ui_ship_parts_root, // UI_COMP *parent
-    (vec2) { 0.15, 0 }, // vec2 pos
+    (vec2) { 0.04, 0 }, // vec2 pos
     1.0, // float width
     1.0, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_Y | HEIGHT_UNIT_RATIO_Y
@@ -186,21 +186,21 @@ int init_ship_parts() {
 
   ship_parts.ui_ship_parts_info_background = add_ui_comp(
     ship_parts.ui_ship_parts_root, // UI_COMP *parent
-    (vec2) { 0.7, -0.7 }, // vec2 pos
+    (vec2) { 0.7, -0.67 }, // vec2 pos
     0.24, // float width
-    0.24, // float height
+    0.30, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(ship_parts.ui_ship_parts_info_background, "assets/ui/test.png");
 
   ship_parts.ui_ship_parts_info_title_background = add_ui_comp(
     ship_parts.ui_ship_parts_info_background, // UI_COMP *parent
-    (vec2) { 0.025, -0.05 }, // vec2 pos
+    (vec2) { 0.025, -0.04 }, // vec2 pos
     0.95, // float width
-    0.2, // float height
+    0.16, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(ship_parts.ui_ship_parts_info_title_background, "assets/ui/hud_color_bg.png");
+  set_ui_texture(ship_parts.ui_ship_parts_info_title_background, "assets/ui/hud_color.png");
 
   ship_parts.ui_ship_parts_info_title_text = add_ui_comp(
     ship_parts.ui_ship_parts_info_title_background, // UI_COMP *parent
@@ -218,12 +218,12 @@ int init_ship_parts() {
 
   ship_parts.ui_ship_parts_info_content_background = add_ui_comp(
     ship_parts.ui_ship_parts_info_background, // UI_COMP *parent
-    (vec2) { 0.025, -0.3 }, // vec2 pos
+    (vec2) { 0.025, -0.24 }, // vec2 pos
     0.95, // float width
-    0.65, // float height
+    0.72, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(ship_parts.ui_ship_parts_info_content_background, "assets/ui/hud_color.png");
+  set_ui_texture(ship_parts.ui_ship_parts_info_content_background, "assets/ui/hud_color_bg.png");
 
   ship_parts.ui_ship_parts_info_content_text = add_ui_comp(
     ship_parts.ui_ship_parts_info_content_background, // UI_COMP *parent
@@ -255,16 +255,25 @@ void update_ship_parts() {
     update_ship_parts_icons();
   } else if (mode == STATION) {
     // set visibility
-    set_ui_enabled(ship_parts.ui_ship_parts_root, 0);
+    // set_ui_enabled(ship_parts.ui_ship_parts_root, 0);
+    update_ship_parts_icons();
   }
 }
 
 void toggle_ship_parts() {
+  if (ui_intermediate_root->enabled) {
+    return;
+  }
   if (ship_parts.ui_ship_parts_root->enabled) {
     set_ui_enabled(ship_parts.ui_ship_parts_root, 0);
+    if (inventory.ui_inventory_root->enabled) {
+      set_ui_enabled(inventory.ui_inventory_root, 0);
+    }
     CURSOR_ENABLED = 0;
   } else {
     set_ui_enabled(ship_parts.ui_ship_parts_root, 1);
+    set_ui_enabled(ship_parts.ui_ship_parts_info_background, 1);
+    set_ui_enabled(ship_parts.ui_ship_parts_background, 1);
     set_ui_enabled(inventory.ui_inventory_root, 0);
     set_ui_enabled(ui_esc_root, 0);
     set_ui_enabled(ui_render_root, 0);
@@ -454,6 +463,13 @@ void ship_parts_on_hover_wrapper(UI_COMP *ui_ship_parts, void *arg) {
 }
 
 void ship_parts_on_hover(UI_COMP *ui_ship_parts, I_SLOT *equipped_ship_parts) {
+  if (!ship_parts.ui_ship_parts_info_background->enabled) {
+    set_ui_enabled(ship_parts.ui_ship_parts_info_background, 1);
+  }
+  if (inventory.ui_inventory_info_background->enabled) {
+    set_ui_enabled(inventory.ui_inventory_info_background, 0);
+  }
+  
   const char *item_slot_id_str[] =
   {
     [I_SLOT_REACTOR] = "REACTOR",
@@ -548,6 +564,10 @@ void ship_parts_off_hover(UI_COMP *ui_ship_parts, I_SLOT *equipped_ship_parts) {
 }
 
 void ship_parts_on_click(UI_COMP *ui_ship_parts, I_SLOT *equipped_ship_parts) {
+  if (mode == SPACE) {
+    return;
+  }
+
   I_SLOT *first_empty_slot = inv_first_avail();
   if (!first_empty_slot) {
     // TODO: add popup prompt

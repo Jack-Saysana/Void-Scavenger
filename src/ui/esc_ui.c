@@ -13,6 +13,8 @@ Implements the functionality for defining UI components for ESC menu.
     otherwise unsuccessful
 */
 int init_esc() {
+  volume_multiplier = 50;
+
   ui_esc_root = add_ui_comp(
     UI_ROOT_COMP, // UI_COMP *parent
     (vec2) { 0.0, 0.0 }, // vec2 pos
@@ -24,18 +26,18 @@ int init_esc() {
 
   ui_esc_background = add_ui_comp(
     ui_esc_root, // UI_COMP *parent
-    (vec2) { 0.4, -0.3 }, // vec2 pos
+    (vec2) { 0.4, -0.2375 }, // vec2 pos
     0.2, // float width
-    0.4, // float height
+    0.525, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(ui_esc_background, "assets/ui/hud_color_bg.png");
 
   ui_esc_render_root = add_ui_comp(
     ui_esc_background, // UI_COMP *parent
-    (vec2) { 0.0625, -0.0625 }, // vec2 pos
+    (vec2) { 0.0625, -0.04761905 }, // vec2 pos
     0.875, // float width
-    0.25, // float height
+    0.19047619, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(ui_esc_render_root, "assets/transparent.png");
@@ -52,9 +54,9 @@ int init_esc() {
 
   ui_esc_control_root = add_ui_comp(
     ui_esc_background, // UI_COMP *parent
-    (vec2) { 0.0625, -0.375 }, // vec2 pos
+    (vec2) { 0.0625, -0.28571429 }, // vec2 pos
     0.875, // float width
-    0.25, // float height
+    0.19047619, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(ui_esc_control_root, "assets/transparent.png");
@@ -71,9 +73,9 @@ int init_esc() {
 
   ui_esc_difficulty_root = add_ui_comp(
     ui_esc_background, // UI_COMP *parent
-    (vec2) { 0.0625, -0.6875 }, // vec2 pos
+    (vec2) { 0.0625, -0.52380953 }, // vec2 pos
     0.875, // float width
-    0.25, // float height
+    0.19047619, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(ui_esc_difficulty_root, "assets/transparent.png");
@@ -120,6 +122,57 @@ int init_esc() {
   set_ui_text(ui_difficulty_plus_button, ">", 0.42, T_CENTER, fixed_sys, GLM_VEC3_ONE);
   set_ui_on_click(ui_difficulty_plus_button, (void *) difficulty_plus_on_click, NULL);
 
+  ui_esc_volume_root = add_ui_comp(
+    ui_esc_background, // UI_COMP *parent
+    (vec2) { 0.0625, -0.76190477 }, // vec2 pos
+    0.875, // float width
+    0.19047619, // float height
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
+  );
+  set_ui_texture(ui_esc_volume_root, "assets/transparent.png");
+
+  ui_esc_volume_title_text = add_ui_comp(
+    ui_esc_volume_root, // UI_COMP *parent
+    (vec2) { 0.0, 0.0 }, // vec2 pos
+    1.0, // float width
+    0.4, // float height
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
+  );
+  set_ui_texture(ui_esc_volume_title_text, "assets/transparent.png");
+  set_ui_text(ui_esc_volume_title_text, "SOUND VOLUME", 0.625, T_CENTER, fixed_sys, GLM_VEC3_ZERO);
+
+  ui_esc_volume_minus_button = init_blue_button(
+    ui_esc_volume_root, // UI_COMP *parent
+    (vec2) { 0.0, -0.4 }, // vec2 pos
+    0.15, // float width
+    0.6, // float height
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
+  );
+  set_ui_text(ui_esc_volume_minus_button, "<", 0.42, T_CENTER, fixed_sys, GLM_VEC3_ONE);
+  set_ui_on_click(ui_esc_volume_minus_button, (void *) volume_minus_on_click, NULL);
+
+  ui_esc_volume_text = add_ui_comp(
+    ui_esc_volume_root, // UI_COMP *parent
+    (vec2) { 0.15, -0.4 }, // vec2 pos
+    0.7, // float width
+    0.6, // float height
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
+  );
+  set_ui_texture(ui_esc_volume_text, "assets/transparent.png");
+  memset(volume_buffer, '\0', ESC_BUFFER_SIZE);
+  snprintf(volume_buffer, ESC_BUFFER_SIZE, "%d", volume_multiplier);
+  set_ui_text(ui_esc_volume_text, volume_buffer, 0.42, T_CENTER, fixed_sys, GLM_VEC3_ZERO);
+
+  ui_esc_volume_plus_button = init_blue_button(
+    ui_esc_volume_root, // UI_COMP *parent
+    (vec2) { 0.85, -0.4 }, // vec2 pos
+    0.15, // float width
+    0.6, // float height
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
+  );
+  set_ui_text(ui_esc_volume_plus_button, ">", 0.42, T_CENTER, fixed_sys, GLM_VEC3_ONE);
+  set_ui_on_click(ui_esc_volume_plus_button, (void *) volume_plus_on_click, NULL);
+
   set_ui_enabled(ui_esc_root, 0);
   return 0;
 }
@@ -143,6 +196,7 @@ void toggle_esc() {
     set_ui_enabled(inventory.ui_inventory_root, 0);
     set_ui_enabled(skill_tree.ui_skill_tree_root, 0);
     set_ui_enabled(ship_parts.ui_ship_parts_root, 0);
+    set_ui_enabled(ui_intermediate_root, 0);
     CURSOR_ENABLED = 1;
   }
 }
@@ -208,4 +262,23 @@ void update_esc() {
       set_ui_text(ui_difficulty_text, difficulty_buffer, 0.42, T_CENTER, fixed_sys, GLM_VEC3_ZERO);
       break;
   }
+
+  snprintf(volume_buffer, ESC_BUFFER_SIZE, "%d", volume_multiplier);
+  set_ui_text(ui_esc_volume_text, volume_buffer, 0.42, T_CENTER, fixed_sys, GLM_VEC3_ZERO);
+}
+
+void volume_minus_on_click() {
+  if (volume_multiplier > 0) {
+    volume_multiplier -= 5;
+  }
+
+  update_volume((1.0 / 50) * volume_multiplier);
+}
+
+void volume_plus_on_click() {
+  if (volume_multiplier < 100) {
+    volume_multiplier += 5;
+  }
+
+  update_volume((1.0 / 50) * volume_multiplier);
 }

@@ -106,6 +106,7 @@ extern UI_COMP *ui_esc_root;
 extern UI_COMP *ui_render_root;
 extern int render_distance_display_value;
 extern UI_COMP *ui_control_root;
+extern UI_COMP *ui_intermediate_root;
 
 // Arena globals
 extern float space_size;
