@@ -304,7 +304,7 @@ void input_keys(GLFWwindow *window) {
     for (int i = GLFW_KEY_0; i <= GLFW_KEY_9; i++) {
     if (glfwGetKey(window, i) == GLFW_PRESS && !holding_num[i - GLFW_KEY_0]) {
       holding_num[i - GLFW_KEY_0] = 1;
-      if (cheats && console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
+      if (get_cheats_state() && console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
         cons_cmd[cons_cmd_len++] = i;
         update_console_text(cons_cmd);
         advance_cursor();
@@ -319,7 +319,7 @@ void input_keys(GLFWwindow *window) {
   if (glfwGetKey(window, GLFW_KEY_MINUS) == GLFW_PRESS &&
       !holding_shift && !holding_minus) {
     holding_minus = 1;
-    if (cheats && console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
+    if (get_cheats_state() && console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
       cons_cmd[cons_cmd_len++] = '-';
       update_console_text(cons_cmd);
       advance_cursor();
@@ -333,7 +333,7 @@ void input_keys(GLFWwindow *window) {
 
   /* Space */
   if (glfwGetKey(window, GLFW_KEY_SPACE)) {
-    if (cheats && console_enabled && cons_cmd_len < MAX_CMD_LEN - 1 && !holding_space) {
+    if (get_cheats_state() && console_enabled && cons_cmd_len < MAX_CMD_LEN - 1 && !holding_space) {
       cons_cmd[cons_cmd_len++] = ' ';
       update_console_text(cons_cmd);
       advance_cursor();
@@ -356,7 +356,7 @@ void input_keys(GLFWwindow *window) {
   if (glfwGetKey(window, GLFW_KEY_MINUS) == GLFW_PRESS && holding_shift &&
       !holding_underscore) {
     holding_underscore = 1;
-    if (cheats && console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
+    if (get_cheats_state() && console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
       cons_cmd[cons_cmd_len++] = '_';
       update_console_text(cons_cmd);
       advance_cursor();
@@ -371,7 +371,7 @@ void input_keys(GLFWwindow *window) {
   /* Enter */
   if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS && !holding_enter) {
     holding_enter = 1;
-    if (cheats && console_enabled) {
+    if (get_cheats_state() && console_enabled) {
       cons_cmd[cons_cmd_len++] = '\0';
       /* Call lexer to tokenize and parse the command */
       tokenize(cons_cmd, cons_cmd_len);
@@ -396,7 +396,7 @@ void input_keys(GLFWwindow *window) {
   /* Period / Dot */
   if (glfwGetKey(window, GLFW_KEY_PERIOD) == GLFW_PRESS && !holding_dot) {
     holding_dot = 1;
-    if (cheats && console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
+    if (get_cheats_state() && console_enabled && cons_cmd_len < MAX_CMD_LEN - 1) {
       cons_cmd[cons_cmd_len++] = '.';
       update_console_text(cons_cmd);
       advance_cursor();
@@ -408,7 +408,7 @@ void input_keys(GLFWwindow *window) {
   /* Backspace */
   if (glfwGetKey(window, GLFW_KEY_BACKSPACE) == GLFW_PRESS && !holding_backspace) {
     holding_backspace = 1;
-    if (cheats && console_enabled && cons_cmd_len > 0) {
+    if (get_cheats_state() && console_enabled && cons_cmd_len > 0) {
       cons_cmd[--cons_cmd_len] = '\0';
       update_console_text(cons_cmd);
       retreat_cursor();
@@ -420,7 +420,7 @@ void input_keys(GLFWwindow *window) {
   /* Slash */
   if (glfwGetKey(window, GLFW_KEY_SLASH) == GLFW_PRESS && !holding_slash) {
     holding_slash = 1;
-    if (cheats) {
+    if (get_cheats_state()) {
       if (console_enabled) {
         disable_console();
       } else {

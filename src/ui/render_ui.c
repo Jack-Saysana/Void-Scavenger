@@ -287,13 +287,24 @@ void update_resolution() {
   write_settings();
 }
 
+void update_details() {
+  write_settings();
+}
+
+void update_cheats() {
+  write_settings();
+}
+
 void read_settings() {
   FILE *settings = fopen("./settings.txt", "r");
   if (settings == NULL) {
     cur_res = 0;
+    low_details = 0;
+    cheats = 1;
     return;
   }
-  fscanf(settings, "res: %d", &cur_res);
+  fscanf(settings, "res: %d\ndetail: %d\ncheats: %d",
+         &cur_res, &low_details, &cheats);
   fclose(settings);
 }
 
@@ -302,6 +313,15 @@ void write_settings() {
   if (settings == NULL) {
     return;
   }
-  fprintf(settings, "res: %d", cur_res);
+  fprintf(settings, "res: %d\ndetail: %d\ncheats: %d",
+                    cur_res, low_details, cheats);
   fclose(settings);
+}
+
+int get_cheats_state() {
+  return cheats;
+}
+
+int get_details_state() {
+  return low_details;
 }

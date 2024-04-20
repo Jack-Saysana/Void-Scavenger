@@ -31,3 +31,5 @@ void tick();
 void add_timer(float, void *, int, void *);
 void read_settings();
 void update_resolution();
+void update_details();
+void update_cheats();

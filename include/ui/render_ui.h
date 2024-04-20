@@ -85,6 +85,8 @@ UI_COMP *ui_render_glowing_items_button;
 int render_distance_multiplier;
 static char render_distance_buffer[RENDER_BUFFER_SIZE];
 static int cur_res = 0;
+static int cheats = 0;
+static int low_details = 0;
 
 GAME_MODE last_game_mode;
 

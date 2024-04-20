@@ -16,6 +16,8 @@ int main() {
 
   read_settings();
   update_resolution();
+  update_details();
+  update_cheats();
 
   int status = barebones_init();
   if (status) {
