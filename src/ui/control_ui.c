@@ -21,7 +21,7 @@ int init_control() {
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(ui_control_root, "assets/transparent.png");
-  
+
   ui_control_background = add_ui_comp(
     ui_control_root, // UI_COMP *parent
     (vec2) { 0.3, -0.2 }, // vec2 pos
@@ -61,18 +61,22 @@ int init_control() {
 
   ui_control_instruction_image = add_ui_comp(
     ui_control_instruction_root, // UI_COMP *parent
-    (vec2) { 0.0, -0.04167 }, // vec2 pos
-    1.0, // float width
-    0.5, // float height
+    //(vec2) { 0.0, -0.04167 }, // vec2 pos
+    (vec2) { 0.5, -0.25 }, // vec2 pos
+    0.75, // float width
+    0.375, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_X
   );
+  set_ui_pivot(ui_control_instruction_image, PIVOT_CENTER);
   set_ui_texture(ui_control_instruction_image, "assets/ui/wasd_mouse.png");
 
   ui_control_instruction_title_text = add_ui_comp(
-    ui_control_instruction_image, // UI_COMP *parent
+    //ui_control_instruction_image, // UI_COMP *parent
+    ui_control_instruction_root, // UI_COMP *parent
+    //(vec2) { 0.0, 0.0 }, // vec2 pos
     (vec2) { 0.0, 0.0 }, // vec2 pos
     1.0, // float width
-    0.1, // float height
+    0.05, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
   );
   set_ui_texture(ui_control_instruction_title_text, "assets/transparent.png");
@@ -81,22 +85,28 @@ int init_control() {
   set_ui_text(ui_control_instruction_title_text, control_instruction_title_buffer, 1.0, T_CENTER, fixed_sys, GLM_VEC3_ZERO);
 
   ui_control_instruction_key_text = add_ui_comp(
-    ui_control_instruction_image, // UI_COMP *parent
-    (vec2) { 0.0, -0.95 }, // vec2 pos
+    //ui_control_instruction_image, // UI_COMP *parent
+    ui_control_instruction_root, // UI_COMP *parent
+    //(vec2) { 0.0, -0.75 }, // vec2 pos
+    (vec2) { 0.0, -0.65 }, // vec2 pos
     0.5, // float width
-    0.1, // float height
+    0.05, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
   );
   set_ui_texture(ui_control_instruction_key_text, "assets/transparent.png");
   memset(control_instruction_key_buffer, '\0', CONTROL_BUFFER_SIZE);
-  snprintf(control_instruction_key_buffer, CONTROL_BUFFER_SIZE, "[W]ACCEL  [S]DECEL  [A]LEFT ROLL        [D]RIGHT ROLL       ");
-  set_ui_text(ui_control_instruction_key_text, control_instruction_key_buffer, 1.0, T_CENTER, fixed_sys, GLM_VEC3_ZERO);
+  snprintf(control_instruction_key_buffer, CONTROL_BUFFER_SIZE,
+           "[W]: ACCEL\n[S]: DECEL\n[A]: LEFT ROLL\n[D]: RIGHT ROLL");
+  set_ui_text(ui_control_instruction_key_text, control_instruction_key_buffer,
+              1.0, T_LEFT, fixed_sys, GLM_VEC3_ZERO);
 
   ui_control_instruction_mouse_text = add_ui_comp(
-    ui_control_instruction_image, // UI_COMP *parent
-    (vec2) { 0.5, -0.95 }, // vec2 pos
+    //ui_control_instruction_image, // UI_COMP *parent
+    ui_control_instruction_root, // UI_COMP *parent
+    //(vec2) { 0.5, -0.95 }, // vec2 pos
+    (vec2) { 0.5, -0.65 }, // vec2 pos
     0.5, // float width
-    0.1, // float height
+    0.05, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
   );
   set_ui_texture(ui_control_instruction_mouse_text, "assets/transparent.png");
@@ -111,16 +121,28 @@ int init_control() {
 void update_control() {
   if (ui_control_root->enabled) {
     if (mode == SPACE) {
-      snprintf(control_instruction_title_buffer, CONTROL_BUFFER_SIZE, "SPACE MODE");
-      set_ui_text(ui_control_instruction_title_text, control_instruction_title_buffer, 1.0, T_CENTER, fixed_sys, GLM_VEC3_ZERO);
-      snprintf(control_instruction_key_buffer, CONTROL_BUFFER_SIZE, "[W]ACCEL  [S]DECEL  [A]LEFT ROLL        [D]RIGHT ROLL       ");
-      set_ui_text(ui_control_instruction_key_text, control_instruction_key_buffer, 1.0, T_CENTER, fixed_sys, GLM_VEC3_ZERO);
+      snprintf(control_instruction_title_buffer, CONTROL_BUFFER_SIZE,
+               "SPACE MODE");
+      set_ui_text(ui_control_instruction_title_text,
+                  control_instruction_title_buffer, 1.0, T_CENTER, fixed_sys,
+                  GLM_VEC3_ZERO);
+      snprintf(control_instruction_key_buffer, CONTROL_BUFFER_SIZE,
+               "[W]: ACCEL\n[S]: DECEL\n[A]: LEFT ROLL\n[D]: RIGHT ROLL\n[R]: LOOK BEHIND\n[TAB]: TARGET NEAREST ENEMY\n[C]: TOGGLE STATION WAYPOINT");
+      set_ui_text(ui_control_instruction_key_text,
+                  control_instruction_key_buffer, 1.0, T_LEFT, fixed_sys,
+                  GLM_VEC3_ZERO);
       set_ui_texture(ui_control_instruction_image, "assets/ui/wasd_mouse.png");
     } else if (mode == STATION) {
-      snprintf(control_instruction_title_buffer, CONTROL_BUFFER_SIZE, "STATION MODE");
-      set_ui_text(ui_control_instruction_title_text, control_instruction_title_buffer, 1.0, T_CENTER, fixed_sys, GLM_VEC3_ZERO);
-      snprintf(control_instruction_key_buffer, CONTROL_BUFFER_SIZE, "[W]FORWARD  [S]BACK [A]LEFT     [D]RIGHT[SPACE] JUMP        ");
-      set_ui_text(ui_control_instruction_key_text, control_instruction_key_buffer, 1.0, T_CENTER, fixed_sys, GLM_VEC3_ZERO);
+      snprintf(control_instruction_title_buffer, CONTROL_BUFFER_SIZE,
+               "STATION MODE");
+      set_ui_text(ui_control_instruction_title_text,
+                  control_instruction_title_buffer, 1.0, T_CENTER, fixed_sys,
+                  GLM_VEC3_ZERO);
+      snprintf(control_instruction_key_buffer, CONTROL_BUFFER_SIZE,
+               "[W]: FORWARD\n[S]: BACK\n[A]: LEFT\n[D]: RIGHT\n[SPACE]: JUMP\n[I]: INVENTORY\n[K]: SKILL TREE\n");
+      set_ui_text(ui_control_instruction_key_text,
+                  control_instruction_key_buffer, 1.0, T_LEFT, fixed_sys,
+                  GLM_VEC3_ZERO);
       set_ui_texture(ui_control_instruction_image, "assets/ui/wasd_mouse.png");
     }
   }

@@ -136,7 +136,8 @@ void mouse_button_callback(GLFWwindow *window, int button, int action,
         /* spawns projectile*/
         size_t proj_index = init_projectile(camera.pos,
                                             forward,
-                                            10.0 + st_player.speed,
+                                            P_BASE_PROJ_SPEED +
+                                            st_player.speed,
                                             SRC_PLAYER,
                                             LASER,
                                             st_player.damage,
@@ -225,6 +226,10 @@ void input_keys(GLFWwindow *window) {
           /* Handle using terminal in space mode */
           set_gamemode_space();
           st_player.total_levels_completed++;
+          maze_size++;
+          if (maze_size > 31) {
+            maze_size = 31;
+          }
         }
         if (i == GLFW_KEY_E && get_item_prompt_state() &&
             !holding_alpha[i - GLFW_KEY_A]) {
@@ -255,7 +260,7 @@ void input_keys(GLFWwindow *window) {
             player_ship.cur_speed = 0;
           } else {
             player_ship.cur_speed -= DELTA_TIME * player_ship.thruster.max_accel;
-            use_power(player_ship.thruster.max_power_draw * S_THRUSTER_REVERSE_FACTOR, 
+            use_power(player_ship.thruster.max_power_draw * S_THRUSTER_REVERSE_FACTOR,
                       TYPE_THRUSTER, &player_ship);
           }
         } else if (i == GLFW_KEY_A && !player_ship.ship_stalled){

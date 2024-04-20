@@ -112,3 +112,4 @@ void update_radar_fb();
 void update_main_menu_fb();
 void add_audio(char *);
 void generate_ship_noises();
+void generate_shield_audio();

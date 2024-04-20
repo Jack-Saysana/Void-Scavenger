@@ -9,7 +9,7 @@
 Implements the functionality for defining UI components for control menu.
 */
 
-#define CONTROL_BUFFER_SIZE (128)
+#define CONTROL_BUFFER_SIZE (1024)
 /* GLOBALS */
 UI_COMP *ui_control_root;
 UI_COMP *ui_control_background;

@@ -29,3 +29,5 @@ void loading_init();
 void recharge_player_shield();
 void tick();
 void add_timer(float, void *, int, void *);
+void read_settings();
+void update_resolution();

@@ -24,3 +24,4 @@ void recharge_ship_shield(SHIP *);
 void reactor_recharge(SHIP *);
 
 void update_ship_noises();
+void disable_stallwarning();

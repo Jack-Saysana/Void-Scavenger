@@ -206,6 +206,7 @@ void load_audio_tracks() {
   add_audio(audio_dir"/main_menu_theme.wav");
   add_audio(audio_dir"/space_mode_theme.wav");
   add_audio(audio_dir"/station_mode_theme.wav");
+  generate_shield_audio();
 }
 
 void *load_assets(void *arg) {

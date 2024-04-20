@@ -134,6 +134,7 @@ void reset_player() {
 
   reset_inventory();
   reset_equipped_parts();
+  disable_stallwarning();
 }
 
 // De-allocate player resources at end of game
@@ -269,6 +270,7 @@ void reset_sp_player_state() {
   player_ship.cur_power_use = 0.0;
   player_ship.reactor_can_recharge = 1;
   player_ship.ship_stalled = 0;
+  disable_stallwarning();
 }
 
 void sim_refresh_player_ship() {
@@ -291,7 +293,7 @@ void recharge_player_shield() {
     recharge_ship_shield(&player_ship);
   } else if (mode == STATION) {
     if (st_player.recharging_shield) {
-      st_player.cur_shield += st_player.shield_recharge_rate * DELTA_TIME;
+      st_player.cur_shield += st_player.shield_recharge_rate * TICK_RATE;
       if (st_player.cur_shield >= st_player.max_shield) {
         st_player.recharging_shield = 0;
         st_player.cur_shield = st_player.max_shield;

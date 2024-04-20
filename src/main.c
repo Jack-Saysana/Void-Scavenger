@@ -14,8 +14,8 @@ int main() {
     return -1;
   }
 
-  glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, DEFAULT_RES_X,
-                       DEFAULT_RES_Y, GLFW_DONT_CARE);
+  read_settings();
+  update_resolution();
 
   int status = barebones_init();
   if (status) {
@@ -32,8 +32,8 @@ int main() {
     DELTA_TIME = CUR_TIME - LAST_FRAME;
     LAST_FRAME = CUR_TIME;
     REAL_DELTA = DELTA_TIME;
-    if (DELTA_TIME > 0.016) {
-      DELTA_TIME = 0.016;
+    if (DELTA_TIME > 0.032) {
+      DELTA_TIME = 0.032;
     }
 
     if (mode == LOADING) {

@@ -19,6 +19,7 @@
 #define P_BASE_DAMAGE (100.0)
 #define P_LEVEL_SCALE (50.0)
 #define P_BASE_JUMP (5.0)
+#define P_BASE_PROJ_SPEED (25.0)
 
 // Ship constants
 #define S_BASE_PWR_OUTPUT (100.0)
@@ -28,7 +29,7 @@
 #define S_BASE_SHIELD (100.0)
 #define S_BASE_SHIELD_RECHARGE (7.5)
 #define S_BASE_SHIELD_DELAY (7.5)
-#define S_BASE_PWR_DRAW (7.5)
+#define S_BASE_PWR_DRAW (3.5)
 #define S_BASE_DAMAGE (50.0)
 #define S_BASE_FIRERATE (0.1)
 #define S_BASE_FIRERATE_LASER (0.3)
@@ -103,7 +104,7 @@
 #define SHIELD_RECHARGE_DELAY_MODIFIER (-0.25)
 #define SHIELD_RECHARGE_DELAY_MIN (10.0) //BASE = 7.5
 #define SHIELD_POWER_DRAW_MODIFIER (-0.25)
-#define SHIELD_POWER_DRAW_MIN (10.0) //BASE = 7.5
+#define SHIELD_POWER_DRAW_MIN (10.0) //BASE = 3.5
 #define WEAPON_NUM_STATS (7)
 #define WEAPON_DAMAGE_MODIFIER (5.0)
 #define WEAPON_DAMAGE_MIN (30.0) //BASE = 50
@@ -192,13 +193,16 @@
 #define SP_AVOID_BOUNDS_PRIORITY (100.0)
 #define SP_AVOID_OBSTACLE_PRIORITY (2.0)
 #define SP_CHASE_PRIORITY (1.0)
-#define SP_SHOT_DELAY (2.5)
+#define SP_SHOT_DELAY_BADASS (2.5)
+#define SP_SHOT_DELAY_HARD (1.0)
+#define SP_SHOT_DELAY_MEDIUM (0.0)
+#define SP_SHOT_DELAY_EASY (-1.0)
 
 #define NUM_ALIEN_TYPES (2)
 #define NUM_ALIEN_SHIP_TYPES (3)
 #define NUM_ALIEN_ATTACK_TYPES (7)
 #define NUM_ALIEN_MOV_TYPES (4)
-#define ST_E_BASE_PROJ_SPEED (10.0)
+#define ST_E_BASE_PROJ_SPEED (50.0)
 #define ST_E_BASE_PROJ_DAMAGE (10.0)
 #define ST_E_BASE_PROJ_RANGE (100.0)
 #define E_ANIM_HURT_MELEE (0)
@@ -238,6 +242,8 @@
 #define MAIN_THEME                  (21)
 #define SPACE_THEME                 (22)
 #define STATION_THEME               (23)
+#define SHIELD_SINE_WAVE            (24)
+#define SHIELD_TRI_WAVE             (25)
 
 #define INVALID_SOURCE              (-1)
 #define SOURCE_PAUSED               (0)
@@ -247,6 +253,8 @@
 #define MAX_SHIP_VELOCITY_TONE      (10.0)
 #define MAX_TONE                    (100.0)
 #define MAX_GAIN_DIST               (25.0)
+#define MAX_SHIELD_SINE_FREQUENCY   (150.0)
+#define MAX_SHIELD_TRI_FREQUENCY    (100.0)
 
 // Station Eneemy Types
 #define BRUTE (0)
