@@ -25,7 +25,7 @@ int init_skill_tree() {
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(skill_tree.ui_skill_tree_root, "assets/transparent.png");
-  
+
   skill_tree.ui_skill_tree_background = add_ui_comp(
     skill_tree.ui_skill_tree_root, // UI_COMP *parent
     (vec2) { 0.0, 0.0 }, // vec2 pos
@@ -847,13 +847,17 @@ void enable_skill(SKILL *skill_slot) {
     // Survival Skills
     case ID_SURVIVAL_LV1_SKILL_1:
       st_player.max_health += 20;
+      st_player.cur_health = st_player.max_health;
       break;
     case ID_SURVIVAL_LV1_SKILL_2:
       st_player.max_shield += 20;
+      st_player.recharging_shield = 1;
       break;
     case ID_SURVIVAL_LV2_SKILL_1:
       st_player.max_health += 20;
+      st_player.cur_health = st_player.max_health;
       st_player.max_shield += 20;
+      st_player.recharging_shield = 1;
       break;
     // Combat Skills
     case ID_COMBAT_LV1_SKILL_1:

@@ -10,3 +10,5 @@ static int item_prompt_enabled = 0;
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
+
+int get_terminal_ui_state();

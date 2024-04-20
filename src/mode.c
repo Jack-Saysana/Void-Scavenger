@@ -26,10 +26,10 @@ int init_space_mode() {
   /*Enemy can shoot on */
 
   // Initialize proper render distances
-  RENDER_DIST = SP_BASE_RENDER_DIST;
+  //RENDER_DIST = SP_BASE_RENDER_DIST;
   glm_vec3_copy((vec3) { RENDER_DIST, RENDER_DIST, RENDER_DIST },
                 render_sphere->scale);
-  SIM_DIST = SP_BASE_SIM_DIST;
+  //SIM_DIST = SP_BASE_SIM_DIST;
   glm_vec3_copy((vec3) { SIM_DIST, SIM_DIST, SIM_DIST }, sim_sphere->scale);
   update_perspective();
 
@@ -208,10 +208,10 @@ int init_station_mode() {
   hide_stallwarning();
 
   // Initialize proper render distances
-  RENDER_DIST = ST_BASE_RENDER_DIST;
+  //RENDER_DIST = ST_BASE_RENDER_DIST;
   glm_vec3_copy((vec3) {RENDER_DIST, RENDER_DIST, RENDER_DIST },
                 render_sphere->scale);
-  SIM_DIST = ST_BASE_SIM_DIST;
+  //SIM_DIST = ST_BASE_SIM_DIST;
   glm_vec3_copy((vec3) {SIM_DIST, SIM_DIST, SIM_DIST }, sim_sphere->scale);
   update_perspective();
 

@@ -282,12 +282,13 @@ void render_distance_minus_on_click() {
 
   if (mode == SPACE) {
     set_render_dist((SP_BASE_RENDER_DIST / 100) * render_distance_multiplier);
-    set_sim_dist((SP_BASE_SIM_DIST / 100) * render_distance_multiplier);
+    set_sim_dist(RENDER_DIST + 50.0);
   } else if (mode == STATION) {
     set_render_dist((ST_BASE_RENDER_DIST / 100) * render_distance_multiplier);
-    set_sim_dist((ST_BASE_SIM_DIST / 100) * render_distance_multiplier);
+    set_sim_dist(RENDER_DIST + 5.0);
   }
   last_game_mode = mode;
+  write_settings();
 }
 
 void render_distance_plus_on_click() {
@@ -297,12 +298,13 @@ void render_distance_plus_on_click() {
 
   if (mode == SPACE) {
     set_render_dist((SP_BASE_RENDER_DIST / 100) * render_distance_multiplier);
-    set_sim_dist((SP_BASE_SIM_DIST / 100) * render_distance_multiplier);
+    set_sim_dist(RENDER_DIST + 50.0);
   } else if (mode == STATION) {
     set_render_dist((ST_BASE_RENDER_DIST / 100) * render_distance_multiplier);
-    set_sim_dist((ST_BASE_SIM_DIST / 100) * render_distance_multiplier);
+    set_sim_dist(RENDER_DIST + 5.0);
   }
   last_game_mode = mode;
+  write_settings();
 }
 
 void glowing_items_on_click() {

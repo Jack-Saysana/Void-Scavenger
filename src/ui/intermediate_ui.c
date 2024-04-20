@@ -266,7 +266,7 @@ void set_intermediate_enemy_type_info(int slot_number, int enemy_move_type, SHIP
     [E_HIGH_SPEED]  = "HIGH SPEED",
     [E_ULTRA_SPEED]  = "ULTRA SPEED",
   };
-  
+
   const char *enemy_weapon_type_str[] =
   {
     [W_BALLISTIC] = "BALLISTIC",
