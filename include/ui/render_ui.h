@@ -82,9 +82,13 @@ UI_COMP *ui_resolution_plus_button;
 UI_COMP *ui_resolution_apply_button;
 UI_COMP *ui_render_glowing_items_root;
 UI_COMP *ui_render_glowing_items_button;
+UI_COMP *ui_render_low_details_root;
+UI_COMP *ui_render_low_details_button;
 int render_distance_multiplier;
 static char render_distance_buffer[RENDER_BUFFER_SIZE];
 static int cur_res = 0;
+static int cheats = 0;
+static int low_details = 0;
 
 GAME_MODE last_game_mode;
 
@@ -95,6 +99,7 @@ void render_back_on_click();
 void render_distance_minus_on_click();
 void render_distance_plus_on_click();
 void glowing_items_on_click();
+void low_details_on_click();
 void change_resolution(UI_COMP *, void *);
 void update_resolution();
 void write_settings();

@@ -14,8 +14,10 @@ int main() {
     return -1;
   }
 
-  //read_settings();
-  //update_resolution();
+  read_settings();
+  update_resolution();
+  update_details();
+  update_cheats();
 
   int status = barebones_init();
   if (status) {

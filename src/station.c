@@ -380,6 +380,11 @@ void create_station_corridors() {
     enemy_variation = 70;
     sp_spawn_chance = 2;
   }
+
+  if (get_details_state()) {
+    item_spawn_chance = 0;
+  }
+
   int found_terminal_room = 0;
   /* Backup room ~ Room to place terminal in case spawning conditions are */
   /* not met to spawn the terminal in another room */

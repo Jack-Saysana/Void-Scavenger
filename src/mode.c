@@ -20,6 +20,9 @@ int init_space_mode() {
   /* Ensure coordinates are enabled */
   enable_coordinates();
 
+  /* Realign game level ui comp */
+  update_level_pos();
+
   /* Re-enable shooting (if not already) */
   enable_shooting();
 
@@ -201,6 +204,9 @@ int init_station_mode() {
   reset_dmg_ui_state();
   /* Turn off the coordinates */
   disable_coordinates();
+
+  /* Realign game level ui comp */
+  update_level_pos();
 
   /* Re-enable shooting (if not already) */
   enable_shooting();

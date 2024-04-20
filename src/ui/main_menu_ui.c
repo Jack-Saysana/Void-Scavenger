@@ -124,6 +124,7 @@ void start_game(UI_COMP *comp, void *args) {
   CURSOR_ENABLED = 0;
   enable_fps();
   enable_coordinates();
+  enable_level();
   pause_audio(MAIN_THEME);
   play_audio(SPACE_THEME);
   init_space_mode();
