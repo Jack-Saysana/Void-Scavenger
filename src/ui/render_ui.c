@@ -184,7 +184,7 @@ int init_render() {
     ui_render_background, // UI_COMP *parent
     //(vec2) { 0.0625, -0.6875 }, // vec2 pos
     (vec2) { 0.0625, -0.7875 }, // vec2 pos
-    0.875, // float width
+    0.4375, // float width
     0.15, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
   );
@@ -197,8 +197,27 @@ int init_render() {
     1.0, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
   );
-  set_ui_text(ui_render_glowing_items_button, "GLOWING ITEMS: OFF", 0.25, T_CENTER, fixed_sys, GLM_VEC3_ONE);
+  set_ui_text(ui_render_glowing_items_button, "GLOWING ITEMS: OFF", 0.275, T_CENTER, fixed_sys, GLM_VEC3_ONE);
   set_ui_on_click(ui_render_glowing_items_button, (void *) glowing_items_on_click, NULL);
+
+
+  ui_render_low_details_root = add_ui_comp(
+    ui_render_background, // UI_COMP *parent
+    (vec2) { 0.5, -0.7875 }, // vec2 pos
+    0.4375, // float width
+    0.15, // float height
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
+  );
+
+  ui_render_low_details_button = init_blue_button(
+    ui_render_low_details_root, // UI_COMP *parent
+    (vec2) { 0.0, 0.0 }, // vec2 pos
+    1.0, // float width
+    1.0, // float height
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
+  );
+  set_ui_text(ui_render_low_details_button, "LOW DETAIL: OFF", 0.275, T_CENTER, fixed_sys, GLM_VEC3_ONE);
+  set_ui_on_click(ui_render_low_details_button, (void *) low_details_on_click, NULL);
 
   set_ui_enabled(ui_render_root, 0);
   return 0;
@@ -206,9 +225,15 @@ int init_render() {
 
 void update_render() {
   if (item_glow == 1) {
-    set_ui_text(ui_render_glowing_items_button, "GLOWING ITEMS: ON", 0.25, T_CENTER, fixed_sys, GLM_VEC3_ONE);
+    set_ui_text(ui_render_glowing_items_button, "GLOWING ITEMS: ON", 0.275, T_CENTER, fixed_sys, GLM_VEC3_ONE);
   } else {
-    set_ui_text(ui_render_glowing_items_button, "GLOWING ITEMS: OFF", 0.25, T_CENTER, fixed_sys, GLM_VEC3_ONE);
+    set_ui_text(ui_render_glowing_items_button, "GLOWING ITEMS: OFF", 0.275, T_CENTER, fixed_sys, GLM_VEC3_ONE);
+  }
+
+  if (low_details == 1) {
+    set_ui_text(ui_render_low_details_button, "LOW DETAIL: ON", 0.275, T_CENTER, fixed_sys, GLM_VEC3_ONE);
+  } else {
+    set_ui_text(ui_render_low_details_button, "LOW DETAIL: OFF", 0.275, T_CENTER, fixed_sys, GLM_VEC3_ONE);
   }
 
   snprintf(render_distance_buffer, RENDER_BUFFER_SIZE, "%d", render_distance_multiplier);
@@ -266,6 +291,14 @@ void glowing_items_on_click() {
     item_glow = 0;
   } else {
     item_glow = 1;
+  }
+}
+
+void low_details_on_click() {
+  if (low_details) {
+    low_details = 0;
+  } else {
+    low_details = 1;
   }
 }
 
