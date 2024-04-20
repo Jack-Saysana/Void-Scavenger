@@ -25,6 +25,7 @@
 }
 
 static int enemy_audio_allowed = 1;
+static int audio_initialized = 0;
 
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 int check_source_playing(TRACK *, int);
