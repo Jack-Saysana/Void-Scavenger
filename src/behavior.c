@@ -322,11 +322,27 @@ void get_shot_target(vec3 e_pos, vec3 t_pos, vec3 t_vel, float proj_speed,
   } else if (t1 > 0.0) {
     // Add constant to time to make enemies lead their shots a little bit more.
     // This improves their aim.
-    t = t1 + SP_SHOT_DELAY;
+    if (difficulty == EASY) {
+      t = t1 + SP_SHOT_DELAY_EASY;
+    } else if (difficulty == MEDIUM) {
+      t = t1 + SP_SHOT_DELAY_MEDIUM;
+    } else if (difficulty == HARD) {
+      t = t1 + SP_SHOT_DELAY_HARD;
+    } else {
+      t = t1 + SP_SHOT_DELAY_BADASS;
+    }
   } else if (t2 > 0.0) {
     // Add constant to time to make enemies lead their shots a little bit more.
     // This improves their aim.
-    t = t2 + SP_SHOT_DELAY;
+    if (difficulty == EASY) {
+      t = t2 + SP_SHOT_DELAY_EASY;
+    } else if (difficulty == MEDIUM) {
+      t = t2 + SP_SHOT_DELAY_MEDIUM;
+    } else if (difficulty == HARD) {
+      t = t2 + SP_SHOT_DELAY_HARD;
+    } else {
+      t = t2 + SP_SHOT_DELAY_BADASS;
+    }
   } else {
     glm_vec3_sub(t_pos, e_pos, dest);
     glm_vec3_normalize(dest);
