@@ -225,12 +225,6 @@ void input_keys(GLFWwindow *window) {
                    !holding_alpha[i - GLFW_KEY_A]) {
           /* Handle using terminal in space mode */
           open_intermediate();
-          // set_gamemode_space();
-          // st_player.total_levels_completed++;
-          // maze_size++;
-          // if (maze_size > 31) {
-          //   maze_size = 31;
-          // }
         }
         if (i == GLFW_KEY_M && !holding_alpha[i - GLFW_KEY_A]) {
           /* Handle M press for testing intermediate menu */

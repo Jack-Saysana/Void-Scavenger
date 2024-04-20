@@ -210,6 +210,12 @@ void open_intermediate() {
   set_ui_enabled(inventory.ui_inventory_root, 1);
   set_ui_enabled(ship_parts.ui_ship_parts_info_background, 1);
   set_ui_enabled(inventory.ui_inventory_info_background, 0);
+
+  set_ui_enabled(ui_esc_root, 0);
+  set_ui_enabled(ui_render_root, 0);
+  set_ui_enabled(ui_control_root, 0);
+  set_ui_enabled(skill_tree.ui_skill_tree_root, 0);
+
   CURSOR_ENABLED = 1;
 }
 
@@ -275,21 +281,31 @@ void set_intermediate_enemy_type_info(int slot_number, int enemy_move_type, SHIP
   };
 
   if (slot_number == 1) {
-    snprintf(intermediate_enemy_1_type_buffer, INTERMEDIATE_TEXT_BUFFER_SIZE, "ENEMY TYPE [%s]", enemy_move_type_str[enemy_move_type]);
+    snprintf(intermediate_enemy_1_type_buffer, INTERMEDIATE_TEXT_BUFFER_SIZE,
+             "ENEMY TYPE [%s]", enemy_move_type_str[enemy_move_type]);
     set_ui_text(ui_intermediate_enemy_1_type_text,
-              intermediate_enemy_1_type_buffer, 0.08, T_LEFT, fixed_sys, 
+              intermediate_enemy_1_type_buffer, 0.08, T_LEFT, fixed_sys,
               (vec3) { 0.0, 0.0, 0.0 });
-    snprintf(intermediate_enemy_1_info_buffer, INTERMEDIATE_TEXT_BUFFER_SIZE, "HEALTH [%.0f] SHIELD [%.0f]\nWEAPON [%s]", enemy_ship->hull.max_health, enemy_ship->shield.max_shield, enemy_weapon_type_str[enemy_ship->weapon.type]);
-    set_ui_text(ui_intermediate_enemy_1_info_text, intermediate_enemy_1_info_buffer, 
-                0.08, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+    snprintf(intermediate_enemy_1_info_buffer, INTERMEDIATE_TEXT_BUFFER_SIZE,
+             "HEALTH [%.0f] SHIELD [%.0f]\nWEAPON [%s]",
+             enemy_ship->hull.max_health, enemy_ship->shield.max_shield,
+             enemy_weapon_type_str[enemy_ship->weapon.type]);
+    set_ui_text(ui_intermediate_enemy_1_info_text,
+                intermediate_enemy_1_info_buffer, 0.08, T_LEFT, fixed_sys,
+                (vec3) { 0.0, 0.0, 0.0 });
   } else if (slot_number == 2) {
-    snprintf(intermediate_enemy_2_type_buffer, INTERMEDIATE_TEXT_BUFFER_SIZE, "ENEMY TYPE [%s]", enemy_move_type_str[enemy_move_type]);
+    snprintf(intermediate_enemy_2_type_buffer, INTERMEDIATE_TEXT_BUFFER_SIZE,
+             "ENEMY TYPE [%s]", enemy_move_type_str[enemy_move_type]);
     set_ui_text(ui_intermediate_enemy_2_type_text,
-              intermediate_enemy_2_type_buffer, 0.08, T_LEFT, fixed_sys, 
+              intermediate_enemy_2_type_buffer, 0.08, T_LEFT, fixed_sys,
               (vec3) { 0.0, 0.0, 0.0 });
-    snprintf(intermediate_enemy_2_info_buffer, INTERMEDIATE_TEXT_BUFFER_SIZE, "HEALTH [%.0f] SHIELD [%.0f]\nWEAPON [%s]", enemy_ship->hull.max_health, enemy_ship->shield.max_shield, enemy_weapon_type_str[enemy_ship->weapon.type]);
-    set_ui_text(ui_intermediate_enemy_2_info_text, intermediate_enemy_2_info_buffer, 
-                0.08, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+    snprintf(intermediate_enemy_2_info_buffer, INTERMEDIATE_TEXT_BUFFER_SIZE,
+             "HEALTH [%.0f] SHIELD [%.0f]\nWEAPON [%s]",
+             enemy_ship->hull.max_health, enemy_ship->shield.max_shield,
+             enemy_weapon_type_str[enemy_ship->weapon.type]);
+    set_ui_text(ui_intermediate_enemy_2_info_text,
+                intermediate_enemy_2_info_buffer, 0.08, T_LEFT, fixed_sys,
+                (vec3) { 0.0, 0.0, 0.0 });
   } else {
     return;
   }
