@@ -37,3 +37,4 @@ unsigned int get_fire_shader();
 unsigned int get_fire_particles();
 void play_audio(int);
 void pause_audio(int);
+void enable_level();

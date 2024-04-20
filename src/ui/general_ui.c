@@ -73,6 +73,7 @@ void init_ui_components() {
   game_over_ui_initialize();
   init_item_prompt_ui();
   stall_ui_initialize();
+  level_ui_initialize();
 }
 
 /*
@@ -92,6 +93,7 @@ void update_ui_components() {
     update_fps();
   }
   // update UI components
+  update_level();
   update_stats();
   update_inventory();
   update_ship_parts();
