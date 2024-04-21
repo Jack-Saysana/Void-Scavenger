@@ -238,11 +238,7 @@ void console_dispatcher() {
         } else if (strncmp(command[1].tok, GAMELEVEL, sizeof(GAMELEVEL)) == 0) {
           /* BEGIN: set gamelevel */
           if (command[2].kind == NUMBER) {
-            float input = create_float(2);
-            if (input == FLT_MAX) {
-              command_not_found();
-            }
-            set_gamelevel(input);
+            set_gamelevel(atoi(command[2].tok));
             return;
           }
           /*END: set gamelevel*/

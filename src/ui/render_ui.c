@@ -28,7 +28,7 @@ int init_render() {
     ui_render_root, // UI_COMP *parent
     (vec2) { 0.4, -0.2125 }, // vec2 pos
     0.2, // float width
-    0.575, // float height
+    0.675, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(ui_render_background, "assets/ui/hud_color_bg.png");
@@ -37,7 +37,7 @@ int init_render() {
     ui_render_background, // UI_COMP *parent
     (vec2) { 0.0625, -0.04347826 }, // vec2 pos
     0.875, // float width
-    0.17391304, // float height
+    0.15391304, // float height
     //ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
     RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
@@ -55,11 +55,10 @@ int init_render() {
 
   ui_render_render_distance_root = add_ui_comp(
     ui_render_background, // UI_COMP *parent
-    //(vec2) { 0.0625, -0.26086956 }, // vec2 pos
-    //(vec2) { 0.0625, -0.24 }, // vec2 pos
     (vec2) { 0.0625, 0.0 }, // vec2 pos
     0.875, // float width
-    0.17391304, // float height
+    //0.17391304, // float height
+    0.15391304, // float height
     //ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
     RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
     SIZE_UNIT_RATIO
@@ -110,12 +109,9 @@ int init_render() {
 
   ui_resolution_root = add_ui_comp(
     ui_render_background, // UI_COMP *parent
-    //(vec2) { 0.0625, -0.47826086 }, // vec2 pos
     (vec2) { 0.0625, 0.0 }, // vec2 pos
     0.875, // float width
-    //0.17391304, // float height
-    0.24, // float height
-    //ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
+    0.22, // float height
     RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
     SIZE_UNIT_RATIO
   );
@@ -187,12 +183,9 @@ int init_render() {
 
   ui_windowed_root = add_ui_comp(
     ui_render_background, // UI_COMP *parent
-    //(vec2) { 0.0625, -0.715 }, // vec2 pos
-    (vec2) { 0.0625, -0.05 }, // vec2 pos
+    (vec2) { 0.0625, -0.025 }, // vec2 pos
     0.875, // float width
-    //0.17391304, // float height
     0.11, // float height
-    //ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
     RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
     SIZE_UNIT_RATIO
   );
@@ -212,10 +205,8 @@ int init_render() {
 
   ui_render_glowing_items_root = add_ui_comp(
     ui_render_background, // UI_COMP *parent
-    //(vec2) { 0.0625, -0.78260868 }, // vec2 pos
-    (vec2) { 0.0625, -0.05 }, // vec2 pos
+    (vec2) { 0.0625, -0.025 }, // vec2 pos
     0.875, // float width
-    //0.17391304, // float height
     0.11, // float height
     //ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
     RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
@@ -231,8 +222,29 @@ int init_render() {
     1.0, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
   );
-  set_ui_text(ui_render_glowing_items_button, "GLOWING ITEMS: OFF", 0.25, T_CENTER, fixed_sys, GLM_VEC3_ONE);
+  set_ui_text(ui_render_glowing_items_button, "GLOWING ITEMS: OFF", 0.275, T_CENTER, fixed_sys, GLM_VEC3_ONE);
   set_ui_on_click(ui_render_glowing_items_button, (void *) glowing_items_on_click, NULL);
+
+
+  ui_render_low_details_root = add_ui_comp(
+    ui_render_background, // UI_COMP *parent
+    (vec2) { 0.0625, -0.025 }, // vec2 pos
+    0.875, // float width
+    0.11, // float height
+    //ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
+    RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
+    SIZE_UNIT_RATIO
+  );
+
+  ui_render_low_details_button = init_blue_button(
+    ui_render_low_details_root, // UI_COMP *parent
+    (vec2) { 0.0, 0.0 }, // vec2 pos
+    1.0, // float width
+    1.0, // float height
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
+  );
+  set_ui_text(ui_render_low_details_button, "LOW DETAIL: OFF", 0.275, T_CENTER, fixed_sys, GLM_VEC3_ONE);
+  set_ui_on_click(ui_render_low_details_button, (void *) low_details_on_click, NULL);
 
   set_ui_enabled(ui_render_root, 0);
   return 0;
@@ -240,9 +252,15 @@ int init_render() {
 
 void update_render() {
   if (item_glow == 1) {
-    set_ui_text(ui_render_glowing_items_button, "GLOWING ITEMS: ON", 0.25, T_CENTER, fixed_sys, GLM_VEC3_ONE);
+    set_ui_text(ui_render_glowing_items_button, "GLOWING ITEMS: ON", 0.275, T_CENTER, fixed_sys, GLM_VEC3_ONE);
   } else {
-    set_ui_text(ui_render_glowing_items_button, "GLOWING ITEMS: OFF", 0.25, T_CENTER, fixed_sys, GLM_VEC3_ONE);
+    set_ui_text(ui_render_glowing_items_button, "GLOWING ITEMS: OFF", 0.275, T_CENTER, fixed_sys, GLM_VEC3_ONE);
+  }
+
+  if (low_details == 1) {
+    set_ui_text(ui_render_low_details_button, "LOW DETAIL: ON", 0.275, T_CENTER, fixed_sys, GLM_VEC3_ONE);
+  } else {
+    set_ui_text(ui_render_low_details_button, "LOW DETAIL: OFF", 0.275, T_CENTER, fixed_sys, GLM_VEC3_ONE);
   }
 
   if (windowed) {
@@ -315,6 +333,14 @@ void glowing_items_on_click() {
   }
 }
 
+void low_details_on_click() {
+  if (low_details) {
+    low_details = 0;
+  } else {
+    low_details = 1;
+  }
+}
+
 void change_resolution(UI_COMP *ui, void *args) {
   if (windowed) {
     return;
@@ -337,14 +363,26 @@ void update_resolution() {
   write_settings();
 }
 
+void update_details() {
+  write_settings();
+}
+
+void update_cheats(int set_to) {
+  cheats = set_to;
+  write_settings();
+}
+
 void read_settings() {
   FILE *settings = fopen("./settings.txt", "r");
   if (settings == NULL) {
     cur_res = 0;
+    low_details = 0;
+    cheats = 1;
     return;
   }
-  fscanf(settings, "res: %d\nrd: %d\nwindowed: %d\n", &cur_res,
-         &render_distance_multiplier, &windowed);
+  fscanf(settings, "res: %d\nrd: %d\nwindowed: %d\ndetail: %d\ncheats: %d",
+         &cur_res, &render_distance_multiplier, &windowed, &low_details,
+         &cheats);
   fclose(settings);
 }
 
@@ -358,7 +396,15 @@ void write_settings() {
   if (settings == NULL) {
     return;
   }
-  fprintf(settings, "res: %d\nrd: %d\nwindowed: %d\n", cur_res,
-          render_distance_multiplier, windowed);
+  fprintf(settings, "res: %d\nrd: %d\nwindowed: %d\ndetail: %d\ncheats: %d",
+          cur_res, render_distance_multiplier, windowed, low_details, cheats);
   fclose(settings);
+}
+
+int get_cheats_state() {
+  return cheats;
+}
+
+int get_details_state() {
+  return low_details;
 }

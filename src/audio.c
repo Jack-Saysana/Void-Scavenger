@@ -6,8 +6,11 @@ int init_audio() {
   if (!alutInit(NULL, NULL)) {
     fprintf(stderr, "ALUT Initialization Error: %s\n",
             alutGetErrorString(alutGetError()));
-    return -1;
+    return 0;
   }
+
+  audio_initialized = 1;
+
   tracks = (TRACK *) malloc(BUFF_STARTING_LEN * sizeof(TRACK));
   if (!tracks) {
     fprintf(stderr, "Failed to initialize audio tracks buffer!\n");
@@ -27,6 +30,9 @@ void exit_audio() {
 // ================== INDIVIDUAL INITIALIZATION AND CLEANUP ==================
 
 size_t add_audio(char *filepath) {
+  if (!audio_initialized) {
+    return INVALID_INDEX;
+  }
   if (!tracks) {
     fprintf(stderr, "Trying to add an audio path to a NULL tracks buffer\n");
     return INVALID_INDEX;
@@ -82,6 +88,9 @@ size_t add_audio(char *filepath) {
 // ============================= GENERAL HELPERS =============================
 
 void play_audio(int track) {
+  if (!audio_initialized) {
+    return;
+  }
   if (track < 0 || track >= tracks_buff_len) {
     fprintf(stderr, "Trying to play a track which doesn't exist!\n");
     return;
@@ -96,6 +105,9 @@ void play_audio(int track) {
 }
 
 int check_source_playing(TRACK *buff, int track) {
+  if (!audio_initialized) {
+    return INVALID_SOURCE;
+  }
   ALint playing_source = 0;
   TRACK *t = buff + track;
   if (!t) {
@@ -111,6 +123,9 @@ int check_source_playing(TRACK *buff, int track) {
 }
 
 void pause_audio(int track) {
+  if (!audio_initialized) {
+    return;
+  }
   TRACK *t = tracks + track;
   alSourceStop(t->source);
 }
@@ -124,6 +139,9 @@ void pause_audio(int track) {
   ...
 */
 void update_volume(float volume) {
+  if (!audio_initialized) {
+    return;
+  }
   global_volume = volume;
   alListenerf(AL_GAIN, volume);
 }
@@ -131,12 +149,18 @@ void update_volume(float volume) {
 // ========================== STATION PLAYER AUDIO ============================
 
 void play_player_death() {
+  if (!audio_initialized) {
+    return;
+  }
   int track = PLAYER_DEATH_1_WAV;
   track += gen_rand_int(2);
   play_audio(track);
 }
 
 void play_player_hurt() {
+  if (!audio_initialized) {
+    return;
+  }
   int track = PLAYER_HURT_1_WAV;
   if (!AUDIO_EXPLICIT) {
     track += gen_rand_int(2);
@@ -147,6 +171,9 @@ void play_player_hurt() {
 }
 
 void update_station_player_audio(vec3 pos, versor quat) {
+  if (!audio_initialized) {
+    return;
+  }
   update_listener_pos(pos);
   update_listener_orientation(quat);
   update_source_pos(pos, STATION_MODE_WEAPON_WAV);
@@ -155,12 +182,18 @@ void update_station_player_audio(vec3 pos, versor quat) {
 // ============================ WORLD BOUNDS AUDIO ============================
 
 void play_out_of_bounds_audio() {
+  if (!audio_initialized) {
+    return;
+  }
   if (check_source_playing(tracks, WORLD_EXIT_WAV) == SOURCE_PAUSED) {
     play_audio(WORLD_EXIT_WAV);
   }
 }
 
 void pause_out_of_bounds_audio() {
+  if (!audio_initialized) {
+    return;
+  }
   if (check_source_playing(tracks, WORLD_EXIT_WAV) == SOURCE_PLAYING) {
     pause_audio(WORLD_EXIT_WAV);
   }
@@ -169,6 +202,9 @@ void pause_out_of_bounds_audio() {
 // ============================= SPACESHIP AUDIO ==============================
 
 void pause_ship_audio() {
+  if (!audio_initialized) {
+    return;
+  }
   pause_audio(SHIP_SINE_WAVE);
   pause_audio(SHIP_TRI_WAVE_1);
   pause_audio(SHIP_TRI_WAVE_2);
@@ -178,6 +214,9 @@ void pause_ship_audio() {
   Creates the ship tones and adds them to the tracks buffer
 */
 void generate_ship_noises() {
+  if (!audio_initialized) {
+    return;
+  }
   generate_sine_tone(BASE_SINE_FREQUENCY);
   generate_triangle_tone(BASE_TRIANGLE_FREQUENCY + 1.0);
   generate_triangle_tone(BASE_TRIANGLE_FREQUENCY);
@@ -189,6 +228,9 @@ void generate_ship_noises() {
   sine tone
 */
 void update_ship_noises() {
+  if (!audio_initialized) {
+    return;
+  }
   if (!game_over_check()) {
     float velocity = glm_vec3_norm(player_ship.ent->velocity);
     float tone = 0.0;
@@ -217,16 +259,25 @@ void update_ship_noises() {
 }
 
 void play_ship_explosion() {
+  if (!audio_initialized) {
+    return;
+  }
   play_audio(SPACESHIP_EXPLOSION_WAV);
 }
 
 void play_spaceship_hull() {
+  if (!audio_initialized) {
+    return;
+  }
   play_audio(SPACESHIP_HULL_HIT_WAV);
 }
 
 // =============================== SHIELD AUDIO ==============================
 
 void generate_shield_audio() {
+  if (!audio_initialized) {
+    return;
+  }
   generate_sine_tone(BASE_SINE_FREQUENCY);
   generate_triangle_tone(BASE_TRIANGLE_FREQUENCY);
 
@@ -235,6 +286,9 @@ void generate_shield_audio() {
 }
 
 void update_shield_tone() {
+  if (!audio_initialized) {
+    return;
+  }
   if (st_player.recharging_shield) {
     float cur_shield = st_player.cur_shield / st_player.max_shield;
     update_tone_frequency(SHIELD_SINE_WAVE, BASE_SINE_FREQUENCY +
@@ -260,6 +314,9 @@ void update_shield_tone() {
   Creates a sine wave based on the frequency and duration passed in
 */
 void generate_sine_wave(float frequency, float duration, ALshort *buff) {
+  if (!audio_initialized) {
+    return;
+  }
   int num_samples = duration * SAMPLE_RATE;
   for (int i = 0; i < num_samples; i++) {
     float time = i / ((float) SAMPLE_RATE);
@@ -271,6 +328,9 @@ void generate_sine_wave(float frequency, float duration, ALshort *buff) {
   Creates a triangle wave based on the frequency and duration passed in
 */
 void generate_triangle_wave(float frequency, float duration, ALshort *buff) {
+  if (!audio_initialized) {
+    return;
+  }
   int num_samples = duration * SAMPLE_RATE;
   for (int i = 0; i < num_samples; i++) {
     float time = i / ((float) SAMPLE_RATE);
@@ -291,6 +351,9 @@ void generate_triangle_wave(float frequency, float duration, ALshort *buff) {
   Adds a sine tone to the tracks buffer
 */
 void generate_sine_tone(float frequency) {
+  if (!audio_initialized) {
+    return;
+  }
   TRACK *t = tracks + num_tracks;
   int wave_buff_size = SHIP_SOUND_DURATION * SAMPLE_RATE * sizeof(ALshort);
   ALshort *buff = (ALshort *) malloc(wave_buff_size);
@@ -329,6 +392,9 @@ void generate_sine_tone(float frequency) {
   Adds a triangle tone to the tracks buffer
 */
 void generate_triangle_tone(float frequency) {
+  if (!audio_initialized) {
+    return;
+  }
   TRACK *t = tracks + num_tracks;
   int wave_buff_size = SHIP_SOUND_DURATION * SAMPLE_RATE * sizeof(ALshort);
   ALshort *buff = (ALshort *) malloc(wave_buff_size);
@@ -367,6 +433,9 @@ void generate_triangle_tone(float frequency) {
   Updates track's tone, assuming the track is a single frequency tone
 */
 void update_tone_frequency(int track, float frequency) {
+  if (!audio_initialized) {
+    return;
+  }
   alSourcef(tracks[track].source, AL_PITCH, frequency / 100.0);
 }
 
@@ -377,6 +446,9 @@ void update_tone_frequency(int track, float frequency) {
   (world space)
 */
 void update_listener_pos(vec3 pos) {
+  if (!audio_initialized) {
+    return;
+  }
   alListenerfv(AL_POSITION, (ALfloat *) pos);
 }
 
@@ -385,10 +457,16 @@ void update_listener_pos(vec3 pos) {
   (world space)
 */
 void update_source_pos(vec3 pos, int track) {
+  if (!audio_initialized) {
+    return;
+  }
   alSourcefv(tracks[track].source, AL_POSITION, (ALfloat *) pos);
 }
 
 void update_source_gain(int track, float gain) {
+  if (!audio_initialized) {
+    return;
+  }
   alSourcef(tracks[track].source, AL_GAIN, gain);
 }
 
@@ -396,6 +474,9 @@ void update_source_gain(int track, float gain) {
   Updates the orientation of the listener (using world space)
 */
 void update_listener_orientation(versor quat) {
+  if (!audio_initialized) {
+    return;
+  }
   vec3 up;
   vec3 at = {-1.0, 0.0, 0.0};
   glm_vec3_copy(GLM_YUP, up);
@@ -408,16 +489,25 @@ void update_listener_orientation(versor quat) {
 }
 
 void reset_listener_orientation() {
+  if (!audio_initialized) {
+    return;
+  }
   ALfloat orientation[6] = {0.0, 0.0, -1.0, 0.0, 1.0, 0.0};
   alListenerfv(AL_ORIENTATION, orientation);
 }
 
 void reset_listener_pos() {
+  if (!audio_initialized) {
+    return;
+  }
   ALfloat pos[3] = {0.0, 0.0, 0.0};
   alListenerfv(AL_POSITION, pos);
 }
 
 void reset_source_pos(TRACK *t) {
+  if (!audio_initialized) {
+    return;
+  }
   ALfloat pos[3] = {0.0, 0.0, 0.0};
   alSourcefv(t->source, AL_POSITION, pos);
 }
@@ -425,6 +515,9 @@ void reset_source_pos(TRACK *t) {
 // =========================== STATION ENEMY AUDIO ============================
 
 void play_enemy_audio(vec3 pos, int track) {
+  if (!audio_initialized) {
+    return;
+  }
   if (enemy_audio_allowed) {
     float dist = glm_vec3_distance(pos, st_player.ent->translation);
     float new_volume = 0.0;

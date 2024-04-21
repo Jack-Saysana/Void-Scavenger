@@ -78,8 +78,6 @@ int part_spawn_chance[RARITY_LEVELS] = {
   50, 25, 10, 3, 0
 };
 
-// TODO: Set to 0 for release
-int cheats = 1;
 TRACK *tracks = NULL;
 size_t num_tracks = 0;
 size_t tracks_buff_len = 0;

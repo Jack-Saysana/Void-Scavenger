@@ -165,7 +165,7 @@ void update_control() {
       set_ui_texture(ui_control_instruction_image, "assets/ui/wasd_mouse.png");
     }
 
-    if (cheats) {
+    if (get_cheats_state()) {
       set_ui_text(ui_control_cheat_button, "CHEAT: ON", 0.25, T_CENTER, fixed_sys, GLM_VEC3_ONE);
       set_ui_on_click(ui_control_cheat_button, (void *) control_cheat_on_click, NULL);
     } else {
@@ -181,9 +181,9 @@ void control_back_on_click() {
 }
 
 void control_cheat_on_click() {
-  if (cheats == 1) {
-    cheats = 0;
+  if (get_cheats_state() == 1) {
+    update_cheats(0);
   } else {
-    cheats = 1;
+    update_cheats(1);
   }
 }

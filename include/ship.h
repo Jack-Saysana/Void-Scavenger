@@ -7,7 +7,7 @@
 
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 
-void use_power(float, int, SHIP *);
+void use_power(float, int, SHIP *, float);
 void stall_ship(SHIP *);
 void destall_ship(SHIP *);
 void destall_enemy_ship(void *);

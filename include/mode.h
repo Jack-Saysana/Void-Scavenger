@@ -127,3 +127,5 @@ void reset_st_player_state();
 void reset_sp_player_state();
 
 void hide_stallwarning();
+
+void update_level_pos();

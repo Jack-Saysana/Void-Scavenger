@@ -12,7 +12,7 @@ void ship_shoot() {
     return;
   }
   /* update power usage*/
-  use_power(player_ship.weapon.max_power_draw, TYPE_WEAPON, &player_ship);
+  use_power(player_ship.weapon.max_power_draw, TYPE_WEAPON, &player_ship, TICK_RATE);
   /* get ship vectors */
   vec3 ship_forward;
   glm_quat_rotatev(player_ship.ent->rotation, (vec3){-1.0, 0.0, 0.0}, ship_forward);
@@ -223,18 +223,18 @@ float calc_power_usage(SHIP *ship) {
 }
 
 
-void use_power(float pwr_draw, int type, SHIP * ship) {
+void use_power(float pwr_draw, int type, SHIP * ship, float integration) {
   float delay_time;
   float new_pwr_draw;
   if (type == TYPE_WEAPON) {
     new_pwr_draw = pwr_draw * S_WEAPON_PWR_USE_FACTOR;
     delay_time = pwr_draw;
   } else if (type == TYPE_THRUSTER) {
-    new_pwr_draw = pwr_draw * TICK_RATE *
+    new_pwr_draw = pwr_draw * integration *
                    ship->thruster.max_accel * S_THRUSTER_PWR_USE_FACTOR;
     delay_time = pwr_draw * S_THRUSTER_PWR_DELAY_FACTOR;
   } else if (type == TYPE_SHIELD) {
-    new_pwr_draw = pwr_draw * TICK_RATE;
+    new_pwr_draw = pwr_draw * integration;
     delay_time = pwr_draw * S_SHIELD_PWR_DELAY_FACTOR;
   } else {
     return;
@@ -278,7 +278,7 @@ void reactor_recharge(SHIP * ship) {
 
 void recharge_ship_shield(SHIP *ship) {
   if (ship->recharging_shield && !ship->ship_stalled) {
-    use_power(ship->shield.power_draw, TYPE_SHIELD, ship);
+    use_power(ship->shield.power_draw, TYPE_SHIELD, ship, TICK_RATE);
     ship->cur_shield += ship->shield.recharge_rate * TICK_RATE;
     if (ship->cur_shield >= ship->shield.max_shield) {
       ship->recharging_shield = 0;

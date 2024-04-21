@@ -72,14 +72,13 @@ void set_game_over_screen(int set) {
 void set_game_over_stats() {
   time_t cur_time;
   time(&cur_time);
-  float time_played = difftime(cur_time, start_time);
-  float minutes_played = time_played / 60.0;
-  float hours_played = minutes_played / 60.0;
-  if (minutes_played >= 1.0) {
-    time_played = fmodf(time_played, 60.0);
-  } else {
-    minutes_played = 0.0;
-  }
+  int time_played = (int) difftime(cur_time, start_time);
+  int minutes_played = time_played / 60;
+  int hours_played = minutes_played / 60;
+
+  time_played = time_played % 60;
+  minutes_played = minutes_played % 60;
+
   #ifdef __linux
   snprintf(game_over_stats_buffer, GAME_OVER_STATS_SIZE,
            " Levels Completed: %ld\n"
@@ -90,7 +89,7 @@ void set_game_over_stats() {
            " Damage Dealt: %.1lf\n"
            " Damage Taken: %.1lf\n"
            " Total Experience %.1lf\n"
-           " Time Played: %.0f hrs %.0f min %.0f sec\n",
+           " Time Played: %d hrs %d min %d sec\n",
            st_player.total_levels_completed,
            st_player.total_distance_flown,
            st_player.total_distance_walked,
@@ -113,7 +112,7 @@ void set_game_over_stats() {
            " Damage Dealt: %.1lf\n"
            " Damage Taken: %.1lf\n"
            " Total Experience %.1lf\n"
-           " Time Played: %.0f hrs %.0f min %.0f sec\n",
+           " Time Played: %d hrs %d min %d sec\n",
            st_player.total_levels_completed,
            st_player.total_distance_flown,
            st_player.total_distance_walked,

@@ -34,3 +34,5 @@ void control_cheat_on_click();
 
 /* ================= EXTERNALLY DEFINED FUNCTIONS ================ */
 UI_COMP *init_blue_button(UI_COMP *, vec2, float, float, int);
+int get_cheats_state();
+void update_cheats(int);

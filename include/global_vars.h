@@ -135,8 +135,6 @@ extern I_SLOT equipped_wing;
 
 extern int part_spawn_chance[];
 
-// Global Toggles
-extern int cheats;
 // Audio
 extern TRACK *tracks;
 extern size_t tracks_buff_len;

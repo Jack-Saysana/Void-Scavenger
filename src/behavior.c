@@ -167,7 +167,7 @@ void sp_enemy_pathfind(size_t index) {
       !enemy->ship_stalled) {
     enemy->e_can_shoot = 0;
     add_timer(1, set_sp_enemy_can_shoot, FUNCTION_PTR, (void *) index);
-    use_power(enemy->weapon.max_power_draw, TYPE_WEAPON, enemy);
+    use_power(enemy->weapon.max_power_draw, TYPE_WEAPON, enemy, TICK_RATE);
 
     vec3 gun_pos = GLM_VEC3_ZERO_INIT;
     glm_vec3_scale_as(forward, 12.0, gun_pos);

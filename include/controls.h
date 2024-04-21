@@ -88,4 +88,5 @@ void quit();
 void play_audio(int);
 void update_station_player_audio(vec3, versor);
 void ship_shoot();
-void use_power(float, int, SHIP *);
+int get_cheats_state();
+void use_power(float, int, SHIP *, float);

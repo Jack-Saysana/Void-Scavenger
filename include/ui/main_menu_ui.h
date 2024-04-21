@@ -38,3 +38,4 @@ unsigned int get_fire_particles();
 void play_audio(int);
 void pause_audio(int);
 void generate_sp_enemy_types();
+void enable_level();
