@@ -56,7 +56,7 @@ int init_inventory() {
   memset(inventory_info_title_buffer, '\0', INVENTORY_TEXT_BUFFER_SIZE);
   snprintf(inventory_info_title_buffer, INVENTORY_TEXT_BUFFER_SIZE, "[RARITY] TYPE");
   set_ui_text(inventory.ui_inventory_info_title_text,
-              inventory_info_title_buffer, 0.08, T_LEFT, fixed_sys,
+              inventory_info_title_buffer, TEXT_LINE_HEIGHT, T_LEFT, fixed_sys,
               (vec3) { 0.0, 0.0, 0.0 });
 
   inventory.ui_inventory_info_content_background = add_ui_comp(
@@ -82,7 +82,7 @@ int init_inventory() {
   memset(inventory_info_content_buffer, '\0', INVENTORY_TEXT_BUFFER_SIZE);
   snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE, "EMPTY");
   set_ui_text(inventory.ui_inventory_info_content_text, inventory_info_content_buffer,
-              0.08, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+              TEXT_LINE_HEIGHT, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
 
   inventory.ui_inventory_background = add_ui_comp(
     inventory.ui_inventory_root, // UI_COMP *parent
@@ -209,11 +209,11 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
   if (inventory_slot->type == I_SLOT_EMPTY) {
     snprintf(inventory_info_title_buffer, INVENTORY_TEXT_BUFFER_SIZE, "[RARITY] TYPE");
     set_ui_text(inventory.ui_inventory_info_title_text,
-                inventory_info_title_buffer, 0.08, T_LEFT, fixed_sys, 
+                inventory_info_title_buffer, TEXT_LINE_HEIGHT, T_LEFT, fixed_sys, 
                 (vec3) { 0.0, 0.0, 0.0 });
     snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE, "EMPTY");
     set_ui_text(inventory.ui_inventory_info_content_text, inventory_info_content_buffer, 
-                0.08, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+                TEXT_LINE_HEIGHT, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
   } else {
     // Fill title buffer
     if (inventory_slot->type == I_SLOT_WEAPON ) {
@@ -224,7 +224,7 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
            rarity_str[inventory_slot->rarity], item_slot_id_str[inventory_slot->type]);
     }
     set_ui_text(inventory.ui_inventory_info_title_text, inventory_info_title_buffer, 
-                0.08, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+                TEXT_LINE_HEIGHT, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
     // Fill content buffer
     switch (inventory_slot->type) {
       case I_SLOT_REACTOR:
@@ -265,7 +265,7 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
       default:
         break;
     }
-    set_ui_text(inventory.ui_inventory_info_content_text, inventory_info_content_buffer, 0.08, 
+    set_ui_text(inventory.ui_inventory_info_content_text, inventory_info_content_buffer, TEXT_LINE_HEIGHT, 
                 T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
   }
 }
@@ -331,11 +331,11 @@ void slot_on_click(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
       }
       snprintf(inventory_info_title_buffer, INVENTORY_TEXT_BUFFER_SIZE, "[RARITY] TYPE");
       set_ui_text(inventory.ui_inventory_info_title_text,
-                  inventory_info_title_buffer, 0.08, T_LEFT, fixed_sys, 
+                  inventory_info_title_buffer, TEXT_LINE_HEIGHT, T_LEFT, fixed_sys, 
                   (vec3) { 0.0, 0.0, 0.0 });
       snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE, "EMPTY");
       set_ui_text(inventory.ui_inventory_info_content_text, inventory_info_content_buffer, 
-                  0.08, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+                  TEXT_LINE_HEIGHT, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
     }
   }
 }

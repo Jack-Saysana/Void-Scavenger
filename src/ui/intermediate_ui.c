@@ -228,8 +228,8 @@ void open_intermediate() {
 
   set_ui_enabled(ui_intermediate_root, 1);
   set_ui_pos(inventory.ui_inventory_background, (vec2) { 0.7, -0.36 });
-  set_ui_width(inventory.ui_inventory_background, 0.159);
-  set_ui_height(inventory.ui_inventory_background, 0.159);
+  set_ui_width(inventory.ui_inventory_background, 0.125);
+  set_ui_height(inventory.ui_inventory_background, 0.125);
   set_ui_pos(inventory.ui_inventory_info_background, (vec2) { 0.7, -0.67 });
   set_ui_enabled(ship_parts.ui_ship_parts_root, 1);
   set_ui_enabled(inventory.ui_inventory_root, 1);
