@@ -107,20 +107,20 @@ int init_intermediate() {
     0.16, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(ui_intermediate_enemy_1_type_background, "assets/ui/hud_color.png");
+  set_ui_texture(ui_intermediate_enemy_1_type_background,
+                 "assets/ui/hud_color.png");
 
   ui_intermediate_enemy_1_type_text = add_ui_comp(
     ui_intermediate_enemy_1_type_background, // UI_COMP *parent
     (vec2) { 0.05, -0.05 }, // vec2 pos
     0.9, // float width
     0.9, // float height
-    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_X
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
+    LINE_UNIT_RATIO_X
   );
   set_ui_texture(ui_intermediate_enemy_1_type_text, "assets/transparent.png");
-  memset(intermediate_enemy_1_type_buffer, '\0', INTERMEDIATE_TEXT_BUFFER_SIZE);
-  snprintf(intermediate_enemy_1_type_buffer, INTERMEDIATE_TEXT_BUFFER_SIZE, "ENEMY SHIP TYPE");
   set_ui_text(ui_intermediate_enemy_1_type_text,
-              intermediate_enemy_1_type_buffer, 0.08, T_LEFT, fixed_sys,
+              "POSSIBLE ENEMY TYPES", 0.08, T_LEFT, fixed_sys,
               (vec3) { 0.0, 0.0, 0.0 });
 
   ui_intermediate_enemy_1_info_background = add_ui_comp(
@@ -130,20 +130,24 @@ int init_intermediate() {
     0.24, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(ui_intermediate_enemy_1_info_background, "assets/ui/hud_color_bg.png");
+  set_ui_texture(ui_intermediate_enemy_1_info_background,
+                 "assets/ui/hud_color_bg.png");
 
   ui_intermediate_enemy_1_info_text = add_ui_comp(
     ui_intermediate_enemy_1_info_background, // UI_COMP *parent
     (vec2) { 0.05, -0.05 }, // vec2 pos
     0.9, // float width
     0.9, // float height
-    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_X
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
+    LINE_UNIT_RATIO_X
   );
   set_ui_texture(ui_intermediate_enemy_1_info_text, "assets/transparent.png");
   memset(intermediate_enemy_1_info_buffer, '\0', INTERMEDIATE_TEXT_BUFFER_SIZE);
-  snprintf(intermediate_enemy_1_info_buffer, INTERMEDIATE_TEXT_BUFFER_SIZE, "ENEMY HEALTH INFO\nENEMY WEAPON INFO");
-  set_ui_text(ui_intermediate_enemy_1_info_text, intermediate_enemy_1_info_buffer,
-              0.08, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+  snprintf(intermediate_enemy_1_info_buffer, INTERMEDIATE_TEXT_BUFFER_SIZE,
+           "ENEMY HEALTH INFO\nENEMY WEAPON INFO");
+  set_ui_text(ui_intermediate_enemy_1_info_text,
+              intermediate_enemy_1_info_buffer, 0.08, T_LEFT, fixed_sys,
+              (vec3) { 0.0, 0.0, 0.0 });
 
   /*
   ================
@@ -157,20 +161,20 @@ int init_intermediate() {
     0.16, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(ui_intermediate_enemy_2_type_background, "assets/ui/hud_color.png");
+  set_ui_texture(ui_intermediate_enemy_2_type_background,
+                 "assets/ui/hud_color.png");
 
   ui_intermediate_enemy_2_type_text = add_ui_comp(
     ui_intermediate_enemy_2_type_background, // UI_COMP *parent
     (vec2) { 0.05, -0.05 }, // vec2 pos
     0.9, // float width
     0.9, // float height
-    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_X
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
+    LINE_UNIT_RATIO_X
   );
   set_ui_texture(ui_intermediate_enemy_2_type_text, "assets/transparent.png");
-  memset(intermediate_enemy_2_type_buffer, '\0', INTERMEDIATE_TEXT_BUFFER_SIZE);
-  snprintf(intermediate_enemy_2_type_buffer, INTERMEDIATE_TEXT_BUFFER_SIZE, "ENEMY SHIP TYPE");
   set_ui_text(ui_intermediate_enemy_2_type_text,
-              intermediate_enemy_2_type_buffer, 0.08, T_LEFT, fixed_sys,
+              "POSSIBLE ENEMY MOVEMENT", 0.08, T_LEFT, fixed_sys,
               (vec3) { 0.0, 0.0, 0.0 });
 
   ui_intermediate_enemy_2_info_background = add_ui_comp(
@@ -180,20 +184,25 @@ int init_intermediate() {
     0.24, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(ui_intermediate_enemy_2_info_background, "assets/ui/hud_color_bg.png");
+  set_ui_texture(ui_intermediate_enemy_2_info_background,
+                 "assets/ui/hud_color_bg.png");
 
   ui_intermediate_enemy_2_info_text = add_ui_comp(
     ui_intermediate_enemy_2_info_background, // UI_COMP *parent
     (vec2) { 0.05, -0.05 }, // vec2 pos
     0.9, // float width
     0.9, // float height
-    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_X
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
+    LINE_UNIT_RATIO_X
   );
   set_ui_texture(ui_intermediate_enemy_2_info_text, "assets/transparent.png");
-  memset(intermediate_enemy_2_info_buffer, '\0', INTERMEDIATE_TEXT_BUFFER_SIZE);
-  snprintf(intermediate_enemy_2_info_buffer, INTERMEDIATE_TEXT_BUFFER_SIZE, "ENEMY HEALTH INFO\nENEMY WEAPON INFO");
-  set_ui_text(ui_intermediate_enemy_2_info_text, intermediate_enemy_1_info_buffer,
-              0.08, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+  memset(intermediate_enemy_2_info_buffer, '\0',
+         INTERMEDIATE_TEXT_BUFFER_SIZE);
+  snprintf(intermediate_enemy_2_info_buffer, INTERMEDIATE_TEXT_BUFFER_SIZE,
+           "ENEMY HEALTH INFO\nENEMY WEAPON INFO");
+  set_ui_text(ui_intermediate_enemy_2_info_text,
+              intermediate_enemy_1_info_buffer, 0.08, T_LEFT, fixed_sys,
+              (vec3) { 0.0, 0.0, 0.0 });
 
   set_ui_enabled(ui_intermediate_root, 0);
 
@@ -202,9 +211,25 @@ int init_intermediate() {
 
 void open_intermediate() {
   last_terminal_state = 1;
+  if (gen_sp_enemies) {
+    gen_sp_enemies = 0;
+    generate_sp_enemy_types();
+    get_sp_enemy_type_strings(intermediate_enemy_1_info_buffer,
+                              INTERMEDIATE_TEXT_BUFFER_SIZE,
+                              intermediate_enemy_2_info_buffer,
+                              INTERMEDIATE_TEXT_BUFFER_SIZE);
+    set_ui_text(ui_intermediate_enemy_1_info_text,
+                intermediate_enemy_1_info_buffer, 0.08, T_LEFT, fixed_sys,
+                (vec3) { 0.0, 0.0, 0.0 });
+    set_ui_text(ui_intermediate_enemy_2_info_text,
+                intermediate_enemy_2_info_buffer, 0.08, T_LEFT, fixed_sys,
+                (vec3) { 0.0, 0.0, 0.0 });
+  }
 
   set_ui_enabled(ui_intermediate_root, 1);
   set_ui_pos(inventory.ui_inventory_background, (vec2) { 0.7, -0.36 });
+  set_ui_width(inventory.ui_inventory_background, 0.159);
+  set_ui_height(inventory.ui_inventory_background, 0.159);
   set_ui_pos(inventory.ui_inventory_info_background, (vec2) { 0.7, -0.67 });
   set_ui_enabled(ship_parts.ui_ship_parts_root, 1);
   set_ui_enabled(inventory.ui_inventory_root, 1);
@@ -225,6 +250,7 @@ void close_intermediate() {
   set_ui_enabled(inventory.ui_inventory_root, 0);
   set_ui_enabled(ship_parts.ui_ship_parts_info_background, 0);
   set_ui_enabled(inventory.ui_inventory_info_background, 0);
+  last_terminal_state = 0;
   CURSOR_ENABLED = 0;
 }
 
@@ -244,13 +270,22 @@ void toggle_intermediate() {
 }
 
 void launch_on_click() {
-  set_gamemode_space();
+  free_timer_queue();
+  add_timer(TICK_RATE, tick, FUNCTION_PTR, NULL);
+  reset_listener_orientation();
+  reset_listener_pos();
+  pause_audio(STATION_THEME);
+  clear_station_mode();
+  init_space_mode();
+  play_audio(SPACE_THEME);
+
   st_player.total_levels_completed++;
   maze_size++;
   if (maze_size > 31) {
     maze_size = 31;
   }
   close_intermediate();
+  gen_sp_enemies = 1;
 }
 
 /*
@@ -264,20 +299,21 @@ void launch_on_click() {
     SHIP *enemy_ship
       The enemy ship generated
 */
+/*
 void set_intermediate_enemy_type_info(int slot_number, int enemy_move_type, SHIP *enemy_ship) {
   const char *enemy_move_type_str[] =
   {
     [E_LOW_SPEED] = "LOW SPEED",
     [E_MID_SPEED] = "MID SPEED",
-    [E_HIGH_SPEED]  = "HIGH SPEED",
-    [E_ULTRA_SPEED]  = "ULTRA SPEED",
+    [E_HIGH_SPEED] = "HIGH SPEED",
+    [E_ULTRA_SPEED] = "ULTRA SPEED",
   };
 
   const char *enemy_weapon_type_str[] =
   {
     [W_BALLISTIC] = "BALLISTIC",
     [W_LASER] = "LASER",
-    [W_PLASMA]  = "PLASMA",
+    [W_PLASMA] = "PLASMA",
   };
 
   if (slot_number == 1) {
@@ -310,3 +346,4 @@ void set_intermediate_enemy_type_info(int slot_number, int enemy_move_type, SHIP
     return;
   }
 }
+*/

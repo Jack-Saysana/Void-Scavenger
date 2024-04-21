@@ -54,3 +54,4 @@ void tick();
 void play_audio(int);
 void pause_audio(int);
 GLFWwindow *get_game_window();
+void generate_sp_enemy_types();

@@ -56,9 +56,9 @@ int init_inventory() {
   memset(inventory_info_title_buffer, '\0', INVENTORY_TEXT_BUFFER_SIZE);
   snprintf(inventory_info_title_buffer, INVENTORY_TEXT_BUFFER_SIZE, "[RARITY] TYPE");
   set_ui_text(inventory.ui_inventory_info_title_text,
-              inventory_info_title_buffer, 0.08, T_LEFT, fixed_sys, 
+              inventory_info_title_buffer, 0.08, T_LEFT, fixed_sys,
               (vec3) { 0.0, 0.0, 0.0 });
-  
+
   inventory.ui_inventory_info_content_background = add_ui_comp(
     inventory.ui_inventory_info_background, // UI_COMP *parent
     (vec2) { 0.025, -0.24 }, // vec2 pos
@@ -81,7 +81,7 @@ int init_inventory() {
                  "assets/transparent.png");
   memset(inventory_info_content_buffer, '\0', INVENTORY_TEXT_BUFFER_SIZE);
   snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE, "EMPTY");
-  set_ui_text(inventory.ui_inventory_info_content_text, inventory_info_content_buffer, 
+  set_ui_text(inventory.ui_inventory_info_content_text, inventory_info_content_buffer,
               0.08, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
 
   inventory.ui_inventory_background = add_ui_comp(
@@ -149,6 +149,8 @@ void toggle_inventory() {
     CURSOR_ENABLED = 0;
   } else {
     set_ui_pos(inventory.ui_inventory_background, (vec2) { 0.4, -0.15 });
+    set_ui_width(inventory.ui_inventory_background, 0.3);
+    set_ui_height(inventory.ui_inventory_background, 0.3);
     set_ui_pos(inventory.ui_inventory_info_background, (vec2) { 0.15, -0.15 });
     set_ui_enabled(inventory.ui_inventory_root, 1);
     set_ui_enabled(inventory.ui_inventory_info_background, 1);

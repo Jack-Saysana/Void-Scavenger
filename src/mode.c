@@ -66,27 +66,12 @@ int init_space_mode() {
     return -1;
   }
 
+
   srand(glfwGetTime());
   vec3 pos = GLM_VEC3_ZERO_INIT;
   versor rot = GLM_QUAT_IDENTITY_INIT;
   int num_enemies = BASE_NUM_ENEMIES +
                     gen_rand_int(5 * (st_player.cur_level + 1));
-  int e_attack_type_range = 0;
-  int e_mov_type_range = 0;
-  if (st_player.total_levels_completed > E_TYPE_UPDATE_2) {
-    e_attack_type_range = 6;
-    e_mov_type_range = 3;
-  } else if (st_player.total_levels_completed > E_TYPE_UPDATE_1) {
-    e_attack_type_range = 4;
-    e_mov_type_range = 2;
-  } else if (st_player.total_levels_completed > E_TYPE_UPDATE_0) {
-    e_attack_type_range = 2;
-    e_mov_type_range = 1;
-  }
-  for (int i = 0; i < E_BASE_NUM_TYPES; i++) {
-    attack_types_picked[i] = gen_rand_int(e_attack_type_range + 1);
-    mov_types_picked[i] = gen_rand_int(e_mov_type_range + 1);
-  }
   if (num_enemies > 0) {
     for (int i = 0; i < num_enemies; i++) {
       gen_rand_vec3(&pos, 2.0 * space_size);
@@ -98,7 +83,8 @@ int init_space_mode() {
       glm_quat_normalize(rot);
       int attack_picker = gen_rand_int(E_BASE_NUM_TYPES);
       int mov_picker = gen_rand_int(E_BASE_NUM_TYPES);
-      spawn_sp_enemy(pos, rot, attack_types_picked[attack_picker], mov_types_picked[mov_picker]);
+      spawn_sp_enemy(pos, rot, attack_types_picked[attack_picker],
+                     mov_types_picked[mov_picker]);
     }
   }
 
@@ -116,6 +102,67 @@ int init_space_mode() {
   spawn_space_debris();
 
   return 0;
+}
+
+void generate_sp_enemy_types() {
+  int e_attack_type_range = 0;
+  int e_mov_type_range = 0;
+  if (st_player.total_levels_completed > E_TYPE_UPDATE_2) {
+    e_attack_type_range = 6;
+    e_mov_type_range = 3;
+  } else if (st_player.total_levels_completed > E_TYPE_UPDATE_1) {
+    e_attack_type_range = 4;
+    e_mov_type_range = 2;
+  } else if (st_player.total_levels_completed > E_TYPE_UPDATE_0) {
+    e_attack_type_range = 2;
+    e_mov_type_range = 1;
+  }
+  for (int i = 0; i < E_BASE_NUM_TYPES; i++) {
+    attack_types_picked[i] = gen_rand_int(e_attack_type_range + 1);
+    mov_types_picked[i] = gen_rand_int(e_mov_type_range + 1);
+  }
+}
+
+void get_sp_enemy_type_strings(char *attacks, size_t a_size,
+                               char *movement, size_t m_size) {
+  const char *enemy_move_type_str[] =
+  {
+    "LOW SPEED",
+    "MID SPEED",
+    "HIGH SPEED",
+    "ULTRA SPEED",
+  };
+
+  const char *enemy_type_str[] =
+  {
+    "STD BALLISTIC",
+    "HEALTH-BASED BALLISTIC",
+    "SHIELD-BASED BALLISTIC",
+    "STD PLASMA",
+    "STD LASER",
+    "HEALTH-BASED LASER",
+    "SHIELD-BASED PLASMA",
+  };
+
+  size_t a_offset = 0;
+  size_t m_offset = 0;
+  size_t cur_len = 0;
+  for (int i = 0; i < E_BASE_NUM_TYPES; i++) {
+    cur_len = strlen(enemy_type_str[attack_types_picked[i]]);
+    if (a_offset + cur_len < a_size) {
+      sprintf(attacks + a_offset, "%s\n",
+              enemy_type_str[attack_types_picked[i]]);
+      a_offset += cur_len + 1;
+    }
+    cur_len = strlen(enemy_move_type_str[mov_types_picked[i]]);
+    if (m_offset + cur_len < m_size) {
+      sprintf(movement + m_offset, "%s\n",
+              enemy_move_type_str[mov_types_picked[i]]);
+      m_offset += cur_len + 1;
+    }
+  }
+  attacks[a_offset - 1] = '\0';
+  movement[m_offset - 1] = '\0';
 }
 
 void insert_sp_enemy() {

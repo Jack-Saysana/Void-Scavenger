@@ -122,6 +122,7 @@ void set_gamemode_space() {
   reset_listener_pos();
   pause_audio(STATION_THEME);
   clear_station_mode();
+  generate_sp_enemy_types();
   init_space_mode();
   play_audio(SPACE_THEME);
 }
@@ -162,6 +163,7 @@ void reset_space() {
   free_timer_queue();
   add_timer(TICK_RATE, tick, FUNCTION_PTR, NULL);
   clear_space_mode();
+  generate_sp_enemy_types();
   init_space_mode();
 }
 
