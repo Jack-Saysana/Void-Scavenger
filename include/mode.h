@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <cglm/cglm.h>
 #include <pthread.h>
 #include <engine/engine.h>
@@ -8,8 +9,8 @@
 static ENTITY *dead_zones[6] = { NULL };
 static ENTITY *sp_station = NULL;
 static ENTITY *st_terminal = NULL;
-static int attack_types_picked[E_BASE_NUM_TYPES];
-static int mov_types_picked[E_BASE_NUM_TYPES];
+static int attack_types_picked[E_BASE_NUM_TYPES] = { 0, 0 };
+static int mov_types_picked[E_BASE_NUM_TYPES] = { 0, 0 };
 
 // ======================= INTERNALLY DEFINED FUNCTIONS ======================
 

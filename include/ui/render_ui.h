@@ -35,6 +35,7 @@ static char *resolution_names[] = {
   "1920x1440 (4:3)",
   "2048x1536 (4:3)",
 };
+
 static vec2 resolutions[] = {
   {1280, 720},
   {1366, 768},
@@ -61,9 +62,10 @@ static vec2 resolutions[] = {
   {1920, 1440},
   {2048, 1536},
 };
-#define NUM_RESOLUTIONS (21)
 
+#define NUM_RESOLUTIONS (21)
 #define RENDER_BUFFER_SIZE (128)
+
 /* GLOBALS */
 UI_COMP *ui_render_root;
 UI_COMP *ui_render_background;
@@ -80,13 +82,16 @@ UI_COMP *ui_resolution_minus_button;
 UI_COMP *ui_resolution_value_text;
 UI_COMP *ui_resolution_plus_button;
 UI_COMP *ui_resolution_apply_button;
+UI_COMP *ui_windowed_root;
+UI_COMP *ui_windowed_button;
 UI_COMP *ui_render_glowing_items_root;
 UI_COMP *ui_render_glowing_items_button;
 UI_COMP *ui_render_low_details_root;
 UI_COMP *ui_render_low_details_button;
-int render_distance_multiplier;
+int render_distance_multiplier = 50;
 static char render_distance_buffer[RENDER_BUFFER_SIZE];
 static int cur_res = 0;
+static int windowed = 0;
 static int cheats = 0;
 static int low_details = 0;
 
@@ -103,9 +108,10 @@ void low_details_on_click();
 void change_resolution(UI_COMP *, void *);
 void update_resolution();
 void write_settings();
+void toggle_windowed();
 
 /* ================= EXTERNALLY DEFINED FUNCTIONS ================ */
 UI_COMP *init_blue_button(UI_COMP *, vec2, float, float, int);
 void set_render_dist(float dist);
 void set_sim_dist(float dist);
-void set_resolution(int, int);
+void set_resolution(int, int, int);

@@ -46,7 +46,7 @@ void give_item(int type, int rarity) {
     show_error_message("Inventory Full!\n");
     return;
   }
-  ST_ITEM *part = (ST_ITEM *) malloc(sizeof(ST_ITEM));  
+  ST_ITEM *part = (ST_ITEM *) malloc(sizeof(ST_ITEM));
   set_enhancements(part, type, rarity);
   memcpy(&(slot->data), &(part->enhancements), sizeof(part->enhancements));
 
@@ -122,6 +122,7 @@ void set_gamemode_space() {
   reset_listener_pos();
   pause_audio(STATION_THEME);
   clear_station_mode();
+  generate_sp_enemy_types();
   init_space_mode();
   play_audio(SPACE_THEME);
 }
@@ -162,6 +163,7 @@ void reset_space() {
   free_timer_queue();
   add_timer(TICK_RATE, tick, FUNCTION_PTR, NULL);
   clear_space_mode();
+  generate_sp_enemy_types();
   init_space_mode();
 }
 
@@ -212,8 +214,13 @@ void set_gamelevel(float gamelevel) {
   }
 }
 
-void set_resolution(int x, int y) {
+void set_resolution(int x, int y, int windowed) {
   GLFWwindow *window = get_game_window();
-  glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, x, y,
-                       GLFW_DONT_CARE);
+  if (windowed) {
+    glfwSetWindowMonitor(window, NULL, 0, 0, 640, 360,
+                         GLFW_DONT_CARE);
+  } else {
+    glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, x, y,
+                         GLFW_DONT_CARE);
+  }
 }

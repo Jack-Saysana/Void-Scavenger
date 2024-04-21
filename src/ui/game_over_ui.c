@@ -64,6 +64,8 @@ void set_game_over_screen(int set) {
     set_ui_enabled(inventory.ui_inventory_root, 0);
     set_ui_enabled(skill_tree.ui_skill_tree_root, 0);
     set_ui_enabled(ship_parts.ui_ship_parts_root, 0);
+    close_intermediate();
+    CURSOR_ENABLED = 1;
   }
 }
 

@@ -11,7 +11,7 @@ void init_item_prompt_ui() {
 
 void set_item_prompt(int state) {
   item_prompt_enabled = state;
-  set_ui_enabled(item_ui, state);
+  set_ui_enabled(item_ui, state && !get_terminal_ui_state());
 }
 
 int get_item_prompt_state() {

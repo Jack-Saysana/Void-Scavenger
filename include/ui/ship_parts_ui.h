@@ -23,8 +23,6 @@ SHIP_PARTS ship_parts;
 static char ship_parts_info_title_buffer[SHIP_PARTS_TEXT_BUFFER_SIZE];
 static char ship_parts_info_content_buffer[SHIP_PARTS_TEXT_BUFFER_SIZE];
 
-void update_ship_parts_icons();
-
 /* ================= INTERNALLY DEFINED FUNCTIONS ================= */
 int init_ship_parts();
 void update_ship_parts();
@@ -35,6 +33,7 @@ void ship_parts_off_hover_wrapper(UI_COMP *ui_ship_parts, void *arg);
 void ship_parts_off_hover(UI_COMP *ui_ship_parts, I_SLOT *equipped_ship_parts);
 void ship_parts_on_click(UI_COMP *ui_ship_parts, I_SLOT *equipped_ship_parts);
 void update_ship_stats();
+void update_ship_parts_icons();
 
 /* ================= EXTERNALLY DEFINED FUNCTIONS ================ */
 void switch_slot(I_SLOT *slot_a, I_SLOT *slot_b);

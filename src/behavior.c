@@ -30,10 +30,11 @@ void sp_enemy_pathfind(size_t index) {
   //                  (0.5 * enemy->thruster.max_accel *
   //                   enemy->thruster.max_accel * stop_time);
   float stop_time = -enemy->cur_speed / -enemy->thruster.max_accel;
-  float stop_dist = (enemy->cur_speed * stop_time) +
+  float stop_dist = fmin((enemy->cur_speed * stop_time) +
                     (0.5 * enemy->thruster.max_accel *
-                     enemy->thruster.max_accel * stop_time);
-  float turning_rad = 50.0 + stop_dist;
+                     enemy->thruster.max_accel * stop_time),
+                    MAX_STOP_DIST);
+  float turning_rad = fmin(50.0 + stop_dist, MAX_TURNING_RAD);
 
   vec3 target_dir = GLM_VEC3_ZERO_INIT;
   float target_speed = enemy->thruster.max_vel;

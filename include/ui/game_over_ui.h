@@ -27,3 +27,4 @@ char game_over_stats_buffer[GAME_OVER_STATS_SIZE];
 // ======================= EXTERNALLY DEFINED FUNCTIONS ======================
 void quit();
 void reset_game();
+void close_intermediate();

@@ -224,12 +224,11 @@ void input_keys(GLFWwindow *window) {
         if (i == GLFW_KEY_E && get_terminal_ui_state() &&
                    !holding_alpha[i - GLFW_KEY_A]) {
           /* Handle using terminal in space mode */
-          set_gamemode_space();
-          st_player.total_levels_completed++;
-          maze_size++;
-          if (maze_size > 31) {
-            maze_size = 31;
-          }
+          open_intermediate();
+        }
+        if (i == GLFW_KEY_M && !holding_alpha[i - GLFW_KEY_A]) {
+          /* Handle M press for testing intermediate menu */
+          toggle_intermediate();
         }
         if (i == GLFW_KEY_E && get_item_prompt_state() &&
             !holding_alpha[i - GLFW_KEY_A]) {
@@ -286,12 +285,17 @@ void input_keys(GLFWwindow *window) {
         }  else if (i == GLFW_KEY_P && !holding_alpha[i - GLFW_KEY_A]) {
           /* Handle P press (Ship Parts at Space Mode) */
           toggle_ship_parts();
-        } else if (i == GLFW_KEY_I && !holding_alpha[i - GLFW_KEY_A]) {
-          /* Handle I press */
-          toggle_inventory();
         }
+        //if (i == GLFW_KEY_I && !holding_alpha[i - GLFW_KEY_A]) {
+          /* Handle I press */
+        //  toggle_inventory();
+        //}
         if (i == GLFW_KEY_C && !holding_alpha[i - GLFW_KEY_A]) {
           toggle_st_waypoint();
+        }
+        if (i == GLFW_KEY_M && !holding_alpha[i - GLFW_KEY_A]) {
+          /* Handle M press for testing intermediate menu */
+          toggle_intermediate();
         }
       }
       holding_alpha[i - GLFW_KEY_A] = 1;

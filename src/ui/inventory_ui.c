@@ -28,20 +28,20 @@ int init_inventory() {
     inventory.ui_inventory_root, // UI_COMP *parent
     (vec2) { 0.15, -0.15 }, // vec2 pos
     0.24, // float width
-    0.24, // float height
+    0.3, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(inventory.ui_inventory_info_background, "assets/ui/test.png");
 
   inventory.ui_inventory_info_title_background = add_ui_comp(
     inventory.ui_inventory_info_background, // UI_COMP *parent
-    (vec2) { 0.025, -0.05 }, // vec2 pos
+    (vec2) { 0.025, -0.04 }, // vec2 pos
     0.95, // float width
-    0.2, // float height
+    0.16, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(inventory.ui_inventory_info_title_background,
-                 "assets/ui/hud_color_bg.png");
+                 "assets/ui/hud_color.png");
 
   inventory.ui_inventory_info_title_text = add_ui_comp(
     inventory.ui_inventory_info_title_background, // UI_COMP *parent
@@ -56,18 +56,18 @@ int init_inventory() {
   memset(inventory_info_title_buffer, '\0', INVENTORY_TEXT_BUFFER_SIZE);
   snprintf(inventory_info_title_buffer, INVENTORY_TEXT_BUFFER_SIZE, "[RARITY] TYPE");
   set_ui_text(inventory.ui_inventory_info_title_text,
-              inventory_info_title_buffer, 0.06, T_LEFT, fixed_sys, 
+              inventory_info_title_buffer, 0.08, T_LEFT, fixed_sys,
               (vec3) { 0.0, 0.0, 0.0 });
-  
+
   inventory.ui_inventory_info_content_background = add_ui_comp(
     inventory.ui_inventory_info_background, // UI_COMP *parent
-    (vec2) { 0.025, -0.3 }, // vec2 pos
+    (vec2) { 0.025, -0.24 }, // vec2 pos
     0.95, // float width
-    0.65, // float height
+    0.72, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(inventory.ui_inventory_info_content_background,
-                 "assets/ui/hud_color.png");
+                 "assets/ui/hud_color_bg.png");
 
   inventory.ui_inventory_info_content_text = add_ui_comp(
     inventory.ui_inventory_info_content_background, // UI_COMP *parent
@@ -81,14 +81,14 @@ int init_inventory() {
                  "assets/transparent.png");
   memset(inventory_info_content_buffer, '\0', INVENTORY_TEXT_BUFFER_SIZE);
   snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE, "EMPTY");
-  set_ui_text(inventory.ui_inventory_info_content_text, inventory_info_content_buffer, 
+  set_ui_text(inventory.ui_inventory_info_content_text, inventory_info_content_buffer,
               0.08, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
 
   inventory.ui_inventory_background = add_ui_comp(
     inventory.ui_inventory_root, // UI_COMP *parent
     (vec2) { 0.4, -0.15 }, // vec2 pos
-    0.3, // float width
-    0.3, // float height
+    0.159, // float width
+    0.159, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_X
   );
   set_ui_texture(inventory.ui_inventory_background, "assets/ui/test.png");
@@ -96,10 +96,10 @@ int init_inventory() {
   for (int i = 0; i < 9; i++) {
     inventory.ui_inventory_slot_background[i] = add_ui_comp(
       inventory.ui_inventory_background, // UI_COMP *parent
-      (vec2) { 0.025 + 0.025 * (i % 3) + (i % 3) * 0.3, 
-               -(0.025 + (i / 3) * 0.325) }, // vec2 pos
-      0.3, // float width
-      0.3, // float height
+      (vec2) { 0.03773585 + 0.03773585 * (i % 3) + (i % 3) * 0.28301887, 
+               -(0.03773585 + (i / 3) * 0.32075472) }, // vec2 pos
+      0.28301887, // float width
+      0.28301887, // float height
       ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_Y | HEIGHT_UNIT_RATIO_Y
     );
     set_ui_texture(inventory.ui_inventory_slot_background[i],
@@ -138,11 +138,23 @@ void update_inventory() {
 }
 
 void toggle_inventory() {
+  if (ui_intermediate_root->enabled) {
+    return;
+  }
   if (inventory.ui_inventory_root->enabled) {
     set_ui_enabled(inventory.ui_inventory_root, 0);
+    if (ship_parts.ui_ship_parts_root->enabled) {
+      set_ui_enabled(ship_parts.ui_ship_parts_root, 0);
+    }
     CURSOR_ENABLED = 0;
   } else {
+    set_ui_pos(inventory.ui_inventory_background, (vec2) { 0.4, -0.15 });
+    set_ui_width(inventory.ui_inventory_background, 0.3);
+    set_ui_height(inventory.ui_inventory_background, 0.3);
+    set_ui_pos(inventory.ui_inventory_info_background, (vec2) { 0.15, -0.15 });
     set_ui_enabled(inventory.ui_inventory_root, 1);
+    set_ui_enabled(inventory.ui_inventory_info_background, 1);
+    set_ui_enabled(inventory.ui_inventory_background, 1);
     set_ui_enabled(skill_tree.ui_skill_tree_root, 0);
     set_ui_enabled(ship_parts.ui_ship_parts_root, 0);
     set_ui_enabled(ui_esc_root, 0);
@@ -158,6 +170,13 @@ void slot_on_hover_wrapper(UI_COMP *ui_comp, void *arg) {
 }
 
 void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
+  if (!inventory.ui_inventory_info_background->enabled) {
+    set_ui_enabled(inventory.ui_inventory_info_background, 1);
+  }
+  if (ship_parts.ui_ship_parts_info_background->enabled) {
+    set_ui_enabled(ship_parts.ui_ship_parts_info_background, 0);
+  }
+
   const char *item_slot_id_str[] =
   {
     [I_SLOT_REACTOR] = "REACTOR",
@@ -246,7 +265,7 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
       default:
         break;
     }
-    set_ui_text(inventory.ui_inventory_info_content_text, inventory_info_content_buffer, 0.06, 
+    set_ui_text(inventory.ui_inventory_info_content_text, inventory_info_content_buffer, 0.08, 
                 T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
   }
 }
@@ -263,57 +282,61 @@ void slot_off_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
 
 void slot_on_click(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
   if (mode == SPACE) {
-    // space mode switch ship parts when click
-    switch (inventory_slot->type) {
-      case I_SLOT_REACTOR:
-        switch_slot(&equipped_reactor, inventory_slot);
-        player_ship.reactor = equipped_reactor.data.reactor;
-        break;
-      case I_SLOT_HULL:
-        switch_slot(&equipped_hull, inventory_slot);
-        player_ship.hull = equipped_hull.data.hull;
-        break;
-      case I_SLOT_SHIELD:
-        switch_slot(&equipped_shield, inventory_slot);
-        player_ship.shield = equipped_shield.data.shield;
-        player_ship.cur_shield = fmin(player_ship.shield.max_shield,
-                                      player_ship.cur_shield);
-        player_ship.recharging_shield = 0;
-        update_timer_args(ship_shield_recharge_delay, &player_ship,
-                          (void *) INVALID_INDEX);
-        add_timer(player_ship.shield.recharge_delay,
-                  ship_shield_recharge_delay, -1000, &player_ship);
-        break;
-      case I_SLOT_WEAPON:
-        switch_slot(&equipped_weapon, inventory_slot);
-        player_ship.weapon = equipped_weapon.data.weapon;
-        set_can_shoot(1);
-        break;
-      case I_SLOT_WING:
-        switch_slot(&equipped_wing, inventory_slot);
-        player_ship.wing = equipped_wing.data.wing;
-        break;
-      case I_SLOT_THRUSTER:
-        switch_slot(&equipped_thruster, inventory_slot);
-        player_ship.thruster = equipped_thruster.data.thruster;
-        break;
-      case DEFAULT:
-        break;
-    }
+    return;
   } else if (mode == STATION) {
-    // station mode drop item when click
-    for (int i = 0; i < 9 ; i++) {
-      if (inventory_slot == st_player.inventory + i) {
-        drop_item(i);
+    // switch ship parts when click at intermediate menu
+    if (ui_intermediate_root->enabled) {
+      switch (inventory_slot->type) {
+        case I_SLOT_REACTOR:
+          switch_slot(&equipped_reactor, inventory_slot);
+          player_ship.reactor = equipped_reactor.data.reactor;
+          break;
+        case I_SLOT_HULL:
+          switch_slot(&equipped_hull, inventory_slot);
+          player_ship.hull = equipped_hull.data.hull;
+          break;
+        case I_SLOT_SHIELD:
+          switch_slot(&equipped_shield, inventory_slot);
+          player_ship.shield = equipped_shield.data.shield;
+          player_ship.cur_shield = fmin(player_ship.shield.max_shield,
+                                        player_ship.cur_shield);
+          player_ship.recharging_shield = 0;
+          update_timer_args(ship_shield_recharge_delay, &player_ship,
+                            (void *) INVALID_INDEX);
+          add_timer(player_ship.shield.recharge_delay,
+                    ship_shield_recharge_delay, -1000, &player_ship);
+          break;
+        case I_SLOT_WEAPON:
+          switch_slot(&equipped_weapon, inventory_slot);
+          player_ship.weapon = equipped_weapon.data.weapon;
+          set_can_shoot(1);
+          break;
+        case I_SLOT_WING:
+          switch_slot(&equipped_wing, inventory_slot);
+          player_ship.wing = equipped_wing.data.wing;
+          break;
+        case I_SLOT_THRUSTER:
+          switch_slot(&equipped_thruster, inventory_slot);
+          player_ship.thruster = equipped_thruster.data.thruster;
+          break;
+        case DEFAULT:
+          break;
       }
+    } else {
+      // station mode drop item when click
+      for (int i = 0; i < 9 ; i++) {
+        if (inventory_slot == st_player.inventory + i) {
+          drop_item(i);
+        }
+      }
+      snprintf(inventory_info_title_buffer, INVENTORY_TEXT_BUFFER_SIZE, "[RARITY] TYPE");
+      set_ui_text(inventory.ui_inventory_info_title_text,
+                  inventory_info_title_buffer, 0.08, T_LEFT, fixed_sys, 
+                  (vec3) { 0.0, 0.0, 0.0 });
+      snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE, "EMPTY");
+      set_ui_text(inventory.ui_inventory_info_content_text, inventory_info_content_buffer, 
+                  0.08, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
     }
-    snprintf(inventory_info_title_buffer, INVENTORY_TEXT_BUFFER_SIZE, "[RARITY] TYPE");
-    set_ui_text(inventory.ui_inventory_info_title_text,
-                inventory_info_title_buffer, 0.08, T_LEFT, fixed_sys, 
-                (vec3) { 0.0, 0.0, 0.0 });
-    snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE, "EMPTY");
-    set_ui_text(inventory.ui_inventory_info_content_text, inventory_info_content_buffer, 
-                0.08, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
   }
 }
 

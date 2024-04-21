@@ -14,7 +14,6 @@ Implements the functionality for defining UI components for render menu.
 */
 int init_render() {
   last_game_mode = SPACE;
-  render_distance_multiplier = 50;
 
   ui_render_root = add_ui_comp(
     UI_ROOT_COMP, // UI_COMP *parent
@@ -27,19 +26,20 @@ int init_render() {
 
   ui_render_background = add_ui_comp(
     ui_render_root, // UI_COMP *parent
-    (vec2) { 0.4, -0.3 }, // vec2 pos
+    (vec2) { 0.4, -0.2125 }, // vec2 pos
     0.2, // float width
-    0.4, // float height
+    0.675, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(ui_render_background, "assets/ui/hud_color_bg.png");
 
   ui_render_back_root = add_ui_comp(
     ui_render_background, // UI_COMP *parent
-    (vec2) { 0.0625, -0.0625 }, // vec2 pos
+    (vec2) { 0.0625, -0.04347826 }, // vec2 pos
     0.875, // float width
-    0.25, // float height
-    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
+    0.15391304, // float height
+    //ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
+    RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(ui_render_back_root, "assets/transparent.png");
 
@@ -55,12 +55,13 @@ int init_render() {
 
   ui_render_render_distance_root = add_ui_comp(
     ui_render_background, // UI_COMP *parent
-    //(vec2) { 0.0625, -0.375 }, // vec2 pos
-    (vec2) { 0.0625, -0.325 }, // vec2 pos
+    (vec2) { 0.0625, 0.0 }, // vec2 pos
     0.875, // float width
-    //0.25, // float height
-    0.15, // float height
-    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
+    //0.17391304, // float height
+    0.15391304, // float height
+    //ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
+    RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
+    SIZE_UNIT_RATIO
   );
   set_ui_texture(ui_render_render_distance_root, "assets/transparent.png");
 
@@ -108,11 +109,10 @@ int init_render() {
 
   ui_resolution_root = add_ui_comp(
     ui_render_background, // UI_COMP *parent
-    (vec2) { 0.0625, -0.4875 }, // vec2 pos
+    (vec2) { 0.0625, 0.0 }, // vec2 pos
     0.875, // float width
-    //0.25, // float height
-    0.15, // float height
-    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
+    0.22, // float height
+    RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
     SIZE_UNIT_RATIO
   );
   set_ui_texture(ui_resolution_root, "assets/transparent.png");
@@ -121,7 +121,7 @@ int init_render() {
     ui_resolution_root, // UI_COMP *parent
     (vec2) { 0.0, 0.0 }, // vec2 pos
     1.0, // float width
-    0.4, // float height
+    0.325, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
     SIZE_UNIT_RATIO
   );
@@ -131,9 +131,9 @@ int init_render() {
 
   ui_resolution_minus_button = init_blue_button(
     ui_resolution_root, // UI_COMP *parent
-    (vec2) { 0.0, -0.4 }, // vec2 pos
+    (vec2) { 0.0, -0.3 }, // vec2 pos
     0.15, // float width
-    0.6, // float height
+    0.4, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
     SIZE_UNIT_RATIO
   );
@@ -144,9 +144,9 @@ int init_render() {
 
   ui_resolution_value_text = add_ui_comp(
     ui_resolution_root, // UI_COMP *parent
-    (vec2) { 0.15, -0.4 }, // vec2 pos
+    (vec2) { 0.15, -0.3 }, // vec2 pos
     0.7, // float width
-    0.6, // float height
+    0.3, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
     SIZE_UNIT_RATIO
   );
@@ -156,9 +156,9 @@ int init_render() {
 
   ui_resolution_plus_button = init_blue_button(
     ui_resolution_root, // UI_COMP *parent
-    (vec2) { 0.85, -0.4 }, // vec2 pos
+    (vec2) { 0.85, -0.3 }, // vec2 pos
     0.15, // float width
-    0.6, // float height
+    0.4, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
     SIZE_UNIT_RATIO
   );
@@ -168,27 +168,52 @@ int init_render() {
                   (void *) 1);
 
   ui_resolution_apply_button = init_blue_button(
-    ui_resolution_root,
-    (vec3) { 0.5, -1.1 },
-    0.75,
-    0.75,
-    ABSOLUTE_POS | POS_UNIT_RATIO | SIZE_UNIT_RATIO
+    ui_resolution_root, // UI_COMP *parent
+    (vec3) { 0.5, -1.0 }, // vec2 pos
+    0.5, // float width
+    0.25, // float height
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
+    SIZE_UNIT_RATIO
   );
-  set_ui_pivot(ui_resolution_apply_button, PIVOT_TOP);
-  set_ui_text(ui_resolution_apply_button, "APPLY", 0.42, T_CENTER, fixed_sys,
+  set_ui_pivot(ui_resolution_apply_button, PIVOT_BOTTOM);
+  set_ui_text(ui_resolution_apply_button, "APPLY", 0.5, T_CENTER, fixed_sys,
               GLM_VEC3_ONE);
   set_ui_on_click(ui_resolution_apply_button, (void *) update_resolution,
                   NULL);
 
-  ui_render_glowing_items_root = add_ui_comp(
+  ui_windowed_root = add_ui_comp(
     ui_render_background, // UI_COMP *parent
-    //(vec2) { 0.0625, -0.6875 }, // vec2 pos
-    (vec2) { 0.0625, -0.7875 }, // vec2 pos
-    0.4375, // float width
-    0.15, // float height
-    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
+    (vec2) { 0.0625, -0.025 }, // vec2 pos
+    0.875, // float width
+    0.11, // float height
+    RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
+    SIZE_UNIT_RATIO
   );
   set_ui_texture(ui_render_render_distance_root, "assets/transparent.png");
+
+
+  ui_windowed_button = init_blue_button(
+    ui_windowed_root, // UI_COMP *parent
+    (vec2) { 0.0, 0.0 }, // vec2 pos
+    1.0, // float width
+    1.0, // float height
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
+  );
+  set_ui_text(ui_windowed_button, "WINDOWED: OFF", 0.25, T_CENTER,
+              fixed_sys, GLM_VEC3_ONE);
+  set_ui_on_click(ui_windowed_button, (void *) toggle_windowed, NULL);
+
+  ui_render_glowing_items_root = add_ui_comp(
+    ui_render_background, // UI_COMP *parent
+    (vec2) { 0.0625, -0.025 }, // vec2 pos
+    0.875, // float width
+    0.11, // float height
+    //ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
+    RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
+    SIZE_UNIT_RATIO
+  );
+  set_ui_texture(ui_render_render_distance_root, "assets/transparent.png");
+
 
   ui_render_glowing_items_button = init_blue_button(
     ui_render_glowing_items_root, // UI_COMP *parent
@@ -203,10 +228,12 @@ int init_render() {
 
   ui_render_low_details_root = add_ui_comp(
     ui_render_background, // UI_COMP *parent
-    (vec2) { 0.5, -0.7875 }, // vec2 pos
-    0.4375, // float width
-    0.15, // float height
-    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
+    (vec2) { 0.0625, -0.025 }, // vec2 pos
+    0.875, // float width
+    0.11, // float height
+    //ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
+    RELATIVE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
+    SIZE_UNIT_RATIO
   );
 
   ui_render_low_details_button = init_blue_button(
@@ -236,6 +263,16 @@ void update_render() {
     set_ui_text(ui_render_low_details_button, "LOW DETAIL: OFF", 0.275, T_CENTER, fixed_sys, GLM_VEC3_ONE);
   }
 
+  if (windowed) {
+    set_ui_text(ui_windowed_button, "WINDOWED: ON", 0.25, T_CENTER,
+                fixed_sys, GLM_VEC3_ONE);
+    set_ui_enabled(ui_resolution_root, 0);
+  } else {
+    set_ui_text(ui_windowed_button, "WINDOWED: OFF", 0.25, T_CENTER,
+                fixed_sys, GLM_VEC3_ONE);
+    set_ui_enabled(ui_resolution_root, 1);
+  }
+
   snprintf(render_distance_buffer, RENDER_BUFFER_SIZE, "%d", render_distance_multiplier);
   set_ui_text(ui_render_render_distance_value_text, render_distance_buffer, 0.42, T_CENTER, fixed_sys, GLM_VEC3_ZERO);
 
@@ -263,12 +300,13 @@ void render_distance_minus_on_click() {
 
   if (mode == SPACE) {
     set_render_dist((SP_BASE_RENDER_DIST / 100) * render_distance_multiplier);
-    set_sim_dist((SP_BASE_SIM_DIST / 100) * render_distance_multiplier);
+    set_sim_dist(RENDER_DIST + 50.0);
   } else if (mode == STATION) {
     set_render_dist((ST_BASE_RENDER_DIST / 100) * render_distance_multiplier);
-    set_sim_dist((ST_BASE_SIM_DIST / 100) * render_distance_multiplier);
+    set_sim_dist(RENDER_DIST + 5.0);
   }
   last_game_mode = mode;
+  write_settings();
 }
 
 void render_distance_plus_on_click() {
@@ -278,12 +316,13 @@ void render_distance_plus_on_click() {
 
   if (mode == SPACE) {
     set_render_dist((SP_BASE_RENDER_DIST / 100) * render_distance_multiplier);
-    set_sim_dist((SP_BASE_SIM_DIST / 100) * render_distance_multiplier);
+    set_sim_dist(RENDER_DIST + 50.0);
   } else if (mode == STATION) {
     set_render_dist((ST_BASE_RENDER_DIST / 100) * render_distance_multiplier);
-    set_sim_dist((ST_BASE_SIM_DIST / 100) * render_distance_multiplier);
+    set_sim_dist(RENDER_DIST + 5.0);
   }
   last_game_mode = mode;
+  write_settings();
 }
 
 void glowing_items_on_click() {
@@ -303,6 +342,10 @@ void low_details_on_click() {
 }
 
 void change_resolution(UI_COMP *ui, void *args) {
+  if (windowed) {
+    return;
+  }
+
   size_t move = (size_t) args;
   if (move) {
     cur_res = (cur_res + 1) % NUM_RESOLUTIONS;
@@ -316,7 +359,7 @@ void change_resolution(UI_COMP *ui, void *args) {
 }
 
 void update_resolution() {
-  set_resolution(resolutions[cur_res][X], resolutions[cur_res][Y]);
+  set_resolution(resolutions[cur_res][X], resolutions[cur_res][Y], windowed);
   write_settings();
 }
 
@@ -324,7 +367,8 @@ void update_details() {
   write_settings();
 }
 
-void update_cheats() {
+void update_cheats(int set_to) {
+  cheats = set_to;
   write_settings();
 }
 
@@ -336,9 +380,15 @@ void read_settings() {
     cheats = 1;
     return;
   }
-  fscanf(settings, "res: %d\ndetail: %d\ncheats: %d",
-         &cur_res, &low_details, &cheats);
+  fscanf(settings, "res: %d\nrd: %d\nwindowed: %d\ndetail: %d\ncheats: %d",
+         &cur_res, &render_distance_multiplier, &windowed, &low_details,
+         &cheats);
   fclose(settings);
+}
+
+void toggle_windowed() {
+  windowed = !windowed;
+  update_resolution();
 }
 
 void write_settings() {
@@ -346,8 +396,8 @@ void write_settings() {
   if (settings == NULL) {
     return;
   }
-  fprintf(settings, "res: %d\ndetail: %d\ncheats: %d",
-                    cur_res, low_details, cheats);
+  fprintf(settings, "res: %d\nrd: %d\nwindowed: %d\ndetail: %d\ncheats: %d",
+          cur_res, render_distance_multiplier, windowed, low_details, cheats);
   fclose(settings);
 }
 

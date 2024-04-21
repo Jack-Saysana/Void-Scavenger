@@ -127,6 +127,7 @@ void start_game(UI_COMP *comp, void *args) {
   enable_level();
   pause_audio(MAIN_THEME);
   play_audio(SPACE_THEME);
+  generate_sp_enemy_types();
   init_space_mode();
 }
 

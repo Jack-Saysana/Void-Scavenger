@@ -47,5 +47,7 @@ int init_control();
 void update_control();
 void update_esc();
 void stall_ui_initialize();
+int init_intermediate();
+void update_intermediate();
 void update_level();
 void level_ui_initialize();

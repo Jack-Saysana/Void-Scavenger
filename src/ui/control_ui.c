@@ -33,7 +33,7 @@ int init_control() {
 
   ui_control_back_root = add_ui_comp(
     ui_control_background, // UI_COMP *parent
-    (vec2) { 0.28125, -0.04167 }, // vec2 pos
+    (vec2) { 0.04167, -0.04167 }, // vec2 pos
     0.4375, // float width
     0.1667, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
@@ -49,6 +49,25 @@ int init_control() {
   );
   set_ui_text(ui_control_back_button, "BACK", 0.25, T_CENTER, fixed_sys, GLM_VEC3_ONE);
   set_ui_on_click(ui_control_back_button, (void *) control_back_on_click, NULL);
+
+  ui_control_cheat_root = add_ui_comp(
+    ui_control_background, // UI_COMP *parent
+    (vec2) { 0.52084, -0.04167 }, // vec2 pos
+    0.4375, // float width
+    0.1667, // float height
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
+  );
+  set_ui_texture(ui_control_cheat_root, "assets/transparent.png");
+
+  ui_control_cheat_button = init_blue_button(
+    ui_control_cheat_root, // UI_COMP *parent
+    (vec2) { 0.0, 0.0 }, // vec2 pos
+    1.0, // float width
+    1.0, // float height
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | SIZE_UNIT_RATIO
+  );
+  set_ui_text(ui_control_cheat_button, "CHEAT: ON", 0.25, T_CENTER, fixed_sys, GLM_VEC3_ONE);
+  set_ui_on_click(ui_control_cheat_button, (void *) control_cheat_on_click, NULL);
 
   ui_control_instruction_root = add_ui_comp(
     ui_control_background, // UI_COMP *parent
@@ -145,10 +164,26 @@ void update_control() {
                   GLM_VEC3_ZERO);
       set_ui_texture(ui_control_instruction_image, "assets/ui/wasd_mouse.png");
     }
+
+    if (get_cheats_state()) {
+      set_ui_text(ui_control_cheat_button, "CHEAT: ON", 0.25, T_CENTER, fixed_sys, GLM_VEC3_ONE);
+      set_ui_on_click(ui_control_cheat_button, (void *) control_cheat_on_click, NULL);
+    } else {
+      set_ui_text(ui_control_cheat_button, "CHEAT: OFF", 0.25, T_CENTER, fixed_sys, GLM_VEC3_ONE);
+      set_ui_on_click(ui_control_cheat_button, (void *) control_cheat_on_click, NULL);
+    }
   }
 }
 
 void control_back_on_click() {
   set_ui_enabled(ui_esc_root, 1);
   set_ui_enabled(ui_control_root, 0);
+}
+
+void control_cheat_on_click() {
+  if (get_cheats_state() == 1) {
+    update_cheats(0);
+  } else {
+    update_cheats(1);
+  }
 }
