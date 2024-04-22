@@ -2,7 +2,7 @@
 
 /*
                                    INVENTORY
-Implements the functionality for defining UI components for player's station 
+Implements the functionality for defining UI components for player's station
 mode inventory.
 */
 
@@ -49,12 +49,13 @@ int init_inventory() {
     0.9, // float width
     0.9, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X |
-    HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_X
+    HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_Y
   );
   set_ui_texture(inventory.ui_inventory_info_title_text,
                  "assets/transparent.png");
   memset(inventory_info_title_buffer, '\0', INVENTORY_TEXT_BUFFER_SIZE);
-  snprintf(inventory_info_title_buffer, INVENTORY_TEXT_BUFFER_SIZE, "[RARITY] TYPE");
+  snprintf(inventory_info_title_buffer, INVENTORY_TEXT_BUFFER_SIZE,
+           "[RARITY] TYPE");
   set_ui_text(inventory.ui_inventory_info_title_text,
               inventory_info_title_buffer, TEXT_LINE_HEIGHT, T_LEFT, fixed_sys,
               (vec3) { 0.0, 0.0, 0.0 });
@@ -75,28 +76,29 @@ int init_inventory() {
     0.9, // float width
     0.9, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X |
-    HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_X
+    HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_Y
   );
   set_ui_texture(inventory.ui_inventory_info_content_text,
                  "assets/transparent.png");
   memset(inventory_info_content_buffer, '\0', INVENTORY_TEXT_BUFFER_SIZE);
   snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE, "EMPTY");
-  set_ui_text(inventory.ui_inventory_info_content_text, inventory_info_content_buffer,
-              TEXT_LINE_HEIGHT, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+  set_ui_text(inventory.ui_inventory_info_content_text,
+              inventory_info_content_buffer, CONTENT_LINE_HEIGHT, T_LEFT,
+              fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
 
   inventory.ui_inventory_background = add_ui_comp(
     inventory.ui_inventory_root, // UI_COMP *parent
     (vec2) { 0.4, -0.15 }, // vec2 pos
-    0.159, // float width
-    0.159, // float height
-    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_X
+    0.33, // float width
+    0.33, // float height
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_Y | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(inventory.ui_inventory_background, "assets/ui/test.png");
 
   for (int i = 0; i < 9; i++) {
     inventory.ui_inventory_slot_background[i] = add_ui_comp(
       inventory.ui_inventory_background, // UI_COMP *parent
-      (vec2) { 0.03773585 + 0.03773585 * (i % 3) + (i % 3) * 0.28301887, 
+      (vec2) { 0.03773585 + 0.03773585 * (i % 3) + (i % 3) * 0.28301887,
                -(0.03773585 + (i / 3) * 0.32075472) }, // vec2 pos
       0.28301887, // float width
       0.28301887, // float height
@@ -149,8 +151,8 @@ void toggle_inventory() {
     CURSOR_ENABLED = 0;
   } else {
     set_ui_pos(inventory.ui_inventory_background, (vec2) { 0.4, -0.15 });
-    set_ui_width(inventory.ui_inventory_background, 0.3);
-    set_ui_height(inventory.ui_inventory_background, 0.3);
+    set_ui_width(inventory.ui_inventory_background, 0.5);
+    set_ui_height(inventory.ui_inventory_background, 0.5);
     set_ui_pos(inventory.ui_inventory_info_background, (vec2) { 0.15, -0.15 });
     set_ui_enabled(inventory.ui_inventory_root, 1);
     set_ui_enabled(inventory.ui_inventory_info_background, 1);
@@ -207,29 +209,35 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
   // update when slot item on hover
   set_ui_texture(ui_inventory_slot, "assets/ui/test.png");
   if (inventory_slot->type == I_SLOT_EMPTY) {
-    snprintf(inventory_info_title_buffer, INVENTORY_TEXT_BUFFER_SIZE, "[RARITY] TYPE");
+    snprintf(inventory_info_title_buffer, INVENTORY_TEXT_BUFFER_SIZE,
+            "[RARITY] TYPE");
     set_ui_text(inventory.ui_inventory_info_title_text,
-                inventory_info_title_buffer, TEXT_LINE_HEIGHT, T_LEFT, fixed_sys, 
-                (vec3) { 0.0, 0.0, 0.0 });
-    snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE, "EMPTY");
-    set_ui_text(inventory.ui_inventory_info_content_text, inventory_info_content_buffer, 
-                TEXT_LINE_HEIGHT, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+                inventory_info_title_buffer, TEXT_LINE_HEIGHT, T_LEFT,
+                fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+    snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE,
+             "EMPTY");
+    set_ui_text(inventory.ui_inventory_info_content_text,
+                inventory_info_content_buffer, CONTENT_LINE_HEIGHT, T_LEFT,
+                fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
   } else {
     // Fill title buffer
     if (inventory_slot->type == I_SLOT_WEAPON ) {
-      snprintf(inventory_info_title_buffer, INVENTORY_TEXT_BUFFER_SIZE, "[%s] %s", 
-           rarity_str[inventory_slot->rarity], item_slot_weapon_type_str[inventory_slot->weapon_type]);
+      snprintf(inventory_info_title_buffer, INVENTORY_TEXT_BUFFER_SIZE,
+               "[%s] %s", rarity_str[inventory_slot->rarity],
+               item_slot_weapon_type_str[inventory_slot->weapon_type]);
     } else {
-      snprintf(inventory_info_title_buffer, INVENTORY_TEXT_BUFFER_SIZE, "[%s] %s", 
-           rarity_str[inventory_slot->rarity], item_slot_id_str[inventory_slot->type]);
+      snprintf(inventory_info_title_buffer, INVENTORY_TEXT_BUFFER_SIZE,
+               "[%s] %s", rarity_str[inventory_slot->rarity],
+               item_slot_id_str[inventory_slot->type]);
     }
-    set_ui_text(inventory.ui_inventory_info_title_text, inventory_info_title_buffer, 
-                TEXT_LINE_HEIGHT, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+    set_ui_text(inventory.ui_inventory_info_title_text,
+                inventory_info_title_buffer, TEXT_LINE_HEIGHT, T_LEFT,
+                fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
     // Fill content buffer
     switch (inventory_slot->type) {
       case I_SLOT_REACTOR:
         snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE,
-                 "[MAX OUTPUT = %.2f]\n[RECHARGE RATE = %.2F]\n[STALL TIME = %.2f]", 
+                 "[MAX OUTPUT = %.2f]\n[RECHARGE RATE = %.2F]\n[STALL TIME = %.2f]",
                  inventory_slot->data.reactor.max_output,
                  inventory_slot->data.reactor.recharge_rate,
                  inventory_slot->data.reactor.stall_time);
@@ -240,33 +248,42 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
         break;
       case I_SLOT_SHIELD:
         snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE,
-                  "[MAX SHIELD = %.2f]\n[RECHARGE RATE = %.2f]\n[RECHARGE DELAY = %.2f]\n[POWER DRAW = %.2f]", 
-                  inventory_slot->data.shield.max_shield, inventory_slot->data.shield.recharge_rate, 
-                  inventory_slot->data.shield.recharge_delay, inventory_slot->data.shield.power_draw);
+                  "[MAX SHIELD = %.2f]\n[RECHARGE RATE = %.2f]\n[RECHARGE DELAY = %.2f]\n[POWER DRAW = %.2f]",
+                  inventory_slot->data.shield.max_shield,
+                  inventory_slot->data.shield.recharge_rate,
+                  inventory_slot->data.shield.recharge_delay,
+                  inventory_slot->data.shield.power_draw);
         break;
       case I_SLOT_WEAPON:
         snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE,
-                  "[DAMAGE = %.2f]\n[FIRE RATE = %.2f]\n[MAX POWER DRAW = %.2f]\n[PROJ SPEED = %.2f]\n[RANGE = %.2f]\n[PROJ SIZE = %.2f]\n[NUM BARRELS = %d]", 
-                  inventory_slot->data.weapon.damage, inventory_slot->data.weapon.fire_rate, 
-                  inventory_slot->data.weapon.max_power_draw, inventory_slot->data.weapon.proj_speed, 
-                  inventory_slot->data.weapon.range, inventory_slot->data.weapon.bullet_size,
+                  "[DAMAGE = %.2f]\n[FIRE RATE = %.2f]\n[MAX POWER DRAW = %.2f]\n[PROJ SPEED = %.2f]\n[RANGE = %.2f]\n[PROJ SIZE = %.2f]\n[NUM BARRELS = %d]",
+                  inventory_slot->data.weapon.damage,
+                  inventory_slot->data.weapon.fire_rate,
+                  inventory_slot->data.weapon.max_power_draw,
+                  inventory_slot->data.weapon.proj_speed,
+                  inventory_slot->data.weapon.range,
+                  inventory_slot->data.weapon.bullet_size,
                   inventory_slot->data.weapon.num_barrels);
         break;
       case I_SLOT_WING:
-        snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE, 
-                 "[MAX ANG ACCEL = %.2f]\n[MAX ANG VEL = %.2f]", 
-                 inventory_slot->data.wing.max_ang_accel, inventory_slot->data.wing.max_ang_vel);
+        snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE,
+                 "[MAX ANG ACCEL = %.2f]\n[MAX ANG VEL = %.2f]",
+                 inventory_slot->data.wing.max_ang_accel,
+                 inventory_slot->data.wing.max_ang_vel);
         break;
       case I_SLOT_THRUSTER:
-        snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE, 
-                 "[MAX ACCELERATION = %.2f]\n[MAX POWER DRAW = %.2f]\n[MAX VELOCITY = %.2f]", 
-                 inventory_slot->data.thruster.max_accel, inventory_slot->data.thruster.max_power_draw, inventory_slot->data.thruster.max_vel);
+        snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE,
+                 "[MAX ACCELERATION = %.2f]\n[MAX POWER DRAW = %.2f]\n[MAX VELOCITY = %.2f]",
+                 inventory_slot->data.thruster.max_accel,
+                 inventory_slot->data.thruster.max_power_draw,
+                 inventory_slot->data.thruster.max_vel);
         break;
       default:
         break;
     }
-    set_ui_text(inventory.ui_inventory_info_content_text, inventory_info_content_buffer, TEXT_LINE_HEIGHT, 
-                T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+    set_ui_text(inventory.ui_inventory_info_content_text,
+                inventory_info_content_buffer, CONTENT_LINE_HEIGHT, T_LEFT,
+                fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
   }
 }
 
@@ -329,13 +346,16 @@ void slot_on_click(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
           drop_item(i);
         }
       }
-      snprintf(inventory_info_title_buffer, INVENTORY_TEXT_BUFFER_SIZE, "[RARITY] TYPE");
+      snprintf(inventory_info_title_buffer, INVENTORY_TEXT_BUFFER_SIZE,
+               "[RARITY] TYPE");
       set_ui_text(inventory.ui_inventory_info_title_text,
-                  inventory_info_title_buffer, TEXT_LINE_HEIGHT, T_LEFT, fixed_sys, 
-                  (vec3) { 0.0, 0.0, 0.0 });
-      snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE, "EMPTY");
-      set_ui_text(inventory.ui_inventory_info_content_text, inventory_info_content_buffer, 
-                  TEXT_LINE_HEIGHT, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+                  inventory_info_title_buffer, TEXT_LINE_HEIGHT, T_LEFT,
+                  fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+      snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE,
+               "EMPTY");
+      set_ui_text(inventory.ui_inventory_info_content_text,
+                  inventory_info_content_buffer, CONTENT_LINE_HEIGHT, T_LEFT,
+                  fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
     }
   }
 }

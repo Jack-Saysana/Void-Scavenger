@@ -14,7 +14,8 @@ mode inventory.
 */
 
 #define INVENTORY_TEXT_BUFFER_SIZE (256)
-#define TEXT_LINE_HEIGHT (0.05)
+#define TEXT_LINE_HEIGHT (0.5)
+#define CONTENT_LINE_HEIGHT (0.1)
 
 /* GLOBALS */
 INVENTORY inventory;

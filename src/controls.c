@@ -342,7 +342,7 @@ void input_keys(GLFWwindow *window) {
       update_console_text(cons_cmd);
       advance_cursor();
     } else if (!holding_space && !console_enabled && mode == STATION &&
-               (st_player.ent->velocity[Y] < 0.001 && st_player.ent->velocity[Y] > 0.0)) {
+               (st_player.ent->velocity[Y] < 0.01 && st_player.ent->velocity[Y] > -0.01)) {
       //Handle jump
       vec3 player_up;
       glm_quat_rotatev(st_player.ent->rotation, (vec3){0.0, 1.0, 0.0}, player_up);

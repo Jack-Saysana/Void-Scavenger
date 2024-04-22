@@ -35,7 +35,8 @@ int init_ship_parts() {
     1.0, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_Y | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(ship_parts.ui_ship_parts_background, "assets/ui/ship_top_view_mask.png");
+  set_ui_texture(ship_parts.ui_ship_parts_background,
+                 "assets/ui/ship_top_view_mask.png");
 
   ship_parts.ui_ship_top_view = add_ui_comp(
     ship_parts.ui_ship_parts_background, // UI_COMP *parent
@@ -53,7 +54,8 @@ int init_ship_parts() {
     0.08, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_X
   );
-  set_ui_texture(ship_parts.ui_reactor_background, "assets/ui/hud_color_bg.png");
+  set_ui_texture(ship_parts.ui_reactor_background,
+                 "assets/ui/hud_color_bg.png");
   set_ui_on_hover(ship_parts.ui_reactor_background,
                   ship_parts_on_hover_wrapper, (void *)&equipped_reactor);
   set_ui_no_hover(ship_parts.ui_reactor_background,
@@ -66,8 +68,10 @@ int init_ship_parts() {
     0.8, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(ship_parts.ui_reactor_icon, "assets/ui/parts_reactor_icon.png");
-  set_ui_on_click(ship_parts.ui_reactor_icon, (void *) ship_parts_on_click, &equipped_reactor);
+  set_ui_texture(ship_parts.ui_reactor_icon,
+                 "assets/ui/parts_reactor_icon.png");
+  set_ui_on_click(ship_parts.ui_reactor_icon,
+                  (void *) ship_parts_on_click, &equipped_reactor);
 
   ship_parts.ui_hull_background = add_ui_comp(
     ship_parts.ui_ship_top_view, // UI_COMP *parent
@@ -90,7 +94,8 @@ int init_ship_parts() {
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(ship_parts.ui_hull_icon, "assets/ui/parts_hull_icon.png");
-  set_ui_on_click(ship_parts.ui_hull_icon, (void *) ship_parts_on_click, &equipped_hull);
+  set_ui_on_click(ship_parts.ui_hull_icon, (void *) ship_parts_on_click,
+                  &equipped_hull);
 
   ship_parts.ui_shield_background = add_ui_comp(
     ship_parts.ui_ship_top_view, // UI_COMP *parent
@@ -99,7 +104,8 @@ int init_ship_parts() {
     0.08, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_X
   );
-  set_ui_texture(ship_parts.ui_shield_background, "assets/ui/hud_color_bg.png");
+  set_ui_texture(ship_parts.ui_shield_background,
+                 "assets/ui/hud_color_bg.png");
   set_ui_on_hover(ship_parts.ui_shield_background,
                   ship_parts_on_hover_wrapper, (void *)&equipped_shield);
   set_ui_no_hover(ship_parts.ui_shield_background,
@@ -113,7 +119,8 @@ int init_ship_parts() {
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(ship_parts.ui_shield_icon, "assets/ui/parts_shield_icon.png");
-  set_ui_on_click(ship_parts.ui_shield_icon, (void *) ship_parts_on_click, &equipped_shield);
+  set_ui_on_click(ship_parts.ui_shield_icon, (void *) ship_parts_on_click,
+                  &equipped_shield);
 
   ship_parts.ui_weapon_background = add_ui_comp(
     ship_parts.ui_ship_top_view, // UI_COMP *parent
@@ -122,7 +129,8 @@ int init_ship_parts() {
     0.08, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_X
   );
-  set_ui_texture(ship_parts.ui_weapon_background, "assets/ui/hud_color_bg.png");
+  set_ui_texture(ship_parts.ui_weapon_background,
+                 "assets/ui/hud_color_bg.png");
   set_ui_on_hover(ship_parts.ui_weapon_background,
                   ship_parts_on_hover_wrapper, (void *)&equipped_weapon);
   set_ui_no_hover(ship_parts.ui_weapon_background,
@@ -136,7 +144,8 @@ int init_ship_parts() {
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(ship_parts.ui_weapon_icon, "assets/ui/parts_weapon_icon.png");
-  set_ui_on_click(ship_parts.ui_weapon_icon, (void *) ship_parts_on_click, &equipped_weapon);
+  set_ui_on_click(ship_parts.ui_weapon_icon, (void *) ship_parts_on_click,
+                  &equipped_weapon);
 
   ship_parts.ui_wing_background = add_ui_comp(
     ship_parts.ui_ship_top_view, // UI_COMP *parent
@@ -159,7 +168,8 @@ int init_ship_parts() {
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
   set_ui_texture(ship_parts.ui_wing_icon, "assets/ui/parts_wing_icon.png");
-  set_ui_on_click(ship_parts.ui_wing_icon, (void *) ship_parts_on_click, &equipped_wing);
+  set_ui_on_click(ship_parts.ui_wing_icon, (void *) ship_parts_on_click,
+                  &equipped_wing);
 
   ship_parts.ui_thruster_background = add_ui_comp(
     ship_parts.ui_ship_top_view, // UI_COMP *parent
@@ -168,7 +178,8 @@ int init_ship_parts() {
     0.08, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_X
   );
-  set_ui_texture(ship_parts.ui_thruster_background, "assets/ui/hud_color_bg.png");
+  set_ui_texture(ship_parts.ui_thruster_background,
+                 "assets/ui/hud_color_bg.png");
   set_ui_on_hover(ship_parts.ui_thruster_background,
                   ship_parts_on_hover_wrapper, (void *)&equipped_thruster);
   set_ui_no_hover(ship_parts.ui_thruster_background,
@@ -181,8 +192,10 @@ int init_ship_parts() {
     0.8, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(ship_parts.ui_thruster_icon, "assets/ui/parts_thruster_icon.png");
-  set_ui_on_click(ship_parts.ui_thruster_icon, (void *) ship_parts_on_click, &equipped_thruster);
+  set_ui_texture(ship_parts.ui_thruster_icon,
+                 "assets/ui/parts_thruster_icon.png");
+  set_ui_on_click(ship_parts.ui_thruster_icon, (void *) ship_parts_on_click,
+                  &equipped_thruster);
 
   ship_parts.ui_ship_parts_info_background = add_ui_comp(
     ship_parts.ui_ship_parts_root, // UI_COMP *parent
@@ -191,7 +204,8 @@ int init_ship_parts() {
     0.30, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(ship_parts.ui_ship_parts_info_background, "assets/ui/test.png");
+  set_ui_texture(ship_parts.ui_ship_parts_info_background,
+                 "assets/ui/test.png");
 
   ship_parts.ui_ship_parts_info_title_background = add_ui_comp(
     ship_parts.ui_ship_parts_info_background, // UI_COMP *parent
@@ -200,21 +214,25 @@ int init_ship_parts() {
     0.16, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(ship_parts.ui_ship_parts_info_title_background, "assets/ui/hud_color.png");
+  set_ui_texture(ship_parts.ui_ship_parts_info_title_background,
+                 "assets/ui/hud_color.png");
 
   ship_parts.ui_ship_parts_info_title_text = add_ui_comp(
     ship_parts.ui_ship_parts_info_title_background, // UI_COMP *parent
     (vec2) { 0.05, -0.05 }, // vec2 pos
     0.9, // float width
     0.9, // float height
-    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_X
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
+    LINE_UNIT_RATIO_Y
   );
-  set_ui_texture(ship_parts.ui_ship_parts_info_title_text, "assets/transparent.png");
+  set_ui_texture(ship_parts.ui_ship_parts_info_title_text,
+                 "assets/transparent.png");
   memset(ship_parts_info_title_buffer, '\0', SHIP_PARTS_TEXT_BUFFER_SIZE);
-  snprintf(ship_parts_info_title_buffer, SHIP_PARTS_TEXT_BUFFER_SIZE, "[RARITY] TYPE");
+  snprintf(ship_parts_info_title_buffer, SHIP_PARTS_TEXT_BUFFER_SIZE,
+           "[RARITY] TYPE");
   set_ui_text(ship_parts.ui_ship_parts_info_title_text,
-              ship_parts_info_title_buffer, 0.08, T_LEFT, fixed_sys, 
-              (vec3) { 0.0, 0.0, 0.0 });
+              ship_parts_info_title_buffer, TEXT_LINE_HEIGHT, T_LEFT,
+              fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
 
   ship_parts.ui_ship_parts_info_content_background = add_ui_comp(
     ship_parts.ui_ship_parts_info_background, // UI_COMP *parent
@@ -223,21 +241,25 @@ int init_ship_parts() {
     0.72, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y
   );
-  set_ui_texture(ship_parts.ui_ship_parts_info_content_background, "assets/ui/hud_color_bg.png");
+  set_ui_texture(ship_parts.ui_ship_parts_info_content_background,
+                 "assets/ui/hud_color_bg.png");
 
   ship_parts.ui_ship_parts_info_content_text = add_ui_comp(
     ship_parts.ui_ship_parts_info_content_background, // UI_COMP *parent
     (vec2) { 0.05, -0.05 }, // vec2 pos
     0.9, // float width
     0.9, // float height
-    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_X
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
+    LINE_UNIT_RATIO_Y
   );
   set_ui_texture(ship_parts.ui_ship_parts_info_content_text,
                  "assets/transparent.png");
   memset(ship_parts_info_content_buffer, '\0', SHIP_PARTS_TEXT_BUFFER_SIZE);
-  snprintf(ship_parts_info_content_buffer, SHIP_PARTS_TEXT_BUFFER_SIZE, "EMPTY");
-  set_ui_text(ship_parts.ui_ship_parts_info_content_text, ship_parts_info_content_buffer, 
-              0.08, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+  snprintf(ship_parts_info_content_buffer, SHIP_PARTS_TEXT_BUFFER_SIZE,
+           "EMPTY");
+  set_ui_text(ship_parts.ui_ship_parts_info_content_text,
+              ship_parts_info_content_buffer, CONTENT_LINE_HEIGHT, T_LEFT,
+              fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
 
   // set init visibility
   set_ui_enabled(ship_parts.ui_ship_parts_root, 0);
@@ -469,7 +491,7 @@ void ship_parts_on_hover(UI_COMP *ui_ship_parts, I_SLOT *equipped_ship_parts) {
   if (inventory.ui_inventory_info_background->enabled) {
     set_ui_enabled(inventory.ui_inventory_info_background, 0);
   }
-  
+
   const char *item_slot_id_str[] =
   {
     [I_SLOT_REACTOR] = "REACTOR",
@@ -500,59 +522,73 @@ void ship_parts_on_hover(UI_COMP *ui_ship_parts, I_SLOT *equipped_ship_parts) {
   set_ui_texture(ui_ship_parts, "assets/ui/test.png");
   // Fill title buffer
   if (equipped_ship_parts->type == I_SLOT_WEAPON) {
-    snprintf(ship_parts_info_title_buffer, SHIP_PARTS_TEXT_BUFFER_SIZE, "[%s] %s", 
-          rarity_str[equipped_ship_parts->rarity], item_slot_weapon_type_str[equipped_ship_parts->weapon_type]);
+    snprintf(ship_parts_info_title_buffer, SHIP_PARTS_TEXT_BUFFER_SIZE,
+             "[%s] %s", rarity_str[equipped_ship_parts->rarity],
+             item_slot_weapon_type_str[equipped_ship_parts->weapon_type]);
   } else if (equipped_ship_parts->type != I_SLOT_EMPTY) {
-    snprintf(ship_parts_info_title_buffer, SHIP_PARTS_TEXT_BUFFER_SIZE, "[%s] %s", 
-          rarity_str[equipped_ship_parts->rarity], item_slot_id_str[equipped_ship_parts->type]);
+    snprintf(ship_parts_info_title_buffer, SHIP_PARTS_TEXT_BUFFER_SIZE,
+             "[%s] %s", rarity_str[equipped_ship_parts->rarity],
+             item_slot_id_str[equipped_ship_parts->type]);
   } else {
-    snprintf(ship_parts_info_title_buffer, SHIP_PARTS_TEXT_BUFFER_SIZE, "[RARITY] TYPE");
+    snprintf(ship_parts_info_title_buffer, SHIP_PARTS_TEXT_BUFFER_SIZE,
+             "[RARITY] TYPE");
   }
-  set_ui_text(ship_parts.ui_ship_parts_info_title_text, ship_parts_info_title_buffer, 
-              0.08, T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+  set_ui_text(ship_parts.ui_ship_parts_info_title_text,
+              ship_parts_info_title_buffer, TEXT_LINE_HEIGHT, T_LEFT,
+              fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
   // Fill content buffer
   switch (equipped_ship_parts->type) {
     case I_SLOT_REACTOR:
       snprintf(ship_parts_info_content_buffer, SHIP_PARTS_TEXT_BUFFER_SIZE,
                 "[MAX OUTPUT = %.2f]\n[RECHARGE RATE = %.2f]\n[STALL TIME = %.2f]",
                  equipped_ship_parts->data.reactor.max_output,
-                 equipped_ship_parts->data.reactor.recharge_rate, 
+                 equipped_ship_parts->data.reactor.recharge_rate,
                  equipped_ship_parts->data.reactor.stall_time);
       break;
     case I_SLOT_HULL:
       snprintf(ship_parts_info_content_buffer, SHIP_PARTS_TEXT_BUFFER_SIZE,
-                "[MAX HEALTH = %.2f]", equipped_ship_parts->data.hull.max_health);
+                "[MAX HEALTH = %.2f]",
+                equipped_ship_parts->data.hull.max_health);
       break;
     case I_SLOT_SHIELD:
       snprintf(ship_parts_info_content_buffer, SHIP_PARTS_TEXT_BUFFER_SIZE,
-                "[MAX SHIELD = %.2f]\n[RECHARGE RATE = %.2f]\n[RECHARGE DELAY = %.2f]\n[POWER DRAW = %.2f]", 
-                equipped_ship_parts->data.shield.max_shield, equipped_ship_parts->data.shield.recharge_rate, 
-                equipped_ship_parts->data.shield.recharge_delay, equipped_ship_parts->data.shield.power_draw);
+                "[MAX SHIELD = %.2f]\n[RECHARGE RATE = %.2f]\n[RECHARGE DELAY = %.2f]\n[POWER DRAW = %.2f]",
+                equipped_ship_parts->data.shield.max_shield,
+                equipped_ship_parts->data.shield.recharge_rate,
+                equipped_ship_parts->data.shield.recharge_delay,
+                equipped_ship_parts->data.shield.power_draw);
       break;
     case I_SLOT_WEAPON:
       snprintf(ship_parts_info_content_buffer, SHIP_PARTS_TEXT_BUFFER_SIZE,
-                "[DAMAGE = %.2f]\n[FIRE RATE = %.2f]\n[POWER DRAW = %.2f]\n[PROJ SPEED = %.2f]\n[RANGE = %.2f]\n[PROJ SIZE = %.2f]\n[NUM BARRELS = %.d]", 
-                equipped_ship_parts->data.weapon.damage, equipped_ship_parts->data.weapon.fire_rate, 
-                equipped_ship_parts->data.weapon.max_power_draw, equipped_ship_parts->data.weapon.proj_speed, 
-                equipped_ship_parts->data.weapon.range, equipped_ship_parts->data.weapon.bullet_size, 
+                "[DAMAGE = %.2f]\n[FIRE RATE = %.2f]\n[POWER DRAW = %.2f]\n[PROJ SPEED = %.2f]\n[RANGE = %.2f]\n[PROJ SIZE = %.2f]\n[NUM BARRELS = %.d]",
+                equipped_ship_parts->data.weapon.damage,
+                equipped_ship_parts->data.weapon.fire_rate,
+                equipped_ship_parts->data.weapon.max_power_draw,
+                equipped_ship_parts->data.weapon.proj_speed,
+                equipped_ship_parts->data.weapon.range,
+                equipped_ship_parts->data.weapon.bullet_size,
                 equipped_ship_parts->data.weapon.num_barrels);
       break;
     case I_SLOT_WING:
       snprintf(ship_parts_info_content_buffer, SHIP_PARTS_TEXT_BUFFER_SIZE,
-                "[MAX ANG ACCEL = %.2f]\n[MAX ANG VEL = %.2f]", 
-                equipped_ship_parts->data.wing.max_ang_accel, equipped_ship_parts->data.wing.max_ang_vel);
+                "[MAX ANG ACCEL = %.2f]\n[MAX ANG VEL = %.2f]",
+                equipped_ship_parts->data.wing.max_ang_accel,
+                equipped_ship_parts->data.wing.max_ang_vel);
       break;
     case I_SLOT_THRUSTER:
       snprintf(ship_parts_info_content_buffer, SHIP_PARTS_TEXT_BUFFER_SIZE,
-                "[MAX ACCELERATION = %.2f]\n[MAX POWER DRAW = %.2f]\n[MAX VELOCITY = %.2f]", 
-                equipped_ship_parts->data.thruster.max_accel, equipped_ship_parts->data.thruster.max_power_draw, equipped_ship_parts->data.thruster.max_vel);
+                "[MAX ACCELERATION = %.2f]\n[MAX POWER DRAW = %.2f]\n[MAX VELOCITY = %.2f]",
+                equipped_ship_parts->data.thruster.max_accel,
+                equipped_ship_parts->data.thruster.max_power_draw,
+                equipped_ship_parts->data.thruster.max_vel);
       break;
     case DEFAULT:
       snprintf(ship_parts_info_content_buffer, SHIP_PARTS_TEXT_BUFFER_SIZE, "EMPTY");
       break;
   }
-  set_ui_text(ship_parts.ui_ship_parts_info_content_text, ship_parts_info_content_buffer, 0.08, 
-              T_LEFT, fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+  set_ui_text(ship_parts.ui_ship_parts_info_content_text,
+              ship_parts_info_content_buffer, CONTENT_LINE_HEIGHT, T_LEFT,
+              fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
 }
 
 void ship_parts_off_hover_wrapper(UI_COMP *ui_ship_parts, void *arg) {

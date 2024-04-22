@@ -16,6 +16,8 @@ mode ship parts.
 */
 
 #define SHIP_PARTS_TEXT_BUFFER_SIZE (256)
+#define TEXT_LINE_HEIGHT (0.5)
+#define CONTENT_LINE_HEIGHT (0.1)
 
 /* GLOBALS */
 SHIP_PARTS ship_parts;
