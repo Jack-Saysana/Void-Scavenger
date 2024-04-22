@@ -25,3 +25,6 @@ void reactor_recharge(SHIP *);
 
 void update_ship_noises();
 void disable_stallwarning();
+void reset_enemy_skill_diff();
+void reset_enemy_xp_diff();
+void reset_player_proj_size_diff();

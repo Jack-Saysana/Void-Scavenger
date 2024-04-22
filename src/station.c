@@ -385,6 +385,9 @@ void create_station_corridors() {
     item_spawn_chance = 0;
   }
 
+  /* Lowers the enemy spawn rate based on skill tree perk */
+  enemy_spawn_chance += enemy_skill_diff();
+
   int found_terminal_room = 0;
   /* Backup room ~ Room to place terminal in case spawning conditions are */
   /* not met to spawn the terminal in another room */
