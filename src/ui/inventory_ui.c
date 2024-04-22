@@ -69,7 +69,15 @@ int init_inventory() {
   );
   set_ui_texture(inventory.ui_inventory_info_content_background,
                  "assets/ui/hud_color_bg.png");
-
+  inventory.ui_inventory_info_content = add_ui_comp(
+    inventory.ui_inventory_info_content_background,
+    (vec2) { 0.0, -0.05 },
+    1.0, 0.95,
+    ABSOLUTE_POS | POS_UNIT_RATIO | SIZE_UNIT_RATIO
+  );
+  set_ui_texture(inventory.ui_inventory_info_content,
+                 "assets/transparent.png");
+  /*
   inventory.ui_inventory_info_content_text = add_ui_comp(
     inventory.ui_inventory_info_content_background, // UI_COMP *parent
     (vec2) { 0.05, -0.05 }, // vec2 pos
@@ -85,6 +93,47 @@ int init_inventory() {
   set_ui_text(inventory.ui_inventory_info_content_text,
               inventory_info_content_buffer, CONTENT_LINE_HEIGHT, T_LEFT,
               fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+  */
+  for (int i = 0; i < NUM_INV_INFO_LINES; i++) {
+    inventory.ui_inventory_info_lines[i] = add_ui_comp(
+      inventory.ui_inventory_info_content,
+      (vec2) { 0.05, 0.0 },
+      0.7,
+      CONTENT_LINE_HEIGHT,
+      RELATIVE_POS | POS_UNIT_RATIO | SIZE_UNIT_RATIO
+    );
+    set_ui_texture(inventory.ui_inventory_info_lines[i],
+                   "assets/transparent.png");
+    if (i == 0) {
+      memset(inventory_info_buffers[i][0], '\0', INVENTORY_TEXT_BUFFER_SIZE);
+      snprintf(inventory_info_buffers[i][0], INVENTORY_TEXT_BUFFER_SIZE,
+               "EMPTY");
+      set_ui_text(inventory.ui_inventory_info_lines[i],
+                  inventory_info_buffers[i][0], 1.0, T_LEFT, fixed_sys,
+                  (vec3) { 0.0, 0.0, 0.0 });
+    } else {
+      set_ui_enabled(inventory.ui_inventory_info_lines[i], 0);
+    }
+
+    inventory.ui_inventory_modifier_lines[i] = add_ui_comp(
+      inventory.ui_inventory_info_content,
+      (vec2) { 0.01, 0.0 },
+      0.2,
+      CONTENT_LINE_HEIGHT,
+      RELATIVE_POS | POS_UNIT_RATIO | SIZE_UNIT_RATIO
+    );
+    set_ui_texture(inventory.ui_inventory_modifier_lines[i],
+                   "assets/transparent.png");
+    if (i == 0) {
+      memset(inventory_info_buffers[i][1], '\0',
+             INVENTORY_TEXT_BUFFER_SIZE);
+      set_ui_text(inventory.ui_inventory_modifier_lines[i],
+                  inventory_info_buffers[i][1], 1.0, T_LEFT, fixed_sys,
+                  (vec3) { 0.0, 0.0, 0.0 });
+    } else {
+      set_ui_enabled(inventory.ui_inventory_modifier_lines[i], 0);
+    }
+  }
 
   inventory.ui_inventory_background = add_ui_comp(
     inventory.ui_inventory_root, // UI_COMP *parent
@@ -214,11 +263,18 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
     set_ui_text(inventory.ui_inventory_info_title_text,
                 inventory_info_title_buffer, TEXT_LINE_HEIGHT, T_LEFT,
                 fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
-    snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE,
+    snprintf(inventory_info_buffers[0][0], INVENTORY_TEXT_BUFFER_SIZE,
              "EMPTY");
-    set_ui_text(inventory.ui_inventory_info_content_text,
-                inventory_info_content_buffer, CONTENT_LINE_HEIGHT, T_LEFT,
+    set_ui_text(inventory.ui_inventory_info_lines[0],
+                inventory_info_buffers[0][0], 1.0, T_LEFT,
                 fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+    set_ui_enabled(inventory.ui_inventory_info_lines[0], 1);
+    for (int i = 1; i < NUM_INV_INFO_LINES; i++) {
+      set_ui_enabled(inventory.ui_inventory_info_lines[i], 0);
+    }
+    for (int i = 0; i < NUM_INV_INFO_LINES; i++) {
+      set_ui_enabled(inventory.ui_inventory_modifier_lines[i], 0);
+    }
   } else {
     // Fill title buffer
     if (inventory_slot->type == I_SLOT_WEAPON ) {
@@ -234,56 +290,222 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
                 inventory_info_title_buffer, TEXT_LINE_HEIGHT, T_LEFT,
                 fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
     // Fill content buffer
+    float diffs[7] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
     switch (inventory_slot->type) {
       case I_SLOT_REACTOR:
-        snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE,
-                 "[MAX OUTPUT = %.2f]\n[RECHARGE RATE = %.2F]\n[STALL TIME = %.2f]",
-                 inventory_slot->data.reactor.max_output,
-                 inventory_slot->data.reactor.recharge_rate,
+        snprintf(inventory_info_buffers[0][0], INVENTORY_TEXT_BUFFER_SIZE,
+                 "[MAX OUTPUT = %.2f]",
+                 inventory_slot->data.reactor.max_output);
+        set_ui_enabled(inventory.ui_inventory_info_lines[0], 1);
+        set_ui_enabled(inventory.ui_inventory_modifier_lines[0], 1);
+        diffs[0] = inventory_slot->data.reactor.max_output -
+               player_ship.reactor.max_output;
+
+        snprintf(inventory_info_buffers[1][0], INVENTORY_TEXT_BUFFER_SIZE,
+                 "[RECHARGE RATE = %.2F]",
+                 inventory_slot->data.reactor.recharge_rate);
+        set_ui_enabled(inventory.ui_inventory_info_lines[1], 1);
+        set_ui_enabled(inventory.ui_inventory_modifier_lines[1], 1);
+        diffs[1] = inventory_slot->data.reactor.recharge_rate -
+               player_ship.reactor.recharge_rate;
+
+        snprintf(inventory_info_buffers[2][0], INVENTORY_TEXT_BUFFER_SIZE,
+                 "[STALL TIME = %.2f]",
                  inventory_slot->data.reactor.stall_time);
+        set_ui_enabled(inventory.ui_inventory_info_lines[2], 1);
+        set_ui_enabled(inventory.ui_inventory_modifier_lines[2], 1);
+        diffs[2] = inventory_slot->data.reactor.stall_time -
+               player_ship.reactor.stall_time;
+
+        for (int i = 3; i < NUM_INV_INFO_LINES; i++) {
+          set_ui_enabled(inventory.ui_inventory_info_lines[i], 0);
+          set_ui_enabled(inventory.ui_inventory_modifier_lines[i], 0);
+        }
         break;
       case I_SLOT_HULL:
-        snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE,
+        snprintf(inventory_info_buffers[0][0], INVENTORY_TEXT_BUFFER_SIZE,
                   "[MAX HEALTH = %.2f]", inventory_slot->data.hull.max_health);
+        set_ui_enabled(inventory.ui_inventory_info_lines[0], 1);
+        set_ui_enabled(inventory.ui_inventory_modifier_lines[0], 1);
+        diffs[0] = inventory_slot->data.hull.max_health -
+                   player_ship.hull.max_health;
+
+        for (int i = 1; i < NUM_INV_INFO_LINES; i++) {
+          set_ui_enabled(inventory.ui_inventory_info_lines[i], 0);
+          set_ui_enabled(inventory.ui_inventory_modifier_lines[i], 0);
+        }
         break;
       case I_SLOT_SHIELD:
-        snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE,
-                  "[MAX SHIELD = %.2f]\n[RECHARGE RATE = %.2f]\n[RECHARGE DELAY = %.2f]\n[POWER DRAW = %.2f]",
-                  inventory_slot->data.shield.max_shield,
-                  inventory_slot->data.shield.recharge_rate,
-                  inventory_slot->data.shield.recharge_delay,
+        snprintf(inventory_info_buffers[0][0], INVENTORY_TEXT_BUFFER_SIZE,
+                  "[MAX SHIELD = %.2f]",
+                  inventory_slot->data.shield.max_shield);
+        set_ui_enabled(inventory.ui_inventory_info_lines[0], 1);
+        set_ui_enabled(inventory.ui_inventory_modifier_lines[0], 1);
+        diffs[0] = inventory_slot->data.shield.max_shield -
+                   player_ship.shield.max_shield;
+
+        snprintf(inventory_info_buffers[1][0], INVENTORY_TEXT_BUFFER_SIZE,
+                  "[RECHARGE RATE = %.2f]",
+                  inventory_slot->data.shield.recharge_rate);
+        set_ui_enabled(inventory.ui_inventory_info_lines[1], 1);
+        set_ui_enabled(inventory.ui_inventory_modifier_lines[1], 1);
+        diffs[1] = inventory_slot->data.shield.recharge_rate -
+                   player_ship.shield.recharge_rate;
+
+        snprintf(inventory_info_buffers[2][0], INVENTORY_TEXT_BUFFER_SIZE,
+                  "[RECHARGE DELAY = %.2f]",
+                  inventory_slot->data.shield.recharge_delay);
+        set_ui_enabled(inventory.ui_inventory_info_lines[2], 1);
+        set_ui_enabled(inventory.ui_inventory_modifier_lines[2], 1);
+        diffs[2] = inventory_slot->data.shield.recharge_delay -
+                   player_ship.shield.recharge_delay;
+
+        snprintf(inventory_info_buffers[3][0], INVENTORY_TEXT_BUFFER_SIZE,
+                  "[POWER DRAW = %.2f]",
                   inventory_slot->data.shield.power_draw);
+        set_ui_enabled(inventory.ui_inventory_info_lines[3], 1);
+        set_ui_enabled(inventory.ui_inventory_modifier_lines[3], 1);
+        diffs[3] = inventory_slot->data.shield.power_draw -
+                   player_ship.shield.power_draw;
+
+        for (int i = 4; i < NUM_INV_INFO_LINES; i++) {
+          set_ui_enabled(inventory.ui_inventory_info_lines[i], 0);
+          set_ui_enabled(inventory.ui_inventory_modifier_lines[i], 0);
+        }
         break;
       case I_SLOT_WEAPON:
-        snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE,
-                  "[DAMAGE = %.2f]\n[FIRE RATE = %.2f]\n[MAX POWER DRAW = %.2f]\n[PROJ SPEED = %.2f]\n[RANGE = %.2f]\n[PROJ SIZE = %.2f]\n[NUM BARRELS = %d]",
-                  inventory_slot->data.weapon.damage,
-                  inventory_slot->data.weapon.fire_rate,
-                  inventory_slot->data.weapon.max_power_draw,
-                  inventory_slot->data.weapon.proj_speed,
-                  inventory_slot->data.weapon.range,
-                  inventory_slot->data.weapon.bullet_size,
-                  inventory_slot->data.weapon.num_barrels);
+        snprintf(inventory_info_buffers[0][0], INVENTORY_TEXT_BUFFER_SIZE,
+                 "[DAMAGE = %.2f]", inventory_slot->data.weapon.damage);
+        set_ui_enabled(inventory.ui_inventory_info_lines[0], 1);
+        set_ui_enabled(inventory.ui_inventory_modifier_lines[0], 1);
+        diffs[0] = inventory_slot->data.weapon.damage -
+                   player_ship.weapon.damage;
+
+        snprintf(inventory_info_buffers[1][0], INVENTORY_TEXT_BUFFER_SIZE,
+                          "[FIRE RATE = %.2f]",
+                          inventory_slot->data.weapon.fire_rate);
+        set_ui_enabled(inventory.ui_inventory_info_lines[1], 1);
+        set_ui_enabled(inventory.ui_inventory_modifier_lines[1], 1);
+        diffs[1] = inventory_slot->data.weapon.fire_rate -
+                   player_ship.weapon.fire_rate;
+
+        snprintf(inventory_info_buffers[2][0], INVENTORY_TEXT_BUFFER_SIZE,
+                 "[MAX POWER DRAW = %.2f]",
+                 inventory_slot->data.weapon.max_power_draw);
+        set_ui_enabled(inventory.ui_inventory_info_lines[2], 1);
+        set_ui_enabled(inventory.ui_inventory_modifier_lines[2], 1);
+        diffs[2] = inventory_slot->data.weapon.max_power_draw -
+                   player_ship.weapon.max_power_draw;
+
+        snprintf(inventory_info_buffers[3][0], INVENTORY_TEXT_BUFFER_SIZE,
+                 "[PROJ SPEED = %.2f]",
+                 inventory_slot->data.weapon.proj_speed);
+        set_ui_enabled(inventory.ui_inventory_info_lines[3], 1);
+        set_ui_enabled(inventory.ui_inventory_modifier_lines[3], 1);
+        diffs[3] = inventory_slot->data.shield.power_draw -
+                   player_ship.shield.power_draw;
+
+        snprintf(inventory_info_buffers[4][0], INVENTORY_TEXT_BUFFER_SIZE,
+                 "[RANGE = %.2f]", inventory_slot->data.weapon.range);
+        set_ui_enabled(inventory.ui_inventory_info_lines[4], 1);
+        set_ui_enabled(inventory.ui_inventory_modifier_lines[4], 1);
+        diffs[4] = inventory_slot->data.weapon.range - player_ship.weapon.range;
+
+        snprintf(inventory_info_buffers[5][0], INVENTORY_TEXT_BUFFER_SIZE,
+                 "[PROJ SIZE = %.2f]",
+                 inventory_slot->data.weapon.bullet_size);
+        set_ui_enabled(inventory.ui_inventory_info_lines[5], 1);
+        set_ui_enabled(inventory.ui_inventory_modifier_lines[5], 1);
+        diffs[5] = inventory_slot->data.weapon.bullet_size -
+                   player_ship.weapon.bullet_size;
+
+        snprintf(inventory_info_buffers[6][0], INVENTORY_TEXT_BUFFER_SIZE,
+                 "[NUM BARRELS = %d]",
+                 inventory_slot->data.weapon.num_barrels);
+        set_ui_enabled(inventory.ui_inventory_info_lines[6], 1);
+        set_ui_enabled(inventory.ui_inventory_modifier_lines[6], 1);
+        diffs[6] = inventory_slot->data.weapon.num_barrels -
+                   player_ship.weapon.num_barrels;
+
         break;
       case I_SLOT_WING:
-        snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE,
-                 "[MAX ANG ACCEL = %.2f]\n[MAX ANG VEL = %.2f]",
-                 inventory_slot->data.wing.max_ang_accel,
+        snprintf(inventory_info_buffers[0][0], INVENTORY_TEXT_BUFFER_SIZE,
+                 "[MAX ANG ACCEL = %.2f]",
+                 inventory_slot->data.wing.max_ang_accel);
+        set_ui_enabled(inventory.ui_inventory_info_lines[0], 1);
+        set_ui_enabled(inventory.ui_inventory_modifier_lines[0], 1);
+        diffs[0] = inventory_slot->data.wing.max_ang_accel -
+                   player_ship.wing.max_ang_accel;
+
+        snprintf(inventory_info_buffers[1][0], INVENTORY_TEXT_BUFFER_SIZE,
+                 "[MAX ANG VEL = %.2f]",
                  inventory_slot->data.wing.max_ang_vel);
+        set_ui_enabled(inventory.ui_inventory_info_lines[1], 1);
+        set_ui_enabled(inventory.ui_inventory_modifier_lines[1], 1);
+        diffs[1] = inventory_slot->data.wing.max_ang_vel -
+                   player_ship.wing.max_ang_vel;
+
+        for (int i = 2; i < NUM_INV_INFO_LINES; i++) {
+          set_ui_enabled(inventory.ui_inventory_info_lines[i], 0);
+          set_ui_enabled(inventory.ui_inventory_modifier_lines[i], 0);
+        }
         break;
       case I_SLOT_THRUSTER:
-        snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE,
-                 "[MAX ACCELERATION = %.2f]\n[MAX POWER DRAW = %.2f]\n[MAX VELOCITY = %.2f]",
-                 inventory_slot->data.thruster.max_accel,
-                 inventory_slot->data.thruster.max_power_draw,
+        snprintf(inventory_info_buffers[0][0], INVENTORY_TEXT_BUFFER_SIZE,
+                 "[MAX ACCELERATION = %.2f]",
+                 inventory_slot->data.thruster.max_accel);
+        set_ui_enabled(inventory.ui_inventory_info_lines[0], 1);
+        set_ui_enabled(inventory.ui_inventory_modifier_lines[0], 1);
+        diffs[0] = inventory_slot->data.thruster.max_accel -
+                   player_ship.thruster.max_accel;
+
+        snprintf(inventory_info_buffers[1][0], INVENTORY_TEXT_BUFFER_SIZE,
+                 "[MAX POWER DRAW = %.2f]",
+                 inventory_slot->data.thruster.max_power_draw);
+        set_ui_enabled(inventory.ui_inventory_info_lines[1], 1);
+        set_ui_enabled(inventory.ui_inventory_modifier_lines[1], 1);
+        diffs[1] = inventory_slot->data.thruster.max_power_draw -
+                   player_ship.thruster.max_power_draw;
+
+        snprintf(inventory_info_buffers[2][0], INVENTORY_TEXT_BUFFER_SIZE,
+                 "[MAX VELOCITY = %.2f]",
                  inventory_slot->data.thruster.max_vel);
+        set_ui_enabled(inventory.ui_inventory_info_lines[2], 1);
+        set_ui_enabled(inventory.ui_inventory_modifier_lines[2], 1);
+        diffs[2] = inventory_slot->data.thruster.max_vel -
+                   player_ship.thruster.max_vel;
+
+        for (int i = 3; i < NUM_INV_INFO_LINES; i++) {
+          set_ui_enabled(inventory.ui_inventory_info_lines[i], 0);
+          set_ui_enabled(inventory.ui_inventory_modifier_lines[i], 0);
+        }
         break;
       default:
         break;
     }
+    for (int i = 0; i < NUM_INV_INFO_LINES; i++) {
+      set_ui_text(inventory.ui_inventory_info_lines[i],
+                  inventory_info_buffers[i][0], 1.0, T_LEFT,
+                  fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+      if (diffs[i] >= 0.0) {
+        snprintf(inventory_info_buffers[i][1], INVENTORY_TEXT_BUFFER_SIZE,
+                 "[+%.2f]", diffs[i]);
+        set_ui_text(inventory.ui_inventory_modifier_lines[i],
+                    inventory_info_buffers[i][1], 1.0, T_LEFT,
+                    fixed_sys, (vec3) { 0.0, 1.0, 0.0 });
+      } else {
+        snprintf(inventory_info_buffers[i][1], INVENTORY_TEXT_BUFFER_SIZE,
+                 "[%.2f]", diffs[i]);
+        set_ui_text(inventory.ui_inventory_modifier_lines[i],
+                    inventory_info_buffers[i][1], 1.0, T_LEFT,
+                    fixed_sys, (vec3) { 1.0, 0.0, 0.0 });
+      }
+    }
+    /*
     set_ui_text(inventory.ui_inventory_info_content_text,
                 inventory_info_content_buffer, CONTENT_LINE_HEIGHT, T_LEFT,
                 fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+    */
   }
 }
 
@@ -351,11 +573,18 @@ void slot_on_click(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
       set_ui_text(inventory.ui_inventory_info_title_text,
                   inventory_info_title_buffer, TEXT_LINE_HEIGHT, T_LEFT,
                   fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
-      snprintf(inventory_info_content_buffer, INVENTORY_TEXT_BUFFER_SIZE,
+      snprintf(inventory_info_buffers[0][0], INVENTORY_TEXT_BUFFER_SIZE,
                "EMPTY");
-      set_ui_text(inventory.ui_inventory_info_content_text,
-                  inventory_info_content_buffer, CONTENT_LINE_HEIGHT, T_LEFT,
+      set_ui_enabled(inventory.ui_inventory_info_lines[0], 1);
+      set_ui_text(inventory.ui_inventory_info_lines[0],
+                  inventory_info_buffers[0][0], 1.0, T_LEFT,
                   fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
+      for (int i = 1; i < NUM_INV_INFO_LINES; i++) {
+        set_ui_enabled(inventory.ui_inventory_info_lines[i], 0);
+      }
+      for (int i = 0; i < NUM_INV_INFO_LINES; i++) {
+        set_ui_enabled(inventory.ui_inventory_modifier_lines[i], 0);
+      }
     }
   }
 }
