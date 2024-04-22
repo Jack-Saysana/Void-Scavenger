@@ -1397,7 +1397,7 @@ float enemy_xp_diff() {
 }
 
 void reset_enemy_xp_diff() {
-  station_mode_xp_offset = 0.0;
+  station_mode_xp_offset = 1.0;
 }
 
 float player_proj_size_diff() {
@@ -1405,5 +1405,5 @@ float player_proj_size_diff() {
 }
 
 void reset_player_proj_size_diff() {
-  station_mode_proj_size = 0.0;
+  station_mode_proj_size = 1.0;
 }
