@@ -9,16 +9,18 @@
 
 /*
                                    INVENTORY
-Implements the functionality for defining UI components for player's station 
+Implements the functionality for defining UI components for player's station
 mode inventory.
 */
 
 #define INVENTORY_TEXT_BUFFER_SIZE (256)
+#define TEXT_LINE_HEIGHT (0.5)
+#define CONTENT_LINE_HEIGHT (0.075)
 
 /* GLOBALS */
 INVENTORY inventory;
 static char inventory_info_title_buffer[INVENTORY_TEXT_BUFFER_SIZE];
-static char inventory_info_content_buffer[INVENTORY_TEXT_BUFFER_SIZE];
+static char inventory_info_buffers[NUM_INV_INFO_LINES][2][INVENTORY_TEXT_BUFFER_SIZE];
 
 /* ================= INTERNALLY DEFINED FUNCTIONS ================= */
 int init_inventory();

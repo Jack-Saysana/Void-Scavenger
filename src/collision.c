@@ -201,6 +201,10 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
           float xp = st_enemies[(size_t)target_wrapper->data].amount_xp +
                      E_LEVEL_SCALE * st_player.total_levels_completed;
           xp +=  gen_rand_float_plus_minus(xp/E_XP_RANGE);
+
+          /* XP perk multiplier */
+          xp *= enemy_xp_diff();
+
           st_player.cur_experience += (int)xp;
           st_player.total_experience += (int) xp;
           while (st_player.cur_experience >= st_player.max_experience) {

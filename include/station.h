@@ -119,3 +119,4 @@ size_t init_item(int, int, vec3, vec3, versor, float);
 int item_insert_sim(size_t);
 
 int get_details_state();
+int enemy_skill_diff();

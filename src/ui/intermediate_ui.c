@@ -61,7 +61,7 @@ int init_intermediate() {
     (vec2) { 0.05, -0.05 }, // vec2 pos
     0.95, // float width
     0.9, // float height
-    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_X
+    ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_Y
   );
   set_ui_texture(ui_intermediate_next_lv_text, "assets/transparent.png");
   memset(intermediate_next_lv_buffer, '\0', INTERMEDIATE_TEXT_BUFFER_SIZE);
@@ -73,7 +73,7 @@ int init_intermediate() {
            "NEXT LV [%lld]", st_player.total_levels_completed + 1);
 #endif
   set_ui_text(ui_intermediate_next_lv_text,
-              intermediate_next_lv_buffer, 0.16, T_LEFT, fixed_sys,
+              intermediate_next_lv_buffer, 0.5, T_LEFT, fixed_sys,
               (vec3) { 0.0, 0.0, 0.0 });
 
   ui_intermediate_next_lv_button_root = add_ui_comp(
@@ -116,11 +116,11 @@ int init_intermediate() {
     0.9, // float width
     0.9, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
-    LINE_UNIT_RATIO_X
+    LINE_UNIT_RATIO_Y
   );
   set_ui_texture(ui_intermediate_enemy_1_type_text, "assets/transparent.png");
   set_ui_text(ui_intermediate_enemy_1_type_text,
-              "POSSIBLE ENEMY TYPES", 0.08, T_LEFT, fixed_sys,
+              "POSSIBLE ENEMY TYPES", 0.5, T_LEFT, fixed_sys,
               (vec3) { 0.0, 0.0, 0.0 });
 
   ui_intermediate_enemy_1_info_background = add_ui_comp(
@@ -139,14 +139,14 @@ int init_intermediate() {
     0.9, // float width
     0.9, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
-    LINE_UNIT_RATIO_X
+    LINE_UNIT_RATIO_Y
   );
   set_ui_texture(ui_intermediate_enemy_1_info_text, "assets/transparent.png");
   memset(intermediate_enemy_1_info_buffer, '\0', INTERMEDIATE_TEXT_BUFFER_SIZE);
   snprintf(intermediate_enemy_1_info_buffer, INTERMEDIATE_TEXT_BUFFER_SIZE,
            "ENEMY HEALTH INFO\nENEMY WEAPON INFO");
   set_ui_text(ui_intermediate_enemy_1_info_text,
-              intermediate_enemy_1_info_buffer, 0.08, T_LEFT, fixed_sys,
+              intermediate_enemy_1_info_buffer, 0.5, T_LEFT, fixed_sys,
               (vec3) { 0.0, 0.0, 0.0 });
 
   /*
@@ -170,11 +170,11 @@ int init_intermediate() {
     0.9, // float width
     0.9, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
-    LINE_UNIT_RATIO_X
+    LINE_UNIT_RATIO_Y
   );
   set_ui_texture(ui_intermediate_enemy_2_type_text, "assets/transparent.png");
   set_ui_text(ui_intermediate_enemy_2_type_text,
-              "POSSIBLE ENEMY MOVEMENT", 0.08, T_LEFT, fixed_sys,
+              "POSSIBLE ENEMY MOVEMENT", 0.5, T_LEFT, fixed_sys,
               (vec3) { 0.0, 0.0, 0.0 });
 
   ui_intermediate_enemy_2_info_background = add_ui_comp(
@@ -193,7 +193,7 @@ int init_intermediate() {
     0.9, // float width
     0.9, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_Y |
-    LINE_UNIT_RATIO_X
+    LINE_UNIT_RATIO_Y
   );
   set_ui_texture(ui_intermediate_enemy_2_info_text, "assets/transparent.png");
   memset(intermediate_enemy_2_info_buffer, '\0',
@@ -201,7 +201,7 @@ int init_intermediate() {
   snprintf(intermediate_enemy_2_info_buffer, INTERMEDIATE_TEXT_BUFFER_SIZE,
            "ENEMY HEALTH INFO\nENEMY WEAPON INFO");
   set_ui_text(ui_intermediate_enemy_2_info_text,
-              intermediate_enemy_1_info_buffer, 0.08, T_LEFT, fixed_sys,
+              intermediate_enemy_1_info_buffer, 0.5, T_LEFT, fixed_sys,
               (vec3) { 0.0, 0.0, 0.0 });
 
   set_ui_enabled(ui_intermediate_root, 0);
@@ -219,22 +219,34 @@ void open_intermediate() {
                               intermediate_enemy_2_info_buffer,
                               INTERMEDIATE_TEXT_BUFFER_SIZE);
     set_ui_text(ui_intermediate_enemy_1_info_text,
-                intermediate_enemy_1_info_buffer, 0.08, T_LEFT, fixed_sys,
+                intermediate_enemy_1_info_buffer, 0.5, T_LEFT, fixed_sys,
                 (vec3) { 0.0, 0.0, 0.0 });
     set_ui_text(ui_intermediate_enemy_2_info_text,
-                intermediate_enemy_2_info_buffer, 0.08, T_LEFT, fixed_sys,
+                intermediate_enemy_2_info_buffer, 0.5, T_LEFT, fixed_sys,
                 (vec3) { 0.0, 0.0, 0.0 });
   }
 
   set_ui_enabled(ui_intermediate_root, 1);
   set_ui_pos(inventory.ui_inventory_background, (vec2) { 0.7, -0.36 });
-  set_ui_width(inventory.ui_inventory_background, 0.159);
-  set_ui_height(inventory.ui_inventory_background, 0.159);
+  set_ui_width(inventory.ui_inventory_background, 0.3);
+  set_ui_height(inventory.ui_inventory_background, 0.3);
   set_ui_pos(inventory.ui_inventory_info_background, (vec2) { 0.7, -0.67 });
   set_ui_enabled(ship_parts.ui_ship_parts_root, 1);
   set_ui_enabled(inventory.ui_inventory_root, 1);
   set_ui_enabled(ship_parts.ui_ship_parts_info_background, 1);
   set_ui_enabled(inventory.ui_inventory_info_background, 0);
+
+#ifdef __linux__
+  snprintf(intermediate_next_lv_buffer, INTERMEDIATE_TEXT_BUFFER_SIZE,
+           "NEXT LV [%ld]", st_player.total_levels_completed + 1);
+#else
+  snprintf(intermediate_next_lv_buffer, INTERMEDIATE_TEXT_BUFFER_SIZE,
+           "NEXT LV [%lld]", st_player.total_levels_completed + 1);
+#endif
+  set_ui_text(ui_intermediate_next_lv_text,
+              intermediate_next_lv_buffer, 0.5, T_LEFT, fixed_sys,
+              (vec3) { 0.0, 0.0, 0.0 });
+
 
   set_ui_enabled(ui_esc_root, 0);
   set_ui_enabled(ui_render_root, 0);
