@@ -47,11 +47,14 @@ size_t init_projectile(vec3 pos, vec3 dir, float speed, PROJ_SOURCE source,
     projectile->ent->scale[Y] = 2.0;
     projectile->ent->scale[Z] = 5.0;
   } else {
-    vec3 scaler = {1.0,1.0,1.0};
+    vec3 scalar = {1.0,1.0,1.0};
     if (mode == SPACE) {
-      glm_vec3_scale_as(scaler,player_ship.weapon.bullet_size,scaler);
+      glm_vec3_scale_as(scalar,player_ship.weapon.bullet_size, scalar);
+    } else if (mode == STATION && source == SRC_PLAYER) {
+      /* Apply projectile multipler based on skill tree skill */
+      glm_vec3_scale(scalar, player_proj_size_diff(), scalar);
     }
-    glm_vec3_copy(scaler, projectile->ent->scale);
+    glm_vec3_copy(scalar, projectile->ent->scale);
   }
 
   projectile->wrapper_offset = init_wrapper(PROJ_OBJ, projectile->ent,

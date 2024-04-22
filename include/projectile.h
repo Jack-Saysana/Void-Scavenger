@@ -21,3 +21,5 @@ void add_timer(float, void *, int, void *);
 void update_timer_args(void *, void *, void *);
 
 void play_audio(int);
+
+float player_proj_size_diff();

@@ -105,8 +105,12 @@ typedef struct skill_tree {
   SKILL skill_combat_lv2_skill_1;
   SKILL skill_exploration_lv2_skill_1;
 
-  // UI_COMP *ui_skill_tree_lv_2_skill_2_background;
-  // UI_COMP *ui_skill_tree_lv_2_skill_2_icon;
+  UI_COMP *ui_skill_tree_lv_2_skill_2_background;
+  UI_COMP *ui_skill_tree_lv_2_skill_2_icon;
+  SKILL skill_survival_lv2_skill_2;
+  SKILL skill_combat_lv2_skill_2;
+  SKILL skill_exploration_lv2_skill_2;
+
   // UI_COMP *ui_skill_tree_lv_2_skill_3_background;
   // UI_COMP *ui_skill_tree_lv_2_skill_3_icon;
   // UI_COMP *ui_skill_tree_lv_2_skill_4_background;
@@ -121,10 +125,18 @@ typedef struct skill_tree {
   SKILL skill_combat_lv3;
   SKILL skill_exploration_lv3;
 
-  // UI_COMP *ui_skill_tree_lv_3_skill_1_background;
-  // UI_COMP *ui_skill_tree_lv_3_skill_1_icon;
-  // UI_COMP *ui_skill_tree_lv_3_skill_2_background;
-  // UI_COMP *ui_skill_tree_lv_3_skill_2_icon;
+  UI_COMP *ui_skill_tree_lv_3_skill_1_background;
+  UI_COMP *ui_skill_tree_lv_3_skill_1_icon;
+  SKILL skill_survival_lv3_skill_1;
+  SKILL skill_combat_lv3_skill_1;
+  SKILL skill_exploration_lv3_skill_1;
+
+  UI_COMP *ui_skill_tree_lv_3_skill_2_background;
+  UI_COMP *ui_skill_tree_lv_3_skill_2_icon;
+  SKILL skill_survival_lv3_skill_2;
+  SKILL skill_combat_lv3_skill_2;
+  SKILL skill_exploration_lv3_skill_2;
+
   // UI_COMP *ui_skill_tree_lv_3_skill_3_background;
   // UI_COMP *ui_skill_tree_lv_3_skill_3_icon;
 
@@ -135,8 +147,17 @@ typedef struct skill_tree {
   SKILL skill_combat_lv4;
   SKILL skill_exploration_lv4;
 
-  // UI_COMP *ui_skill_tree_lv_4_skill_1_background;
-  // UI_COMP *ui_skill_tree_lv_4_skill_1_icon;
+  UI_COMP *ui_skill_tree_lv_4_skill_1_background;
+  UI_COMP *ui_skill_tree_lv_4_skill_1_icon;
+  SKILL skill_survival_lv4_skill_1;
+  SKILL skill_combat_lv4_skill_1;
+  SKILL skill_exploration_lv4_skill_1;
+
+  UI_COMP *ui_skill_tree_lv_4_skill_2_background;
+  UI_COMP *ui_skill_tree_lv_4_skill_2_icon;
+  SKILL skill_survival_lv4_skill_2;
+  SKILL skill_combat_lv4_skill_2;
+  SKILL skill_exploration_lv4_skill_2;
 
   T_SKILL current_page;
 } SKILL_TREE;
