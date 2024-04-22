@@ -25,3 +25,4 @@ void reactor_recharge(SHIP *);
 
 void update_ship_noises();
 void disable_stallwarning();
+void reset_enemy_skill_diff();

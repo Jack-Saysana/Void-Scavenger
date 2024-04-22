@@ -19,6 +19,10 @@ static char skill_tree_sp_buffer[SKILL_TREE_TEXT_BUFFER_SIZE];
 static char skill_tree_info_title_buffer[SKILL_TREE_TEXT_BUFFER_SIZE];
 static char skill_tree_info_content_buffer[SKILL_TREE_TEXT_BUFFER_SIZE];
 
+static int enemy_lower_spawn_chance = 0;
+static float station_mode_proj_size = 1.0;
+static float station_mode_xp_offset = 1.0;
+
 /* ================= INTERNALLY DEFINED FUNCTIONS ================= */
 int init_skill_tree();
 void init_skills();

@@ -563,7 +563,7 @@ void init_skills() {
   skill_tree.skill_combat_lv2_skill_1.parent_skill = &skill_tree.skill_combat_lv2;
   skill_tree.skill_combat_lv2_skill_1.is_unlocked = 0;
   snprintf(skill_tree.skill_combat_lv2_skill_1.skill_name, SKILL_TREE_TEXT_BUFFER_SIZE, "MAGNUM VOLLEYFIRE");
-  snprintf(skill_tree.skill_combat_lv2_skill_1.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ADD 20%% ATTACK DAMAGE\nAND INCREASE 20%% FIRE RATE");
+  snprintf(skill_tree.skill_combat_lv2_skill_1.skill_content, SKILL_TREE_TEXT_BUFFER_SIZE, "ADD 20%% ATTACK DAMAGE\nAND INCREASE 20%% FIRE\nRATE");
   skill_tree.skill_combat_lv2_skill_1.skill_level = 2;
   skill_tree.skill_combat_lv2_skill_1.skill_type = T_COMBAT;
   skill_tree.skill_combat_lv2_skill_1.skill_id = ID_COMBAT_LV2_SKILL_1;
@@ -859,6 +859,31 @@ void enable_skill(SKILL *skill_slot) {
       st_player.max_shield += 20;
       st_player.recharging_shield = 1;
       break;
+    case ID_SURVIVAL_LV2_SKILL_2: 
+      /* IRON HEART */
+      st_player.max_health += 40;
+      st_player.cur_health = st_player.max_health;
+      break;
+    case ID_SURVIVAL_LV3_SKILL_1:
+      /* SPAWN SLASHER */
+      enemy_lower_spawn_chance += 2;
+      break;
+    case ID_SURVIVAL_LV3_SKILL_2:
+      /* SPAWN SLAYER */
+      enemy_lower_spawn_chance += 3;
+      break;
+    case ID_SURVIVAL_LV4_SKILL_1:
+      /* LIONS FACE */
+      enemy_lower_spawn_chance += 1;
+      st_player.max_health += 20;
+      st_player.cur_health = st_player.max_health;
+      break;
+    case ID_SURVIVAL_LV4_SKILL_2:
+      /* TIGER FACE */
+      enemy_lower_spawn_chance += 1;
+      st_player.max_shield += 20;
+      st_player.recharging_shield = 1;
+      break;
     // Combat Skills
     case ID_COMBAT_LV1_SKILL_1:
       st_player.damage += 20;
@@ -870,6 +895,26 @@ void enable_skill(SKILL *skill_slot) {
       st_player.damage += 20;
       st_player.fire_rate -= 0.02;
       break;
+    case ID_COMBAT_LV2_SKILL_2:
+      /* LARGE ROUNDS LVL 1 */
+      station_mode_proj_size += 0.5;
+      break;
+    case ID_COMBAT_LV3_SKILL_1:
+      /* LARGE ROUNDS LVL 2 */
+      station_mode_proj_size += 1.0;
+      break;
+    case ID_COMBAT_LV3_SKILL_2:
+      /* TITANIUM ROUNDS */
+      st_player.damage += 25;
+      break;
+    case ID_COMBAT_LV4_SKILL_1:
+      /* CANNON ROUNDS */
+      st_player.damage += 30;
+      break;
+    case ID_COMBAT_LV4_SKILL_2:
+      /* MYTHICAL BLASTER */
+      st_player.damage += 10;
+      st_player.fire_rate -= 0.02;
     //Exploration Skills
     case ID_EXPLORATION_LV1_SKILL_1:
       st_player.speed += 2;
@@ -887,7 +932,36 @@ void enable_skill(SKILL *skill_slot) {
         part_spawn_chance[i] += 2;
       }
       break;
+    case ID_EXPLORATION_LV2_SKILL_2:
+      /* SUPER LUCK */
+      for (int i = 0; i < RARITY_LEVELS; i++) {
+        part_spawn_chance[i] += 4;
+      }
+      break;
+    case ID_EXPLORATION_LV3_SKILL_1:
+      /* LEVEL CHASER LVL 1 */
+      station_mode_xp_offset += 0.1;
+      break;
+    case ID_EXPLORATION_LV3_SKILL_2:
+      /* LEVEL CHASER LVL 2 */
+      station_mode_xp_offset += 0.1;
+      break;
+    case ID_EXPLORATION_LV4_SKILL_1:
+      /* LEVEL CHASER LVL 3 */
+      station_mode_xp_offset += 0.5;
+      break;
+    case ID_EXPLORATION_LV4_SKILL_2:
+      /* SPEED OF LIGHT */
+      st_player.speed += 5;
     default:
       return;
   }
+}
+
+int enemy_skill_diff() {
+  return enemy_lower_spawn_chance;
+}
+
+void reset_enemy_skill_diff() {
+  enemy_lower_spawn_chance = 0;
 }

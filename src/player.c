@@ -135,6 +135,7 @@ void reset_player() {
   reset_inventory();
   reset_equipped_parts();
   disable_stallwarning();
+  reset_enemy_skill_diff();
 }
 
 // De-allocate player resources at end of game
