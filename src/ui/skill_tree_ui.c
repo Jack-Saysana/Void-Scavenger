@@ -210,7 +210,7 @@ int init_skill_tree() {
     0.9, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_Y | HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_Y
   );
-  set_ui_texture(skill_tree.ui_skill_tree_lv_1_skill_1_icon, "assets/ui/skill/survival_hp_disable.png");
+  // set_ui_texture(skill_tree.ui_skill_tree_lv_1_skill_1_icon, "assets/ui/skill/survival_hp_disable.png");
 
   skill_tree.ui_skill_tree_lv_1_skill_2_background = add_ui_comp(
     skill_tree.ui_skill_tree_lv_1_background, // UI_COMP *parent
@@ -231,7 +231,7 @@ int init_skill_tree() {
     0.9, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_Y | HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_Y
   );
-  set_ui_texture(skill_tree.ui_skill_tree_lv_1_skill_2_icon, "assets/ui/skill/survival_shield_disable.png");
+  // set_ui_texture(skill_tree.ui_skill_tree_lv_1_skill_2_icon, "assets/ui/skill/survival_shield_disable.png");
 
   /*
   =====================
@@ -292,7 +292,7 @@ int init_skill_tree() {
     0.9, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_Y | HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_Y
   );
-  set_ui_texture(skill_tree.ui_skill_tree_lv_2_skill_1_icon, "assets/ui/skill/survival_hp_shield_disable.png");
+  // set_ui_texture(skill_tree.ui_skill_tree_lv_2_skill_1_icon, "assets/ui/skill/survival_hp_shield_disable.png");
 
   skill_tree.ui_skill_tree_lv_2_skill_2_background = add_ui_comp(
     skill_tree.ui_skill_tree_lv_2_background, // UI_COMP *parent
@@ -313,7 +313,7 @@ int init_skill_tree() {
     0.9, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_Y | HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_Y
   );
-  set_ui_texture(skill_tree.ui_skill_tree_lv_2_skill_2_icon, "assets/ui/skill/survival_hp_shield_disable.png");
+  // set_ui_texture(skill_tree.ui_skill_tree_lv_2_skill_2_icon, "assets/ui/skill/survival_hp_shield_disable.png");
   /*
   =====================
     Lv3 Enable Button
@@ -375,7 +375,7 @@ int init_skill_tree() {
     0.9, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_Y | HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_Y
   );
-  set_ui_texture(skill_tree.ui_skill_tree_lv_3_skill_1_icon, "assets/ui/skill/survival_hp_shield_disable.png");
+  // set_ui_texture(skill_tree.ui_skill_tree_lv_3_skill_1_icon, "assets/ui/skill/survival_hp_shield_disable.png");
 
   skill_tree.ui_skill_tree_lv_3_skill_2_background = add_ui_comp(
     skill_tree.ui_skill_tree_lv_3_background, // UI_COMP *parent
@@ -396,7 +396,7 @@ int init_skill_tree() {
     0.9, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_Y | HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_Y
   );
-  set_ui_texture(skill_tree.ui_skill_tree_lv_3_skill_2_icon, "assets/ui/skill/survival_hp_shield_disable.png");
+  // set_ui_texture(skill_tree.ui_skill_tree_lv_3_skill_2_icon, "assets/ui/skill/survival_hp_shield_disable.png");
 
 
   /*
@@ -459,7 +459,7 @@ int init_skill_tree() {
     0.9, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_Y | HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_Y
   );
-  set_ui_texture(skill_tree.ui_skill_tree_lv_4_skill_1_icon, "assets/ui/skill/survival_hp_shield_disable.png");
+  // set_ui_texture(skill_tree.ui_skill_tree_lv_4_skill_1_icon, "assets/ui/skill/survival_hp_shield_disable.png");
 
   skill_tree.ui_skill_tree_lv_4_skill_2_background = add_ui_comp(
     skill_tree.ui_skill_tree_lv_4_background, // UI_COMP *parent
@@ -480,7 +480,7 @@ int init_skill_tree() {
     0.9, // float height
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_Y | HEIGHT_UNIT_RATIO_Y | LINE_UNIT_RATIO_Y
   );
-  set_ui_texture(skill_tree.ui_skill_tree_lv_4_skill_2_icon, "assets/ui/skill/survival_hp_shield_disable.png");
+  // set_ui_texture(skill_tree.ui_skill_tree_lv_4_skill_2_icon, "assets/ui/skill/survival_hp_shield_disable.png");
 
   /*
   ========
@@ -641,7 +641,7 @@ void init_skills() {
   skill_tree.skill_survival_lv2_skill_2.parent_skill = &skill_tree.skill_survival_lv2;
   skill_tree.skill_survival_lv2_skill_2.is_unlocked = 0;
   snprintf(skill_tree.skill_survival_lv2_skill_2.skill_name,
-           SKILL_TREE_TEXT_BUFFER_SIZE, "IRON HEART");
+           SKILL_TREE_TEXT_BUFFER_SIZE, "HEALTH BOOSTER");
   snprintf(skill_tree.skill_survival_lv2_skill_2.skill_content,
            SKILL_TREE_TEXT_BUFFER_SIZE, "ADD 20 HP");
   skill_tree.skill_survival_lv2_skill_2.skill_level = 2;
@@ -693,7 +693,7 @@ void init_skills() {
   skill_tree.skill_survival_lv4_skill_1.parent_skill = &skill_tree.skill_survival_lv4;
   skill_tree.skill_survival_lv4_skill_1.is_unlocked = 0;
   snprintf(skill_tree.skill_survival_lv4_skill_1.skill_name,
-           SKILL_TREE_TEXT_BUFFER_SIZE, "LIONS FACE");
+           SKILL_TREE_TEXT_BUFFER_SIZE, "BEAR STANCE");
   snprintf(skill_tree.skill_survival_lv4_skill_1.skill_content,
            SKILL_TREE_TEXT_BUFFER_SIZE, "REDUCE ENEMY SPAWN\nRATE BY 1%%\nADD 20 HP");
   skill_tree.skill_survival_lv4_skill_1.skill_level = 4;
@@ -703,7 +703,7 @@ void init_skills() {
   skill_tree.skill_survival_lv4_skill_2.parent_skill = &skill_tree.skill_survival_lv4;
   skill_tree.skill_survival_lv4_skill_2.is_unlocked = 0;
   snprintf(skill_tree.skill_survival_lv4_skill_2.skill_name,
-           SKILL_TREE_TEXT_BUFFER_SIZE, "TIGER FACE");
+           SKILL_TREE_TEXT_BUFFER_SIZE, "TURTLE STANCE");
   snprintf(skill_tree.skill_survival_lv4_skill_2.skill_content,
            SKILL_TREE_TEXT_BUFFER_SIZE, "REDUCE ENEMY SPAWN\nRATE BY 1%%\nADD 20 SHIELD");
   skill_tree.skill_survival_lv4_skill_2.skill_level = 4;
@@ -729,7 +729,7 @@ void init_skills() {
   skill_tree.skill_combat_lv1_skill_1.parent_skill = &skill_tree.skill_combat_lv1;
   skill_tree.skill_combat_lv1_skill_1.is_unlocked = 0;
   snprintf(skill_tree.skill_combat_lv1_skill_1.skill_name,
-           SKILL_TREE_TEXT_BUFFER_SIZE, ".45 MAGNUM BULLET");
+           SKILL_TREE_TEXT_BUFFER_SIZE, "SILVER BULLET");
   snprintf(skill_tree.skill_combat_lv1_skill_1.skill_content,
            SKILL_TREE_TEXT_BUFFER_SIZE, "ADD 20%% ATTACK DAMAGE");
   skill_tree.skill_combat_lv1_skill_1.skill_level = 1;
@@ -760,7 +760,7 @@ void init_skills() {
   skill_tree.skill_combat_lv2_skill_1.parent_skill = &skill_tree.skill_combat_lv2;
   skill_tree.skill_combat_lv2_skill_1.is_unlocked = 0;
   snprintf(skill_tree.skill_combat_lv2_skill_1.skill_name,
-           SKILL_TREE_TEXT_BUFFER_SIZE, "MAGNUM VOLLEYFIRE");
+           SKILL_TREE_TEXT_BUFFER_SIZE, "BULLET VOLLEYFIRE");
   snprintf(skill_tree.skill_combat_lv2_skill_1.skill_content,
            SKILL_TREE_TEXT_BUFFER_SIZE,
            "ADD 20%% ATTACK DAMAGE\nAND INCREASE 20%% FIRE\nRATE");
@@ -771,7 +771,7 @@ void init_skills() {
   skill_tree.skill_combat_lv2_skill_2.parent_skill = &skill_tree.skill_combat_lv2;
   skill_tree.skill_combat_lv2_skill_2.is_unlocked = 0;
   snprintf(skill_tree.skill_combat_lv2_skill_2.skill_name,
-           SKILL_TREE_TEXT_BUFFER_SIZE, "LARGER ROUNDS LVL 1");
+           SKILL_TREE_TEXT_BUFFER_SIZE, ".45 ACP BULLET");
   snprintf(skill_tree.skill_combat_lv2_skill_2.skill_content,
            SKILL_TREE_TEXT_BUFFER_SIZE,
            "50%% LARGER ROUNDS");
@@ -793,7 +793,7 @@ void init_skills() {
   skill_tree.skill_combat_lv3_skill_1.parent_skill = &skill_tree.skill_combat_lv3;
   skill_tree.skill_combat_lv3_skill_1.is_unlocked = 0;
   snprintf(skill_tree.skill_combat_lv3_skill_1.skill_name,
-           SKILL_TREE_TEXT_BUFFER_SIZE, "LARGER ROUNDS LVL 2");
+           SKILL_TREE_TEXT_BUFFER_SIZE, ".50 BMG BULLET");
   snprintf(skill_tree.skill_combat_lv3_skill_1.skill_content,
            SKILL_TREE_TEXT_BUFFER_SIZE,
            "100%% LARGER ROUNDS");
@@ -804,10 +804,10 @@ void init_skills() {
   skill_tree.skill_combat_lv3_skill_2.parent_skill = &skill_tree.skill_combat_lv3;
   skill_tree.skill_combat_lv3_skill_2.is_unlocked = 0;
   snprintf(skill_tree.skill_combat_lv3_skill_2.skill_name,
-           SKILL_TREE_TEXT_BUFFER_SIZE, "TITANIUM ROUNDS");
+           SKILL_TREE_TEXT_BUFFER_SIZE, "CANNON SHOT");
   snprintf(skill_tree.skill_combat_lv3_skill_2.skill_content,
            SKILL_TREE_TEXT_BUFFER_SIZE,
-           "25 MORE ATTACK\nDAMAGE");
+           "ADD 25%% ATTACK DAMAGE\nDAMAGE");
   skill_tree.skill_combat_lv3_skill_2.skill_level = 3;
   skill_tree.skill_combat_lv3_skill_2.skill_type = T_COMBAT;
   skill_tree.skill_combat_lv3_skill_2.skill_id = ID_COMBAT_LV3_SKILL_2;
@@ -826,10 +826,10 @@ void init_skills() {
   skill_tree.skill_combat_lv4_skill_1.parent_skill = &skill_tree.skill_combat_lv4;
   skill_tree.skill_combat_lv4_skill_1.is_unlocked = 0;
   snprintf(skill_tree.skill_combat_lv4_skill_1.skill_name,
-           SKILL_TREE_TEXT_BUFFER_SIZE, "CANNON ROUNDS");
+           SKILL_TREE_TEXT_BUFFER_SIZE, "DEAD EYE");
   snprintf(skill_tree.skill_combat_lv4_skill_1.skill_content,
            SKILL_TREE_TEXT_BUFFER_SIZE,
-           "30 MORE ATTACK\nDAMAGE");
+           "ADD 30%% ATTACK DAMAGE");
   skill_tree.skill_combat_lv4_skill_1.skill_level = 4;
   skill_tree.skill_combat_lv4_skill_1.skill_type = T_COMBAT;
   skill_tree.skill_combat_lv4_skill_1.skill_id = ID_COMBAT_LV4_SKILL_1;
@@ -837,10 +837,10 @@ void init_skills() {
   skill_tree.skill_combat_lv4_skill_2.parent_skill = &skill_tree.skill_combat_lv4;
   skill_tree.skill_combat_lv4_skill_2.is_unlocked = 0;
   snprintf(skill_tree.skill_combat_lv4_skill_2.skill_name,
-           SKILL_TREE_TEXT_BUFFER_SIZE, "MYTHICAL BLASTER");
+           SKILL_TREE_TEXT_BUFFER_SIZE, "TIGER STANCE");
   snprintf(skill_tree.skill_combat_lv4_skill_2.skill_content,
            SKILL_TREE_TEXT_BUFFER_SIZE,
-           "10 MORE ATTACK\nDAMAGE AND 20%%\nFASTER FIRE RATE");
+           "ADD 20%% ATTACK DAMAGE\nAND INCREASE 20%% FIRE\nRATE");
   skill_tree.skill_combat_lv4_skill_2.skill_level = 4;
   skill_tree.skill_combat_lv4_skill_2.skill_type = T_COMBAT;
   skill_tree.skill_combat_lv4_skill_2.skill_id = ID_COMBAT_LV4_SKILL_2;
@@ -864,7 +864,7 @@ void init_skills() {
   skill_tree.skill_exploration_lv1_skill_1.parent_skill = &skill_tree.skill_exploration_lv1;
   skill_tree.skill_exploration_lv1_skill_1.is_unlocked = 0;
   snprintf(skill_tree.skill_exploration_lv1_skill_1.skill_name,
-           SKILL_TREE_TEXT_BUFFER_SIZE, "EXOSKELETON LEG");
+           SKILL_TREE_TEXT_BUFFER_SIZE, "SPRINT");
   snprintf(skill_tree.skill_exploration_lv1_skill_1.skill_content,
            SKILL_TREE_TEXT_BUFFER_SIZE, "ADD 20%% SPEED");
   skill_tree.skill_exploration_lv1_skill_1.skill_level = 1;
@@ -906,7 +906,7 @@ void init_skills() {
   skill_tree.skill_exploration_lv2_skill_2.parent_skill = &skill_tree.skill_exploration_lv2;
   skill_tree.skill_exploration_lv2_skill_2.is_unlocked = 0;
   snprintf(skill_tree.skill_exploration_lv2_skill_2.skill_name,
-           SKILL_TREE_TEXT_BUFFER_SIZE, "SUPER LUCK");
+           SKILL_TREE_TEXT_BUFFER_SIZE, "TREASURE MAP");
   snprintf(skill_tree.skill_exploration_lv2_skill_2.skill_content,
            SKILL_TREE_TEXT_BUFFER_SIZE,
            "FIND RARER ITEMS\n 4%% EASIER");
@@ -928,10 +928,10 @@ void init_skills() {
   skill_tree.skill_exploration_lv3_skill_1.parent_skill = &skill_tree.skill_exploration_lv3;
   skill_tree.skill_exploration_lv3_skill_1.is_unlocked = 0;
   snprintf(skill_tree.skill_exploration_lv3_skill_1.skill_name,
-           SKILL_TREE_TEXT_BUFFER_SIZE, "LEVEL CHASER LVL 1");
+           SKILL_TREE_TEXT_BUFFER_SIZE, "LEVEL CHASER");
   snprintf(skill_tree.skill_exploration_lv3_skill_1.skill_content,
            SKILL_TREE_TEXT_BUFFER_SIZE,
-           "GAIN XP 10%%\nFASTER");
+           "GAIN XP 5%%\nFASTER");
   skill_tree.skill_exploration_lv3_skill_1.skill_level = 3;
   skill_tree.skill_exploration_lv3_skill_1.skill_type = T_EXPLORATION;
   skill_tree.skill_exploration_lv3_skill_1.skill_id = ID_EXPLORATION_LV3_SKILL_1;
@@ -939,7 +939,7 @@ void init_skills() {
   skill_tree.skill_exploration_lv3_skill_2.parent_skill = &skill_tree.skill_exploration_lv3;
   skill_tree.skill_exploration_lv3_skill_2.is_unlocked = 0;
   snprintf(skill_tree.skill_exploration_lv3_skill_2.skill_name,
-           SKILL_TREE_TEXT_BUFFER_SIZE, "LEVEL CHASER LVL 2");
+           SKILL_TREE_TEXT_BUFFER_SIZE, "LEVEL BREAKER");
   snprintf(skill_tree.skill_exploration_lv3_skill_2.skill_content,
            SKILL_TREE_TEXT_BUFFER_SIZE,
            "GAIN XP 10%%\nFASTER");
@@ -961,7 +961,7 @@ void init_skills() {
   skill_tree.skill_exploration_lv4_skill_1.parent_skill = &skill_tree.skill_exploration_lv4;
   skill_tree.skill_exploration_lv4_skill_1.is_unlocked = 0;
   snprintf(skill_tree.skill_exploration_lv4_skill_1.skill_name,
-           SKILL_TREE_TEXT_BUFFER_SIZE, "LEVEL MACHINE");
+           SKILL_TREE_TEXT_BUFFER_SIZE, "STAR MEDAL");
   snprintf(skill_tree.skill_exploration_lv4_skill_1.skill_content,
            SKILL_TREE_TEXT_BUFFER_SIZE,
            "GAIN XP 50%%\nFASTER");
@@ -972,7 +972,7 @@ void init_skills() {
   skill_tree.skill_exploration_lv4_skill_2.parent_skill = &skill_tree.skill_exploration_lv4;
   skill_tree.skill_exploration_lv4_skill_2.is_unlocked = 0;
   snprintf(skill_tree.skill_exploration_lv4_skill_2.skill_name,
-           SKILL_TREE_TEXT_BUFFER_SIZE, "SPEED OF LIGHT");
+           SKILL_TREE_TEXT_BUFFER_SIZE, "EXOSKELETON LEG");
   snprintf(skill_tree.skill_exploration_lv4_skill_2.skill_content,
            SKILL_TREE_TEXT_BUFFER_SIZE,
            "MOVE 50%% FASTER");
@@ -1028,8 +1028,8 @@ void update_skill_tabs() {
       set_ui_on_hover(skill_tree.ui_skill_tree_lv_2_skill_1_background, skill_on_hover_wrapper, &skill_tree.skill_survival_lv2_skill_1);
       set_ui_no_hover(skill_tree.ui_skill_tree_lv_2_skill_1_background, skill_off_hover_wrapper, &skill_tree.skill_survival_lv2_skill_1);
       set_ui_on_click(skill_tree.ui_skill_tree_lv_2_skill_1_background, (void *) skill_on_click, &skill_tree.skill_survival_lv2_skill_1);
-      if (skill_tree.skill_survival_lv2_skill_2.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_2_skill_2_icon, "assets/ui/skill/survival_hp_shield_enable.png");
-      else set_ui_texture(skill_tree.ui_skill_tree_lv_2_skill_2_icon, "assets/ui/skill/survival_hp_shield_disable.png");
+      if (skill_tree.skill_survival_lv2_skill_2.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_2_skill_2_icon, "assets/ui/skill/survival_hp_enable.png");
+      else set_ui_texture(skill_tree.ui_skill_tree_lv_2_skill_2_icon, "assets/ui/skill/survival_hp_disable.png");
       set_ui_on_hover(skill_tree.ui_skill_tree_lv_2_skill_2_background, skill_on_hover_wrapper, &skill_tree.skill_survival_lv2_skill_2);
       set_ui_no_hover(skill_tree.ui_skill_tree_lv_2_skill_2_background, skill_off_hover_wrapper, &skill_tree.skill_survival_lv2_skill_2);
       set_ui_on_click(skill_tree.ui_skill_tree_lv_2_skill_2_background, (void *) skill_on_click, &skill_tree.skill_survival_lv2_skill_2);
@@ -1040,13 +1040,13 @@ void update_skill_tabs() {
       set_ui_on_hover(skill_tree.ui_skill_tree_lv_3_enable_background, skill_on_hover_wrapper, &skill_tree.skill_survival_lv3);
       set_ui_no_hover(skill_tree.ui_skill_tree_lv_3_enable_background, skill_off_hover_wrapper, &skill_tree.skill_survival_lv3);
       set_ui_on_click(skill_tree.ui_skill_tree_lv_3_enable_background, (void *) skill_on_click, &skill_tree.skill_survival_lv3);
-      if (skill_tree.skill_survival_lv3_skill_1.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_3_skill_1_icon, "assets/ui/skill/survival_hp_shield_enable.png");
-      else set_ui_texture(skill_tree.ui_skill_tree_lv_3_skill_1_icon, "assets/ui/skill/survival_hp_shield_disable.png");
+      if (skill_tree.skill_survival_lv3_skill_1.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_3_skill_1_icon, "assets/ui/skill/survival_reduce_enemy_spawn_2_enable.png");
+      else set_ui_texture(skill_tree.ui_skill_tree_lv_3_skill_1_icon, "assets/ui/skill/survival_reduce_enemy_spawn_2_disable.png");
       set_ui_on_hover(skill_tree.ui_skill_tree_lv_3_skill_1_background, skill_on_hover_wrapper, &skill_tree.skill_survival_lv3_skill_1);
       set_ui_no_hover(skill_tree.ui_skill_tree_lv_3_skill_1_background, skill_off_hover_wrapper, &skill_tree.skill_survival_lv3_skill_1);
       set_ui_on_click(skill_tree.ui_skill_tree_lv_3_skill_1_background, (void *) skill_on_click, &skill_tree.skill_survival_lv3_skill_1);
-      if (skill_tree.skill_survival_lv3_skill_2.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_3_skill_2_icon, "assets/ui/skill/survival_hp_shield_enable.png");
-      else set_ui_texture(skill_tree.ui_skill_tree_lv_3_skill_2_icon, "assets/ui/skill/survival_hp_shield_disable.png");
+      if (skill_tree.skill_survival_lv3_skill_2.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_3_skill_2_icon, "assets/ui/skill/survival_reduce_enemy_spawn_3_enable.png");
+      else set_ui_texture(skill_tree.ui_skill_tree_lv_3_skill_2_icon, "assets/ui/skill/survival_reduce_enemy_spawn_3_disable.png");
       set_ui_on_hover(skill_tree.ui_skill_tree_lv_3_skill_2_background, skill_on_hover_wrapper, &skill_tree.skill_survival_lv3_skill_2);
       set_ui_no_hover(skill_tree.ui_skill_tree_lv_3_skill_2_background, skill_off_hover_wrapper, &skill_tree.skill_survival_lv3_skill_2);
       set_ui_on_click(skill_tree.ui_skill_tree_lv_3_skill_2_background, (void *) skill_on_click, &skill_tree.skill_survival_lv3_skill_2);
@@ -1057,13 +1057,13 @@ void update_skill_tabs() {
       set_ui_on_hover(skill_tree.ui_skill_tree_lv_4_enable_background, skill_on_hover_wrapper, &skill_tree.skill_survival_lv4);
       set_ui_no_hover(skill_tree.ui_skill_tree_lv_4_enable_background, skill_off_hover_wrapper, &skill_tree.skill_survival_lv4);
       set_ui_on_click(skill_tree.ui_skill_tree_lv_4_enable_background, (void *) skill_on_click, &skill_tree.skill_survival_lv4);
-      if (skill_tree.skill_survival_lv4_skill_1.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_4_skill_1_icon, "assets/ui/skill/survival_hp_shield_enable.png");
-      else set_ui_texture(skill_tree.ui_skill_tree_lv_4_skill_1_icon, "assets/ui/skill/survival_hp_shield_disable.png");
+      if (skill_tree.skill_survival_lv4_skill_1.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_4_skill_1_icon, "assets/ui/skill/survival_bear_stance_enable.png");
+      else set_ui_texture(skill_tree.ui_skill_tree_lv_4_skill_1_icon, "assets/ui/skill/survival_bear_stance_disable.png");
       set_ui_on_hover(skill_tree.ui_skill_tree_lv_4_skill_1_background, skill_on_hover_wrapper, &skill_tree.skill_survival_lv4_skill_1);
       set_ui_no_hover(skill_tree.ui_skill_tree_lv_4_skill_1_background, skill_off_hover_wrapper, &skill_tree.skill_survival_lv4_skill_1);
       set_ui_on_click(skill_tree.ui_skill_tree_lv_4_skill_1_background, (void *) skill_on_click, &skill_tree.skill_survival_lv4_skill_1);
-      if (skill_tree.skill_survival_lv4_skill_2.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_4_skill_2_icon, "assets/ui/skill/survival_hp_shield_enable.png");
-      else set_ui_texture(skill_tree.ui_skill_tree_lv_4_skill_2_icon, "assets/ui/skill/survival_hp_shield_disable.png");
+      if (skill_tree.skill_survival_lv4_skill_2.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_4_skill_2_icon, "assets/ui/skill/survival_turtle_stance_enable.png");
+      else set_ui_texture(skill_tree.ui_skill_tree_lv_4_skill_2_icon, "assets/ui/skill/survival_turtle_stance_disable.png");
       set_ui_on_hover(skill_tree.ui_skill_tree_lv_4_skill_2_background, skill_on_hover_wrapper, &skill_tree.skill_survival_lv4_skill_2);
       set_ui_no_hover(skill_tree.ui_skill_tree_lv_4_skill_2_background, skill_off_hover_wrapper, &skill_tree.skill_survival_lv4_skill_2);
       set_ui_on_click(skill_tree.ui_skill_tree_lv_4_skill_2_background, (void *) skill_on_click, &skill_tree.skill_survival_lv4_skill_2);
@@ -1101,8 +1101,8 @@ void update_skill_tabs() {
       set_ui_on_hover(skill_tree.ui_skill_tree_lv_2_skill_1_background, skill_on_hover_wrapper, &skill_tree.skill_combat_lv2_skill_1);
       set_ui_no_hover(skill_tree.ui_skill_tree_lv_2_skill_1_background, skill_off_hover_wrapper, &skill_tree.skill_combat_lv2_skill_1);
       set_ui_on_click(skill_tree.ui_skill_tree_lv_2_skill_1_background, (void *) skill_on_click, &skill_tree.skill_combat_lv2_skill_1);
-      if (skill_tree.skill_combat_lv2_skill_2.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_2_skill_2_icon, "assets/ui/skill/combat_atk_fire_rate_enable.png");
-      else set_ui_texture(skill_tree.ui_skill_tree_lv_2_skill_2_icon, "assets/ui/skill/combat_atk_fire_rate_disable.png");
+      if (skill_tree.skill_combat_lv2_skill_2.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_2_skill_2_icon, "assets/ui/skill/combat_round_size_50_enable.png");
+      else set_ui_texture(skill_tree.ui_skill_tree_lv_2_skill_2_icon, "assets/ui/skill/combat_round_size_50_disable.png");
       set_ui_on_hover(skill_tree.ui_skill_tree_lv_2_skill_2_background, skill_on_hover_wrapper, &skill_tree.skill_combat_lv2_skill_2);
       set_ui_no_hover(skill_tree.ui_skill_tree_lv_2_skill_2_background, skill_off_hover_wrapper, &skill_tree.skill_combat_lv2_skill_2);
       set_ui_on_click(skill_tree.ui_skill_tree_lv_2_skill_2_background, (void *) skill_on_click, &skill_tree.skill_combat_lv2_skill_2);
@@ -1113,13 +1113,13 @@ void update_skill_tabs() {
       set_ui_on_hover(skill_tree.ui_skill_tree_lv_3_enable_background, skill_on_hover_wrapper, &skill_tree.skill_combat_lv3);
       set_ui_no_hover(skill_tree.ui_skill_tree_lv_3_enable_background, skill_off_hover_wrapper, &skill_tree.skill_combat_lv3);
       set_ui_on_click(skill_tree.ui_skill_tree_lv_3_enable_background, (void *) skill_on_click, &skill_tree.skill_combat_lv3);
-      if (skill_tree.skill_combat_lv3_skill_1.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_3_skill_1_icon, "assets/ui/skill/combat_atk_fire_rate_enable.png");
-      else set_ui_texture(skill_tree.ui_skill_tree_lv_3_skill_1_icon, "assets/ui/skill/combat_atk_fire_rate_disable.png");
+      if (skill_tree.skill_combat_lv3_skill_1.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_3_skill_1_icon, "assets/ui/skill/combat_round_size_100_enable.png");
+      else set_ui_texture(skill_tree.ui_skill_tree_lv_3_skill_1_icon, "assets/ui/skill/combat_round_size_100_disable.png");
       set_ui_on_hover(skill_tree.ui_skill_tree_lv_3_skill_1_background, skill_on_hover_wrapper, &skill_tree.skill_combat_lv3_skill_1);
       set_ui_no_hover(skill_tree.ui_skill_tree_lv_3_skill_1_background, skill_off_hover_wrapper, &skill_tree.skill_combat_lv3_skill_1);
       set_ui_on_click(skill_tree.ui_skill_tree_lv_3_skill_1_background, (void *) skill_on_click, &skill_tree.skill_combat_lv3_skill_1);
-      if (skill_tree.skill_combat_lv3_skill_2.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_3_skill_2_icon, "assets/ui/skill/combat_atk_fire_rate_enable.png");
-      else set_ui_texture(skill_tree.ui_skill_tree_lv_3_skill_2_icon, "assets/ui/skill/combat_atk_fire_rate_disable.png");
+      if (skill_tree.skill_combat_lv3_skill_2.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_3_skill_2_icon, "assets/ui/skill/combat_25_atk_enable.png");
+      else set_ui_texture(skill_tree.ui_skill_tree_lv_3_skill_2_icon, "assets/ui/skill/combat_25_atk_disable.png");
       set_ui_on_hover(skill_tree.ui_skill_tree_lv_3_skill_2_background, skill_on_hover_wrapper, &skill_tree.skill_combat_lv3_skill_2);
       set_ui_no_hover(skill_tree.ui_skill_tree_lv_3_skill_2_background, skill_off_hover_wrapper, &skill_tree.skill_combat_lv3_skill_2);
       set_ui_on_click(skill_tree.ui_skill_tree_lv_3_skill_2_background, (void *) skill_on_click, &skill_tree.skill_combat_lv3_skill_2);
@@ -1130,13 +1130,13 @@ void update_skill_tabs() {
       set_ui_on_hover(skill_tree.ui_skill_tree_lv_4_enable_background, skill_on_hover_wrapper, &skill_tree.skill_combat_lv4);
       set_ui_no_hover(skill_tree.ui_skill_tree_lv_4_enable_background, skill_off_hover_wrapper, &skill_tree.skill_combat_lv4);
       set_ui_on_click(skill_tree.ui_skill_tree_lv_4_enable_background, (void *) skill_on_click, &skill_tree.skill_combat_lv4);
-      if (skill_tree.skill_combat_lv4_skill_1.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_4_skill_1_icon, "assets/ui/skill/combat_atk_fire_rate_enable.png");
-      else set_ui_texture(skill_tree.ui_skill_tree_lv_4_skill_1_icon, "assets/ui/skill/combat_atk_fire_rate_disable.png");
+      if (skill_tree.skill_combat_lv4_skill_1.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_4_skill_1_icon, "assets/ui/skill/combat_deadeye_enabled.png");
+      else set_ui_texture(skill_tree.ui_skill_tree_lv_4_skill_1_icon, "assets/ui/skill/combat_deadeye_disable.png");
       set_ui_on_hover(skill_tree.ui_skill_tree_lv_4_skill_1_background, skill_on_hover_wrapper, &skill_tree.skill_combat_lv4_skill_1);
       set_ui_no_hover(skill_tree.ui_skill_tree_lv_4_skill_1_background, skill_off_hover_wrapper, &skill_tree.skill_combat_lv4_skill_1);
       set_ui_on_click(skill_tree.ui_skill_tree_lv_4_skill_1_background, (void *) skill_on_click, &skill_tree.skill_combat_lv4_skill_1);
-      if (skill_tree.skill_combat_lv4_skill_2.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_4_skill_2_icon, "assets/ui/skill/combat_atk_fire_rate_enable.png");
-      else set_ui_texture(skill_tree.ui_skill_tree_lv_4_skill_2_icon, "assets/ui/skill/combat_atk_fire_rate_disable.png");
+      if (skill_tree.skill_combat_lv4_skill_2.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_4_skill_2_icon, "assets/ui/skill/combat_tiger_stance_enable.png");
+      else set_ui_texture(skill_tree.ui_skill_tree_lv_4_skill_2_icon, "assets/ui/skill/combat_tiger_stance_disable.png");
       set_ui_on_hover(skill_tree.ui_skill_tree_lv_4_skill_2_background, skill_on_hover_wrapper, &skill_tree.skill_combat_lv4_skill_2);
       set_ui_no_hover(skill_tree.ui_skill_tree_lv_4_skill_2_background, skill_off_hover_wrapper, &skill_tree.skill_combat_lv4_skill_2);
       set_ui_on_click(skill_tree.ui_skill_tree_lv_4_skill_2_background, (void *) skill_on_click, &skill_tree.skill_combat_lv4_skill_2);
@@ -1151,8 +1151,8 @@ void update_skill_tabs() {
       set_ui_on_hover(skill_tree.ui_skill_tree_lv_1_enable_background, skill_on_hover_wrapper, &skill_tree.skill_exploration_lv1);
       set_ui_no_hover(skill_tree.ui_skill_tree_lv_1_enable_background, skill_off_hover_wrapper, &skill_tree.skill_exploration_lv1);
       set_ui_on_click(skill_tree.ui_skill_tree_lv_1_enable_background, (void *) skill_on_click, &skill_tree.skill_exploration_lv1);
-      if (skill_tree.skill_exploration_lv1_skill_1.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_1_skill_1_icon, "assets/ui/skill/exploration_speed_enable.png");
-      else set_ui_texture(skill_tree.ui_skill_tree_lv_1_skill_1_icon, "assets/ui/skill/exploration_speed_disable.png");
+      if (skill_tree.skill_exploration_lv1_skill_1.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_1_skill_1_icon, "assets/ui/skill/exploration_sprint_enable.png");
+      else set_ui_texture(skill_tree.ui_skill_tree_lv_1_skill_1_icon, "assets/ui/skill/exploration_sprint_disable.png");
       set_ui_on_hover(skill_tree.ui_skill_tree_lv_1_skill_1_background, skill_on_hover_wrapper, &skill_tree.skill_exploration_lv1_skill_1);
       set_ui_no_hover(skill_tree.ui_skill_tree_lv_1_skill_1_background, skill_off_hover_wrapper, &skill_tree.skill_exploration_lv1_skill_1);
       set_ui_on_click(skill_tree.ui_skill_tree_lv_1_skill_1_background, (void *) skill_on_click, &skill_tree.skill_exploration_lv1_skill_1);
@@ -1173,8 +1173,8 @@ void update_skill_tabs() {
       set_ui_on_hover(skill_tree.ui_skill_tree_lv_2_skill_1_background, skill_on_hover_wrapper, &skill_tree.skill_exploration_lv2_skill_1);
       set_ui_no_hover(skill_tree.ui_skill_tree_lv_2_skill_1_background, skill_off_hover_wrapper, &skill_tree.skill_exploration_lv2_skill_1);
       set_ui_on_click(skill_tree.ui_skill_tree_lv_2_skill_1_background, (void *) skill_on_click, &skill_tree.skill_exploration_lv2_skill_1);
-      if (skill_tree.skill_exploration_lv2_skill_2.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_2_skill_2_icon, "assets/ui/skill/exploration_speed_loot_rate_enable.png");
-      else set_ui_texture(skill_tree.ui_skill_tree_lv_2_skill_2_icon, "assets/ui/skill/exploration_speed_loot_rate_disable.png");
+      if (skill_tree.skill_exploration_lv2_skill_2.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_2_skill_2_icon, "assets/ui/skill/exploration_loot_rate_4_enabled.png");
+      else set_ui_texture(skill_tree.ui_skill_tree_lv_2_skill_2_icon, "assets/ui/skill/exploration_loot_rate_4_disabled.png");
       set_ui_on_hover(skill_tree.ui_skill_tree_lv_2_skill_2_background, skill_on_hover_wrapper, &skill_tree.skill_exploration_lv2_skill_2);
       set_ui_no_hover(skill_tree.ui_skill_tree_lv_2_skill_2_background, skill_off_hover_wrapper, &skill_tree.skill_exploration_lv2_skill_2);
       set_ui_on_click(skill_tree.ui_skill_tree_lv_2_skill_2_background, (void *) skill_on_click, &skill_tree.skill_exploration_lv2_skill_2);
@@ -1185,13 +1185,13 @@ void update_skill_tabs() {
       set_ui_on_hover(skill_tree.ui_skill_tree_lv_3_enable_background, skill_on_hover_wrapper, &skill_tree.skill_exploration_lv3);
       set_ui_no_hover(skill_tree.ui_skill_tree_lv_3_enable_background, skill_off_hover_wrapper, &skill_tree.skill_exploration_lv3);
       set_ui_on_click(skill_tree.ui_skill_tree_lv_3_enable_background, (void *) skill_on_click, &skill_tree.skill_exploration_lv3);
-      if (skill_tree.skill_exploration_lv3_skill_1.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_3_skill_1_icon, "assets/ui/skill/exploration_speed_loot_rate_enable.png");
-      else set_ui_texture(skill_tree.ui_skill_tree_lv_3_skill_1_icon, "assets/ui/skill/exploration_speed_loot_rate_disable.png");
+      if (skill_tree.skill_exploration_lv3_skill_1.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_3_skill_1_icon, "assets/ui/skill/exploration_exp_5_enable.png");
+      else set_ui_texture(skill_tree.ui_skill_tree_lv_3_skill_1_icon, "assets/ui/skill/exploration_exp_5_disable.png");
       set_ui_on_hover(skill_tree.ui_skill_tree_lv_3_skill_1_background, skill_on_hover_wrapper, &skill_tree.skill_exploration_lv3_skill_1);
       set_ui_no_hover(skill_tree.ui_skill_tree_lv_3_skill_1_background, skill_off_hover_wrapper, &skill_tree.skill_exploration_lv3_skill_1);
       set_ui_on_click(skill_tree.ui_skill_tree_lv_3_skill_1_background, (void *) skill_on_click, &skill_tree.skill_exploration_lv3_skill_1);
-      if (skill_tree.skill_exploration_lv3_skill_2.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_3_skill_2_icon, "assets/ui/skill/exploration_speed_loot_rate_enable.png");
-      else set_ui_texture(skill_tree.ui_skill_tree_lv_3_skill_2_icon, "assets/ui/skill/exploration_speed_loot_rate_disable.png");
+      if (skill_tree.skill_exploration_lv3_skill_2.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_3_skill_2_icon, "assets/ui/skill/exploration_exp_50_enable.png");
+      else set_ui_texture(skill_tree.ui_skill_tree_lv_3_skill_2_icon, "assets/ui/skill/exploration_exp_50_disable.png");
       set_ui_on_hover(skill_tree.ui_skill_tree_lv_3_skill_2_background, skill_on_hover_wrapper, &skill_tree.skill_exploration_lv3_skill_2);
       set_ui_no_hover(skill_tree.ui_skill_tree_lv_3_skill_2_background, skill_off_hover_wrapper, &skill_tree.skill_exploration_lv3_skill_2);
       set_ui_on_click(skill_tree.ui_skill_tree_lv_3_skill_2_background, (void *) skill_on_click, &skill_tree.skill_exploration_lv3_skill_2);
@@ -1202,13 +1202,13 @@ void update_skill_tabs() {
       set_ui_on_hover(skill_tree.ui_skill_tree_lv_4_enable_background, skill_on_hover_wrapper, &skill_tree.skill_exploration_lv4);
       set_ui_no_hover(skill_tree.ui_skill_tree_lv_4_enable_background, skill_off_hover_wrapper, &skill_tree.skill_exploration_lv4);
       set_ui_on_click(skill_tree.ui_skill_tree_lv_4_enable_background, (void *) skill_on_click, &skill_tree.skill_exploration_lv4);
-      if (skill_tree.skill_exploration_lv4_skill_1.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_4_skill_1_icon, "assets/ui/skill/exploration_speed_loot_rate_enable.png");
-      else set_ui_texture(skill_tree.ui_skill_tree_lv_4_skill_1_icon, "assets/ui/skill/exploration_speed_loot_rate_disable.png");
+      if (skill_tree.skill_exploration_lv4_skill_1.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_4_skill_1_icon, "assets/ui/skill/exploration_star_medal_enable.png");
+      else set_ui_texture(skill_tree.ui_skill_tree_lv_4_skill_1_icon, "assets/ui/skill/exploration_star_medal_disable.png");
       set_ui_on_hover(skill_tree.ui_skill_tree_lv_4_skill_1_background, skill_on_hover_wrapper, &skill_tree.skill_exploration_lv4_skill_1);
       set_ui_no_hover(skill_tree.ui_skill_tree_lv_4_skill_1_background, skill_off_hover_wrapper, &skill_tree.skill_exploration_lv4_skill_1);
       set_ui_on_click(skill_tree.ui_skill_tree_lv_4_skill_1_background, (void *) skill_on_click, &skill_tree.skill_exploration_lv4_skill_1);
-      if (skill_tree.skill_exploration_lv4_skill_2.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_4_skill_2_icon, "assets/ui/skill/exploration_speed_loot_rate_enable.png");
-      else set_ui_texture(skill_tree.ui_skill_tree_lv_4_skill_2_icon, "assets/ui/skill/exploration_speed_loot_rate_disable.png");
+      if (skill_tree.skill_exploration_lv4_skill_2.is_unlocked) set_ui_texture(skill_tree.ui_skill_tree_lv_4_skill_2_icon, "assets/ui/skill/exploration_speed_enable.png");
+      else set_ui_texture(skill_tree.ui_skill_tree_lv_4_skill_2_icon, "assets/ui/skill/exploration_speed_disable.png");
       set_ui_on_hover(skill_tree.ui_skill_tree_lv_4_skill_2_background, skill_on_hover_wrapper, &skill_tree.skill_exploration_lv4_skill_2);
       set_ui_no_hover(skill_tree.ui_skill_tree_lv_4_skill_2_background, skill_off_hover_wrapper, &skill_tree.skill_exploration_lv4_skill_2);
       set_ui_on_click(skill_tree.ui_skill_tree_lv_4_skill_2_background, (void *) skill_on_click, &skill_tree.skill_exploration_lv4_skill_2);
@@ -1284,8 +1284,8 @@ void enable_skill(SKILL *skill_slot) {
       st_player.recharging_shield = 1;
       break;
     case ID_SURVIVAL_LV2_SKILL_2:
-      /* IRON HEART */
-      st_player.max_health += 40;
+      /* HEALTH BOOSTER */
+      st_player.max_health += 20;
       st_player.cur_health = st_player.max_health;
       break;
     case ID_SURVIVAL_LV3_SKILL_1:
@@ -1297,13 +1297,13 @@ void enable_skill(SKILL *skill_slot) {
       enemy_lower_spawn_chance += 3;
       break;
     case ID_SURVIVAL_LV4_SKILL_1:
-      /* LIONS FACE */
+      /* BEAR STANCE */
       enemy_lower_spawn_chance += 1;
       st_player.max_health += 20;
       st_player.cur_health = st_player.max_health;
       break;
     case ID_SURVIVAL_LV4_SKILL_2:
-      /* TIGER FACE */
+      /* TURTLE STANCE */
       enemy_lower_spawn_chance += 1;
       st_player.max_shield += 20;
       st_player.recharging_shield = 1;
@@ -1320,23 +1320,23 @@ void enable_skill(SKILL *skill_slot) {
       st_player.fire_rate -= 0.02;
       break;
     case ID_COMBAT_LV2_SKILL_2:
-      /* LARGE ROUNDS LVL 1 */
+      /* .45 ACP BULLET */
       station_mode_proj_size += 0.5;
       break;
     case ID_COMBAT_LV3_SKILL_1:
-      /* LARGE ROUNDS LVL 2 */
+      /* .50 BMG BULLET */
       station_mode_proj_size += 1.0;
       break;
     case ID_COMBAT_LV3_SKILL_2:
-      /* TITANIUM ROUNDS */
+      /* CANNON SHOT */
       st_player.damage += 25;
       break;
     case ID_COMBAT_LV4_SKILL_1:
-      /* CANNON ROUNDS */
+      /* DEAD EYE */
       st_player.damage += 30;
       break;
     case ID_COMBAT_LV4_SKILL_2:
-      /* MYTHICAL BLASTER */
+      /* TIGER STANCE */
       st_player.damage += 10;
       st_player.fire_rate -= 0.02;
     //Exploration Skills
@@ -1357,25 +1357,25 @@ void enable_skill(SKILL *skill_slot) {
       }
       break;
     case ID_EXPLORATION_LV2_SKILL_2:
-      /* SUPER LUCK */
+      /* TREASURE MAP */
       for (int i = 0; i < RARITY_LEVELS; i++) {
         part_spawn_chance[i] += 4;
       }
       break;
     case ID_EXPLORATION_LV3_SKILL_1:
-      /* LEVEL CHASER LVL 1 */
-      station_mode_xp_offset += 0.1;
+      /* LEVEL CHASER */
+      station_mode_xp_offset += 0.05;
       break;
     case ID_EXPLORATION_LV3_SKILL_2:
-      /* LEVEL CHASER LVL 2 */
+      /* LEVEL BREAKER */
       station_mode_xp_offset += 0.1;
       break;
     case ID_EXPLORATION_LV4_SKILL_1:
-      /* LEVEL CHASER LVL 3 */
+      /* STAR MEDAL */
       station_mode_xp_offset += 0.5;
       break;
     case ID_EXPLORATION_LV4_SKILL_2:
-      /* SPEED OF LIGHT */
+      /* EXOSKELETON LEG */
       st_player.speed += 5;
     default:
       return;
