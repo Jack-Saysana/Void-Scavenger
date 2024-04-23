@@ -162,7 +162,7 @@ void update_control() {
       set_ui_text(ui_control_instruction_key_text,
                   control_instruction_key_buffer, 1.0, T_LEFT, fixed_sys,
                   GLM_VEC3_ZERO);
-      set_ui_texture(ui_control_instruction_image, "assets/ui/control_tation.png");
+      set_ui_texture(ui_control_instruction_image, "assets/ui/control_station.png");
     }
 
     if (get_cheats_state()) {
