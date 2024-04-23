@@ -79,6 +79,11 @@
 #define S_E_ULTRA_SPEED_BASE_ACCEL (8.0)
 #define S_E_STALL_TIME (3.5)
 
+//Dificulty health modifiers
+#define E_EASY_MODIFIER (0.75)
+#define E_MEDIUM_MODIFIER (1.0)
+#define E_HARD_MODIFIER (1.25)
+#define E_BADASS_MODIFIER (0.5)
 
 //Ship Part Generation
 #define GOLD_POOL (50)

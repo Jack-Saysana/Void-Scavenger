@@ -96,6 +96,15 @@ size_t init_enemy(size_t index, int weapon) {
     new_enemy->fire_rate = E_BASE_FIRERATE_NORMAL;
     new_enemy->amount_xp = E_BASE_XP;
   }
+  if (difficulty == EASY) {
+    new_enemy->max_health *= E_EASY_MODIFIER;
+  } else if (difficulty == MEDIUM) {
+    new_enemy->max_health *= E_MEDIUM_MODIFIER;
+  } else if (difficulty == HARD) {
+    new_enemy->max_health *= E_HARD_MODIFIER;
+  } else {
+    new_enemy->max_health *= E_BADASS_MODIFIER;
+  }
   if (weapon == E_RANDOM) {
     if (gen_rand_int(2)) {
       new_enemy->weapon_type = MELEE;
@@ -370,7 +379,19 @@ size_t init_enemy_ship(int index, int mov_type) {
         ? st_player.total_levels_completed : E_LEVEL_SCALE_CAP)
         * S_E_SHIELD_TYPE_SHIELD_MODIFIER;
   }
-
+  if (difficulty == EASY) {
+    new_enemy->hull.max_health *= E_EASY_MODIFIER;
+    new_enemy->shield.max_shield *= E_EASY_MODIFIER;
+  } else if (difficulty == MEDIUM) {
+    new_enemy->hull.max_health *= E_MEDIUM_MODIFIER;
+    new_enemy->shield.max_shield *= E_MEDIUM_MODIFIER;
+  } else if (difficulty == HARD) {
+    new_enemy->hull.max_health *= E_HARD_MODIFIER;
+    new_enemy->shield.max_shield *= E_HARD_MODIFIER;
+  } else {
+    new_enemy->hull.max_health *= E_BADASS_MODIFIER;
+    new_enemy->shield.max_shield *= E_BADASS_MODIFIER;
+  }
   if (mov_type == E_LOW_SPEED) {
     new_enemy->thruster.max_vel = S_BASE_VEL;
     new_enemy->thruster.max_accel = S_BASE_ACCEL;
