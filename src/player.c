@@ -118,6 +118,8 @@ void reset_player() {
   st_player.total_damage_dealt = 0.0;
   st_player.total_damage_taken = 0.0;
   st_player.total_experience = 0.0;
+  st_player.cur_experience = 0.0;
+  st_player.cur_level = 0;
 
   player_ship.hull = S_BASE_PART_HULL;
   player_ship.reactor = S_BASE_PART_REACTOR;
