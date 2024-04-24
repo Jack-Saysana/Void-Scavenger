@@ -322,7 +322,7 @@
 #define ST_GRAVITY (12.0)
 
 // Asteroid constants
-#define NUM_ASTEROIDS (30)
+#define NUM_ASTEROIDS (100)
 #define NUM_ASTEROID_TYPES (5)
 #define TYPE_ASTEROID (0)
 
