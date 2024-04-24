@@ -122,6 +122,7 @@ extern unsigned int num_pt_lights;
 extern unsigned int item_glow;
 
 extern int ESHOOT_ON;
+extern int S_INV_ON;
 
 // Equipped Parts
 extern I_SLOT equipped_hull;

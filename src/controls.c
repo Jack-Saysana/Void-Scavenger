@@ -286,10 +286,12 @@ void input_keys(GLFWwindow *window) {
           /* Handle P press (Ship Parts at Space Mode) */
           toggle_ship_parts();
         }
-        //if (i == GLFW_KEY_I && !holding_alpha[i - GLFW_KEY_A]) {
+        if (i == GLFW_KEY_I && !holding_alpha[i - GLFW_KEY_A]) {
           /* Handle I press */
-        //  toggle_inventory();
-        //}
+          if (S_INV_ON) {
+            toggle_inventory();
+          }
+        }
         if (i == GLFW_KEY_C && !holding_alpha[i - GLFW_KEY_A]) {
           toggle_st_waypoint();
         }

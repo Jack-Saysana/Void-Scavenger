@@ -61,6 +61,7 @@
 #define REACTOR_CMD          ("reactor")
 #define WING_CMD             ("wing")
 #define THRUSTER_CMD         ("thruster")
+#define INVENTORY            ("inventory")
 
 #define MAX_TOKS (10)
 
@@ -108,3 +109,4 @@ void set_gun(S_WEAPON_T);
 void spawn_ship_part_cmd(vec3, int, int);
 void give_item(int, int);
 void set_resolution(int, int, int);
+void space_inv_on(int);

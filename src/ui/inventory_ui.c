@@ -521,6 +521,43 @@ void slot_off_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
 
 void slot_on_click(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
   if (mode == SPACE) {
+    // space mode switch ship parts when click
+    switch (inventory_slot->type) {
+      case I_SLOT_REACTOR:
+        switch_slot(&equipped_reactor, inventory_slot);
+        player_ship.reactor = equipped_reactor.data.reactor;
+        break;
+      case I_SLOT_HULL:
+        switch_slot(&equipped_hull, inventory_slot);
+        player_ship.hull = equipped_hull.data.hull;
+        break;
+      case I_SLOT_SHIELD:
+        switch_slot(&equipped_shield, inventory_slot);
+        player_ship.shield = equipped_shield.data.shield;
+        player_ship.cur_shield = fmin(player_ship.shield.max_shield,
+                                      player_ship.cur_shield);
+        player_ship.recharging_shield = 0;
+        update_timer_args(ship_shield_recharge_delay, &player_ship,
+                          (void *) INVALID_INDEX);
+        add_timer(player_ship.shield.recharge_delay,
+                  ship_shield_recharge_delay, -1000, &player_ship);
+        break;
+      case I_SLOT_WEAPON:
+        switch_slot(&equipped_weapon, inventory_slot);
+        player_ship.weapon = equipped_weapon.data.weapon;
+        set_can_shoot(1);
+        break;
+      case I_SLOT_WING:
+        switch_slot(&equipped_wing, inventory_slot);
+        player_ship.wing = equipped_wing.data.wing;
+        break;
+      case I_SLOT_THRUSTER:
+        switch_slot(&equipped_thruster, inventory_slot);
+        player_ship.thruster = equipped_thruster.data.thruster;
+        break;
+      case DEFAULT:
+        break;
+    }
     return;
   } else if (mode == STATION) {
     // switch ship parts when click at intermediate menu
