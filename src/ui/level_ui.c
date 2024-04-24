@@ -27,10 +27,10 @@ void update_level_pos() {
 void update_level() {
   #ifdef __linux__
   snprintf(level_buffer, LEVEL_BUFFER_SIZE, "Game Level: %4ld",
-           st_player.total_levels_completed);
+           st_player.total_levels_completed + 1);
   #else
   snprintf(level_buffer, LEVEL_BUFFER_SIZE, "Game Level: %4lld",
-           st_player.total_levels_completed);
+           st_player.total_levels_completed + 1);
   #endif
 
   set_ui_text(level, level_buffer, 0.65, T_CENTER, fixed_sys,
