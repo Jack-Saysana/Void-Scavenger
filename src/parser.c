@@ -79,6 +79,22 @@ void console_dispatcher() {
               command_not_found();
             }
           /* END: set eshoot */
+        } else  if (strncmp(command[1].tok, INVENTORY, sizeof(INVENTORY)) == 0) {
+          /* BEGIN: set inventory */
+            if (command[2].kind == IDENTIFIER &&
+                strncmp(command[2].tok, ON, sizeof(ON)) == 0) {
+              /* BEGIN: set inventory on */
+              space_inv_on(1);
+              /* END: set inventory on */
+            } else if (command[2].kind == IDENTIFIER &&
+                       strncmp(command[2].tok, OFF, sizeof(OFF)) == 0) {
+              /* BEGIN: set inventory off */
+              space_inv_on(0);
+              /* END: set inventory off */
+            } else {
+              command_not_found();
+            }
+          /* END: set eshoot */
         } else if (strncmp(command[1].tok, GAMEMODE, sizeof(GAMEMODE)) == 0) {
           /* BEGIN: set gamemode */
           if (command[2].kind == IDENTIFIER) {

@@ -38,6 +38,14 @@ void eshoot_on(int on) {
   }
 }
 
+void space_inv_on(int on) {
+  if (on) {
+    S_INV_ON = 1;
+  } else {
+    S_INV_ON = 0;
+  }
+}
+
 void give_item(int type, int rarity) {
   /* Assumes that type and rarity are set properly in parser.c */
 
