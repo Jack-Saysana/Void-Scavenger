@@ -87,7 +87,7 @@ int init_control() {
     ABSOLUTE_POS | POS_UNIT_RATIO | WIDTH_UNIT_RATIO_X | HEIGHT_UNIT_RATIO_X
   );
   set_ui_pivot(ui_control_instruction_image, PIVOT_CENTER);
-  set_ui_texture(ui_control_instruction_image, "assets/ui/wasd_mouse.png");
+//  set_ui_texture(ui_control_instruction_image, "assets/ui/wasd_mouse.png");
 
   ui_control_instruction_title_text = add_ui_comp(
     //ui_control_instruction_image, // UI_COMP *parent
