@@ -287,6 +287,7 @@ void launch_on_click() {
   reset_listener_orientation();
   reset_listener_pos();
   pause_audio(STATION_THEME);
+  pause_shield_audio();
   clear_station_mode();
   init_space_mode();
   play_audio(SPACE_THEME);

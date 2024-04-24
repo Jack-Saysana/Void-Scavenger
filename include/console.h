@@ -53,5 +53,6 @@ void reset_listener_pos();
 void tick();
 void play_audio(int);
 void pause_audio(int);
+void pause_shield_audio();
 GLFWwindow *get_game_window();
 void generate_sp_enemy_types();
