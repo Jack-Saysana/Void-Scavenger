@@ -66,5 +66,6 @@ void pause_audio(int);
 void clear_station_mode();
 void init_space_mode();
 void tick();
+void pause_shield_audio();
 
 #endif

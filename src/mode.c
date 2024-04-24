@@ -17,6 +17,7 @@ int init_space_mode() {
   set_st_waypoint_enabled(1);
   reset_dmg_ui_state();
   reset_camera(&camera);
+  pause_shield_audio();
   /* Ensure coordinates are enabled */
   enable_coordinates();
 

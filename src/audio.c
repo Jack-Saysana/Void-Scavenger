@@ -285,6 +285,11 @@ void generate_shield_audio() {
   alSourcef(tracks[SHIELD_TRI_WAVE].source, AL_GAIN, 0.50);
 }
 
+void pause_shield_audio() {
+  pause_audio(SHIELD_SINE_WAVE);
+  pause_audio(SHIELD_TRI_WAVE);
+}
+
 void update_shield_tone() {
   if (!audio_initialized) {
     return;

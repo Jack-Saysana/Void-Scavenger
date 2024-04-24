@@ -129,6 +129,7 @@ void set_gamemode_space() {
   reset_listener_orientation();
   reset_listener_pos();
   pause_audio(STATION_THEME);
+  pause_shield_audio();
   clear_station_mode();
   generate_sp_enemy_types();
   init_space_mode();

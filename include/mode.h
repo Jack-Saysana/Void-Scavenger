@@ -129,3 +129,5 @@ void reset_sp_player_state();
 void hide_stallwarning();
 
 void update_level_pos();
+
+void pause_shield_audio();
