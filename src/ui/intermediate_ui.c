@@ -238,10 +238,10 @@ void open_intermediate() {
 
 #ifdef __linux__
   snprintf(intermediate_next_lv_buffer, INTERMEDIATE_TEXT_BUFFER_SIZE,
-           "NEXT LV [%ld]", st_player.total_levels_completed + 1);
+           "NEXT LV [%ld]", st_player.total_levels_completed + 2);
 #else
   snprintf(intermediate_next_lv_buffer, INTERMEDIATE_TEXT_BUFFER_SIZE,
-           "NEXT LV [%lld]", st_player.total_levels_completed + 1);
+           "NEXT LV [%lld]", st_player.total_levels_completed + 2);
 #endif
   set_ui_text(ui_intermediate_next_lv_text,
               intermediate_next_lv_buffer, 0.5, T_LEFT, fixed_sys,
