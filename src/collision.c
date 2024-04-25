@@ -128,6 +128,10 @@ void handle_physics_collisions(COLLISION *cols, size_t num_cols) {
 void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
   SOBJ *proj_wrapper = NULL;
   SOBJ *target_wrapper = NULL;
+  // Keep track of target wrapper index, since after decrement_enemy_shield(),
+  // there is potential the target_wrapper pointer becomes obselete due to
+  // reallocation of the object wrapper buffer
+  size_t t_wrapper_index = 0;
 
   SOBJ *a_wrapper = NULL;
   SOBJ *b_wrapper = NULL;
@@ -142,9 +146,11 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
     if (a_wrapper->type == PROJ_OBJ && b_wrapper->type != PROJ_OBJ) {
       proj_wrapper = a_wrapper;
       target_wrapper = b_wrapper;
+      t_wrapper_index = (size_t) cols[i].b_ent->data;
     } else if (b_wrapper->type == PROJ_OBJ && a_wrapper->type != PROJ_OBJ) {
       proj_wrapper = b_wrapper;
       target_wrapper = a_wrapper;
+      t_wrapper_index = (size_t) cols[i].a_ent->data;
     } else {
       continue;
     }
@@ -262,8 +268,11 @@ void handle_combat_collisions(COLLISION *cols, size_t num_cols) {
                                    target_wrapper->data, health_dmg, 0.1);
           }
         }
-        if (sp_enemies[(size_t)target_wrapper->data].cur_health <= 0.0 &&
-            !sp_enemies[(size_t)target_wrapper->data].invuln) {
+        // Refresh target_wrapper since there is potential the object wrapper
+        // buffer has been reallocated
+        target_wrapper = object_wrappers + t_wrapper_index;
+        if (sp_enemies[(size_t) target_wrapper->data].cur_health <= 0.0 &&
+            !sp_enemies[(size_t) target_wrapper->data].invuln) {
             st_player.total_ships_defeated++;
         }
       }

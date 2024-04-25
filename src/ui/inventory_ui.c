@@ -291,6 +291,7 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
                 fixed_sys, (vec3) { 0.0, 0.0, 0.0 });
     // Fill content buffer
     float diffs[7] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+    int improvement[7] = { 0, 0, 0, 0, 0, 0, 0 };
     switch (inventory_slot->type) {
       case I_SLOT_REACTOR:
         snprintf(inventory_info_buffers[0][0], INVENTORY_TEXT_BUFFER_SIZE,
@@ -300,6 +301,9 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
         set_ui_enabled(inventory.ui_inventory_modifier_lines[0], 1);
         diffs[0] = inventory_slot->data.reactor.max_output -
                player_ship.reactor.max_output;
+        if (diffs[0] >= 0.0) {
+          improvement[0] = 1;
+        }
 
         snprintf(inventory_info_buffers[1][0], INVENTORY_TEXT_BUFFER_SIZE,
                  "[RECHARGE RATE = %.2F]",
@@ -308,6 +312,9 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
         set_ui_enabled(inventory.ui_inventory_modifier_lines[1], 1);
         diffs[1] = inventory_slot->data.reactor.recharge_rate -
                player_ship.reactor.recharge_rate;
+        if (diffs[1] >= 0.0) {
+          improvement[1] = 1;
+        }
 
         snprintf(inventory_info_buffers[2][0], INVENTORY_TEXT_BUFFER_SIZE,
                  "[STALL TIME = %.2f]",
@@ -316,6 +323,9 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
         set_ui_enabled(inventory.ui_inventory_modifier_lines[2], 1);
         diffs[2] = inventory_slot->data.reactor.stall_time -
                player_ship.reactor.stall_time;
+        if (diffs[2] <= 0.0) {
+          improvement[2] = 1;
+        }
 
         for (int i = 3; i < NUM_INV_INFO_LINES; i++) {
           set_ui_enabled(inventory.ui_inventory_info_lines[i], 0);
@@ -329,6 +339,9 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
         set_ui_enabled(inventory.ui_inventory_modifier_lines[0], 1);
         diffs[0] = inventory_slot->data.hull.max_health -
                    player_ship.hull.max_health;
+        if (diffs[0] >= 0.0) {
+          improvement[0] = 1;
+        }
 
         for (int i = 1; i < NUM_INV_INFO_LINES; i++) {
           set_ui_enabled(inventory.ui_inventory_info_lines[i], 0);
@@ -343,6 +356,9 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
         set_ui_enabled(inventory.ui_inventory_modifier_lines[0], 1);
         diffs[0] = inventory_slot->data.shield.max_shield -
                    player_ship.shield.max_shield;
+        if (diffs[0] >= 0.0) {
+          improvement[0] = 1;
+        }
 
         snprintf(inventory_info_buffers[1][0], INVENTORY_TEXT_BUFFER_SIZE,
                   "[RECHARGE RATE = %.2f]",
@@ -351,6 +367,9 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
         set_ui_enabled(inventory.ui_inventory_modifier_lines[1], 1);
         diffs[1] = inventory_slot->data.shield.recharge_rate -
                    player_ship.shield.recharge_rate;
+        if (diffs[1] >= 0.0) {
+          improvement[1] = 1;
+        }
 
         snprintf(inventory_info_buffers[2][0], INVENTORY_TEXT_BUFFER_SIZE,
                   "[RECHARGE DELAY = %.2f]",
@@ -359,6 +378,9 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
         set_ui_enabled(inventory.ui_inventory_modifier_lines[2], 1);
         diffs[2] = inventory_slot->data.shield.recharge_delay -
                    player_ship.shield.recharge_delay;
+        if (diffs[2] <= 0.0) {
+          improvement[2] = 1;
+        }
 
         snprintf(inventory_info_buffers[3][0], INVENTORY_TEXT_BUFFER_SIZE,
                   "[POWER DRAW = %.2f]",
@@ -367,6 +389,9 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
         set_ui_enabled(inventory.ui_inventory_modifier_lines[3], 1);
         diffs[3] = inventory_slot->data.shield.power_draw -
                    player_ship.shield.power_draw;
+        if (diffs[3] <= 0.0) {
+          improvement[3] = 1;
+        }
 
         for (int i = 4; i < NUM_INV_INFO_LINES; i++) {
           set_ui_enabled(inventory.ui_inventory_info_lines[i], 0);
@@ -380,6 +405,9 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
         set_ui_enabled(inventory.ui_inventory_modifier_lines[0], 1);
         diffs[0] = inventory_slot->data.weapon.damage -
                    player_ship.weapon.damage;
+        if (diffs[0] >= 0.0) {
+          improvement[0] = 1;
+        }
 
         snprintf(inventory_info_buffers[1][0], INVENTORY_TEXT_BUFFER_SIZE,
                           "[FIRE RATE = %.2f]",
@@ -388,6 +416,9 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
         set_ui_enabled(inventory.ui_inventory_modifier_lines[1], 1);
         diffs[1] = inventory_slot->data.weapon.fire_rate -
                    player_ship.weapon.fire_rate;
+        if (diffs[1] <= 0.0) {
+          improvement[1] = 1;
+        }
 
         snprintf(inventory_info_buffers[2][0], INVENTORY_TEXT_BUFFER_SIZE,
                  "[MAX POWER DRAW = %.2f]",
@@ -396,6 +427,9 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
         set_ui_enabled(inventory.ui_inventory_modifier_lines[2], 1);
         diffs[2] = inventory_slot->data.weapon.max_power_draw -
                    player_ship.weapon.max_power_draw;
+        if (diffs[2] <= 0.0) {
+          improvement[2] = 1;
+        }
 
         snprintf(inventory_info_buffers[3][0], INVENTORY_TEXT_BUFFER_SIZE,
                  "[PROJ SPEED = %.2f]",
@@ -404,12 +438,18 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
         set_ui_enabled(inventory.ui_inventory_modifier_lines[3], 1);
         diffs[3] = inventory_slot->data.shield.power_draw -
                    player_ship.shield.power_draw;
+        if (diffs[3] >= 0.0) {
+          improvement[3] = 1;
+        }
 
         snprintf(inventory_info_buffers[4][0], INVENTORY_TEXT_BUFFER_SIZE,
                  "[RANGE = %.2f]", inventory_slot->data.weapon.range);
         set_ui_enabled(inventory.ui_inventory_info_lines[4], 1);
         set_ui_enabled(inventory.ui_inventory_modifier_lines[4], 1);
         diffs[4] = inventory_slot->data.weapon.range - player_ship.weapon.range;
+        if (diffs[4] >= 0.0) {
+          improvement[4] = 1;
+        }
 
         snprintf(inventory_info_buffers[5][0], INVENTORY_TEXT_BUFFER_SIZE,
                  "[PROJ SIZE = %.2f]",
@@ -418,6 +458,9 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
         set_ui_enabled(inventory.ui_inventory_modifier_lines[5], 1);
         diffs[5] = inventory_slot->data.weapon.bullet_size -
                    player_ship.weapon.bullet_size;
+        if (diffs[5] >= 0.0) {
+          improvement[5] = 1;
+        }
 
         snprintf(inventory_info_buffers[6][0], INVENTORY_TEXT_BUFFER_SIZE,
                  "[NUM BARRELS = %d]",
@@ -426,6 +469,9 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
         set_ui_enabled(inventory.ui_inventory_modifier_lines[6], 1);
         diffs[6] = inventory_slot->data.weapon.num_barrels -
                    player_ship.weapon.num_barrels;
+        if (diffs[6] >= 0.0) {
+          improvement[6] = 1;
+        }
 
         break;
       case I_SLOT_WING:
@@ -436,6 +482,9 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
         set_ui_enabled(inventory.ui_inventory_modifier_lines[0], 1);
         diffs[0] = inventory_slot->data.wing.max_ang_accel -
                    player_ship.wing.max_ang_accel;
+        if (diffs[0] >= 0.0) {
+          improvement[0] = 1;
+        }
 
         snprintf(inventory_info_buffers[1][0], INVENTORY_TEXT_BUFFER_SIZE,
                  "[MAX ANG VEL = %.2f]",
@@ -444,6 +493,9 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
         set_ui_enabled(inventory.ui_inventory_modifier_lines[1], 1);
         diffs[1] = inventory_slot->data.wing.max_ang_vel -
                    player_ship.wing.max_ang_vel;
+        if (diffs[1] >= 0.0) {
+          improvement[1] = 1;
+        }
 
         for (int i = 2; i < NUM_INV_INFO_LINES; i++) {
           set_ui_enabled(inventory.ui_inventory_info_lines[i], 0);
@@ -458,6 +510,9 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
         set_ui_enabled(inventory.ui_inventory_modifier_lines[0], 1);
         diffs[0] = inventory_slot->data.thruster.max_accel -
                    player_ship.thruster.max_accel;
+        if (diffs[0] >= 0.0) {
+          improvement[0] = 1;
+        }
 
         snprintf(inventory_info_buffers[1][0], INVENTORY_TEXT_BUFFER_SIZE,
                  "[MAX POWER DRAW = %.2f]",
@@ -466,6 +521,9 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
         set_ui_enabled(inventory.ui_inventory_modifier_lines[1], 1);
         diffs[1] = inventory_slot->data.thruster.max_power_draw -
                    player_ship.thruster.max_power_draw;
+        if (diffs[1] <= 0.0) {
+          improvement[1] = 1;
+        }
 
         snprintf(inventory_info_buffers[2][0], INVENTORY_TEXT_BUFFER_SIZE,
                  "[MAX VELOCITY = %.2f]",
@@ -474,6 +532,9 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
         set_ui_enabled(inventory.ui_inventory_modifier_lines[2], 1);
         diffs[2] = inventory_slot->data.thruster.max_vel -
                    player_ship.thruster.max_vel;
+        if (diffs[2] >= 0.0) {
+          improvement[2] = 1;
+        }
 
         for (int i = 3; i < NUM_INV_INFO_LINES; i++) {
           set_ui_enabled(inventory.ui_inventory_info_lines[i], 0);
@@ -490,12 +551,15 @@ void slot_on_hover(UI_COMP *ui_inventory_slot, I_SLOT *inventory_slot) {
       if (diffs[i] >= 0.0) {
         snprintf(inventory_info_buffers[i][1], INVENTORY_TEXT_BUFFER_SIZE,
                  "[+%.2f]", diffs[i]);
+      } else {
+        snprintf(inventory_info_buffers[i][1], INVENTORY_TEXT_BUFFER_SIZE,
+                 "[%.2f]", diffs[i]);
+      }
+      if (improvement[i]) {
         set_ui_text(inventory.ui_inventory_modifier_lines[i],
                     inventory_info_buffers[i][1], 1.0, T_LEFT,
                     fixed_sys, (vec3) { 0.0, 1.0, 0.0 });
       } else {
-        snprintf(inventory_info_buffers[i][1], INVENTORY_TEXT_BUFFER_SIZE,
-                 "[%.2f]", diffs[i]);
         set_ui_text(inventory.ui_inventory_modifier_lines[i],
                     inventory_info_buffers[i][1], 1.0, T_LEFT,
                     fixed_sys, (vec3) { 1.0, 0.0, 0.0 });

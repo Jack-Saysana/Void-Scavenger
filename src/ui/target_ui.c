@@ -167,3 +167,7 @@ void update_target_ui() {
 
   set_ui_pos(target_waypoint, screen_space);
 }
+
+void reset_target_enemy() {
+  target_enemy = INVALID_INDEX;
+}

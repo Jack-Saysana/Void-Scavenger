@@ -179,6 +179,9 @@ void delete_item(size_t index) {
   delete_wrapper(items[index].wrapper_offset);
 
   num_items--;
+  if (index == num_items) {
+    return;
+  }
 
   items[index] = items[num_items];
   SOBJ *wrapper = object_wrappers + items[index].wrapper_offset;
