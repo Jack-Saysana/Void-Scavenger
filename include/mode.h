@@ -131,3 +131,4 @@ void hide_stallwarning();
 void update_level_pos();
 
 void pause_shield_audio();
+void reset_target_enemy();

@@ -15,6 +15,7 @@
 int init_space_mode() {
   mode = SPACE;
   set_st_waypoint_enabled(1);
+  reset_target_enemy();
   reset_dmg_ui_state();
   reset_camera(&camera);
   pause_shield_audio();
@@ -220,6 +221,7 @@ void clear_space_mode() {
   free_sim(event_sim);
   clear_dead_zones();
   clear_sp_station();
+  reset_target_enemy();
 
   // Free non-player entities
   for (size_t i = 0; i < num_enemies; i++) {
