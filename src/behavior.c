@@ -62,7 +62,7 @@ void sp_enemy_pathfind(size_t index) {
 
   // Chase the player
   vec3 p_dir = GLM_VEC3_ZERO_INIT;
-  float p_speed = enemy->thruster.max_vel;
+  float p_speed = fmin(player_ship.thruster.max_vel, enemy->thruster.max_vel);
   chase_player(e_pos, forward, player_forward, stop_dist,
                enemy->weapon.proj_speed + enemy->cur_speed, p_dir, &p_speed);
   // Take into account priority of chasing player
