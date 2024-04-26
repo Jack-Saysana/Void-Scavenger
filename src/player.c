@@ -100,6 +100,55 @@ void reset_equipped_parts() {
   equipped_thruster.weapon_type = NOT_WEAPON;
 }
 
+void reset_player_skills() {
+  skill_tree.skill_survival_lv1.is_unlocked = 0;
+  skill_tree.skill_survival_lv2.is_unlocked = 0;
+  skill_tree.skill_survival_lv3.is_unlocked = 0;
+  skill_tree.skill_survival_lv4.is_unlocked = 0;
+
+  skill_tree.skill_survival_lv1_skill_1.is_unlocked = 0;
+  skill_tree.skill_survival_lv2_skill_1.is_unlocked = 0;
+  skill_tree.skill_survival_lv3_skill_1.is_unlocked = 0;
+  skill_tree.skill_survival_lv4_skill_1.is_unlocked = 0;
+
+  skill_tree.skill_survival_lv1_skill_2.is_unlocked = 0;
+  skill_tree.skill_survival_lv2_skill_2.is_unlocked = 0;
+  skill_tree.skill_survival_lv3_skill_2.is_unlocked = 0;
+  skill_tree.skill_survival_lv4_skill_2.is_unlocked = 0;
+
+  skill_tree.skill_combat_lv1.is_unlocked = 0;
+  skill_tree.skill_combat_lv2.is_unlocked = 0;
+  skill_tree.skill_combat_lv3.is_unlocked = 0;
+  skill_tree.skill_combat_lv4.is_unlocked = 0;
+
+  skill_tree.skill_combat_lv1_skill_1.is_unlocked = 0;
+  skill_tree.skill_combat_lv2_skill_1.is_unlocked = 0;
+  skill_tree.skill_combat_lv3_skill_1.is_unlocked = 0;
+  skill_tree.skill_combat_lv4_skill_1.is_unlocked = 0;
+
+  skill_tree.skill_combat_lv1_skill_2.is_unlocked = 0;
+  skill_tree.skill_combat_lv2_skill_2.is_unlocked = 0;
+  skill_tree.skill_combat_lv3_skill_2.is_unlocked = 0;
+  skill_tree.skill_combat_lv4_skill_2.is_unlocked = 0;
+
+  skill_tree.skill_exploration_lv1.is_unlocked = 0;
+  skill_tree.skill_exploration_lv2.is_unlocked = 0;
+  skill_tree.skill_exploration_lv3.is_unlocked = 0;
+  skill_tree.skill_exploration_lv4.is_unlocked = 0;
+
+  skill_tree.skill_exploration_lv1_skill_1.is_unlocked = 0;
+  skill_tree.skill_exploration_lv2_skill_1.is_unlocked = 0;
+  skill_tree.skill_exploration_lv3_skill_1.is_unlocked = 0;
+  skill_tree.skill_exploration_lv4_skill_1.is_unlocked = 0;
+
+  skill_tree.skill_exploration_lv1_skill_2.is_unlocked = 0;
+  skill_tree.skill_exploration_lv2_skill_2.is_unlocked = 0;
+  skill_tree.skill_exploration_lv3_skill_2.is_unlocked = 0;
+  skill_tree.skill_exploration_lv4_skill_2.is_unlocked = 0;
+
+
+}
+
 void reset_player() {
   st_player.max_health = P_BASE_HEALTH;
   st_player.cur_health = P_BASE_HEALTH;
@@ -140,6 +189,7 @@ void reset_player() {
   reset_enemy_skill_diff();
   reset_enemy_xp_diff();
   reset_player_proj_size_diff();
+  reset_player_skills();
 }
 
 // De-allocate player resources at end of game
