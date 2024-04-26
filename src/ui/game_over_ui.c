@@ -127,5 +127,5 @@ void set_game_over_stats() {
            );
   #endif
   set_ui_text(game_over_stats, game_over_stats_buffer,
-              0.10, T_LEFT, fixed_sys, GLM_VEC3_ZERO);
+              0.09, T_LEFT, fixed_sys, GLM_VEC3_ZERO);
 }
