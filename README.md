@@ -4,6 +4,10 @@ Void Scavenger is a rogue-like dogfighting and first-person-shooter inspired by 
 ## Building
 After cloning the repository, run ```cmake .``` (Linux) or ```cmake -G "Ninja" .``` (Windows) in the project root directory to created the Makefile (Linux) or Ninja build file (Windows). Assuming that the generation completes successfully, run ```make``` on Linux or ```ninja``` on Windows to build the Void Scavenger binary.
 
+## Playing
+
+All builds of the game, including assets, can be found on our [itch.io](https://void-scavenger.itch.io/void-scavenger) page.
+
 #### Supported Platforms:
 Linux (Debian-like distributions)
 <br>
